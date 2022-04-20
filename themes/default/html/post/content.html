@@ -1,0 +1,364 @@
+<div id="header-fixed" class="content-header-fixed background-white position-fixed animation-ease3s">
+   <div class="item-header display-flex direction-row align-center position-relative w-100 mw-1170 margin-auto">
+      <div class="display-flex direction-row align-center">
+         <div class="margin-r15 padding-l20">
+            <div class="w-100px h-100">
+               <img src="{$thumbnail}" alt="{$title}">
+            </div>
+         </div>
+         <div class="padding-r20">
+            <span class="item-header-title color-black font-medium ellipsis-vertical ellipsis-v2 break-all">{$title}</span>
+         </div>
+      </div>
+      <div class="hide-desktop padding-r20">
+         <button id="btn-hfshare" class="display-inline-block btn-noway border-rall margin-right-auto" type="button" aria-haspopup="true" aria-label="{$word->sharing_options}" aria-expanded="false">
+            <svg class="share-icon display-inline-block icon-x padding-5 background-grely border-all border-grely border-rall vertical-middle animation-ease3s" viewBox="0 0 16 13" width="16" height="13">
+               <path fill-rule="evenodd" clip-rule="evenodd" d="M15.406 5.359L8.978 0v3.215C3.82 3.215.406 8.107.406 12.66 1.653 9.133 4.29 7.517 8.978 7.517v3.2l6.428-5.358z" fill="#000"></path>
+            </svg>
+         </button>
+      </div>
+   </div>
+
+   <div id="hfshare-modal" class="content-share-modal display-flex background-white padding-5 padding-l15 padding-r15 border-top border-grely animation-ease3s hidden" aria-modal="true" role="dialog">
+      <div class="margin-auto" role="toolbar" aria-label="{$word->social_copy_save_share_article}">
+         <ul>
+            <li class="item-share display-inline w-100 margin-r10">
+               <a class="display-inline-block border-rall" href="https://www.facebook.com/dialog/feed?app_id={$settings->fb_app_id}&amp;link={$url_encoded}&amp;name={$title_encoded}&amp;redirect_uri=https%3A%2F%2Fwww.facebook.com%2F" target="_blank" rel="noopener noreferrer" title="{$word->share_on_facebook}" aria-label="{$word->share_on_facebook}">
+                  <svg class="share-icon facebook display-inline-block icon-x padding-5 background-grely border-all border-grely border-rall vertical-middle animation-ease3s" viewBox="0 0 7 15" width="7" height="15">
+                     <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M4.775 14.163V7.08h1.923l.255-2.441H4.775l.004-1.222c0-.636.06-.977.958-.977H6.94V0H5.016c-2.31 0-3.123 1.184-3.123 3.175V4.64H.453v2.44h1.44v7.083h2.882z"></path>
+                  </svg>
+               </a>
+            </li>
+            <li class="item-share display-inline w-100 margin-r10">
+               <a class="display-inline-block border-rall" href="https://twitter.com/intent/tweet?url={$url_encoded}&amp;text={$title_encoded}" target="_blank" rel="noopener noreferrer" title="{$word->share_on_twitter}" aria-label="{$word->share_on_twitter}">
+                  <svg class="share-icon twitter display-inline-block icon-x padding-5 background-grely border-all border-grely border-rall vertical-middle animation-ease3s" viewBox="0 0 13 10" width="13" height="10">
+                     <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M5.987 2.772l.025.425-.429-.052c-1.562-.2-2.927-.876-4.086-2.011L.93.571.784.987c-.309.927-.111 1.906.533 2.565.343.364.266.416-.327.2-.206-.07-.386-.122-.403-.096-.06.06.146.85.309 1.161.223.434.678.858 1.176 1.11l.42.199-.497.009c-.481 0-.498.008-.447.19.172.564.85 1.162 1.606 1.422l.532.182-.464.277a4.833 4.833 0 0 1-2.3.641c-.387.009-.704.044-.704.07 0 .086 1.047.572 1.657.762 1.828.564 4 .32 5.631-.641 1.159-.685 2.318-2.045 2.859-3.363.292-.702.583-1.984.583-2.6 0-.398.026-.45.507-.927.283-.277.55-.58.6-.667.087-.165.078-.165-.36-.018-.73.26-.832.226-.472-.164.266-.278.584-.78.584-.928 0-.026-.129.018-.275.096a4.79 4.79 0 0 1-.755.294l-.464.148-.42-.286C9.66.467 9.335.293 9.163.24 8.725.12 8.055.137 7.66.276c-1.074.39-1.752 1.395-1.674 2.496z"></path>
+                  </svg>
+               </a>
+            </li>
+            <li class="item-share display-inline w-100 margin-r10">
+               <a class="display-inline-block border-rall" href="https://api.whatsapp.com/send?text={$title_encoded}%20{$url_encoded}" target="_blank" rel="noopener noreferrer" title="{$word->share_on_whatsapp}" aria-label="{$word->share_on_whatsapp}">
+                  <span class="share-icon display-inline-block icon-x padding-5 background-grely border-all border-grely whatsapp border-rall vertical-middle animation-ease3s">
+                     <svg width="17" height="17" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="currentColor" fill-rule="nonzero" d="M8.478 0a8.346 8.346 0 0 1 5.947 2.47 8.383 8.383 0 0 1 2.46 5.96c-.002 4.551-3.624 8.273-8.13 8.42l-.277.004h-.003a8.387 8.387 0 0 1-4.018-1.026L0 17l1.193-4.367A8.424 8.424 0 0 1 .071 8.422C.071 3.779 3.844 0 8.478 0Zm.003 1.422c-3.854 0-6.99 3.14-6.99 7.002 0 1.323.369 2.611 1.068 3.725l.166.266-.707 2.584 2.646-.696.255.152a6.975 6.975 0 0 0 3.557.976h.002c3.852 0 6.986-3.141 6.989-7.001 0-1.871-.726-3.63-2.046-4.954a6.934 6.934 0 0 0-4.94-2.054Zm-2.979 3.11c.14 0 .28 0 .403.006.15.006.315.012.472.363.057.129.136.316.219.516l.125.306c.144.356.275.685.303.742.054.105.089.227.019.368-.07.14-.106.228-.21.351l-.215.259-.101.11c-.105.105-.215.22-.091.43.315.54.708 1.032 1.167 1.458.803.717 1.48.94 1.689 1.045.21.105.333.087.456-.054.123-.14.525-.614.665-.825.14-.21.28-.175.472-.105.078.028.29.127.529.241l.367.177.54.266c.21.106.35.16.403.246.052.089.052.51-.123 1.001-.174.492-1.032.967-1.417 1.002-.386.034-.747.174-2.521-.527-2.135-.844-3.484-3.037-3.59-3.178-.104-.142-.856-1.142-.856-2.178s.542-1.545.734-1.757a.77.77 0 0 1 .561-.263Z"/>
+                     </svg>
+                  </span>
+               </a>
+            </li>
+            <li class="item-share display-inline w-100 margin-r10">
+               <a class="display-inline-block border-rall" href="mailto:?subject={$settings->title}%3a+{$title_encoded}%26amp%3bbody%3dDesde+{$settings->title}%3a%0d%0a%0d%0a{$title_encoded}%0d%0a%0d%0a{$description_encoded}%0d%0a%0d%0a{$url_encoded}" target="_blank" rel="noopener noreferrer" title="{$word->share_on_email}" aria-label="{$word->share_on_email}">
+                  <svg class="share-icon email display-inline-block icon-x padding-5 background-grely border-all border-grely border-rall vertical-middle animation-ease3s" viewBox="0 0 15 9" width="15" height="9">
+                     <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M.906 8.418V0L5.64 4.76.906 8.419zm13 0L9.174 4.761 13.906 0v8.418zM7.407 6.539l-1.13-1.137L.907 9h13l-5.37-3.598-1.13 1.137zM1.297 0h12.22l-6.11 5.095L1.297 0z"></path>
+                  </svg>
+               </a>
+            </li>
+            <li class="item-share display-inline w-100 border-right border-grely margin-r15">
+               <button class="btn-clink display-inline-block btn-noway border-rall" type="button" aria-haspopup="true" aria-label="{$word->copy_link_to_share}">
+                  <svg class="share-icon display-inline-block icon-x padding-5 background-grely border-all border-grely border-rall vertical-middle animation-ease3s" viewBox="0 0 16 13" width="13" height="13" viewBox="0 0 13 13" fill="none">
+                     <path fill="currentColor" d="M5.61876 7.38125C5.87501 7.625 5.87501 8.025 5.61876 8.26875C5.37501 8.5125 4.97501 8.5125 4.73126 8.26875C3.51251 7.05 3.51251 5.06875 4.73126 3.85L6.94376 1.6375C8.16251 0.418747 10.1438 0.418747 11.3625 1.6375C12.5813 2.85625 12.5813 4.8375 11.3625 6.05625L10.4313 6.9875C10.4375 6.475 10.3563 5.9625 10.1813 5.475L10.475 5.175C11.2125 4.44375 11.2125 3.25625 10.475 2.525C9.74376 1.7875 8.55626 1.7875 7.82501 2.525L5.61876 4.73125C4.88126 5.4625 4.88126 6.65 5.61876 7.38125ZM7.38126 4.73125C7.62501 4.4875 8.02501 4.4875 8.26876 4.73125C9.48751 5.95 9.48751 7.93125 8.26876 9.15L6.05626 11.3625C4.83751 12.5812 2.85626 12.5812 1.63751 11.3625C0.418762 10.1437 0.418762 8.1625 1.63751 6.94375L2.56876 6.0125C2.56251 6.525 2.64376 7.0375 2.81876 7.53125L2.52501 7.825C1.78751 8.55625 1.78751 9.74375 2.52501 10.475C3.25626 11.2125 4.44376 11.2125 5.17501 10.475L7.38126 8.26875C8.11876 7.5375 8.11876 6.35 7.38126 5.61875C7.12501 5.375 7.12501 4.975 7.38126 4.73125Z"></path>
+                  </svg>
+               </button>
+            </li>
+            <li class="item-share display-inline position-relative w-100 margin-l10">
+               <?php if($TEMP['#loggedin'] == true){ ?>
+               <button class="btn_save btn-noway display-inline-block" type="button" role="switch" aria-label="{$word->save_article_for_reading_later}" aria-checked="<?php echo($TEMP['#saved'] > 0) ? 'true' : 'false';?>" data-id="{$post_id}">
+                  <svg class="share-icon display-inline-block vertical-middle color-black animation-ease3s" stroke="none" width="16px" height="25px" viewBox="0 0 16 25">
+                     <g class="animation-ease3s" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g stroke="currentColor" fill="none">
+                           <path fill="<?php echo($TEMP['#saved'] > 0) ? 'currentColor' : 'none';?>" d="M0.5,0.5 L0.5,24.5 L8.1716264,19.5137775 L15.5,24.4404006 L15.5,0.5 L0.5,0.5 Z"></path>
+                        </g>
+                     </g>
+                  </svg>
+               </button>
+               <div class="content_saved position-absolute">
+                  <div class="item-saved">
+                     <img alt="{$title}" src="{$thumbnail}">
+                  </div>
+               </div>
+               <?php } else { ?>
+               <a class="btn_save color-black" href="{$url->{{#r_login}}}" target="_self">
+                  <svg class="share-icon display-inline-block vertical-middle animation-ease3s" stroke="none" width="16px" height="25px" viewBox="0 0 16 25">
+                     <g class="animation-ease3s" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g stroke="currentColor" fill="none">
+                           <path fill="<?php echo($TEMP['#saved'] > 0) ? 'currentColor' : 'none';?>" d="M0.5,0.5 L0.5,24.5 L8.1716264,19.5137775 L15.5,24.4404006 L15.5,0.5 L0.5,0.5 Z"></path>
+                        </g>
+                     </g>
+                  </svg>
+               </a>
+               <?php } ?>
+            </li>
+         </ul>
+      </div>
+   </div>
+   <div class="content-header-progress background-grely position-absolute background-white w-100">
+      <div id="header-progress" class="item-header-progress background-blue animation-ease3s"></div>
+   </div>
+</div>
+<main>
+   <script type="application/ld+json">
+   {
+      "@context":"http://schema.org",
+      "@type":"NewsArticle",
+      "mainEntityOfPage":{
+         "@id":"{$url}",
+         "@type":"WebPage",
+         "inLanguage":"{$settings->language}"
+      },
+      "headline":"{$title}",
+      "datePublished":"{$published_date}",
+      "dateModified":"{$updated_date}",
+      "description":"{$description}",
+      "author":[
+         {
+            "@type":"Person",
+            "name":"{$author_name}",
+            "url":"{$author_url}",
+            "image": {
+               "@type":"ImageObject",
+               "url":"{$author_avatar}",
+               "width":90,
+               "height":90
+            }
+         }
+      ],
+      "publisher":{
+         "@id":"{#site_url}",
+         "@type":"NewsMediaOrganization",
+         "name":"{$settings->title}",
+         "logo":{
+            "@type":"ImageObject",
+            "url":"{$theme->{images/logo}}",
+            "width":300,
+            "height":300
+         }
+      },
+      "image":{
+         "@type":"ImageObject",
+         "url":"{$thumbnail}",
+         "width":780,
+         "height":440
+      }
+   }
+   </script>
+   <?php if($TEMP['#type'] == 'video'){ ?>
+   <script type="application/ld+json">
+   {
+      "@context":"https://schema.org",
+      "@type":"VideoObject",
+      "name":"{$title}",
+      "description":"{$description}",
+      "thumbnailUrl":"{$thumbnail}",
+      "uploadDate":"{$updated_date}",
+      "embedUrl":"https://www.washingtonpost.com/video/c/embed/450fb5e8-652c-4736-a888-835833478136",
+      "duration":"PT1M5S"
+   }
+
+
+
+   {
+      "@context":"http://schema.org",
+      "@type":"VideoObject",
+      "@id":"{$url}",
+      "description":"{$description}",
+      "url":"https://www.nytimes.com/video/world/europe/100000008248969/ukraine-soldier-funeral-lviv.html",
+      "name":"After Days of Uncertainty, a Ukrainian Soldier Is Laid to Rest",
+      "thumbnailUrl":[
+         "https://static01.nyt.com/images/2022/03/11/world/europe/fallensoldier1/fallensoldier1-videoSixteenByNine1050.jpg",
+         "https://static01.nyt.com/images/2022/03/11/world/europe/fallensoldier1/fallensoldier1-superJumbo.jpg",
+         "https://static01.nyt.com/images/2022/03/11/world/europe/fallensoldier1/fallensoldier1-square640.jpg"
+      ],
+      "embedUrl":"https://www.nytimes.com/video/players/offsite/index.html?videoId=100000008248969",
+      "uploadDate":"{$published_date}",
+      "duration":"PT4M16.089S"
+   }
+   </script>
+   <?php } ?>
+   <div class="display-block margin-t15 padding-t15 padding-b15 background-grely border-bottom border-grely">
+      <div class="margin-b10 font-lowly color-grey text-center text-uppercase">
+         <p>Advertisement</p>
+      </div>
+      <div class="display-block h-100 text-center">
+         <div class="place-ad">
+            
+         </div>
+      </div>
+   </div>
+   <div id="container-post" class="content-post position-relative padding-t15">
+      <div id="posts" class="display-block">
+         {$main}
+      </div>
+      <div id="spinner-load" class="content-spinner display-flex align-center justify-center position-relative w-100 h-45 margin-t15 margin-b15 hidden">
+         <svg class="spinner-container position-absolute" width="45px" height="45px" viewBox="0 0 52 52">
+            <circle cx="26px" cy="26px" r="20px" fill="none" stroke-width="4px"></circle>
+         </svg>
+      </div>
+   </div>
+   <div id="post-right" class="post-right display-none-mob">
+      <div class="theiaStickySidebar">
+         <aside class="post-aside direction-colum h-100 padding-t25 padding-b15 padding-l20">
+            <div class="content-related-aside display-block position-relative">
+               <h2 class="color-black font-medium font-bold text-uppercase">{$word->most_viewed} - {$category}</h2>
+               <ul>
+                  {$related_aside}   
+               </ul>
+            </div>
+            {$newsletter}
+         </aside>
+      </div>
+   </div>
+</main>
+<?php if(empty($_COOKIE['dismiss_newsletter'])){ ?>
+<div class="newsletter-fixed display-flex display-none-desk position-fixed">
+   <div class="item-newsletter-fixed w-100">
+      {$newsletter}
+   </div>
+   <button id="close-newsletter" class="close-newsletter display-flex position-absolute border-rall border-none" type="button" aria-label="Cerrar boletin"></button>
+</div>
+<?php } ?>
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.article.css}}" />
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.newsletter.css}}" />
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.related-aside.css}}" />
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.related-bottom.css}}" />
+{%%<script src="{$theme->{assets/js/theia-sticky-sidebar.min.js}}"></script>%%}
+{%%<script type="text/javascript">
+   $(document).ready(function(){
+      var a = 0,
+          v = 0,
+          u = 0,
+          z = !0,
+          k = !0,
+          d = !1,
+          s = $('#header-progress'),
+          x = $('#posts'),
+          h = $('#header'),
+          l = $('#header-fixed'),
+          o = $('#btn-hfshare'),
+          j = $('#hfshare-modal'),
+          Q = $('#spinner-load'),
+          f = j.find('.item-share a'),
+          GG = l.find('.btn_save'),
+          b = $('body'),
+          y = h.height(),
+          n = [{$post_id}],
+          B = '{$url}',
+          D = B,
+          G = function(e){
+            var C = $("<input>");
+            $("body").append(C), C.val(D).select(), document.execCommand("copy"), J(e), C.remove();
+          }, H = function(){
+            navigator.clipboard ? navigator.clipboard.writeText(D).then(J(this)).catch(G(this)) : G(this);
+          }, J = function(e){
+            var K = $(e).children().first();
+            K.addClass('copied'), setTimeout(function(){
+               K.removeClass('copied');
+            }, 300);
+          },
+          A = function(e){
+            e.removeClass('spinner-is-loading'), ZZ(e, !1)
+          },
+          AA = function(e){
+            e.addClass('border-red'), e.addClass('boxshadow-red')
+          },
+          BB = function(e){
+            e.removeClass('border-blue'), e.removeClass('color-blue'), e.addClass('border-red'), e.addClass('color-red');
+          }<?php if($TEMP['#loggedin'] == true){?>,
+          CC = function(){
+            var YY = $(this), XX = YY.attr('data-id'), DD = $('#post-'+XX+' .btn_save'), JJ, FF;
+            DD.index(GG[0]) == -1 && DD.push(GG[0]), DD.index(YY) == -1 && DD.push(YY), JJ = YY.siblings('.content_saved'), FF = DD.find('path'), ZZ(DD, !0), console.log(DD), $.post("{$url->{req/post/save}}?token={#token_session}", {'post_id': XX, 'post_ids': JSON.stringify(n)}, function(e){
+               e.S == 200 && ((e.AC == 'delete' ? (FF.attr('fill', 'none'), DD.attr('aria-checked', !1), ZZ(DD, !1)) : (JJ.addClass('saved-animation-image'), clearTimeout(KK), KK = setTimeout(function(){(FF.attr('fill', 'currentColor'), DD.attr('aria-checked', !0), JJ.removeClass('saved-animation-image'), YY.addClass('saved-animation-button'), clearTimeout(LL), LL = setTimeout(function(){YY.removeClass('saved-animation-button'), ZZ(DD, !1)}, 100))}, 600))), DD.blur());
+            })
+          }<?php } ?>,
+          ZZ = function(e, i){
+            e.attr('disabled', i);
+          },
+          M = $('.newsletter_category'),
+          N = $('.text_all'),
+          O = $('.text_none'),
+          L = M.children(),
+          p,
+          E,
+          F,
+          KK,
+          LL;
+
+      <?php if($TEMP['#loggedin'] == true){?>$('.btn_save[data-id="{$post_id}"]').click(CC), <?php } ?>$('.close-newsletter').click(function(){
+         $('.newsletter-fixed').addClass('hidden'), $('.personalize_newsletter').removeAttr('style'), b.removeClass('newsletter-personalized-active'), document.cookie = 'dismiss_newsletter=true;max-age=604800;path=/';
+      }), $('.newsletter_type').change(function(){
+         var R = $(this),
+             P = R.parents('.content_newsletter').find('.personalize_newsletter');
+         R.val() == 'personalized' ? (P.css('height', P.children().first().height()), b.addClass('newsletter-personalized-active')) : (P.removeAttr('style'), b.removeClass('newsletter-personalized-active'));
+      }), M.change(function(e){
+         $(this).children().length == $(this).val().length ? (N.addClass('hidden'), O.removeClass('hidden')) : (N.removeClass('hidden'), O.addClass('hidden'));
+      }), $('.select_all').click(function(){
+         L.prop('selected', !L.prop('selected')), N.toggleClass('hidden'), O.toggleClass('hidden');
+      }), $('.btn-clink').click(H), o.click(function(){
+         j.toggleClass('hidden'), l.css('height', 'auto'), o.attr('aria-expanded', !$.parseJSON(o.attr('aria-expanded')));
+      }), $(document).click(function(e){ 
+         if (!$(e.target).parents().is('#btn-hfshare') && !$(e.target).parents().is('#hfshare-modal .item-share')){
+            j.addClass('hidden'), l.removeAttr('style');
+         }
+      }), $('#post-right').theiaStickySidebar();
+
+
+
+      $('.btn_newsletter').click(function(){
+         var R = $(this),
+             Y = R.parent(),
+             V = Y.find('.newsletter_email'),
+             Z = Y.find('.newsletter_popular:checked'),
+             U = Y.find('.newsletter_type').val(),
+             S = Y.find('.newsletter_category').val(),
+             X = Y.find('.newsletter_frequency').val(),
+             P = Y.find('.personalize_newsletter'),
+             I = Y.find('.content-error'),
+             T = V.siblings('.text-error');
+         if(V.val() == ''){
+            T.text('*{$word->this_field_is_empty}'), AA(V);
+         } else if(!(new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/)).test(V.val())){
+            BB(I), T.text("{$word->enter_a_valid_email}"), AA(V);
+         } else {
+            R.addClass('spinner-is-loading'), ZZ(R, !0), $.post("{$url->{req/newsletter/subscribe}}?token={#token_session}", {'email': V.val(), 'type': U, 'frequency': X, 'popular': (Z.length > 0 ? Z.val() : 'off'), 'category': JSON.stringify(S)}, function(e) {
+               e.S == 200 ? (P.removeAttr('style'), I.removeClass('border-red'), I.removeClass('color-red'), I.addClass('border-blue'), I.addClass('color-blue'), A(R), $('.content_newsletter').trigger("reset"), I.text(e.M), setTimeout(function(){
+                                    I.text(''), BB(I);
+                                 }, 5000)) : BB(I), I.text(e.E), e.EX == 1 && AA(V), A(R);
+            });
+         }
+      }), $('.newsletter_email').on('input', function(){
+         var W = $(this);
+         W.val() != '' && (W.siblings('.text-error').text(''), W.removeClass('border-red'), W.removeClass('boxshadow-red'))
+      }), $(document).scroll(function(){
+         var w = $(window).scrollTop(),
+             m = $(p).length == 1 ? parseInt(((w - p.offset().top) / p.height()) * 100) : 0,
+             t = m <= 0 ? 0 : m;
+         s.css('width', t+'%');
+         if(w < v){
+            (t <= 1 && n[u-1] != undefined) && (u--, d = !0), w <= y && (z = !0, j.addClass('hidden'), l.removeAttr('style'), o.attr('aria-expanded', !1), b.removeClass('header-fixed'));
+         } else {
+            if(((w + $(window).height()) - x.offset().top) >= (x.height() - 100)){
+               if(n[u] == n[n.length-1]){
+                  (k) && (k = !1, Q.removeClass('hidden'), $.post("{$url->{req/post/load}}?token={#token_session}", {'category_id': '{$category_id}', 'post_ids': JSON.stringify(n)}, function(e) {e.S == 200 ? (x.append(e.HT), n.push(e.ID), $('.btn-clink').click(H), k = !0, Q.addClass('hidden')<?php if($TEMP['#loggedin'] == true){?>, $('.btn_save[data-id="'+e.ID+'"]').click(CC)<?php } ?>) : Q.removeClass('hidden');}));
+               }
+            }
+            (t >= 99 && n[u+1] != undefined) && (u++, d = !0), w >= y && z && (z = !1, b.addClass('header-fixed'));
+         }
+
+          v = w <= 0 ? 0 : w, p = $('#post-'+n[u]), d && (d = !1, F = p.find('.post-title'), E = F.parent(), l.find('img').attr('src', p.find('.post-thumbnail img').attr('src')).attr('title', F.text()), l.find('.item-header-title').text(F.text()), D = E.prop("tagName") == 'A' ? E.attr('href') : B, HH = p.find('.btn_save'), GG.attr('data-id', HH.attr('data-id')), GG.find('path').attr('fill', HH.find('path').attr('fill')), GG.attr('aria-checked', HH.attr('aria-checked')), p.find('.item-share').each(function(i){
+            $(f[i]).attr('href', $(this).find('a').attr('href'));
+         }));
+
+         $('.item-post').each(function() {
+            var q = $(this), r = q.find('.content-sticky'), c = q.offset().top;
+            if (w >= (c - 30)) {
+               r.addClass('sticky');
+               if (w >= (c + q.height() - (r.height() + 100))) {
+                  r.removeClass('sticky').css({'bottom': 0, 'top': 'auto'});
+               } else {
+                  r.addClass('sticky').removeAttr('style');
+               }
+            } else {
+               r.removeClass('sticky').removeAttr('style');
+            }
+         });
+      });
+   });
+</script>%%}

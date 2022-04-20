@@ -1,0 +1,64 @@
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.main.css}}" />
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.recommended.css}}" />
+<?php if(!empty($TEMP['#main'])){ ?>
+<div class="content-main padding-t25">
+   <div class="items-main display-flex vertical-slots">
+      <div class="main-one">
+         <div class="content-news-left display-flex vertical-slots">
+            <div class="left-news-left">
+               {$main_left_one}
+            </div>
+            <div class="right-news-left">
+               <section class="main-news-wrapper">
+                  <a class="hover-all" href="{$main_right_url}">
+                     <div class="content-news-right no-hover">
+                        <figure class="figure-news-right margin-none no-hover">
+                           <div class="news-right-one no-hover">
+                              <picture class="picture-news-right no-hover">
+                                 <img src="{$main_right_thumbnail}" alt="{$main_right_title}" role="presentation">
+                              </picture>
+                              <figcaption class="figcaption-news-right display-flex no-hover">
+                                 <span class="color-grey font-lowly ellipsis-horizontal margin-t5 margin-b5 margin-left-auto no-hover">{$main_right_published_at}</span>
+                              </figcaption>
+                           </div>
+                        </figure>
+                        <section class="main-news-wrapper">
+                           <h3 class="main-news-title font-postoni-bodo font-big ellipsis-vertical ellipsis-v3 color-black margin-b5 animation-ease3s">{$main_right_title}</h3>
+                           <p class="main-news-summary font-mediumly ellipsis-vertical ellipsis-v4 color-grey animation-ease3s">{$main_right_description}</p>
+                        </section>
+                     </div>
+                  </a>
+               </section>
+            </div>
+         </div>
+      </div>
+      <div class="main-two">
+         {$main_two}
+      </div>
+   </div>
+</div>
+<?php } ?>
+<?php if(!empty($TEMP['#recommended'])){ ?>
+<div class="content-recommended">
+   <section class="items-recommended">
+      <div class="recommended-title">
+         <span class="color-black font-postoni-bodo font-mediumly font-bold">Noticias recomendadas</span>
+      </div>
+      <div class="recommended-news display-flex margin-t15 margin-b15 padding-b15 border-bottom border-grely">
+         {$recommended_news}
+      </div>
+   </section>
+</div>
+<?php } ?>
+<?php if($TEMP['#last_news']){ ?>
+<div class="content-more-news">
+   <section class="items-recommended">
+      <div class="recommended-title">
+         <span class="color-black font-postoni-bodo font-mediumly font-bold">Últimas noticias</span>
+      </div>
+      <div class="recommended-news display-flex vertical-slots margin-t15 margin-b15 padding-b15">
+         {$last_news}
+      </div>
+   </section>
+</div>
+<?php } ?>

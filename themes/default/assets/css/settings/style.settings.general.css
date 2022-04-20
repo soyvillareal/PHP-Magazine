@@ -1,0 +1,43 @@
+.container-settings {
+	max-width: 960px;
+}
+.content-sheader {
+	display: table;
+}
+.item-sheader {
+	display: table-cell;
+}
+.item-sheader.active,
+.item-sheader:active,
+.item-sheader:focus  {
+	background-color: #000;
+}
+
+.item-sheader.active a,
+.item-sheader:active a,
+.item-sheader:focus a {
+	color: #fff;
+}
+@media(max-width: 350px){
+	.content-sheader,
+	.item-sheader {
+		display: block;
+	}
+	.item-sheader:not(:last-child) {
+		border-right: 1px solid;
+		border-bottom: none;
+	}
+}
+@media(max-width: 450px){
+	.item-sheader a {
+		padding: 5px;
+	}
+}
+@media(pointer: fine){
+	.item-sheader:hover  {
+		background-color: #000;
+	}
+	.item-sheader:hover a {
+		color: #fff;
+	}
+}

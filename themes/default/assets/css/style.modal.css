@@ -1,0 +1,49 @@
+.dropdown-account {
+    top: 40px;
+    right: 0;
+    box-shadow: rgb(0,0,0,.3) 0px 0px 4px;
+    z-index: 996;
+}
+body.dropdown-account-active .dropdown-account-overlay {
+    display: block;
+}
+.dropdown-account-overlay {
+    display: none;
+    top: 0px;
+    left: 0px;
+    background: rgba(18, 18, 18, 0.5);
+    z-index: 995;
+}
+.dropdown-account-image {
+    width: 40px;
+    height: 40px;
+}
+.btn_account {
+    z-index: 996;
+}
+@media (max-width: 991px){
+    .modal-login-overlay {
+        bottom: -100%;
+        z-index: 998;
+        background: linear-gradient(transparent, rgb(0, 0, 0));
+    }
+    body.modal-login-active .content-login-modal {
+        bottom: 0;
+    }
+    body.modal-login-active .modal-login-overlay {
+        top: 94px;
+        bottom: 0;
+    }
+    .content-login-modal {
+        bottom: -192px;
+        z-index: 999;
+    }
+    .item-login-modal {
+        height: 150px;
+        box-shadow: rgb(0,0,0,.2) 0px 0px 3px;
+    }
+    .dropdown-account {
+        top: 45px;
+        right: 10px;
+    }
+}

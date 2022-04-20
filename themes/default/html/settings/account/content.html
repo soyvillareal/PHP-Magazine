@@ -1,0 +1,584 @@
+<div class="content-account display-flex">
+    <div id="recaptcha-container"></div>
+    <div class="item-one w-50 border-right border-grey">
+        <div class="item-account container_cgeneral padding-t20 padding-b20 padding-l20 padding-r20">
+            <button class="btn_cgeneral btn-noway w-100 color-black font-big font-bold margin-b15" type="button">
+                <div class="display-flex direction-row align-center">
+                    <span class="w-100 text-left">{$word->account_settings}</span>
+                    <svg class="icon-s hide-desktop" viewBox="0 0 13 8">
+                        <polygon fill="currentColor" points="6.5,8 0,1.4 1.4,0 6.5,5.2 11.6,0 13,1.4"></polygon>
+                    </svg>
+                </div>
+            </button>
+            <div class="content_cgitems">
+                <div class="container_collapse font-mediumly">
+                    <div class="content_cheader display-flex margin-t10 margin-b10">
+                        <label class="text_label font-bold ellipsis-horizontal">{$me->username}</label>
+                        <button class="btn_collapse btn-noway inhover-underline color-blue">{$word->change}</button>
+                    </div>
+                    <div class="content_citems margin-b15 hidden">
+                        <form novalidate>
+                            <div class="margin-b10">
+                                <strong>{$word->enter_a_new} {$word->username}</strong>
+                            </div>
+                            <div class="content-fields w-100 position-relative">
+                                <input id="username" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue text-capitalize sizing-box<?php echo(!empty($TEMP['#user']['username'])) ? ' active' : '';?>" type="text"<?php echo(time() < $TEMP['#user']['user_changed']) ? ' readonly' : '';?> maxlength="16" aria-label="{$word->username}" autocomplete="username" autocapitalize="off" data-send="username" value="{$me->username}">
+                                <div class="color-red text-left text-error font-low margin-t5"></div>
+                                <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal">{$word->username}</label>
+                                <div class="content-spinner-circle position-absolute">
+                                    <div class="spinner-circle"></div>
+                                </div>
+                            </div>
+                            <div class="margin-t10">
+                                <button class="btn_save btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit" disabled>
+                                   <span class="color-white">{$word->save}</span>
+                                   <div class="content-spinner-circle position-absolute">
+                                      <div class="spinner-circle"></div>
+                                   </div>
+                                </button>
+                                <button type="button" class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                            </div>
+                        </form>
+                        <div id="username-alert" class="margin-b10">
+                            {$username_alert}
+                        </div>
+                    </div>
+                </div>
+                <div class="container_collapse font-mediumly margin-b10">
+                    <div class="content_cheader">
+                        <div class="text_email <?php echo($TEMP['#user']['status'] == 'active' && empty($TEMP['#user']['new_email'])) ? 'display-flex' : 'display-block';?>">
+                            <div class="text_email <?php echo($TEMP['#user']['status'] == 'active' && empty($TEMP['#user']['new_email'])) ? 'display-inline-block ellipsis-horizontal' : 'display-flex';?>">
+                                <label class="text_label font-bold ellipsis-horizontal">{$email}</label>
+                                <button id="btn-show-verify" class="btn-noway color-red inhover-underline ellipsis-horizontal<?php echo($TEMP['#user']['status'] == 'active' && empty($TEMP['#user']['new_email'])) ? ' hidden' : '';?>">!{$word->unverified}</button>
+                            </div>
+                            <button class="btn_collapse btn-noway color-blue inhover-underline">{$word->change}</button>
+                        </div>
+                        <span id="email-alert" class="display-block color-blackly margin-t5">{$email_alert}</span>
+                    </div>
+                    <div class="content_citems margin-b15 margin-b5 hidden">
+                        <?php if($TEMP['#user']['type'] != 'normal'){ ?>
+                        <div id="content-disconnect" class="display-block">
+                            <label class="color-red font-bold">{$word->disconnect_this_account}</label>
+                            <p>{$word->email_associated_with_account}</p>
+                            <button id="btn-disconnect" class="btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->continue}</button>
+                            <button class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-t10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+                        </div>
+                        <?php } ?>
+                        <form<?php echo($TEMP['#user']['type'] != 'normal') ? ' class="hidden" ' : ' ';?>novalidate>
+                            <div class="margin-b10">
+                                <strong>{$word->enter_a_new} {$word->email}</strong>
+                            </div>
+                            <div class="content-fields w-100 position-relative">
+                                <input id="new_email" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box<?php echo(!empty($TEMP['#user']['email']) ||!empty($TEMP['#user']['new_email'])) ? ' active' : '';?>" type="text" aria-label="{$word->email}" autocomplete="new_email" autocapitalize="off" data-send="new_email" value="{$email}">
+                                <div class="color-red text-left text-error font-low margin-t5"></div>
+                                <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal">{$word->email}</label>
+                                <div class="content-spinner-circle position-absolute">
+                                    <div class="spinner-circle"></div>
+                                </div>
+                            </div>
+                            <div class="margin-t10">
+                                <button class="btn_save btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit" disabled>
+                                   <span class="color-white">{$word->save}</span>
+                                   <div class="content-spinner-circle position-absolute">
+                                      <div class="spinner-circle"></div>
+                                   </div>
+                                </button>
+                                <button type="button" class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="content-vemail" class="content-verify-email margin-b10 hidden">
+                        <div class="item-ve-one">
+                            <label class="color-black font-bold">{$word->verify_email_address}</label>
+                            <p>{$word->make_account_more_secure_case_loss}</p>
+                            <div class="margin-t10">
+                                <button id="btn-verify-email" class="btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit">
+                                    <span class="color-white">{$word->send}</span>
+                                    <div class="content-spinner-circle position-absolute">
+                                        <div class="spinner-circle"></div>
+                                    </div>
+                                </button>
+                                <button type="button" class="btn_vcancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                                <div class="color-red text-left text-error font-low margin-t5"></div>
+                            </div>
+                        </div>
+                        <div class="item-ve-two hidden">
+                            <label class="color-green font-bold">{$word->verification_email_sent}</label>
+                            <p>{$word->email_been_sent_click_code}</p>
+                            <button type="button" class="btn_vcancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-t10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->close}</button>
+                        </div>
+                    </div>
+                </div>
+                <span class="display-block font-big font-bold padding-t10">{$word->other_settings}</span>
+                <div class="container_collapse font-mediumly margin-t15 margin-b10">
+                    <div class="content_cheader display-flex">
+                        <label class="text_label first-capitalize font-bold ellipsis-horizontal">{$name}</label>
+                        <button class="btn_collapse btn-noway color-blue inhover-underline">{$word->change}</button>
+                    </div>
+                    <div class="content_citems margin-b15 margin-b5 hidden">
+                        <form novalidate>
+                            <div class="margin-b10">
+                                <strong>{$word->enter_a_new} {$word->name}</strong>
+                            </div>
+                            <div class="w-100 position-relative">
+                                <input id="name" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue text-capitalize sizing-box<?php echo(!empty($TEMP['#user']['name'])) ? ' active' : '';?>" type="text" aria-label="{$word->name}" autocomplete="name" autocapitalize="off" data-send="name" value="{$me->name}">
+                                <div class="color-red text-left text-error font-low margin-t5"></div>
+                                <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal">{$word->name}</label>
+                            </div>
+                            <div class="margin-t10">
+                                <button class="btn_save btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit" disabled>
+                                   <span class="color-white">{$word->save}</span>
+                                   <div class="content-spinner-circle position-absolute">
+                                      <div class="spinner-circle"></div>
+                                   </div>
+                                </button>
+                                <button type="button" class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <div class="container_collapse font-mediumly margin-b10">
+                    <div class="content_cheader display-flex">
+                        <label class="text_label first-capitalize font-bold ellipsis-horizontal">{$surname}</label>
+                        <button class="btn_collapse btn-noway color-blue inhover-underline">{$word->change}</button>
+                    </div>
+                    <div class="content_citems margin-b15 margin-b5 hidden">
+                        <form novalidate>
+                            <div class="margin-b10">
+                                <strong>{$word->enter_a_new} {$word->surname}</strong>
+                            </div>
+                            <div class="w-100 position-relative">
+                                <input id="surname" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue text-capitalize sizing-box<?php echo(!empty($TEMP['#user']['surname'])) ? ' active' : '';?>" type="text" aria-label="{$word->surname}" autocomplete="surname" autocapitalize="off" data-send="surname" value="{$me->surname}">
+                                <div class="color-red text-left text-error font-low margin-t5"></div>
+                                <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal">{$word->surname}</label>
+                            </div>
+                            <div class="margin-t10">
+                                <button class="btn_save btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit" disabled>
+                                   <span class="color-white">{$word->save}</span>
+                                   <div class="content-spinner-circle position-absolute">
+                                      <div class="spinner-circle"></div>
+                                   </div>
+                                </button>
+                                <button type="button" class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+                <div class="container_collapse font-mediumly margin-b10">
+                    <div class="content_cheader">
+                        <label class="text_label display-inline-block first-capitalize break-all font-bold">{$about}</label>
+                        <button class="btn_collapse btn-noway color-blue inhover-underline">{$word->change}</button>
+                    </div>
+                    <div class="content_citems margin-b15 margin-b5 hidden">
+                        <form novalidate>
+                            <div class="margin-b10">
+                                <strong>{$word->enter_a_new_} {$word->about}</strong>
+                            </div>
+                            <div class="w-100 position-relative">
+                                <textarea id="about" class="item_input background-white color-black w-100 padding-t25 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box<?php echo(!empty($TEMP['#user']['about'])) ? ' active' : '';?>" type="text" aria-label="{$me->about}" maxlength="500" autocomplete="about" autocapitalize="off" data-send="about">{$about_br2nl}</textarea>
+                                <div class="color-red text-left text-error font-low margin-t5"></div>
+                                <label class="item-label background-white w-100 first-capitalize position-absolute pointer-events-none ellipsis-horizontal">{$word->about}</label>
+                            </div>
+                            <div class="display-flex">
+                                <div class="margin-left-auto<?php echo($TEMP['#text_email_count'] > 400) ? ' color-red' : (($TEMP['#text_email_count'] > 250) ? ' color-orange' : ' color-green');?>">
+                                    <span id="text-email-count">{#text_email_count}</span>/500
+                                </div>
+                            </div>
+                            <div class="margin-t10">
+                                <button class="btn_save btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit" disabled>
+                                   <span class="color-white">{$word->save}</span>
+                                   <div class="content-spinner-circle position-absolute">
+                                      <div class="spinner-circle"></div>
+                                   </div>
+                                </button>
+                                <button type="button" class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="container_collapse font-mediumly">
+                    <div class="content_cheader margin-t10 margin-b10">
+                        <label class="text_label first-capitalize display-inline-block font-bold">{$birthday}</label>
+                        <button class="btn_collapse btn-noway inhover-underline color-blue">{$word->change}</button>
+                    </div>
+                    <div class="content_citems margin-b15 hidden">
+                        <form novalidate>
+                            <div class="margin-b10">
+                                <strong>{$word->enter_a_new_} {$word->date_of_birth}</strong>
+                            </div>
+                            <div class="w-100 position-relative">
+                                <div class="content-birthday">
+                                    <div class="display-flex">
+                                        <select id="day" class="item-one item_changed color-black padding-l10 border-focus-blue border-rlow border-all border-grely caret-down background-grely animation-ease3s"<?php echo($TEMP['#user']['birthday_changed'] > 0) ? ' disabled="true"' : ''?>>
+                                            <option value disabled selected>{$word->year}</option>
+                                            <?php for ($i=1; $i < $TEMP['#days']; $i++) { ?>
+                                            <option value="<?php echo $i ?>"<?php echo($TEMP['#user']['birth_day'] == $i) ? ' selected' : ''?>><?php echo $i ?></option>
+                                            <?php } ?>
+                                        </select>
+                                        <select id="month" class="item-two item_birthday item_changed color-black margin-l10 padding-l10 border-focus-blue border-rlow border-all border-grely caret-down background-grely animation-ease3s"<?php echo($TEMP['#user']['birthday_changed'] > 0) ? ' disabled="true"' : ''?>>
+                                            <option value disabled selected>{$month}</option>
+                                            <option value="1"<?php echo($TEMP['#user']['birthday_month'] == 1) ? ' selected' : ''?>>{$word->january}</option>
+                                            <option value="2"<?php echo($TEMP['#user']['birthday_month'] == 2) ? ' selected' : ''?>>{$word->february}</option>
+                                            <option value="3"<?php echo($TEMP['#user']['birthday_month'] == 3) ? ' selected' : ''?>>{$word->march}</option>
+                                            <option value="4"<?php echo($TEMP['#user']['birthday_month'] == 4) ? ' selected' : ''?>>{$word->april}</option>
+                                            <option value="5"<?php echo($TEMP['#user']['birthday_month'] == 5) ? ' selected' : ''?>>{$word->may}</option>
+                                            <option value="6"<?php echo($TEMP['#user']['birthday_month'] == 6) ? ' selected' : ''?>>{$word->june}</option>
+                                            <option value="7"<?php echo($TEMP['#user']['birthday_month'] == 7) ? ' selected' : ''?>>{$word->july}</option>
+                                            <option value="8"<?php echo($TEMP['#user']['birthday_month'] == 8) ? ' selected' : ''?>>{$word->august}</option>
+                                            <option value="9"<?php echo($TEMP['#user']['birthday_month'] == 9) ? ' selected' : ''?>>{$word->september}</option>
+                                            <option value="10"<?php echo($TEMP['#user']['birthday_month'] == 10) ? ' selected' : ''?>>{$word->october}</option>
+                                            <option value="11"<?php echo($TEMP['#user']['birthday_month'] == 11) ? ' selected' : ''?>>{$word->november}</option>
+                                            <option value="12"<?php echo($TEMP['#user']['birthday_month'] == 12) ? ' selected' : ''?>>{$word->december}</option>
+                                        </select>
+                                        <select id="year" class="item-three item_birthday item_changed color-black padding-l10 border-focus-blue border-rlow border-all border-grely margin-l10 caret-down background-grely animation-ease3s"<?php echo($TEMP['#user']['birthday_changed'] > 0) ? ' disabled="true"' : ''?>>
+                                            <option value disabled selected>{$word->year}</option>
+                                            <?php for ($i=($TEMP['#years'] - 110); $i < ($TEMP['#years'] - 18); $i++) { ?>
+                                                <option value="<?php echo $i ?>"<?php echo($TEMP['#user']['birthday_year'] == $i) ? ' selected' : ''?>><?php echo $i ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    <div class="color-red text-left text-error font-low margin-t5"></div>
+                                </div>
+                            </div>
+                            <div class="margin-t10">
+                                <button class="btn_save btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit" disabled>
+                                   <span class="color-white">{$word->save}</span>
+                                   <div class="content-spinner-circle position-absolute">
+                                      <div class="spinner-circle"></div>
+                                   </div>
+                                </button>
+                                <button type="button" class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                            </div>
+                        </form>
+                        <div id="birthday-alert" class="margin-b10">
+                            {$birthday_alert}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container_collapse font-mediumly">
+                    <div class="content_cheader margin-t10 margin-b10">
+                        <label class="text_label display-inline-block font-bold">{$gender}</label>
+                        <button class="btn_collapse btn-noway inhover-underline color-blue">{$word->change}</button>
+                    </div>
+                    <div class="content_citems margin-b15 hidden">
+                        <form novalidate>
+                            <div class="margin-b10">
+                                <strong>{$word->enter_a_new} {$word->gender}</strong>
+                            </div>
+                            <div class="w-100 position-relative">
+                                <select id="gender" class="item_input color-black padding-l10 border-focus-blue border-rlow border-all border-grely caret-down background-grely animation-ease3s" data-send="gender">
+                                    <option value="male" <?php echo ($TEMP['#user']['gender'] == 'male') ? 'selected': '';?>>{$word->male}</option>
+                                    <option value="female" <?php echo ($TEMP['#user']['gender'] == 'female') ? 'selected': '';?>>{$word->female}</option>
+                                </select>
+                                <div class="color-red text-left text-error font-low margin-t5"></div>
+                            </div>
+                            <div class="margin-t10">
+                                <button class="btn_save btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit" disabled>
+                                   <span class="color-white">{$word->save}</span>
+                                   <div class="content-spinner-circle position-absolute">
+                                      <div class="spinner-circle"></div>
+                                   </div>
+                                </button>
+                                <button type="button" class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="item-two w-50">
+        <div class="item-account container_cgeneral padding-t20 padding-b20 padding-l20 padding-r20">
+            <button class="btn_cgeneral btn-noway w-100 color-black font-big font-bold margin-b15" type="button">
+                <div class="display-flex direction-row align-center">
+                    <span class="w-100 text-left">{$word->profile_settings}</span>
+                    <svg class="icon-s hide-desktop" viewBox="0 0 13 8">
+                        <polygon fill="currentColor" points="6.5,8 0,1.4 1.4,0 6.5,5.2 11.6,0 13,1.4"></polygon>
+                    </svg>
+                </div>
+            </button>
+            <div class="content_cgitems">
+                <div class="container_collapse font-mediumly margin-b10">
+                    <div class="content_cheader">
+                        <div class="display-block">
+                            <div class="display-flex position-relative">
+                                <div id="content-avatar" class="w-100px h-100px margin-auto">
+                                    <img class="border-rall" src="{$me->avatar_s}" alt="{$me->username}">
+                                </div>
+                            </div>
+                            <div class="text-center margin-t5">
+                                <button id="btn-upload" class="btn-noway color-blue margin-r5 inhover-underline">{$word->upload_a_picture}</button>
+                                <button id="btn-ucancel" class="btn-noway color-red inhover-underline<?php echo($TEMP['#user']['avatar'] == 'default-holder') ? ' hidden' : '';?>">{$word->delete}</button>
+                            </div>
+                            <div class="color-red text-center text-error font-low margin-t5"></div>
+                        </div>
+                        <span class="display-block color-blackly margin-t5 text-center">{$word->upload_change_photo_acceptable_file}</span>
+                    </div>
+                </div>
+                <span class="display-block font-big font-bold padding-t10">{$word->social_media}</span>
+                <div class="container_collapse font-mediumly margin-t15 margin-b10">
+                    <div class="content_cheader display-flex">
+                        <label class="text_label first-capitalize font-bold ellipsis-horizontal">{$facebook}</label>
+                        <button class="btn_collapse btn-noway color-blue inhover-underline">{$word->change}</button>
+                    </div>
+                    <div class="content_citems margin-b15 margin-b5 hidden">
+                        <form novalidate>
+                            <div class="margin-b10">
+                                <strong>{$word->enter_a_new} {$word->facebook}</strong>
+                            </div>
+                            <div class="w-100 position-relative">
+                                <input id="facebook" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box<?php echo(!empty($TEMP['#user']['facebook'])) ? ' active' : '';?>" type="text" aria-label="{$word->facebook}" autocomplete="facebook" autocapitalize="off" data-send="facebook" value="{$me->facebook}">
+                                <div class="color-red text-left text-error font-low margin-t5"></div>
+                                <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal">{$word->facebook}</label>
+                            </div>
+                            <div class="margin-t10">
+                                <button class="btn_save btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit" disabled>
+                                   <span class="color-white">{$word->save}</span>
+                                   <div class="content-spinner-circle position-absolute">
+                                      <div class="spinner-circle"></div>
+                                   </div>
+                                </button>
+                                <button type="button" class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="container_collapse font-mediumly margin-b10">
+                    <div class="content_cheader display-flex">
+                        <label class="text_label first-capitalize font-bold ellipsis-horizontal">{$twitter}</label>
+                        <button class="btn_collapse btn-noway color-blue inhover-underline">{$word->change}</button>
+                    </div>
+                    <div class="content_citems margin-b15 margin-b5 hidden">
+                        <form novalidate>
+                            <div class="margin-b10">
+                                <strong>{$word->enter_a_new} {$word->twitter}</strong>
+                            </div>
+                            <div class="w-100 position-relative">
+                                <input id="twitter" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box<?php echo(!empty($TEMP['#user']['twitter'])) ? ' active' : '';?>" type="text" aria-label="{$word->twitter}" autocomplete="twitter" autocapitalize="off" data-send="twitter" value="{$me->twitter}">
+                                <div class="color-red text-left text-error font-low margin-t5"></div>
+                                <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal">{$word->twitter}</label>
+                            </div>
+                            <div class="margin-t10">
+                                <button class="btn_save btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit" disabled>
+                                   <span class="color-white">{$word->save}</span>
+                                   <div class="content-spinner-circle position-absolute">
+                                      <div class="spinner-circle"></div>
+                                   </div>
+                                </button>
+                                <button type="button" class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="container_collapse font-mediumly margin-b10">
+                    <div class="content_cheader display-flex">
+                        <label class="text_label first-capitalize font-bold ellipsis-horizontal">{$instagram}</label>
+                        <button class="btn_collapse btn-noway color-blue inhover-underline">{$word->change}</button>
+                    </div>
+                    <div class="content_citems margin-b15 margin-b5 hidden">
+                        <form novalidate>
+                            <div class="margin-b10">
+                                <strong>{$word->enter_a_new} {$word->instagram}</strong>
+                            </div>
+                            <div class="w-100 position-relative">
+                                <input id="instagram" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box<?php echo(!empty($TEMP['#user']['instagram'])) ? ' active' : '';?>" type="text" aria-label="{$word->instagram}" autocomplete="instagram" autocapitalize="off" data-send="instagram" value="{$me->instagram}">
+                                <div class="color-red text-left text-error font-low margin-t5"></div>
+                                <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal">{$word->instagram}</label>
+                            </div>
+                            <div class="margin-t10">
+                                <button class="btn_save btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit" disabled>
+                                   <span class="color-white">{$word->save}</span>
+                                   <div class="content-spinner-circle position-absolute">
+                                      <div class="spinner-circle"></div>
+                                   </div>
+                                </button>
+                                <button type="button" class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input id="upload-file" class="hidden" type="file" accept="image/jpeg, image/x-png">
+</div>
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/settings/style.settings.account.css}}" />
+{%%<script type="text/javascript">
+    $(document).ready(function(){
+        var s = $('#username'),
+            d = $('#day'),
+            m = $('#month'),
+            y = $('#year'),
+            W = $('#btn-verify-email'),
+            H = $('#btn-show-verify'),
+            S = W.siblings('.text-error'),
+            A = $('#content-vemail'),
+            J = $('#email-alert'),
+            X = $('#upload-file'),
+            N = $('#btn-upload'),
+            AA = N.parent().siblings('.text-error'),
+            GG = $('#text-email-count'),
+            JJ = GG.parent(),
+            L = $('#btn-ucancel'),
+            C = $('#content-avatar img'),
+            D = A.children(),
+            U = $('.item_changed'),
+            FF = $('.text_email'),
+            h = function(){
+                var x = $(this),
+                    g = x.parents('.container_collapse'),
+                    y = x.parents('form'),
+                    c = y.find('.item_input'),
+                    v = y.find('.text-error');
+                z(g.find('.content_cheader')), z(g.find('.content_citems')), v.text(''), q(c)<?php if($TEMP['#user']['type'] != 'normal'){ ?>, Z($('#content-disconnect')), z(y)<?php } ?>;
+            },
+            l = function(){
+                var g = $(this).parents('.container_collapse');
+                z(A), z(g.find('.content_cheader'));
+            },
+            u = function(i, e){
+                var p = i.parent();
+                p.addClass('spinner-is-loading'), $.post("{$url->{req/to-access/validate}}?token={#token_session}", e, function(e){
+                   e.S == 200 ? (n(p), i.siblings('.text-error').text(e.E), b(i)) : n(p);
+                })
+            },
+            M = function(e){
+                C.attr('src', e), Z(C), B = !0, BB = !0, N.text('{$word->upload}'), AA.text(''), Z(L), L.text('{$word->cancel}'), N.blur()
+            },
+            Z = function(e){
+                e.removeClass('hidden')
+            },
+            EE = function(e){
+                e.addClass('hidden')
+            },
+            z = function(e){
+                e.toggleClass('hidden')
+            },
+            t = function(e, i){
+                e.attr('disabled', i)
+            },
+            n = function(e){
+                e.removeClass('spinner-is-loading'), t(e, !0)
+            },
+            b = function(e){
+                e.addClass('border-red'), e.addClass('boxshadow-red')
+            },
+            q = function(e){
+                e.removeClass('border-red'), e.removeClass('boxshadow-red');
+            },
+            Q = [{$me->birth_day}, {$me->birthday_month}, {$me->birthday_year}],
+            CC = '{$me->avatar_s}',
+            B = !1,
+            BB = !1,
+            DD = {$default_holder},
+            I;
+
+        <?php if($TEMP['#user']['type'] != 'normal'){ ?>$('#btn-disconnect').click(function(){
+            var K = $(this).parent();
+            K.siblings('form').removeAttr('class'), EE(K);
+        }), <?php } ?>N.click(function(){
+            if(B){
+                I = new FormData(), I.append('avatar', X[0].files[0]), N.text('{$word->please_wait}'), t(N, !0), AA.text(''), $.ajax({
+                    url: "{$url->{req/settings/upload-avatar}}?token={#token_session}",
+                    type: 'POST',
+                    data: I,
+                    contentType: false,
+                    processData: false,
+                    success: function(e) {
+                        if(e.S == 200){
+                            N.text(e.EM), X.val(''), t(N, !1), DD = 1, CC = e.AV, L.text(e.ED), B = !1, BB = !1, Z(L);
+                        } else {
+                            N.text(e.EM), X.val(''), t(N, !1), e.DH == 1 && (L.text(e.ED), BB = !1), B = !1, C.attr('src', CC), AA.text(e.E);
+                        }
+                    }
+                });
+            } else {
+                X.trigger('click');
+            }
+        }), L.click(function(){
+            BB ? (C.attr('src', CC), X.val(''), B = !1, BB = !1, N.text('{$word->upload_a_picture}'), L.text('{$word->delete}'), AA.text(''), DD == 0 && EE(L)) : (L.text('{$word->please_wait}'), t(L, !0), AA.text(''), $.post("{$url->{req/settings/reset-avatar}}?token={#token_session}", function(e){
+                    e.S == 200 ? (DD = 0, CC = e.AV, C.attr('src', CC), N.text(e.EM), EE(L), L.text(e.ED), t(L, !1), N.blur()) : (AA.text(e.E));
+                }));
+        }), X.change(function(){
+            if (this.files && this.files[0]) {
+                var V = new FileReader();
+                if(V && V.readAsDataURL){
+                    V.readAsDataURL(this.files[0]), $(V).on('load', function(){
+                        M(V.result)
+                    })
+                } else if(window.URL.createObjectURL){
+                    M(window.URL.createObjectURL(this.files[0]))
+                }
+            }
+        }), $('.item_birthday').change(function(){
+            var a = (new Date(y.val(), m.val(), 0)).getDate(), j = d.val(), f;
+            d.html('<option value disabled selected>{$word->year}</option>');
+            for (var i = 1; i <= a; i++) f = $('<option>'), f.attr('value', i), f.text(i), i == j && f.attr('selected', !0), d.append(f);
+        }), U.change(function(){
+            if(Q.length == 3){
+                var R = $(this),
+                    T = R.attr('data-send'),
+                    O = R.parents('form').find('.btn_save'),
+                    Y = T == 'day' ? 0 : (T == 'month' ? 1 : 2);
+                Q[Y] = parseInt(R.val()), t(O, !1); 
+            }
+        }), $('.btn_cgeneral').click(function(){
+                var g = $(this).parents('.container_cgeneral'), k = $(this).find('svg');
+                z(g.find('.content_cgitems')), !k.attr('transform') ? k.attr('transform', 'rotate(180)') : k.removeAttr('transform');
+        }), $('.btn_save').click(function(e){
+            e.preventDefault();
+            var x = $(this),
+                y = x.parents('form'),
+                F = x.parents('.container_collapse'),
+                G = F.find('.text_label'),
+                c = y.find('.item_input'),
+                v = y.find('.text-error'),
+                P = c.length > 0,
+                w =  P ? c.attr('data-send') : 'birthday',
+                r = P ? c.val() : JSON.stringify(Q);
+
+            x.addClass('spinner-is-loading'), t(x, !0), $.post("{$url->{req/settings/account}}?token={#token_session}", {'input': w, 'value': r}, function(e) {
+                if(e.S == 200) {
+                    console.log(e);
+                    G.html(e.M), z(F.find('.content_cheader')), z(F.find('.content_citems')), P ? q(c) : q(U), n(x), w == 'new_email' && (e.EQ == 1 ? ($(FF[0]).attr('class', 'text_email display-block'), $(FF[1]).attr('class', 'text_email display-flex'), J.text(e.EM)) : ($(FF[0]).attr('class', 'text_email display-flex'), $(FF[1]).attr('class', 'display-inline-block ellipsis-horizontal'), J.text(e.EM)), e.EV == 1 && z(H)), w == 'username' && (c.attr('readonly', !0), $('#username-alert').text(e.EM)), w == 'birthday' && (t(U, !0), $('#birthday-alert').text(e.EM));
+                } else {
+                    v.text(e.E), P ? b(c) : b(U), n(x);
+                }
+            });
+        }), $('.item_input').on('input', function(){
+            var x = $(this),
+                y = x.parents('form'),
+                v = y.find('.text-error'),
+                w = x.attr('data-send'),
+                o = y.find('.btn_save'),
+                r = x.val(),
+                HH = r.length;
+
+            v.text(''), q(x);
+            if(w == 'username'){
+                if((new RegExp("^[a-zA-Z0-9]+$")).test(r)){
+                   u(s, {'username': r});
+                } else if(HH > 0){
+                   v.text('*{$word->write_only_numbers_letters}'), b(s)
+                }
+                if(HH > 16) {
+                   x.val(r.slice(0, 16))
+                }
+            } else if(w == 'new_email'){
+                u(x, {'email': r});
+            } else if(w == 'about'){
+                (HH > 400) ? (JJ.addClass('color-red'), JJ.removeClass('color-green'), JJ.removeClass('color-orange')) : ((HH > 250) ? (JJ.addClass('color-orange'), JJ.removeClass('color-red'), JJ.removeClass('color-green')) : (JJ.addClass('color-green'), JJ.removeClass('color-red'), JJ.removeClass('color-orange'))), GG.text(HH), x.val(r.slice(0, 500))
+            }
+            ['username', 'new_email', 'gender', 'birthday'].indexOf(w) != -1 && r == '' ? (v.text('*{$word->this_field_is_empty}'), b(x), t(o, !0)) : t(o, !1), HH > 0 ? x.addClass('active') : x.removeClass('active')
+        }), W.click(function(){
+            S.text(''), W.addClass('spinner-is-loading'), t(W, !0), $.post("{$url->{req/settings/send-code}}?token={#token_session}", function(e){
+                (e.S == 200) ? EE($(D[0]), Z($(D[1])), n(W)) : (S.text(e.E), n(W))
+            })
+        }), H.click(l), $('.btn_vcancel').click(l), $('.btn_collapse').click(h), $('.btn_ccancel').click(h);
+    })
+</script>%%}

@@ -1,0 +1,259 @@
+<main>
+   <div id="container-signup" class="content-signup border-rlow">
+      <div class="content-back background-grely margin-b10 border-bottom border-grely h-50">
+         <button id="btn-back-email" class="btn-noway display-flex w-100 direction-row align-center padding-t10 padding-b10 padding-l15 padding-r15 hover-button animation-ease3s" type="button">
+            <svg class="icon-z color-grey margin-r5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+               <path fill="currentColor" d="M 20 11.343 L 20 12.657 C 20 13.02 19.882 13.33 19.647 13.587 C 19.411 13.843 19.105 13.972 18.728 13.972 L 11.076 13.972 L 14.261 16.991 C 14.536 17.237 14.674 17.546 14.674 17.915 C 14.674 18.285 14.536 18.593 14.261 18.84 L 13.446 19.62 C 13.178 19.873 12.851 20 12.467 20 C 12.091 20 11.761 19.873 11.478 19.62 L 4.402 12.924 C 4.134 12.671 4 12.363 4 12 C 4 11.644 4.134 11.332 4.402 11.065 L 11.478 4.39 C 11.754 4.13 12.083 4 12.467 4 C 12.844 4 13.17 4.13 13.446 4.39 L 14.261 5.15 C 14.536 5.41 14.674 5.722 14.674 6.085 C 14.674 6.448 14.536 6.759 14.261 7.019 L 11.076 10.028 L 18.728 10.028 C 19.105 10.028 19.411 10.157 19.647 10.413 C 19.882 10.67 20 10.98 20 11.343 Z"></path>
+            </svg>
+            <span class="color-grey">{$word->back}</span>
+         </button>
+      </div>
+      <h1 class="font-big font-bold text-center margin-t15 margin-b15 padding-t25">{$word->register}</h1>
+      <div class="content-form">
+         <form novalidate>
+            <div id="fields-one" class="item-form-one">
+               <div class="signup-fields">
+                  <div class="w-100 position-relative padding-b10">
+                     <input id="username" class="input-username item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="text" maxlength="16" aria-label="{$word->username}" autocomplete="username" autocapitalize="off">
+                     <div class="color-red text-left text-error font-low margin-t5"></div>
+                     <label class="item-label position-absolute pointer-events-none ellipsis-horizontal">{$word->username}</label>
+                     <div class="content-spinner-circle position-absolute">
+                        <div class="spinner-circle"></div>
+                     </div>
+                  </div>
+                  <div class="w-100 position-relative">
+                     <input id="email" class="item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="text" aria-label="{$word->email}" autocomplete="email" autocapitalize="off">
+                     <div class="color-red text-left text-error font-low margin-t5"></div>
+                     <label class="item-label position-absolute pointer-events-none ellipsis-horizontal">{$word->email}</label>
+                     <div class="content-spinner-circle position-absolute">
+                        <div class="spinner-circle"></div>
+                     </div>
+                  </div>
+               </div>
+               <div class="signup-accept">
+                  <div class="margin-t10 margin-b10">
+                     <label for="accept-checkbox" class="display-flex position-relative align-start padding-t5 padding-b5">
+                        <span class="icon-y position-relative margin-r10">
+                           <input id="accept-checkbox" class="accept-checkbox icon-y background-white border-rlow border-all border-grely" type="checkbox">
+                           <svg class="accept-icon position-absolute color-white pointer-events-none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M10.052 16.245L3.265 9.46l-1.767 1.768 7.778 7.778a1.25 1.25 0 0 0 1.863-.107L23.415 3.413 21.456 1.86 10.052 16.245z" fill="currentColor" fill-rule="nonzero"></path>
+                           </svg>
+                        </span>
+                        <span class="display-block font-mediumly text-left">
+                        <span class="color-blackly">I agree to The Washington Post's <a class="color-blackly inhover-underline" href="https://www.washingtonpost.com/terms-of-service/2011/11/18/gIQAldiYiN_story.html" target="_blank">Terms of Service</a> and <a class="color-blackly inhover-underline" href="https://www.washingtonpost.com/privacy-policy/2011/11/18/gIQASIiaiN_story.html" target="_blank">Privacy Policy</a>.
+                        </span>
+                        <span class="font-medium color-red">*</span>
+                        </span>
+                     </label>
+                  </div>
+               </div>
+            </div>
+            <div id="fields-two" class="item-form-two hidden">
+               <div class="signup-fields margin-b15">
+                  <div class="w-100 position-relative padding-b10">
+                     <input id="password" class="item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="password" aria-label="{$word->password}" autocomplete="password" autocapitalize="off">
+                     <div class="color-red text-left text-error font-low margin-t5"></div>
+                     <label class="item-label position-absolute pointer-events-none ellipsis-horizontal">{$word->password}</label>
+                  </div>
+                  <div class="w-100 position-relative">
+                     <input id="re-password" class="item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="password" aria-label="{$word->confirm_password}" autocomplete="re-password" autocapitalize="off">
+                     <div class="color-red text-left text-error font-low margin-t5"></div>
+                     <label class="item-label position-absolute pointer-events-none ellipsis-horizontal">{$word->confirm_password}</label>
+                  </div>
+                  <div class="display-flex direction-colum align-center">
+                     <div id="valid-password" class="display-flex direction-row w-100 padding-t10 padding-b5">
+                        <div class="item-valid-password border-all margin-r15 w-25"></div>
+                        <div class="item-valid-password border-all margin-r15 w-25"></div>
+                        <div class="item-valid-password border-all margin-r15 w-25"></div>
+                        <div class="item-valid-password border-all w-25"></div>
+                     </div>
+                     <span class="display-inline-flex justify-center color-grey margin-t10 margin-b10">
+                        <b id="text-validate">{$word->write_a_password}</b>
+                     </span>
+                  </div>
+                  <div class="display-flex justify-center">
+                     <ul>
+                        <li class="display-flex direction-row align-center justify-center">
+                           <svg id="icon-five" class="color-grey margin-r5" width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <circle cx="4.5" cy="5" r="4.275" fill="currentColor" stroke="#D5D5D5" stroke-width="0.45"></circle>
+                              <path d="M2.36261 5.22692L4.09387 6.57489L6.61511 3.19989" stroke="white" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"></path>
+                           </svg>
+                           <div class="color-blackly font-mediumly">{$word->must_include_least_characters}</div>
+                        </li>
+                        <li class="display-flex direction-row align-center justify-center margin-t10">
+                           <svg id="icon-supported" class="color-grey margin-r5" width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg" data-qa="disabled-checkmark">
+                              <circle cx="4.5" cy="5" r="4.275" fill="currentColor" stroke="#D5D5D5" stroke-width="0.45"></circle>
+                              <path d="M2.36261 5.22692L4.09387 6.57489L6.61511 3.19989" stroke="white" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"></path>
+                           </svg>
+                           <div class="display-flex color-blackly font-mediumly">{$word->must_include_least_one}&nbsp;
+                              <div class="display-flex position-relative">
+                                 <button id="show-symbols" class="btn-noway inhover-underline" type="button" aria-haspopup="true" aria-label="{$word->supported_symbols}" aria-expanded="false">{$word->symbol}</button>
+                              </div>
+                           </div>
+                        </li>
+                        <li id="supported-symbols" class="h-0 overflow-hidden animation-ease3s margin-t10" aria-modal="true" role="dialog">
+                           <div class="text-symbols" role="toolbar">
+                              <div class="background-white border-rlow border-all border-grely padding-t10 padding-b10 padding-l10 padding-r10 text-center">
+                                 <span class="color-grey">{$word->supported_symbols}</span>
+                                 <p class="color-blue margin-t5">¡!"#$%&'()*+,-./:;<=>¿?@[]^_`{|}~</p>
+                              </div>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <button id="btn-register" class="button-access btn-noway w-100 h-36 background-blue color-white font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" disabled>
+               <span class="color-white">{$word->next}</span>
+               <div class="content-spinner-circle position-absolute">
+                  <div class="spinner-circle"></div>
+               </div>
+            </button>
+         </form>
+         <div class="helper-text color-blackly font-medium border-bottom border-grely margin-t15 margin-b15 text-center">
+            <span class="padding-l10 padding-r10">{$word->continue_with}</span>
+         </div>
+         <div class="padding-t10 padding-b25">
+            {$social_buttons}
+         </div>
+      </div>
+      <div>
+         <div id="recaptcha-container"></div>
+         <div class="have-account display-flex justify-around">
+            <span class="color-blackly font-medium">{$word->already_have_an_account} <a class="color-blackly inhover-underline" tabindex="0" href="{$url->{{#r_login}}}">{$word->login}</a></span>
+         </div>
+      </div>
+   </div>
+</main>
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.general.min.css}}" />
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.register.min.css}}" />
+{%%<script type="text/javascript">
+   $(document).ready(function(){
+      var a = $('#supported-symbols'),
+          q = $('#container-signup'),
+          K = $('#fields-one'),
+          u = $('#fields-two'),
+          x = $('#btn-register'),
+          w = $('#text-validate'),
+          D = $('#username'),
+          s = $('#email'),
+          v = $('#password'),
+          O = $('#re-password'),
+          L = $('.item_input'),
+          m = s.siblings('.text-error'),
+          R = O.siblings('.text-error'),
+          F = D.siblings('.text-error'),
+          y = function(e){
+            $('#accept-checkbox:checked').val() == 'on' && x.attr('disabled', e)
+          },
+          W = function(e){
+            e.addClass('border-red'), e.addClass('boxshadow-red');
+          },
+          P = function(e){
+            e.removeClass('border-red'), e.removeClass('boxshadow-red');
+          },
+          H = function(e){
+            e.siblings('.text-error').text('*{$word->this_field_is_empty}'), W(e);
+          },
+          C = function(e){
+            e.removeClass('spinner-is-loading'), e.removeAttr('disabled');
+          },
+          J = function(i, e){
+            var G = i.parent();
+            G.addClass('spinner-is-loading'), $.post("{$url->{req/to-access/validate}}?token={#token_session}", e, function(e){
+               e.S == 200 ? (C(G), i.siblings('.text-error').text('*'+e.E), W(i)) : C(G);
+            })
+          },
+          r = !0,
+          A = !1;
+      $('#accept-checkbox').change(function(){
+         var z = $(this).prop('checked');
+         r && (x.prop('disabled', !z), y(!z));
+      }), $('#show-symbols').click(function(){
+         var b = $(this),
+             c = JSON.parse(b.attr('aria-expanded'));
+          !c ? a.css('height', a.children().first().height()) : a.removeAttr('style'), b.attr('aria-expanded', !c);
+      }), x.click(function(){
+         var Y = D.val(),
+             Q = s.val(),
+             T = v.val();
+         if(Y.length == 0){
+            H(D);
+         } else if(r){
+            (new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/)).test(Q) ? 
+               (Q.length == 0 ? 
+                  (m.text('*{$word->this_field_is_empty}'), W(s)) 
+               : 
+               (q.addClass('has-back-button'), x.find('span').text('{$word->create_account}'), K.addClass('hidden'), u.removeClass('hidden'), y(!0), v.focus(), r = !1))
+            : 
+            (m.text('*{$word->enter_a_valid_email}'), W(s));
+         } else if(T.length == 0){
+            H(v);
+         } else {
+            x.addClass('spinner-is-loading'), x.attr('disabled', !0);
+            A && $.post("{$url->{req/to-access/register}}?token={#token_session}", {'username': Y, 'email': Q, 'password': T, 're-password': O.val(), 'return_url': '{#return_url}', 'return_param': '{#return_param}'}, function(e){
+               (e.S == 200) ? window.location = e.UR : (R.text('*'+e.E), W(L), C(x));
+            })
+         }
+      }), $('#btn-back-email').click(function(){
+         q.removeClass('has-back-button'), x.find('span').text('{$word->next}'), u.addClass('hidden'), K.removeClass('hidden'), y(!1), s.focus(), r = !0;
+      }), L.on('input', function(){
+         var U = $(this),
+             I = U.prop('id'),
+             Y = D.val(),
+             S = O.val(),
+             g = U.val(),
+             d = $('#valid-password').children(),
+             l = function(){
+               $(d.splice(0, 2)).addClass('border-orange'), w.text('{$word->password_security}: {$word->half}');
+             },
+             j = function(e, t){
+               if(e){
+                  t.removeClass('color-grey'), t.addClass('color-green')
+               } else {
+                  t.removeClass('color-green'), t.addClass('color-grey')
+               }
+             },
+             n = function(){
+               d.removeClass('border-red'), d.removeClass('border-orange'), d.removeClass('border-green')
+             },
+             k = g.length >= 8;
+         if(I == '{#username#}'){
+            F.text(''), P(D);
+            if((new RegExp("^[a-zA-Z0-9]+$")).test(Y)){
+               J(D, {'username': Y}), y(!1);
+            } else if(Y.length > 0){
+               F.text('*{$word->write_only_numbers_letters}'), W(D), y(!0)
+            }
+            if(g.length > 16) {
+               U.val(g.slice(0, 16))
+            }
+         } else if(I == '{#email#}'){
+            m.text(''), P(s), J(s, {'email': s.val()});
+         } else if(I == '{#password#}'){
+            if(!r){
+               R.text(''), y(!0), P(O), O.val(''), O.removeClass('active'), n();
+               if ((new RegExp("^(?=.{12,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[¡!\"#$%&'()*+,-./:;<=>¿?@\]\[^_`{|}~]).*$", "g")).test(g)) {
+                  d.addClass('border-green'), w.text('{$word->password_security}: {$word->strong}')
+               } else if((new RegExp("^(?=.{8,})(?=.*[a-z])(?=.*[0-9])(?=.*[¡!\"#$%&'()*+,-./:;<=>¿?@\]\[^_`{|}~]).*$", "g")).test(g)){
+                  $(d.splice(0, 3)).addClass('border-green'), w.text('{$word->password_security}: {$word->good}');
+               } else if((new RegExp("^(?=.{8,})(?=.*[¡!\"#$%&'()*+,-./:;<=>¿?@\]\[^_`{|}~]).*$", "g")).test(g)){
+                  l()
+               } else if ((new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g")).test(g)) {
+                  l()
+               } else {
+                  $(d[0]).addClass('border-red'), w.text('{$word->password_security}: {$word->weak}');
+               }
+               j(k, $('#icon-five')), j(/[¡!"#$%&'()*+,-./:;<=>¿?@[\]^_`{|}~]/.test(g), $('#icon-supported')), g.length == 0 && (n(), w.text('{$word->write_a_password}'));
+            }
+         } else if(I == '{#re-password#}'){
+            if(S.length > 0 && v.val() != S){
+               R.text('*{$word->passwords_not_match}'), W(O), y(!0), A = !1;
+            } else {
+               R.text(''), P(O), S.length > 0 ? y(!1) : y(!0), A = !0;
+            }
+         }
+         g.length > 0 ? U.addClass('active') : U.removeClass('active');
+      }), s.focus();
+   });
+</script>%%}

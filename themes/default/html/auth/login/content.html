@@ -1,0 +1,106 @@
+<main>
+   <div class="content-signup border-rlow">
+      <h1 class="font-big font-bold text-center margin-t15 margin-b15 padding-t25">{$word->login}</h1>
+      <div class="content-form">
+         <form novalidate>
+            <div class="item-form-one">
+               <div class="signup-fields">
+                  <div class="w-100 position-relative padding-b10">
+                     <input id="username" class="item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="text" aria-label="{$word->username}" autocomplete="username" autocapitalize="off">
+                     <label class="item-label position-absolute pointer-events-none ellipsis-horizontal">{$word->username}</label>
+                  </div>
+                  <div class="w-100 position-relative">
+                     <input id="password" class="item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="password" aria-label="{$word->password}" autocomplete="password" autocapitalize="off">
+                     <div class="color-red text-left text-error font-low margin-t5"></div>
+                     <label class="item-label position-absolute pointer-events-none ellipsis-horizontal">{$word->password}</label>
+                  </div>
+               </div>
+               <div class="signup-accept">
+                  <div class="margin-t10 margin-b10">
+                     <label for="accept-checkbox" class="display-flex position-relative align-start padding-t5 padding-b5">
+                        <span class="icon-y position-relative margin-r10">
+                           <input id="accept-checkbox" class="accept-checkbox icon-y background-white border-rlow border-all border-grely" type="checkbox">
+                           <svg class="accept-icon position-absolute color-white pointer-events-none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M10.052 16.245L3.265 9.46l-1.767 1.768 7.778 7.778a1.25 1.25 0 0 0 1.863-.107L23.415 3.413 21.456 1.86 10.052 16.245z" fill="currentColor" fill-rule="nonzero"></path>
+                           </svg>
+                        </span>
+                        <span class="display-block color-blackly font-mediumly text-left">{$word->keep_me_signed_in}
+                        </span>
+                     </label>
+                  </div>
+               </div>
+            </div>
+            <button id="btn-login" class="button-access btn-noway w-100 h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="submit" disabled>
+               <span class="color-white">{$word->login}</span>
+               <div class="content-spinner-circle position-absolute">
+                  <div class="spinner-circle"></div>
+               </div>
+            </button>
+         </form>
+         <div class="padding-t5 padding-b10 text-center">
+            <a class="color-blackly text-underline" href="{$url->{{#r_forgot_password}}}" target="_self">{$word->forgot_your_password}</a>
+         </div>
+         <div class="helper-text color-blackly font-medium border-bottom border-grely margin-t15 margin-b15 text-center">
+            <span class="padding-l10 padding-r10">{$word->continue_with}</span>
+         </div>
+         <div class="padding-t10 padding-b25">
+            {$social_buttons}
+         </div>
+      </div>
+      <div>
+         <div id="recaptcha-container"></div>
+         <div class="have-account display-flex justify-around">
+            <span class="color-blackly font-medium">{$word->do_not_have_account_yet} <a class="color-blackly text-underline" tabindex="0" href="{$url->{{#r_register}}}">{$word->register}</a></span>
+         </div>
+      </div>
+   </div>
+</main>
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.general.min.css}}" />
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.login.min.css}}" />
+{%%<script type="text/javascript">
+   $(document).ready(function(){
+      var x = $('#btn-login'),
+          D = $('#username'),
+          v = $('#password'),
+          F = v.siblings('.text-error'),
+          y = function(e, i){
+            i.attr('disabled', e)
+          },
+          W = function(e){
+            e.addClass('border-red'), e.addClass('boxshadow-red');
+          },
+          P = function(e){
+            e.removeClass('border-red'), e.removeClass('boxshadow-red');
+          },
+          H = function(e){
+            e.siblings('.text-error').text('*{$word->this_field_is_empty}'), W(e);
+          },
+          C = function(e){
+            e.removeClass('spinner-is-loading'), e.removeAttr('disabled');
+          };
+      x.click(function(e){
+         var Y = D.val(),
+             T = v.val();
+         Y.length == 0 ? (e.preventDefault(), H(D)) : (v.val().length == 0 ? (e.preventDefault(), H(v)) 
+            :
+            (x.addClass('spinner-is-loading'), y(!0, x), F.html(''), P(D), P(v), $.post("{$url->{req/to-access/login}}?token={#token_session}", {'username': Y, 'password': T, 'save-session': $('#accept-checkbox:checked').val(), 'return_url': '{#return_url}', 'return_param': '{#return_param}'}, function(e){
+                        e.S == 200 ?
+                           window.location.href = e.UR
+                           :
+                           (e.S == 401 ? (F.html('*'+e.E), W(D), W(v), C(x), e.EE == 'pending' && $('#btn-rcode').click(function(){
+                              var r = $(this);
+                              y(!0, r), r.text('{$word->please_wait}');
+                              $.post("{$url->{req/to-access/resend-code}}?token={#token_session}", {'tokenu': e.TK, 'type': 'verify_email'}, function(e){
+                                 (e.S == 200) ? (F.text(e.M), F.removeClass('color-red'), F.addClass('color-green'), P(D), P(v), setTimeout(function(){
+                                                            y(!1, r), F.text(''), F.removeClass('color-green'), F.addClass('color-red')
+                                                         }, 3000)) : (y(!1, r), F.text('*'+e.E))
+                              })
+                           })) : (F.text('*'+e.E), W(D), W(v), C(x)));
+                     }))
+                  )
+      }), $('.item_input').on('input', function(){
+         var U = $(this);
+         D.val() != '' && v.val() != '' ? y(!1, x) : y(!0, x), P(D), P(v), F.text(''), U.val().length > 0 ? U.addClass('active') : U.removeClass('active');
+      }), D.focus();
+   });
+</script>%%}

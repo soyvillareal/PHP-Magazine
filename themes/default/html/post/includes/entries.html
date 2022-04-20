@@ -1,0 +1,67 @@
+<div class="entry<?php echo(strpos($TEMP['!frame'], 'youtube')) ? ' yt-video' : '' ?>" id="section_{!order}" entry="{!id}"> 
+<?php if(!empty($TEMP['!title'])){ ?>
+<h3 class="sub-title margin-b15"> 
+    {!title}
+</h3>
+<?php } ?>
+<?php if($TEMP['!type'] == 'image'){ ?>
+<div class="display-flex margin-b15">
+    <div class="margin-left-auto margin-right-auto">
+        <div class="entry-image display-flex direction-colum align-center w-100">
+            <div class="item-entry-image<?php echo(!empty($TEMP['!next_image'])) ? 'margin-r10' : ''?>">
+                <figure class="item-entry-figure" aria-label="media" role="group">
+                    <picture class="item-entry-picture">
+                        <img src="{!frame}" alt="{!title}">
+                    </picture>
+                    <?php if(!empty($TEMP['!source'])){ ?>
+                    <figcaption class="color-grey margin-t10 text-center break-all">
+                        <span class="font-thumb-source">{!source}</span>
+                    </figcaption>
+                    <?php } ?>
+                </figure>
+            </div>
+            <?php if(!empty($TEMP['!next_image'])){ ?>
+            <div class="item-entry-image">
+                <figure class="item-entry-figure" aria-label="media" role="group">
+                    <picture class="item-entry-picture">
+                        <img src="{!next_frame}" alt="{!next_title}">
+                    </picture>
+                    <?php if(!empty($TEMP['!next_source'])){ ?>
+                    <figcaption class="color-grey margin-t10 text-center break-all">
+                        <span class="font-thumb-source">{!next_source}</span>
+                    </figcaption>
+                    <?php } ?>
+                </figure>
+            </div>
+            <?php } ?>
+        </div>
+    </div>
+</div>
+<?php } ?>
+<?php if($TEMP['!type'] == 'video' || $TEMP['!type'] == 'tweet' || $TEMP['!type'] == 'facebookpost' || $TEMP['!type'] == 'embed' || $TEMP['!type'] == 'soundcloud'){ ?>
+<?php if($TEMP['!type'] == 'facebookpost'){ ?>
+<div class="@fb-post margin-b15" data-href="{!frame}" data-width="100%"></div>
+<?php } else if(strpos($TEMP['!frame'], 'facebook')){ ?>
+<div class="text-center margin-b15">
+    <div class="@fb-video" data-href="{!frame}">
+        <div class="@fb-xfbml-parse-ignore"></div>
+    </div>
+</div>
+<?php } else { ?>
+{!frame}
+<?php } ?> 
+<?php } ?>
+<?php if($TEMP['!type'] == 'instagram'){ ?>
+<div class="margin-b15">
+    <iframe id="instagram-embed-{!order}" class="instagram-embed display-inline-block w-100" src="{!frame}embed/captioned/?cr=1&v=12&wp=658&rd={#site_url}&rp=%2F{$slug_encoded}#%7B%22ci%22%3A0%2C%22os%22%3A{!rand_one}.{!rand_two}%7D" allowtransparency="true" frameborder="0" data-instgrm-payload-id="instagram-media-payload-{!order}" scrolling="no"></iframe>
+</div> 
+<?php } ?>
+<?php if($TEMP['!type'] == 'text'){ ?>
+{!body}
+<?php if(!empty($TEMP['!source'])){ ?>
+<small>
+    {!source}
+</small>
+<?php } ?>
+<?php } ?>
+</div> 

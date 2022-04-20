@@ -1,0 +1,15 @@
+.post-aside {
+    width: 280px;
+}
+.item-related-aside:first-child img {
+    width: 280px;
+    height: 186px;
+}
+.item-related-aside img {
+    width: 90px;
+    height: 60px;
+}
+.item-related-aside:not(:first-child) h2 {
+    width: calc(100% - 90px);
+    word-break: break-all;
+}

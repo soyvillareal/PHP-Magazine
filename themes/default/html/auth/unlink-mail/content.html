@@ -1,0 +1,68 @@
+<main>
+   <div class="content-signup border-rlow">
+      <h1 id="unlink-title" class="font-big font-bold text-center margin-t15 margin-b15 padding-t25">{$title}</h1>
+      <div class="content-form">
+         <div id="unlink-pending" class="unlink-mail-pending<?php echo($TEMP['#user']['status'] == 'deactivated') ? ' hidden' : '';?>">
+            <p class="font-mediumly color-black text-center">{$word->not_create_account_associated_email}</p>
+            <div class="position-relative">
+               <button id="btn-popup" class="button-access btn-noway w-100 h-36 background-red color-white font-franklin font-medium font-bold margin-t15 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->deactivate_this_account}">{$word->deactivate_this_account}</button>
+               <div id="unlink-popup" class="content-unlink-popup position-absolute background-white margin-t10 padding-t20 padding-b20 padding-l20 padding-r20 text-center hidden">
+                  <span class="display-block font-medium font-bold">{$word->are_you_sure}</span>
+                  <p class="font-mediumly color-black margin-t5">{$word->action_can_not_undone}</p>
+                  <div class="display-flex direction-row align-center justify-center margin-t10" role="dialog" aria-label="{$word->deactivate_this_account}">
+                     <button id="btn-cancel" class="button-access btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
+                     <button id="btn-deactivated" class="button-access btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+                        <span class="color-white">{$word->yes}</span>
+                        <div class="content-spinner-circle position-absolute">
+                           <div class="spinner-circle"></div>
+                        </div>
+                     </button>
+                  </div>
+               </div>
+            </div>
+            <div class="helper-text color-blackly font-medium border-bottom border-grely margin-t15 margin-b15 text-center">
+               <span class="padding-l10 padding-r10">{$word->or}</span>
+            </div>
+            <a href="{$url->{{#r_verify_email}/{$verify_email}}}" target="_blank">
+               <button class="button-access btn-noway w-100 h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button">
+                  {$word->verify_your_account}
+               </button>
+            </a>
+            <div class="color-red text-center text-error font-low"></div>
+         </div>
+         <div id="unlink-deactivated" class="unlink-mail-deactivated<?php echo($TEMP['#user']['status'] == 'pending') ? ' hidden' : '';?>">
+            <p class="font-mediumly color-black text-center">{$word->account_was_deactivated_if_need_help} <a class="color-blue" href="{$url->{{#r_contact}}}" target="_blank">{$word->contact_us}</a></p>
+            <a href="{$url->{home}}" target="_self">
+               <button class="button-access btn-noway w-100 h-36 background-blue color-white font-franklin font-medium font-bold margin-t15 margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s">
+                  {$word->return_to}
+               </button>
+            </a>
+         </div>
+      </div>
+   </div>
+</main>
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.general.min.css}}" />
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.unlink.min.css}}" />
+<?php if($TEMP['#user']['status'] == 'pending'){ ?>
+{%%<script type="text/javascript">
+   $(document).ready(function(){
+      var a = $('#btn-deactivated'),
+          b = $('#unlink-popup'),
+          c = $('#btn-popup'),
+          x = function(e){
+            b.addClass('hidden'), c.removeAttr('disabled'), c.attr('aria-expanded', !1);
+          },
+          f = $('.text-error'),
+          C = function(e){
+            e.removeClass('spinner-is-loading'), e.removeAttr('disabled')
+          };
+      c.click(function(){
+         b.removeClass('hidden'), c.attr('disabled', !0), c.attr('aria-expanded', !0), c.blur();
+      }), $('#btn-cancel').click(x), a.click(function(){
+         a.addClass('spinner-is-loading'), a.attr('disabled', !0), f.text(''), $.post("{$url->{req/to-access/deactivate-account}}?token={#token_session}", {'tokenu': '{$token}'}, function(e){
+               e.S == 200 ? ($('#unlink-title').text('{$word->the_account_been_deactivated}'), $('#unlink-pending').addClass('hidden'), $('#unlink-deactivated').removeClass('hidden'), C(a), x()) : (f.text('*'+e.E), C(a), x());
+         })
+      })
+   });
+</script>%%}
+<?php } ?>

@@ -1,0 +1,26 @@
+.container-data-table .scroll-table-header {
+    overflow: auto
+}
+
+.content-row-table:nth-child(odd) {
+    background-color: #f5f5f5
+}
+
+.container-data-table .scroll-table-header::-webkit-scrollbar {
+    height: 5px;
+    border-radius: 12px
+}
+
+.container-data-table .scroll-table-header::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 12px
+}
+
+.container-data-table .scroll-table-header::-webkit-scrollbar-thumb {
+    background: #aaa;
+    border-radius: 12px
+}
+
+.container-data-table .scroll-table-header::-webkit-scrollbar-thumb:hover {
+    background: #909090
+}

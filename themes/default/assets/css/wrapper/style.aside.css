@@ -1,0 +1,12 @@
+@media (max-width: 991px){
+    .drawer {
+        top: 94px;
+        height: calc(100% - 94px);
+        z-index: 997;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .drawer-active .drawer {
+        display: block !important;
+    }
+}

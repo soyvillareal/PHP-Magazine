@@ -1,0 +1,87 @@
+.item_changed,
+.item_input {
+	height: 40px;
+}
+textarea.item_input {
+	min-height: 100px;
+}
+.item_input ~ .item-label {
+    top: 0;
+    left: 12px;
+    max-width: 90%;
+    padding-top: 11px;
+    transform-origin: 0 0;
+    transition: all .2s ease-out;
+    color: rgba(0,0,0,.6);
+}
+.item_input:not(textarea).active ~ .item-label,
+.item_input:not(textarea):focus ~ .item-label {
+    transform: translateY(-.01rem) translateX(-.1rem) scale(.7);
+}
+textarea.item_input ~ .item-label {
+    top: 1px;
+    left: 10px;
+    max-width: calc(100% - 28px);
+}
+textarea.item_input.active ~ .item-label,
+textarea.item_input:focus ~ .item-label {
+    font-size: .7rem;
+}
+.item_input:focus ~ .item-label {
+    color: #326891;
+}
+.content-birthday .item-one {
+	width: 60px;
+}
+.content-birthday .item-two {
+	width: 120px;
+}
+.content-birthday .item-three {
+	width: 80px;
+}
+.content-fields .content-spinner-circle {
+    left: unset;
+    right: 5px;
+    top: 21px;
+}
+.content-spinner-circle .spinner-circle {
+    height: 17px;
+    width: 17px;
+    border-width: 1px;
+    border-top-color: rgb(0, 0, 0, .3);
+    border-bottom-color: rgb(0, 0, 0, .3);
+    border-right-color: rgb(0, 0, 0, .3);
+    border-left-color: #fff;
+}
+.text_email.display-flex .text_label,
+.content_cheader.display-flex .text_label {
+	margin-right: 3px;
+}
+.text_email .text_label {
+	max-width: calc(100% - 85px);
+}
+#btn-show-verify {
+	max-width: 80px;
+}
+body {
+	color: #414141;
+  	background-color: #E0E0E0;
+}
+@media(min-width: 768px){
+	.btn_cgeneral {
+		pointer-events: none;
+	}
+}
+@media(max-width: 767px){
+	.container-settings .content-account {
+		display: block !important;
+	}
+	.content-account .item-one,
+	.content-account .item-two {
+		width: 100%;
+	}
+	.content-account .item-one {
+    	border-bottom: 1px solid;
+    	border-right: none;
+	}
+}

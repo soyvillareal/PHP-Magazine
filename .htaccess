@@ -1,0 +1,83 @@
+RewriteEngine On
+
+RewriteBase /las2rodillas
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^$ index.php?one=home [NC,QSA]
+
+RewriteRule ^ingresar$ index.php?one=login [NC,QSA]
+RewriteRule ^ingresar-social$ index.php?one=social-login [NC,QSA]
+RewriteRule ^registrarse$ index.php?one=register [NC,QSA]
+RewriteRule ^salir$ index.php?one=logout [NC,QSA]
+RewriteRule ^verificar-correo/([^/.]+)?$ index.php?one=verify-email&tokenu=$1 [NC,QSA]
+RewriteRule ^autenticacion/([^/.]+)?$ index.php?one=2check&tokenu=$1 [NC,QSA]
+RewriteRule ^recuperar-contrasena$ index.php?one=forgot-password [NC,QSA]
+RewriteRule ^cambiar-contrasena/([^\/]+)(\/|)$ index.php?one=reset-password&tokenu=$1 [NC,QSA]
+RewriteRule ^desvincular-correo/([^/.]+)?$ index.php?one=unlink-mail&tokenu=$1 [NC,QSA]
+
+RewriteRule ^change-email/([^/.]+)/([^\/]+)(\/|)?$ index.php?one=change-email&tokenu=$1&ukey=$2 [NC,QSA]
+
+
+RewriteRule ^ajustes$ index.php?one=settings&page=account [NC,QSA]
+RewriteRule ^ajustes/cuenta$ index.php?one=settings&page=account [NC,QSA]
+RewriteRule ^ajustes/seguridad$ index.php?one=settings&page=security [NC,QSA]
+
+RewriteRule ^cambiar-correo$ index.php?one=change-email [NC,QSA]
+
+RewriteRule ^pages/([^\/]+)(\/|)$ index.php?one=pages&two=$1 [QSA]
+
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^req/([^/.]+)/?$ requests.php?request-name=$1 [L,QSA]
+RewriteRule ^req/([^/.]+)/([^/.]+)/?$ requests.php?request-name=$1&one=$2 [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^\/]+)(\/|)$ index.php?one=$1 [QSA]
+
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE text/xml
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE image/x-icon
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE application/rss+xml
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/x-javascript
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE application/xhtml+xml
+  AddOutputFilterByType DEFLATE application/x-font
+  AddOutputFilterByType DEFLATE application/x-font-truetype
+  AddOutputFilterByType DEFLATE application/x-font-ttf
+  AddOutputFilterByType DEFLATE application/x-font-otf
+  AddOutputFilterByType DEFLATE application/x-font-opentype
+  AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+  AddOutputFilterByType DEFLATE font/ttf
+  AddOutputFilterByType DEFLATE font/otf
+  AddOutputFilterByType DEFLATE font/opentype
+  BrowserMatch ^Mozilla/4 gzip-only-text/html
+  BrowserMatch ^Mozilla/4\.0[678] no-gzip
+  BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+</IfModule>
+<IfModule mod_security.c>
+  SecFilterScanPOST Off
+</IfModule>
+## EXPIRES CACHING ##
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType image/jpg "access plus 1 year"
+ExpiresByType image/jpeg "access plus 1 year"
+ExpiresByType image/gif "access plus 1 year"
+ExpiresByType image/png "access plus 1 year"
+ExpiresByType text/css "access plus 1 month"
+ExpiresByType application/pdf "access plus 1 month"
+ExpiresByType text/x-javascript "access plus 1 month"
+ExpiresByType application/x-shockwave-flash "access plus 1 month"
+ExpiresByType image/x-icon "access plus 1 year"
+ExpiresDefault "access plus 190 days"
+</IfModule>
+## EXPIRES CACHING ##
