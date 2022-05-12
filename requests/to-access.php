@@ -244,11 +244,11 @@ if($one == 'login'){
 			    $reset_password = Specific::UserToken('reset_password', $user_id);
 			    $token = $reset_password['token'];
 
-	           	if($reset_password['return'] == true){
-	           		$password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+		        if($reset_password['return'] == true){
+		       		$password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 				    if ($dba->query('UPDATE '.T_USER.' SET password = ? WHERE id = ?', $password, $user_id)->returnStatus()) {
-					    $deliver['S'] = 200;
-				    }
+						$deliver['S'] = 200;
+					}
 				}
 			}
 		}

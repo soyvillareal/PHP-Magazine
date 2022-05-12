@@ -64,8 +64,8 @@
          <div class="content-dropdown-account margin-left-auto">
             <button class="btn_account button-general display-flex direction-row align-center h-30 btn-noway display-none-mob background-hover border-rlow vertical-middle animation-ease3s" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Cuenta">
                <span class="display-inline-block vertical-middle color-black margin-r5 font-low">Cuenta</span>
-               <svg class="icon-s" viewBox="0 0 13 8">
-                  <polygon fill="currentColor" points="6.5,8 0,1.4 1.4,0 6.5,5.2 11.6,0 13,1.4"></polygon>
+               <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                 <path fill="currentColor" d="M21.707,8.707l-9,9a1,1,0,0,1-1.414,0l-9-9A1,1,0,1,1,3.707,7.293L12,15.586l8.293-8.293a1,1,0,1,1,1.414,1.414Z"/>
                </svg>
             </button>
             <div class="dropdown-account position-absolute background-white border-rlow border-all border-grely hidden" role="dialog" aria-label="Menu de la cuenta" aria-modal="true">
@@ -78,7 +78,7 @@
                   </a>
                </div>
                <div class="dropdown-account-item padding-t10 padding-b10 padding-l10 padding-r10 border-bottom border-grely">
-                  <a class="color-grey font-medium hover-button" href="{$url->{{#r_settings}}}" target="_self" title="Configuraciones">Crear publicación</a>
+                  <a class="color-grey font-medium hover-button" href="{$url->{{#r_create_post}}}" target="_self" title="Configuraciones">Crear publicación</a>
                </div>
                <div class="dropdown-account-item padding-t10 padding-b10 padding-l10 padding-r10 border-bottom border-grely">
                   <a class="color-grey font-medium hover-button" href="{$url->{{#r_settings}}}" target="_self" title="Configuraciones">Configuraciones</a>
@@ -211,7 +211,7 @@
       {$content}
    </div>
    <?php if($TEMP['#page'] != 'post'){ ?>
-   <footer class="content-footer w-100 padding-t15 position-relative border-top border-grey">
+   <footer class="content-footer w-100 padding-t15 border-top border-grey">
       <div class="items-footer padding-r15 padding-l15 margin-left-auto margin-right-auto margin-b10">
          <!-- footer widget about-->
          <div class="margin-auto flex-2 padding-r15 padding-l15">
@@ -332,7 +332,7 @@
          }), s.click(function(){
             a.toggleClass('drawer-active'), g($(this))<?php echo($TEMP['#loggedin'] == false) ? ', f()' : '';?>;
          })<?php if($TEMP['#loggedin'] === true){ ?>, h.click(function(){
-            a.toggleClass('dropdown-account-active'), h.siblings().toggleClass('hidden'), h.toggleClass('active'), g(h), !$(this).hasClass('button-login') && !j.prop('transform') ? j.attr('transform', 'rotate(180)') : j.removeAttr('transform');
+            a.toggleClass('dropdown-account-active'), h.siblings().toggleClass('hidden'), h.toggleClass('active'), g(h), !$(this).hasClass('button-login') && !j.attr('transform') ? j.attr('transform', 'rotate(180)') : j.removeAttr('transform');
          }), $('#dropdown-account-overlay').click(function(e){
             a.removeClass('dropdown-account-active'), h.siblings().addClass('hidden'), h.removeClass('active'), j.removeAttr('transform'), g(h);
          })<?php } else { ?>, $('#login-overlay').click(f), $('#btn-modal-login').click(function(){

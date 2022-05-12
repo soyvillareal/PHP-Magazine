@@ -7,12 +7,12 @@
                   <div class="w-100 position-relative padding-b10">
                      <input id="password" class="item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="password" aria-label="{$word->password}" autocomplete="password" autocapitalize="off">
                      <div class="color-red text-left text-error font-low margin-t5"></div>
-                     <label class="item-label position-absolute pointer-events-none ellipsis-horizontal">{$word->password}</label>
+                     <label class="item-label position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->password}</label>
                   </div>
                   <div class="w-100 position-relative">
                      <input id="re-password" class="item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="password" aria-label="{$word->confirm_password}" autocomplete="re-password" autocapitalize="off">
                      <div class="color-red text-left text-error font-low margin-t5"></div>
-                     <label class="item-label position-absolute pointer-events-none ellipsis-horizontal">{$word->confirm_password}</label>
+                     <label class="item-label position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->confirm_password}</label>
                   </div>
                   <div class="display-flex direction-colum align-center">
                      <div id="valid-password" class="display-flex direction-row w-100 padding-t10 padding-b5">
@@ -96,18 +96,9 @@
              c = JSON.parse(b.attr('aria-expanded'));
           !c ? a.css('height', a.children().first().height()) : a.removeAttr('style'), b.attr('aria-expanded', !c);
       }), x.click(function(){
-         var T = v.val();
-         if(T.length == 0){
-            v.siblings('.text-error').text('*{$word->this_field_is_empty}'), W(v)
-         } else {
-            x.addClass('spinner-is-loading'), x.attr('disabled', !0);
-            $.post("{$url->{req/to-access/reset-password}}?token={#token_session}", {'password': T, 're-password': O.val(), 'tokenu': '{$tokenu}'}, function(e){
-               (e.S == 200) ?
-                  window.location.href = "{$url->{{#r_login}}}"
-                  :
-                  (R.text('*'+e.E), W(v), W(O), x.removeClass('spinner-is-loading'), x.removeAttr('disabled'));
-            })
-         }
+         x.addClass('spinner-is-loading'), x.attr('disabled', !0), $.post("{$url->{req/to-access/reset-password}}?token={#token_session}", {'password': v.val(), 're-password': O.val(), 'tokenu': '{$tokenu}'}, function(e){
+            (e.S == 200) ? window.location.href = "{$url->{{#r_login}}}" : (R.text(e.E), W(v), W(O), x.removeClass('spinner-is-loading'), x.removeAttr('disabled'));
+         })
       }), $('.item_input').on('input', function(){
          var U = $(this),
              I = U.prop('id'),
@@ -143,10 +134,7 @@
                }
                j(k, $('#icon-five')), j(/[¡!"#$%&'()*+,-./:;<=>¿?@[\]^_`{|}~]/.test(g), $('#icon-supported')), g.length == 0 && (n(), w.text('{$word->write_a_password}'));
          } else if(I == '{#re-password#}'){
-            P(v), (S.length > 0 && v.val() != S) ?
-               (R.text('*{$word->passwords_not_match}'), W(O), y(!0))
-            :
-               (R.text(''), P(O), S.length > 0 ? y(!1) : y(!0));
+            P(v), (S.length > 0 && v.val() != S) ? (R.text('*{$word->passwords_not_match}'), W(O), y(!0)) : (R.text(''), P(O), S.length > 0 ? y(!1) : y(!0));
          }
          g.length > 0 ? U.addClass('active') : U.removeClass('active');
       }), v.focus();

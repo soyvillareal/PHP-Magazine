@@ -10,10 +10,9 @@ if (!empty($user_id)) {
 }
 
 $TEMP['#page']        = 'change-password';
-$TEMP['#title']       = $TEMP['#word']['settings'] . ' - ' . $TEMP['#settings']['title'];
+$TEMP['#title']       = $TEMP['#word']['change_password'] . ' - ' . $TEMP['#settings']['title'];
 $TEMP['#description'] = $TEMP['#settings']['description'];
 $TEMP['#keyword']     = $TEMP['#settings']['keyword'];
 
-$TEMP['second_page'] = Specific::Maket('settings/change-password/content');
-$TEMP['#content']     = Specific::Maket("settings/content");
+$TEMP['#content']     = Specific::Maket("settings/change-password/content");
 ?>

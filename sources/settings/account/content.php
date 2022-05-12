@@ -13,9 +13,21 @@ if (!empty($user_id)) {
 $TEMP['email'] = !empty($TEMP['#user']['new_email']) ? $TEMP['#user']['new_email'] : $TEMP['#user']['email'];
 $TEMP['name'] = !empty($TEMP['#user']['name']) ? $TEMP['#user']['name'] : $TEMP['#word']['name'];
 $TEMP['surname'] = !empty($TEMP['#user']['surname']) ? $TEMP['#user']['surname'] : $TEMP['#word']['surname'];
-$TEMP['about'] = !empty($TEMP['#user']['about']) ? $TEMP['#user']['about'] : $TEMP['#word']['about'];
+$TEMP['about'] = !empty($TEMP['#user']['about']) ? $TEMP['#user']['about'] : $TEMP['#word']['description'];
 $TEMP['birthday'] = $TEMP['#user']['birthday'] == 0 ? 'Fecha de nacimiento' : Specific::DateFormat($TEMP['#user']['birthday']);
 $TEMP['gender'] = $TEMP['#word'][$TEMP['#user']['gender']];
+
+$newsletter = $dba->query('SELECT slug, status, COUNT(*) as count FROM '.T_NEWSLETTER.' WHERE email = ?', $TEMP['#user']['email'])->fetchArray();
+$TEMP['#newsletter_exists'] = false;
+$TEMP['#newsletter_status'] = 'disabled';
+if($newsletter['count'] > 0){
+    $TEMP['#newsletter_exists'] = $newsletter['status'] == 'enabled';
+    $TEMP['#newsletter_status'] = $newsletter['status'];
+}
+$TEMP['newsletter'] = "{$TEMP['#word']['newsletter_settings']} ({$TEMP['#word'][$TEMP['#newsletter_status']]})";
+$TEMP['newsletter_slug'] = $newsletter['slug'];
+
+$TEMP['2check'] = "{$TEMP['#word']['2check']} ({$TEMP['#word'][$TEMP['#user']['2check']]})";
 $TEMP['facebook'] = !empty($TEMP['#user']['facebook']) ? $TEMP['#user']['facebook'] : $TEMP['#word']['facebook'];
 $TEMP['twitter'] = !empty($TEMP['#user']['twitter']) ? $TEMP['#user']['twitter'] : $TEMP['#word']['twitter'];
 $TEMP['instagram'] = !empty($TEMP['#user']['instagram']) ? $TEMP['#user']['instagram'] : $TEMP['#word']['instagram'];
@@ -37,6 +49,5 @@ $TEMP['#title']       = $TEMP['#word']['settings'] . ' - ' . $TEMP['#settings'][
 $TEMP['#description'] = $TEMP['#settings']['description'];
 $TEMP['#keyword']     = $TEMP['#settings']['keyword'];
 
-$TEMP['second_page']  = Specific::Maket('settings/account/content');
-$TEMP['#content']     = Specific::Maket("settings/content");
+$TEMP['#content']     = Specific::Maket("settings/account/content");
 ?>

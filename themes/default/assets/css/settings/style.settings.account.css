@@ -2,21 +2,20 @@
 .item_input {
 	height: 40px;
 }
-textarea.item_input {
-	min-height: 100px;
-}
 .item_input ~ .item-label {
     top: 0;
     left: 12px;
     max-width: 90%;
     padding-top: 11px;
     transform-origin: 0 0;
-    transition: all .2s ease-out;
-    color: rgba(0,0,0,.6);
 }
 .item_input:not(textarea).active ~ .item-label,
 .item_input:not(textarea):focus ~ .item-label {
-    transform: translateY(-.01rem) translateX(-.1rem) scale(.7);
+    transform: translateY(-.1rem) translateX(-.1rem) scale(.7);
+}
+textarea.item_input {
+	resize: vertical;
+	min-height: 100px;
 }
 textarea.item_input ~ .item-label {
     top: 1px;
@@ -73,7 +72,7 @@ body {
 	}
 }
 @media(max-width: 767px){
-	.container-settings .content-account {
+	#global-content .content-account {
 		display: block !important;
 	}
 	.content-account .item-one,

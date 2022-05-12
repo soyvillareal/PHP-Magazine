@@ -1,192 +1,160 @@
-<form class="password-panel form-middle" id="password-boom" action="javascript:void(0)">
-    <div class="max-w-900 border-top-left-radius border-top-right-radius background-white padding-25">
-        <div class="group-validate display-block margin-t15 position-relative w-100 padding-25">
-            <div class="display-flex flex-wrap">
-                <div class="cont-label dv-vertical-center">
-        		  <label class="color-black">{$word->current_password}</label>
-                </div>
-                <div class="flex-grow position-relative">
-            	    <input class="cont-input h-50 border-radius-12 animated-easy border-focus-blue padding-right-50 input_key background-grely color-black" id="current-password" autocomplete="off" type="password">
-                    <button class="btn-noway display-inline-flex background-hover color-grey binput-inleft border-top-right-radius border-bottom-right-radius" tabindex="-1">
-                        <svg class="dv-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path fill="currentColor" d="M 19.714 12 C 18.696 10.361 17.421 9.135 15.887 8.323 C 16.296 9.045 16.5 9.826 16.5 10.667 C 16.5 11.951 16.06 13.05 15.179 13.964 C 14.299 14.877 13.239 15.333 12 15.333 C 10.761 15.333 9.701 14.877 8.821 13.964 C 7.94 13.05 7.5 11.951 7.5 10.667 C 7.5 9.826 7.704 9.045 8.113 8.323 C 6.579 9.135 5.304 10.361 4.286 12 C 5.176 13.424 6.293 14.557 7.636 15.401 C 8.978 16.245 10.433 16.667 12 16.667 C 13.567 16.667 15.022 16.245 16.364 15.401 C 17.707 14.557 18.824 13.424 19.714 12 Z M 12.482 8 C 12.482 7.861 12.435 7.743 12.342 7.646 C 12.248 7.549 12.134 7.5 12 7.5 C 11.163 7.5 10.445 7.811 9.845 8.432 C 9.246 9.054 8.946 9.799 8.946 10.667 C 8.946 10.806 8.993 10.924 9.087 11.021 C 9.181 11.118 9.295 11.167 9.429 11.167 C 9.563 11.167 9.676 11.118 9.77 11.021 C 9.864 10.924 9.911 10.806 9.911 10.667 C 9.911 10.069 10.115 9.559 10.523 9.135 C 10.932 8.712 11.424 8.5 12 8.5 C 12.134 8.5 12.248 8.451 12.342 8.354 C 12.435 8.257 12.482 8.139 12.482 8 Z M 21 12 C 21 12.236 20.933 12.476 20.799 12.719 C 19.862 14.316 18.601 15.595 17.017 16.557 C 15.434 17.519 13.761 18 12 18 C 10.239 18 8.566 17.517 6.983 16.552 C 5.399 15.587 4.138 14.309 3.201 12.719 C 3.067 12.476 3 12.236 3 12 C 3 11.764 3.067 11.524 3.201 11.281 C 4.138 9.691 5.399 8.413 6.983 7.448 C 8.566 6.483 10.239 6 12 6 C 13.761 6 15.434 6.483 17.017 7.448 C 18.601 8.413 19.862 9.691 20.799 11.281 C 20.933 11.524 21 11.764 21 12 Z"/>
-                        </svg>
-                    </button>
-                    <div class="color-red text-left text-error font-low margin-t5"></div>
-                </div>
+<div class="content-signup border-rlow">
+   <div class="background-grely padding-t10 padding-b10 padding-l10 padding-r10 border-bottom border-grely">
+      <a class="display-flex direction-row align-center hover-button" href="{$url->{{#r_settings}}}" target="_self">
+         <svg class="icon-z color-grey margin-r5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path fill="currentColor" d="M 20 11.343 L 20 12.657 C 20 13.02 19.882 13.33 19.647 13.587 C 19.411 13.843 19.105 13.972 18.728 13.972 L 11.076 13.972 L 14.261 16.991 C 14.536 17.237 14.674 17.546 14.674 17.915 C 14.674 18.285 14.536 18.593 14.261 18.84 L 13.446 19.62 C 13.178 19.873 12.851 20 12.467 20 C 12.091 20 11.761 19.873 11.478 19.62 L 4.402 12.924 C 4.134 12.671 4 12.363 4 12 C 4 11.644 4.134 11.332 4.402 11.065 L 11.478 4.39 C 11.754 4.13 12.083 4 12.467 4 C 12.844 4 13.17 4.13 13.446 4.39 L 14.261 5.15 C 14.536 5.41 14.674 5.722 14.674 6.085 C 14.674 6.448 14.536 6.759 14.261 7.019 L 11.076 10.028 L 18.728 10.028 C 19.105 10.028 19.411 10.157 19.647 10.413 C 19.882 10.67 20 10.98 20 11.343 Z"></path>
+         </svg>
+         <span class="color-blackly">{$word->back_to_settings}</span>
+      </a>
+   </div>
+   <h1 class="font-big font-bold text-center margin-t15 margin-b15 padding-t25">{$word->change_password}</h1>
+   <div class="content-form">
+      <form novalidate>
+         <div class="signup-fields margin-b15">
+            <div class="w-100 position-relative padding-b10">
+               <input id="current-password" class="item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="password" aria-label="{$word->current_password}" autocomplete="current-password" autocapitalize="off">
+               <div class="color-red text-left text-error font-low margin-t5"></div>
+               <label class="item-label position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->current_password}</label>
+               <div class="content-spinner-circle position-absolute">
+                  <div class="spinner-circle"></div>
+               </div>
             </div>
-    	</div>
-        <div class="group-validate display-block margin-t15 position-relative w-100 padding-25">
-            <div class="display-flex flex-wrap">
-                <div class="cont-label dv-vertical-center">
-        		  <label class="color-black">{$word->new_password}</label>
-                </div>
-                <div class="flex-grow position-relative">
-            	    <input class="cont-input h-50 border-radius-12 animated-easy border-focus-blue padding-right-50 input_key background-grely color-black" id="password" autocomplete="off" type="password">
-                    <button class="btn-noway display-inline-flex background-hover color-grey binput-inleft border-top-right-radius border-bottom-right-radius" tabindex="-1">
-                        <svg class="dv-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path fill="currentColor" d="M 19.714 12 C 18.696 10.361 17.421 9.135 15.887 8.323 C 16.296 9.045 16.5 9.826 16.5 10.667 C 16.5 11.951 16.06 13.05 15.179 13.964 C 14.299 14.877 13.239 15.333 12 15.333 C 10.761 15.333 9.701 14.877 8.821 13.964 C 7.94 13.05 7.5 11.951 7.5 10.667 C 7.5 9.826 7.704 9.045 8.113 8.323 C 6.579 9.135 5.304 10.361 4.286 12 C 5.176 13.424 6.293 14.557 7.636 15.401 C 8.978 16.245 10.433 16.667 12 16.667 C 13.567 16.667 15.022 16.245 16.364 15.401 C 17.707 14.557 18.824 13.424 19.714 12 Z M 12.482 8 C 12.482 7.861 12.435 7.743 12.342 7.646 C 12.248 7.549 12.134 7.5 12 7.5 C 11.163 7.5 10.445 7.811 9.845 8.432 C 9.246 9.054 8.946 9.799 8.946 10.667 C 8.946 10.806 8.993 10.924 9.087 11.021 C 9.181 11.118 9.295 11.167 9.429 11.167 C 9.563 11.167 9.676 11.118 9.77 11.021 C 9.864 10.924 9.911 10.806 9.911 10.667 C 9.911 10.069 10.115 9.559 10.523 9.135 C 10.932 8.712 11.424 8.5 12 8.5 C 12.134 8.5 12.248 8.451 12.342 8.354 C 12.435 8.257 12.482 8.139 12.482 8 Z M 21 12 C 21 12.236 20.933 12.476 20.799 12.719 C 19.862 14.316 18.601 15.595 17.017 16.557 C 15.434 17.519 13.761 18 12 18 C 10.239 18 8.566 17.517 6.983 16.552 C 5.399 15.587 4.138 14.309 3.201 12.719 C 3.067 12.476 3 12.236 3 12 C 3 11.764 3.067 11.524 3.201 11.281 C 4.138 9.691 5.399 8.413 6.983 7.448 C 8.566 6.483 10.239 6 12 6 C 13.761 6 15.434 6.483 17.017 7.448 C 18.601 8.413 19.862 9.691 20.799 11.281 C 20.933 11.524 21 11.764 21 12 Z"/>
-                        </svg>
-                    </button>
-                    <div class="color-red text-left text-error font-low margin-t5"></div>
-                </div>
+            <div class="w-100 position-relative padding-b10">
+               <input id="password" class="item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="password" aria-label="{$word->password}" autocomplete="password" autocapitalize="off">
+               <div class="color-red text-left text-error font-low margin-t5"></div>
+               <label class="item-label position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->password}</label>
             </div>
-    	</div>
-        <div class="group-validate display-block margin-t15 position-relative w-100 padding-25">
-            <div class="display-flex flex-wrap">
-                <div class="cont-label dv-vertical-center">
-        		  <label class="color-black">{$word->confirm_new_password}</label>
-                </div>
-                <div class="flex-grow position-relative">
-            	    <input class="cont-input h-50 border-radius-12 animated-easy border-focus-blue padding-right-50 input_key background-grely color-black" id="re-password" autocomplete="off" type="password">
-                    <button class="btn-noway display-inline-flex background-hover color-grey binput-inleft border-top-right-radius border-bottom-right-radius" tabindex="-1">
-                        <svg class="dv-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path fill="currentColor" d="M 19.714 12 C 18.696 10.361 17.421 9.135 15.887 8.323 C 16.296 9.045 16.5 9.826 16.5 10.667 C 16.5 11.951 16.06 13.05 15.179 13.964 C 14.299 14.877 13.239 15.333 12 15.333 C 10.761 15.333 9.701 14.877 8.821 13.964 C 7.94 13.05 7.5 11.951 7.5 10.667 C 7.5 9.826 7.704 9.045 8.113 8.323 C 6.579 9.135 5.304 10.361 4.286 12 C 5.176 13.424 6.293 14.557 7.636 15.401 C 8.978 16.245 10.433 16.667 12 16.667 C 13.567 16.667 15.022 16.245 16.364 15.401 C 17.707 14.557 18.824 13.424 19.714 12 Z M 12.482 8 C 12.482 7.861 12.435 7.743 12.342 7.646 C 12.248 7.549 12.134 7.5 12 7.5 C 11.163 7.5 10.445 7.811 9.845 8.432 C 9.246 9.054 8.946 9.799 8.946 10.667 C 8.946 10.806 8.993 10.924 9.087 11.021 C 9.181 11.118 9.295 11.167 9.429 11.167 C 9.563 11.167 9.676 11.118 9.77 11.021 C 9.864 10.924 9.911 10.806 9.911 10.667 C 9.911 10.069 10.115 9.559 10.523 9.135 C 10.932 8.712 11.424 8.5 12 8.5 C 12.134 8.5 12.248 8.451 12.342 8.354 C 12.435 8.257 12.482 8.139 12.482 8 Z M 21 12 C 21 12.236 20.933 12.476 20.799 12.719 C 19.862 14.316 18.601 15.595 17.017 16.557 C 15.434 17.519 13.761 18 12 18 C 10.239 18 8.566 17.517 6.983 16.552 C 5.399 15.587 4.138 14.309 3.201 12.719 C 3.067 12.476 3 12.236 3 12 C 3 11.764 3.067 11.524 3.201 11.281 C 4.138 9.691 5.399 8.413 6.983 7.448 C 8.566 6.483 10.239 6 12 6 C 13.761 6 15.434 6.483 17.017 7.448 C 18.601 8.413 19.862 9.691 20.799 11.281 C 20.933 11.524 21 11.764 21 12 Z"/>
-                        </svg>
-                    </button>
-                    <div class="color-red text-left text-error font-low margin-t5"></div>
-                </div>
-            </div>                    
-        </div>
-    </div>
-    <div class="background-white max-w-900 border-bottom-right-radius border-bottom-left-radius padding-25">
-        <div class="display-flex flex-center">
-            <button class="btn-noway background-blue border-radius-4 padding-10 cursor-disabled color-white hover-opacity" id="password-change" disabled>
-                <span class="color-white">{$word->save}</span>
-                <div class="content-spinner-circle">
-                    <div class="spinner-circle"></div>
-                </div>
-            </button>
-        </div>
-        <div class="margin-t15 text-center w-100 color-black hidden" id="alert-general-settings">{$word->there_problems_with_some_fields}</div>
-    </div>
-</form>
-<script>
-var PI = D.querySelectorAll('.input_key'),
-    PV = D.querySelectorAll('.binput-inleft'),
-    PB = D.querySelector('#password-change'),
-    PS = D.querySelector('#alert-general-settings'),
-    PE = D.querySelector('#current-password'),
-    PP = D.querySelector('#password'),
-    PC = D.querySelector('#re-password'),
-    PZ = D.querySelector('#password-boom'),
-    PF = function(){
-        PX = !1;
-        if((PE.value == '' || PP.value == '' || PC.value == '') && !PX){
-            for (var j = 0, i = PI.length; j < i; j++){
-                var el = PI[j],
-                    GZ = el.parentNode,
-                    GH = hasClass(GZ, 'group-validate') ? GZ : GZ.parentNode;
-                if(el.value == ''){
-                    GH.querySelector('.text-error').innerText = '*{$word->this_field_is_empty}', removeClass(PS, 'hidden'), addClass(el, 'border-red'), addClass(el, 'boxshadow-red'), timeDelay(function(){
-                        addClass(PZ, 'efect-boom'), timeDelay(function(){
-                            removeClass(PZ, 'efect-boom')
-                        }, 200)
-                    }, 700);
-                }
-            }
-            return false;
-        } else {
-            for (var j = 0, i = PI.length; j < i; j++) {
-                var el = PI[j],
-                    GZ = el.parentNode,
-                    GH = hasClass(GZ, 'group-validate') ? GZ : GZ.parentNode;
-                if(el.value != ''){
-                    GH.querySelector('.text-error').innerText = "", addClass(PS, 'hidden'), removeClass(el, 'border-red'), removeClass(el, 'boxshadow-red');
-                }
-            }
-        }
-        addClass(PB, 'spinner-is-loading'), PB.setAttribute('disabled', true);
-        Req("{$url->{req/settings/change-password}}", function(e){
-            if (e.status == 200) {
-                addClass(PS, 'hidden'), removeClass(PB, 'spinner-is-loading'), PB.removeAttribute('disabled'), loadAlert("{$word->setting_updated}");
-                for (var j = 0, i = PI.length; j < i; j++) PI[j].value = "";
-            } else {
-                removeClass(PS, 'hidden'), removeClass(PB, 'spinner-is-loading'), PB.removeAttribute('disabled');
-                if(e.errors != undefined){
-                    for (var j = 0, i = e.errors.length; j < i; j++){
-                        var el = D.querySelector('#'+e.errors[j]['el']),
-                            GZ = el.parentNode,
-                            GH = hasClass(GZ, 'group-validate') ? GZ : GZ.parentNode;
-                        GH.querySelector('.text-error').innerText = '*'+e.errors[j]['error'], addClass(el, 'border-red'), addClass(el, 'boxshadow-red'), timeDelay(function(){
-                            addClass(PZ, 'efect-boom'), timeDelay(function(){
-                                removeClass(PZ, 'efect-boom')
-                            }, 200)
-                        }, 700);
-                    }
-                } else if (e.emptys != undefined){
-                    for (var j = 0, i = e.emptys.length; j < i; j++){
-                        var el = D.querySelector('#'+e.emptys[j]),
-                            GZ = el.parentNode,
-                            GH = hasClass(GZ, 'group-validate') ? GZ : GZ.parentNode;
-                        GH.querySelector('.text-error').innerText = '*{$word->this_field_is_empty}', timeDelay(function(){
-                            addClass(PZ, 'efect-boom'), timeDelay(function(){
-                                removeClass(PZ, 'efect-boom')
-                            }, 200)
-                        }, 700);
-                        addClass(el, 'border-red'), addClass(el, 'boxshadow-red');
-                    }
-                } else {
-                    loadAlert(e.error, 1)
-                }
-            }
-        }, "POST", "&current-password=" + D.querySelector('#current-password').value + "&password=" + D.querySelector('#password').value + "&re-password=" + D.querySelector('#re-password').value)
-    },
-    PX = !1;
-addEvent(PB, "click", PF), addEvent(D, 'keydown', function(e){
-    if((e.which == 13 || e.keyCode == 13) && PX){
-        PF();
-    }
-});
-for (var j = 0, i = PV.length; j < i; j++) addEvent(PV[j], 'click', function(){
-    var self = this,
-        el = self.parentNode.querySelector('input'),
-        svg = self.querySelector('svg');
-    if(el.getAttribute('type') == 'password'){
-        svg.innerHTML = '<path fill="currentColor" d="M 8.575 15.348 L 9.358 14.089 C 8.776 13.714 8.32 13.241 7.992 12.67 C 7.664 12.098 7.5 11.494 7.5 10.857 C 7.5 10.137 7.704 9.467 8.113 8.848 C 6.579 9.545 5.304 10.595 4.286 12 C 5.404 13.536 6.834 14.652 8.575 15.348 Z M 12.482 8.571 C 12.482 8.452 12.435 8.351 12.342 8.268 C 12.248 8.185 12.134 8.143 12 8.143 C 11.163 8.143 10.445 8.409 9.845 8.942 C 9.246 9.475 8.946 10.113 8.946 10.857 C 8.946 10.976 8.993 11.077 9.087 11.161 C 9.181 11.244 9.295 11.286 9.429 11.286 C 9.563 11.286 9.676 11.244 9.77 11.161 C 9.864 11.077 9.911 10.976 9.911 10.857 C 9.911 10.345 10.115 9.908 10.523 9.545 C 10.932 9.182 11.424 9 12 9 C 12.134 9 12.248 8.958 12.342 8.875 C 12.435 8.792 12.482 8.69 12.482 8.571 Z M 16.128 6.866 C 16.128 6.908 16.125 6.935 16.118 6.946 C 15.408 8.071 14.35 9.759 12.944 12.009 C 11.538 14.259 10.483 15.943 9.78 17.062 L 9.288 17.857 C 9.221 17.952 9.127 18 9.007 18 C 8.926 18 8.478 17.792 7.661 17.375 C 7.554 17.315 7.5 17.232 7.5 17.125 C 7.5 17.054 7.647 16.795 7.942 16.348 C 6.984 15.961 6.102 15.446 5.295 14.804 C 4.488 14.161 3.79 13.432 3.201 12.616 C 3.067 12.432 3 12.226 3 12 C 3 11.774 3.067 11.568 3.201 11.384 C 4.225 9.985 5.498 8.881 7.018 8.071 C 8.538 7.262 10.199 6.857 12 6.857 C 12.596 6.857 13.199 6.908 13.808 7.009 L 14.35 6.143 C 14.417 6.048 14.511 6 14.632 6 C 14.665 6 14.725 6.018 14.813 6.054 C 14.9 6.089 15.003 6.135 15.124 6.192 C 15.244 6.248 15.355 6.304 15.455 6.357 C 15.556 6.411 15.661 6.466 15.772 6.522 C 15.882 6.579 15.948 6.613 15.968 6.625 C 16.075 6.685 16.128 6.765 16.128 6.866 Z M 16.5 10.857 C 16.5 11.685 16.235 12.439 15.706 13.121 C 15.177 13.802 14.478 14.292 13.607 14.589 L 16.42 10.107 C 16.473 10.375 16.5 10.625 16.5 10.857 Z M 21 12 C 21 12.208 20.933 12.414 20.799 12.616 C 20.538 12.997 20.173 13.429 19.704 13.911 C 18.7 14.935 17.536 15.729 16.214 16.295 C 14.891 16.86 13.487 17.143 12 17.143 L 12.743 15.964 C 14.163 15.857 15.477 15.449 16.686 14.741 C 17.895 14.033 18.904 13.119 19.714 12 C 18.944 10.935 18 10.06 16.882 9.375 L 17.515 8.375 C 18.151 8.756 18.762 9.211 19.348 9.741 C 19.934 10.271 20.417 10.818 20.799 11.384 C 20.933 11.586 21 11.792 21 12 Z"/>';
-        el.setAttribute('type', 'text');
-    } else {
-        svg.innerHTML = '<path fill="currentColor" d="M 19.714 12 C 18.696 10.361 17.421 9.135 15.887 8.323 C 16.296 9.045 16.5 9.826 16.5 10.667 C 16.5 11.951 16.06 13.05 15.179 13.964 C 14.299 14.877 13.239 15.333 12 15.333 C 10.761 15.333 9.701 14.877 8.821 13.964 C 7.94 13.05 7.5 11.951 7.5 10.667 C 7.5 9.826 7.704 9.045 8.113 8.323 C 6.579 9.135 5.304 10.361 4.286 12 C 5.176 13.424 6.293 14.557 7.636 15.401 C 8.978 16.245 10.433 16.667 12 16.667 C 13.567 16.667 15.022 16.245 16.364 15.401 C 17.707 14.557 18.824 13.424 19.714 12 Z M 12.482 8 C 12.482 7.861 12.435 7.743 12.342 7.646 C 12.248 7.549 12.134 7.5 12 7.5 C 11.163 7.5 10.445 7.811 9.845 8.432 C 9.246 9.054 8.946 9.799 8.946 10.667 C 8.946 10.806 8.993 10.924 9.087 11.021 C 9.181 11.118 9.295 11.167 9.429 11.167 C 9.563 11.167 9.676 11.118 9.77 11.021 C 9.864 10.924 9.911 10.806 9.911 10.667 C 9.911 10.069 10.115 9.559 10.523 9.135 C 10.932 8.712 11.424 8.5 12 8.5 C 12.134 8.5 12.248 8.451 12.342 8.354 C 12.435 8.257 12.482 8.139 12.482 8 Z M 21 12 C 21 12.236 20.933 12.476 20.799 12.719 C 19.862 14.316 18.601 15.595 17.017 16.557 C 15.434 17.519 13.761 18 12 18 C 10.239 18 8.566 17.517 6.983 16.552 C 5.399 15.587 4.138 14.309 3.201 12.719 C 3.067 12.476 3 12.236 3 12 C 3 11.764 3.067 11.524 3.201 11.281 C 4.138 9.691 5.399 8.413 6.983 7.448 C 8.566 6.483 10.239 6 12 6 C 13.761 6 15.434 6.483 17.017 7.448 C 18.601 8.413 19.862 9.691 20.799 11.281 C 20.933 11.524 21 11.764 21 12 Z"/>';
-        el.setAttribute('type', 'password');
-    }
-});
-for (var j = 0, i = PI.length; j < i; j++) addEvent(PI[j], 'input', function(e){
-    if(e.which != 13 || e.keyCode != 13){
-        var self = this,
-            GA = self.id,
-            GW = self.value,
-            GZ = self.parentNode,
-            GH = hasClass(GZ, 'group-validate') ? GZ : GZ.parentNode,
-            GS = GA == 'password' ? PC : PP,
-            el = GH.querySelector('.text-error'),
-            GF = function(){
-                PX = !0;
-                if((GA == 'password' || GA == 're-password') && D.querySelector('#'+GA).value != '' && PP.value == PC.value){
-                    GS.parentNode.parentNode.querySelector('.text-error').innerText = "", removeClass(GS, 'border-red'), removeClass(GS, 'boxshadow-red');
-                }
-            };
-        if(PP.value != '' && PC.value != '' && PE.value != ''){
-            PB.removeAttribute('disabled');
-        } else {
-            PB.setAttribute('disabled', true)
-        }
-        if(GW == ''){
-            GH.querySelector('.text-error').innerText = "", removeClass(self, 'border-red'), removeClass(self, 'boxshadow-red'), PX = !1;
-            return false;
-        }
-        Req("{$url->{req/key-validate}}", function(e){
-            if(e.status == 200){
-                el.innerText = "", removeClass(self, 'border-red'), removeClass(self, 'boxshadow-red'), GF();
-            } else if(e.status == 302){
-                el.innerText = e.error, addClass(self, 'border-red'), addClass(self, 'boxshadow-red'), timeDelay(function(){
-                    addClass(PZ, 'efect-boom'), timeDelay(function(){
-                        removeClass(PZ, 'efect-boom')
-                    }, 200)
-                }, 700), GF();
-            } else {
-                loadAlert(e.error, 1);
-            }
-        }, "POST", "&input=" + GW + "&type=" + GA + "&password=" + PP.value + "&re-password=" + PC.value)
-    }
-});
-</script>
+            <div class="w-100 position-relative">
+               <input id="re-password" class="item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="password" aria-label="{$word->confirm_password}" autocomplete="re-password" autocapitalize="off">
+               <div class="color-red text-left text-error font-low margin-t5"></div>
+               <label class="item-label position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->confirm_password}</label>
+            </div>
+            <div class="display-flex direction-colum align-center">
+               <div id="valid-password" class="display-flex direction-row w-100 padding-t10 padding-b5">
+                  <div class="item-valid-password border-all margin-r15 w-25"></div>
+                  <div class="item-valid-password border-all margin-r15 w-25"></div>
+                  <div class="item-valid-password border-all margin-r15 w-25"></div>
+                  <div class="item-valid-password border-all w-25"></div>
+               </div>
+               <span class="display-inline-flex justify-center color-grey margin-t10 margin-b10">
+                  <b id="text-validate">{$word->write_a_password}</b>
+               </span>
+            </div>
+            <div class="display-flex justify-center">
+               <ul>
+                  <li class="display-flex direction-row align-center justify-center">
+                     <svg id="icon-five" class="color-grey margin-r5" width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="4.5" cy="5" r="4.275" fill="currentColor" stroke="#D5D5D5" stroke-width="0.45"></circle>
+                        <path d="M2.36261 5.22692L4.09387 6.57489L6.61511 3.19989" stroke="white" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"></path>
+                     </svg>
+                     <div class="color-blackly font-mediumly">{$word->must_include_least_characters}</div>
+                  </li>
+                  <li class="display-flex direction-row align-center justify-center margin-t10">
+                     <svg id="icon-supported" class="color-grey margin-r5" width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg" data-qa="disabled-checkmark">
+                        <circle cx="4.5" cy="5" r="4.275" fill="currentColor" stroke="#D5D5D5" stroke-width="0.45"></circle>
+                        <path d="M2.36261 5.22692L4.09387 6.57489L6.61511 3.19989" stroke="white" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"></path>
+                     </svg>
+                     <div class="display-flex color-blackly font-mediumly">{$word->must_include_least_one}&nbsp;
+                        <div class="display-flex position-relative">
+                           <button id="show-symbols" class="btn-noway text-underline" type="button" aria-haspopup="true" aria-label="Supported Symbols" aria-expanded="false">{$word->symbol}</button>
+                        </div>
+                     </div>
+                  </li>
+                  <li id="supported-symbols" class="h-0 overflow-hidden animation-ease3s margin-t10" aria-modal="true" role="dialog">
+                     <div class="text-symbols" role="toolbar">
+                        <div class="background-white border-rlow border-all border-grely padding-t10 padding-b10 padding-l10 padding-r10 text-center">
+                           <span class="color-grey">{$word->supported_symbols}</span>
+                           <p class="color-blue margin-t5">¡!"#$%&'()*+,-./:;<=>¿?@[]^_`{|}~</p>
+                        </div>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <button id="btn-register" class="button-access btn-noway w-100 h-36 background-blue color-white font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" disabled>
+            <span class="color-white">{$word->change}</span>
+            <div class="content-spinner-circle position-absolute">
+               <div class="spinner-circle"></div>
+            </div>
+         </button>
+      </form>
+   </div>
+   <div>
+      <div id="recaptcha-container"></div>
+   </div>
+</div>
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/settings/style.settings.change-password.css}}" />
+{%%<script type="text/javascript">
+   $(document).ready(function(){
+      var a = $('#supported-symbols'),
+          x = $('#btn-register'),
+          w = $('#text-validate'),
+          u = $('#current-password'),
+          v = $('#password'),
+          O = $('#re-password'),
+          R = O.siblings('.text-error'),
+          o = u.siblings('.text-error'),
+          y = function(e){
+            x.attr('disabled', e)
+          },
+          W = function(e){
+            e.addClass('border-red'), e.addClass('boxshadow-red');
+          },
+          P = function(e){
+            e.removeClass('border-red'), e.removeClass('boxshadow-red');
+          },
+          C = function(e){
+            e.removeClass('spinner-is-loading'), e.removeAttr('disabled');
+          };
+      $('#show-symbols').click(function(){
+         var b = $(this),
+             c = JSON.parse(b.attr('aria-expanded'));
+          !c ? a.css('height', a.children().first().height()) : a.removeAttr('style'), b.attr('aria-expanded', !c);
+      }), x.click(function(){
+         x.addClass('spinner-is-loading'), x.attr('disabled', !0), $.post("{$url->{req/settings/change-password}}?token={#token_session}", {'current-password': u.val(), 'password': v.val(), 're-password': O.val()}, function(e){
+            (e.S == 200) ? window.location.href = "{$url->{{#r_login}}}" : ((e.EX == 1 ? (o.text(e.E), W(u)) : (R.text(e.E), W(v), W(O))), x.removeClass('spinner-is-loading'), x.removeAttr('disabled'));
+         })
+      }), $('.item_input').on('input', function(){
+         var U = $(this),
+             I = U.prop('id'),
+             S = O.val(),
+             g = U.val(),
+             d = $('#valid-password').children(),
+             l = function(){
+               $(d.splice(0, 2)).addClass('border-orange'), w.text('{$word->password_security}: {$word->half}');
+             },
+             j = function(e, t){
+               if(e){
+                  t.removeClass('color-grey'), t.addClass('color-green')
+               } else {
+                  t.removeClass('color-green'), t.addClass('color-grey')
+               }
+             },
+             n = function(){
+               d.removeClass('border-red'), d.removeClass('border-orange'), d.removeClass('border-green')
+             },
+             q = g.length,
+             k = q >= 8;
+         if(I == '{#current-password#}'){
+            o.text(''), P(u)
+         } else if(I == '{#password#}'){
+               R.text(''), y(!0), P(O), O.val(''), O.removeClass('active'), n();
+               if ((new RegExp("^(?=.{12,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[¡!\"#$%&'()*+,-./:;<=>¿?@\]\[^_`{|}~]).*$", "g")).test(g)) {
+                  d.addClass('border-green'), w.text('{$word->password_security}: {$word->strong}')
+               } else if((new RegExp("^(?=.{8,})(?=.*[a-z])(?=.*[0-9])(?=.*[¡!\"#$%&'()*+,-./:;<=>¿?@\]\[^_`{|}~]).*$", "g")).test(g)){
+                  $(d.splice(0, 3)).addClass('border-green'), w.text('{$word->password_security}: {$word->good}');
+               } else if((new RegExp("^(?=.{8,})(?=.*[¡!\"#$%&'()*+,-./:;<=>¿?@\]\[^_`{|}~]).*$", "g")).test(g)){
+                  l()
+               } else if ((new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g")).test(g)) {
+                  l()
+               } else {
+                  $(d[0]).addClass('border-red'), w.text('{$word->password_security}: {$word->weak}');
+               }
+               j(k, $('#icon-five')), j(/[¡!"#$%&'()*+,-./:;<=>¿?@[\]^_`{|}~]/.test(g), $('#icon-supported')), g.length == 0 && (n(), w.text('{$word->write_a_password}'));
+         } else if(I == '{#re-password#}'){
+            P(v), (S.length > 0 && v.val() != S) ? (R.text('*{$word->passwords_not_match}'), W(O), y(!0)) : (R.text(''), P(O), S.length > 0 ? y(!1) : y(!0));
+         }
+         q > 0 ? U.addClass('active') : U.removeClass('active');
+      }), v.focus();
+   });
+</script>%%}

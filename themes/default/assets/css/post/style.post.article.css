@@ -57,6 +57,26 @@
         transform: scale(1);
     }
 }
+@-webkit-keyframes saved-image {
+    from {
+        transform: scale(0);
+    }
+    20% {
+        transform: scale(0.2);
+    }
+    40% {
+        transform: scale(0.4);
+    }
+    60% {
+        transform: scale(0.6);
+    }
+    80% {
+        transform: scale(0.8);
+    }
+    to {
+        transform: scale(1);
+    }
+}
 @keyframes bottom-image {
     from {
         transform: scale(1);
@@ -83,7 +103,47 @@
         bottom: 0;
     }
 }
+@-webkit-keyframes bottom-image {
+    from {
+        transform: scale(1);
+        bottom: -40px;
+    }
+    20% {
+        transform: scale(0.8);
+        bottom: -32px;
+    }
+    40% {
+        transform: scale(0.6);
+        bottom: -24px;
+    }
+    60% {
+        transform: scale(0.4);
+        bottom: -16px;
+    }
+    80% {
+        transform: scale(0.2);
+        bottom: -8px;
+    }
+    to {
+        transform: scale(0);
+        bottom: 0;
+    }
+}
 @keyframes saved-button {
+    from {
+        transform: scale(0.8);
+    }
+    40% {
+        transform: scale(1);
+    }
+    80% {
+        transform: scale(1.2);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+@-webkit-keyframes saved-button {
     from {
         transform: scale(0.8);
     }
@@ -216,9 +276,12 @@
 .entry p {
     margin-bottom: 15px;
 }
-.instagram-embed {
-    max-width: 658px!important;
-    box-shadow: rgb(0,0,0,.5) 0 0 1px 0, rgb(0,0,0,.15) 0 1px 10px 0;
+.fb-post > span,
+.fb-post iframe {
+    width: 100% !important;
+}
+.instagram-media {
+    min-width: auto !important;
 }
 .entry:first-child blockquote p:first-child:first-letter {
     font-size: inherit;
@@ -329,11 +392,6 @@
         font-size: 20px;
         line-height: 30px;
         margin-bottom: 15px;
-    }
-    .entry-image {
-        -webkit-flex-direction: row;
-        -ms-flex-direction: row;
-        flex-direction: row;
     }
     .entry:first-child p:first-child:first-letter {
         font-size: 66px;

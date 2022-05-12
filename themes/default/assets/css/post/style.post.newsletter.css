@@ -91,9 +91,6 @@ body.newsletter-personalized-active .item-newsletter-fixed {
     display: none;
 }
 @media (max-width: 480px) {
-    .entry.yt-video iframe {
-        max-height: 200px;
-    }
     .content_newsletter .item-newsletter {
         margin-right: 0;
     }

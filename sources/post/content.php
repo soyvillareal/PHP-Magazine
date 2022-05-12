@@ -50,9 +50,6 @@ $TEMP['#categories'] = $dba->query('SELECT id, name FROM '.T_CATEGORY)->fetchAll
 
 $entries = $dba->query('SELECT * FROM '.T_ENTRY.' WHERE post_id = ?', $post['id'])->fetchAll();
 foreach ($entries as $key => $entry) {
-	if($entry['type'] == 'video' && strpos($entry['frame'], 'facebook')){
-		$entry['type'] = 'facebookvideo';
-	}
 	$TEMP['#entry_types'][] = $entry['type'];
 }
 
@@ -66,54 +63,54 @@ foreach ($tags as $tag) {
 }
 Specific::DestroyMaket();
 
-$dont = -1;
 $related_body = 0;
 foreach ($entries as $key => $entry) {
-	if($key != $dont){
-		$TEMP['!frame'] = $entry['frame'];
-		if($entry['type'] == 'text'){
-		    $j = 0;
-            $paragraph = explode('</p>', $entry['body']);
-            $paragraph_count = count($paragraph);
-            $paragraph_body = round($paragraph_count/2);
-            $entry['body'] = '';
-            for ($i = 0; $i < $paragraph_count; $i++){
-                if($paragraph_count >= 6 && $i == $paragraph_body && $paragraph_body != ($j+4) && $key == 0){
-                	$realted_bo = $dba->query('SELECT * FROM '.T_POST.' WHERE id != ? AND category_id = ? AND status = "approved" ORDER BY RAND()', $post['id'], $post['category_id'])->fetchArray();
-                	$TEMP['!title'] = $realted_bo['title'];
-                	$TEMP['!url'] = Specific::Url($realted_bo['slug']);
-					$TEMP['!thumbnail'] = Specific::GetFile($realted_bo['thumbnail'], 1, 's');
-                    $entry['body'] .= Specific::Maket('post/includes/related-body');
-                	$related_body = $realted_bo['id'];
-                } else if($i == 2 || $i == ($j+4)){
-		            $j = $i;
-                    $entry['body'] .= Specific::Maket('post/includes/advertisement-body');
-                }
-                $entry['body'] .= $paragraph[$i];
+	$TEMP['!frame'] = $entry['frame'];
+	if($entry['type'] == 'text'){
+		$j = 0;
+        $paragraph = explode('</p>', $entry['body']);
+        $paragraph_count = count($paragraph);
+        $paragraph_body = round($paragraph_count/2);
+        $entry['body'] = '';
+        for ($i = 0; $i < $paragraph_count; $i++){
+            if($paragraph_count >= 6 && $i == $paragraph_body && $paragraph_body != ($j+4) && $key == 0){
+                $realted_bo = $dba->query('SELECT * FROM '.T_POST.' WHERE id != ? AND category_id = ? AND status = "approved" ORDER BY RAND()', $post['id'], $post['category_id'])->fetchArray();
+                $TEMP['!title'] = $realted_bo['title'];
+               	$TEMP['!url'] = Specific::Url($realted_bo['slug']);
+				$TEMP['!thumbnail'] = Specific::GetFile($realted_bo['thumbnail'], 1, 's');
+                $entry['body'] .= Specific::Maket('post/includes/related-body');
+                $related_body = $realted_bo['id'];
+            } else if($i == 2 || $i == ($j+4)){
+		        $j = $i;
+                $entry['body'] .= Specific::Maket('post/includes/advertisement-body');
             }
-		} else if($entry['type'] == 'image'){
-			$new_key = $key + 1;
-			$next_entry = $entries[$new_key];
-			if($next_entry['type'] == 'image'){
-				$TEMP['!next_title'] = $next_entry['title'];
-				$TEMP['!next_frame'] = Specific::GetFile($next_entry['frame'], 3);
-				$TEMP['!next_source'] = $next_entry['source'];
-				$dont = $new_key;
-			}
-			$TEMP['!frame'] = Specific::GetFile($entry['frame'], 3);
-		} else if($entry['type'] == 'instagram'){
-			$TEMP['!rand_one'] = rand(1, 9999);
-			$TEMP['!rand_two'] = rand();
-		}
+            $entry['body'] .= $paragraph[$i];
+        }
+	} else if($entry['type'] == 'image'){
+		$TEMP['!frame'] = Specific::GetFile($entry['frame'], 3);
+	} else if($entry['type'] == 'video'){
+		$youtube = preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?(?:youtu\.be|youtube\.com)\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/)([^\?&\"'>]+)/", $entry['frame'], $yt_video);
+		$vimeo = preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?vimeo\.com\/([0-9]+)$/", $entry['frame'], $vm_video);
+		$dailymotion = preg_match("/^.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/", $entry['frame'], $dm_video);
 
-		$TEMP['!id'] = $entry['id'];
-		$TEMP['!title'] = $entry['title'];
-		$TEMP['!body'] = $entry['body'];
-		$TEMP['!order'] = $entry['order'];
-		$TEMP['!type'] = $entry['type'];
-		$TEMP['!source'] = $entry['source'];
-		$TEMP['entries'] .= Specific::Maket('post/includes/entries');
+		if($youtube == true || $vimeo == true || $dailymotion == true){
+			if($youtube == true && strlen($yt_video[1]) == 11){
+				$TEMP['!frame'] = '<iframe src="https://www.youtube.com/embed/'.$yt_video[1].'" width="100%" height="450" frameborder="0" allowfullscreen></iframe>';
+			} else if($vimeo == true){
+				$TEMP['!frame'] = '<iframe src="//player.vimeo.com/video/'.$vm_video[1].'" width="100%" height="450" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+			} else if($dailymotion == true){
+				$TEMP['!frame'] = '<iframe src="//www.dailymotion.com/embed/video/'.$dm_video[2].'" width="100%" height="450" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+			}
+		}
 	}
+
+	$TEMP['!id'] = $entry['id'];
+	$TEMP['!title'] = $entry['title'];
+	$TEMP['!body'] = $entry['body'];
+	$TEMP['!type'] = $entry['type'];
+	$TEMP['!eorder'] = $entry['eorder'];
+	$TEMP['!esource'] = $entry['esource'];
+	$TEMP['entries'] .= Specific::Maket('post/includes/entries');
 }
 Specific::DestroyMaket();
 

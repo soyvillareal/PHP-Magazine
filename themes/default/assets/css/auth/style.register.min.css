@@ -13,8 +13,6 @@
     max-width: 90%;
     padding-top: 12px;
     transform-origin: 0 0;
-    transition: all .2s ease-out;
-    color: rgba(0,0,0,.6);
 }
 .item_input.active ~ .item-label,
 .item_input:focus ~ .item-label {

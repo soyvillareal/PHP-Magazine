@@ -15,26 +15,24 @@ $TEMP['#total_pages'] = $dba->totalPages;
 
 if (!empty($user_sessions)) {
     foreach ($user_sessions as $value) {
-        $session = Specific::GetSessions($value);
-
         $TEMP['!id'] = $value['id'];
+        $session = Specific::GetSessions($value);
         $TEMP['!ip'] = $session['ip'];
         $TEMP['!browser'] = $session['browser'];
         $TEMP['!platform'] = $session['platform'];
-        $TEMP['!time'] = Specific::DateFormat($value['created_at']);
+        $TEMP['!created_at'] = Specific::DateFormat($value['created_at']);
 
-        $TEMP['sessions'] .= Specific::Maket("settings/security/includes/sessions");
+        $TEMP['sessions'] .= Specific::Maket("settings/logins/includes/sessions");
     }
     Specific::DestroyMaket();
 } else {
     $TEMP['sessions'] = Specific::Maket("not-found/sessions");
 }
 
-$TEMP['#page']        = 'security';
-$TEMP['#title']       = $TEMP['#word']['settings'] . ' - ' . $TEMP['#settings']['title'];
+$TEMP['#page']        = 'logins';
+$TEMP['#title']       = $TEMP['#word']['logins'] . ' - ' . $TEMP['#settings']['title'];
 $TEMP['#description'] = $TEMP['#settings']['description'];
 $TEMP['#keyword']     = $TEMP['#settings']['keyword'];
 
-$TEMP['second_page'] = Specific::Maket('settings/security/content');
-$TEMP['#content']     = Specific::Maket("settings/content");
+$TEMP['#content']     = Specific::Maket("settings/logins/content");
 ?>

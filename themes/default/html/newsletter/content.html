@@ -1,0 +1,203 @@
+<div class="container-newsletter">
+    <?php if($TEMP['#newsletter_showhead'] == true){ ?>
+    <div class="content-back-settings background-grely padding-t10 padding-b10 padding-l10 padding-r10 border-rlow border-bottom border-grely">
+        <a class="display-flex direction-row align-center hover-button" href="{$url->{{#r_settings}}}" target="_self">
+            <svg class="icon-z color-grey margin-r5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M 20 11.343 L 20 12.657 C 20 13.02 19.882 13.33 19.647 13.587 C 19.411 13.843 19.105 13.972 18.728 13.972 L 11.076 13.972 L 14.261 16.991 C 14.536 17.237 14.674 17.546 14.674 17.915 C 14.674 18.285 14.536 18.593 14.261 18.84 L 13.446 19.62 C 13.178 19.873 12.851 20 12.467 20 C 12.091 20 11.761 19.873 11.478 19.62 L 4.402 12.924 C 4.134 12.671 4 12.363 4 12 C 4 11.644 4.134 11.332 4.402 11.065 L 11.478 4.39 C 11.754 4.13 12.083 4 12.467 4 C 12.844 4 13.17 4.13 13.446 4.39 L 14.261 5.15 C 14.536 5.41 14.674 5.722 14.674 6.085 C 14.674 6.448 14.536 6.759 14.261 7.019 L 11.076 10.028 L 18.728 10.028 C 19.105 10.028 19.411 10.157 19.647 10.413 C 19.882 10.67 20 10.98 20 11.343 Z"></path>
+            </svg>
+            <span class="color-blackly">{$word->back_to_settings}</span>
+        </a>
+    </div>
+    <?php } ?>
+    <form id="content-newsletter" class="content-newsletter display-flex padding-t20 padding-b20 padding-l20 padding-r20 border-rlow text-center" novalidate>
+        <div class="margin-auto">
+            <span class="title-newsletter color-black font-big font-bold text-uppercase">{$title}</span>
+            <p class="subtitle-newsletter color-black font-bigly margin-t15 margin-b15">{$subtitle}</p>
+            <?php if($TEMP['#newsletter_exists'] == true){ ?>
+            <div id="content-error" class="text-error border-all border-red color-red border-rlow padding-5 margin-b10 animation-ease3s"></div>
+            <?php } ?>
+            <div class="items-newsletter margin-b15">
+                <div class="all-newsletter display-flex">
+                    <div class="item-newsletter position-relative w-50 margin-r15 margin-b10">
+                        <input id="newsletter-email" class="background-white item-input<?php echo($TEMP['#newsletter_exists'] == false) ? ' item_place' : '';?> padding-t20 padding-b5 padding-l10 padding-r10 w-100 h-45 border-focus-blue border-rlow border-all border-black sizing-box<?php echo($TEMP['#newsletter_exists'] == true) ? ' active' : '';?>" type="text" aria-label="{$word->email}" autocomplete="newsletter-email" autocapitalize="off"<?php echo($TEMP['#newsletter_exists'] == true) ? ' value ="{$email}" disabled' : '';?>>
+                        <?php if($TEMP['#newsletter_exists'] == false){ ?>
+                        <div class="color-red text-left text-error font-low margin-t5"></div>
+                        <?php } ?>
+                        <label class="item-label position-absolute pointer-events-none first-capitalize ellipsis-horizontal">{$word->email}</label>
+                    </div>
+                    <div class="item-newsletter w-50 margin-b10">
+                        <select id="newsletter-type" class="item_place background-white color-black padding-l10 w-100 h-45 border-focus-blue border-rlow border-all border-black caret-down" aria-label="{$word->types_of_newsletters}">
+                            <option value="all"<?php echo($TEMP['#frequency'] == 'all') ? ' selected' : ''?>>{$word->all_the_news}</option>
+                            <option value="personalized"<?php echo($TEMP['#frequency'] != 'all') ? ' selected' : ''?>>{$word->personalized}</option>
+                        </select>
+                        <div class="color-red text-left text-error font-low margin-t5"></div>
+                    </div>
+                </div>
+                <div id="personalize-newsletter" class="w-100 h-0 overflow-hidden animation-ease3s">
+                    <div class="w-100 text-left">
+                        <div class="item-newsletter">
+                            <div class="display-flex margin-b5">
+                                <label class="color-black">{$word->frequency}</label>
+                                <div class="display-flex direction-row align-center margin-left-auto">
+                                    <label class="newsletter-checkbox display-inline-block position-relative margin-r5">
+                                        <input id="newsletter-popular" class="checkbox-popular item_place hidden" type="checkbox"<?php echo($TEMP['#popular'] == 'on') ? ' checked' : '';?>>
+                                        <span class="slider-popular position-absolute background-grely"></span>
+                                    </label>
+                                    <span class="color-black">{$word->more_popular}</span>
+                                </div>
+                            </div>
+                            <select id="newsletter-frequency" class="item_place background-white color-black margin-b10 padding-l10 w-100 h-45 border-focus-blue border-rlow border-all border-black caret-down" aria-label="{$word->newsletter_frequency}">
+                                <option value="now"<?php echo($TEMP['#frequency'] == 'now') ? ' selected' : ''?>>{$word->at_the_time}</option>
+                                <option value="daily"<?php echo($TEMP['#frequency'] == 'daily') ? ' selected' : ''?>>{$word->daily_summary}</option>
+                                <option value="weekly"<?php echo($TEMP['#frequency'] == 'weekly') ? ' selected' : ''?>>{$word->weekly_summary}</option>
+                            </select>
+                            <div class="color-red text-left text-error font-low margin-t5"></div>
+                        </div>
+                        <div class="display-block">
+                            <div class="display-flex margin-b5">
+                                <label class="color-black" for="multi-select">{$word->categories}</label>
+                                <button class="select_all item_place btn-noway margin-left-auto hover-button" type="button" aria-label="{$word->select_all_categories}">
+                                    <span class="text_all color-black<?php echo($TEMP['#newsletter_exists'] == true && (empty($TEMP['#cats']) || count($TEMP['#cats']) == count($TEMP['#categories']))) ? ' hidden' : '';?>">{$word->all}</span>
+                                    <span class="text_none color-black<?php echo($TEMP['#newsletter_exists'] == false || (!empty($TEMP['#cats']) && count($TEMP['#cats']) < count($TEMP['#categories']))) ? ' hidden' : '';?>">{$word->none}</span>
+                                </button>
+                            </div>
+                            <select id="newsletter-category" class="item-category item_place background-white color-black padding-t5 padding-b5 padding-l10 w-100 border-focus-blue border-rlow border-all border-black" aria-label="{$word->newsletter_categories}" multiple>
+                                <?php foreach($TEMP['#categories'] as $cat){ ?>
+                                <option value="<?php echo $cat['id'];?>"<?php echo(in_array($cat['id'], $TEMP['#cats'])) ? ' selected' : ''?>><?php echo $cat['name'];?></option>
+                                <?php } ?>
+                            </select>
+                            <div class="color-red text-left text-error font-low margin-t5"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button id="btn-newsletter" class="button-access btn-noway w-100 h-36 background-blue color-white font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-label="{$aria_button}" aria-expanded="false" disabled>
+                <span class="color-white">{$button}</span>
+                <div class="content-spinner-circle position-absolute">
+                    <div class="spinner-circle"></div>
+                </div>
+            </button>
+            <?php if($TEMP['#newsletter_exists'] == true){ ?>
+            <div class="position-relative">
+                <button id="btn-popup" class="button-access btn-noway w-100 h-36 background-red color-white font-medium font-bold padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-label="{$word->unsubscribe_the_newsletter}">{$word->unsubscribe}</button>
+                <div id="unsubscribe-popup" class="content-unsubscribe-popup position-absolute background-white margin-b10 padding-t20 padding-b20 padding-l20 padding-r20 text-center hidden">
+                    <span class="display-block font-medium font-bold">{$word->regret_decides_go}</span>
+                    <p class="font-mediumly color-black margin-t5">{$word->help_us_understand_why}.</p>
+                    <select id="reason" class="item_place background-white color-black margin-t10 padding-l10 w-100 h-36 border-focus-blue border-rlow border-all border-black caret-down" aria-label="{$word->newsletter_frequency}">
+                        <option value="no_anymore">{$word->no_anymore}</option>
+                        <option value="much_content">{$word->much_content}</option>
+                        <option value="no_content">{$word->no_content}</option>
+                        <option value="never_authorice">{$word->never_authorice}</option>
+                        <option value="other">{$word->other}</option>
+                    </select>
+                    <div class="display-block position-relative w-100 margin-t10 hidden">
+                        <textarea id="other" class="item_place item-input background-white color-black w-100 padding-t25 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="text" aria-label="{$word->another_reason_unsubscribe}" maxlength="500" autocomplete="other" autocapitalize="off"></textarea>
+                        <label class="item-label background-white w-100 first-capitalize position-absolute pointer-events-none ellipsis-horizontal text-left">{$word->why_do_you_want_leave}</label>
+                    </div>
+                    <div class="display-flex">
+                        <div class="color-red text-left text-error font-low margin-t5"></div>
+                        <div class="margin-left-auto color-green hidden">
+                            <span id="text-reason-count">0</span>/500
+                        </div>
+                    </div>
+                    <div class="display-flex direction-row align-center justify-center margin-t15" role="dialog" aria-label="{$word->unsubscribe_the_newsletter}">
+                        <button id="btn-cancel" class="button-access item_place btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+                        <button id="btn-unsubscribe" class="button-access item_place btn-noway w-100px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+                            <span class="color-white">{$word->send}</span>
+                            <div class="content-spinner-circle position-absolute">
+                                <div class="spinner-circle"></div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <?php } ?>
+        </div>
+    </form>
+</div>
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/newsletter/style.newsletter.css}}" />
+{%%<script type="text/javascript">
+    var m = $('#btn-newsletter'),
+        a = $('#newsletter-email'),
+        b = a.siblings('.text-error'),
+        c = $('#newsletter-type'),
+        d = $('#newsletter-category'),
+        f = $('#personalize-newsletter'),
+        y = $('#content-error'),
+        g = $('.text_all'),
+        h = $('.text_none'),
+        j = $('.item_place'),
+        C = $('#unsubscribe-popup'),
+        D = $('#btn-unsubscribe'),
+        v = $('#btn-popup'),
+        G = $('#reason'),
+        X = $('#text-reason-count'),
+        V = X.parent(),
+        H = $('#other'),
+        K = C.find('.text-error'),
+        k = d.children(),
+        B = function(e, x, i){
+            e.removeClass('spinner-is-loading'), l(x, i)
+        },
+        L = function(e){
+            e.addClass('spinner-is-loading'), l(e, !0)
+        },
+        l = function(e, i){
+            e.attr('disabled', i)
+        },
+        n = function(){
+            f.css('height', f.children().first().height())
+        },
+        t = function(e){
+            e.removeClass('border-green'), e.removeClass('color-green'), e.addClass('border-red'), e.addClass('color-red');
+        },
+        s = <?php echo(count($TEMP['#cats']) < count($TEMP['#categories'])) ? '!0' : '!1';?>,
+        q,
+        r,
+        F,
+        J;
+    <?php if($TEMP['#newsletter_exists'] == true){ ?>v.click(function(){
+        C.removeClass('hidden'), l(v, !0), l(j.slice(0, -4), !0), v.attr('aria-expanded', !0), v.blur();
+    }), $('#btn-cancel').click(function(e){
+        C.addClass('hidden'), l(v, !1), l(j.slice(0, -4), !1), v.attr('aria-expanded', !1);
+    }), D.click(function(){
+        J = G.val() == 'other' ? H.val() : G.val(), L(D), $.post("{$url->{req/newsletter/unsubscribe}}?token={#token_session}", {'slug': '{$slug}', 'reason': J}, function(e){
+            e.S == 200 ? (B(D, j, !0), y.removeClass('border-red'), y.removeClass('color-red'), y.addClass('border-green'), y.addClass('color-green'), setTimeout(function(){
+                y.text(e.M)
+            }, 300), setTimeout(function(){
+                window.location = <?php echo($TEMP['#loggedin'] == true) ? '"{$url->{{#r_settings}}}"' : '"{$url->{{#r_newsletter}}}"';?>
+            }, 3300)) : (K.text(e.E), B(D, D, !0));
+        })
+    }), <?php } ?>$('.select_all').click(function(){
+        k.prop('selected', s), s = !s, g.toggleClass('hidden'), h.toggleClass('hidden'), l(m, !1), $(this).blur();
+    }), j.on('input', function(){
+        var z = $(this),
+            u = z.attr('id'),
+            o = z.val(),
+            Z = o.length;
+        <?php if($TEMP['#newsletter_exists'] == false){ ?>if(u == '{#newsletter-email#}'){
+            Z > 0 ? (z.addClass('active'), b.text(''), l(m, !1), z.removeClass('border-red'), z.removeClass('boxshadow-red')) : z.removeClass('active')
+        } else <?php } else { ?>if(u == '{#other#}'){
+            Z > 0 ? (z.addClass('active'), K.text(''), l(D, !1), z.removeClass('border-red'), z.removeClass('boxshadow-red')) : z.removeClass('active'), (Z > 400) ? (V.addClass('color-red'), V.removeClass('color-green'), V.removeClass('color-orange')) : ((Z > 250) ? (V.addClass('color-orange'), V.removeClass('color-red'), V.removeClass('color-green')) : (V.addClass('color-green'), V.removeClass('color-red'), V.removeClass('color-orange'))), X.text(Z), z.val(o.slice(0, 500))
+        } else if(u == '{#reason#}'){
+            F = H.parent(), o == 'other' ? (F.removeClass('hidden'), V.removeClass('hidden')) : (F.addClass('hidden'), V.addClass('hidden'))
+        } else <?php } ?>if(u == '{#newsletter-type#}'){
+            o == 'personalized' ? n() : f.removeAttr('style');
+        } else if(u == '{#newsletter-category#}'){
+            k.length == Z ? (g.addClass('hidden'), h.removeClass('hidden'), s = !1) : (g.removeClass('hidden'), h.addClass('hidden'), s = !0);
+        }
+        (Z > 0 || u == '{#newsletter-category#}') &&<?php echo($TEMP['#newsletter_exists'] == false) ? " a.val() != '' &&" : " u != '{#reason#}' && u != '{#other#}' &&";?> l(m, !1)
+    }), m.click(function(){
+        q = c.val(), r = $('#newsletter-popular'), L(m), <?php if($TEMP['#newsletter_exists'] == true){ ?>$.post("{$url->{req/newsletter/update}}?token={#token_session}", {'type': q, 'frequency': $('#newsletter-frequency').val(), 'popular': r.is(':checked'), 'category': JSON.stringify(d.val())}, function(e) {
+            e.S == 200 ? (B(m, j, !0), y.removeClass('border-red'), y.removeClass('color-red'), y.addClass('border-green'), y.addClass('color-green'), setTimeout(function(){
+                y.text(e.M)
+            }, 300), setTimeout(function(){
+                y.text(''), t(y), q == 'all' && (f.removeAttr('style'), $('#content-newsletter').trigger("reset"), c.val('all'), r.prop('checked', !1)), l(j, !1), l(m, !1)
+            }, 3300)) : (t(y), y.text(e.E), m.removeClass('spinner-is-loading'));
+        });<?php } else { ?>$.post("{$url->{req/newsletter/subscribe}}?token={#token_session}", {'email': a.val(), 'type': q, 'frequency': $('#newsletter-frequency').val(), 'popular': $('#newsletter-popular:checked').val(), 'category': JSON.stringify(d.val())}, function(e) {
+            e.S == 200 ? (B(m, j, !0), b.addClass('color-green'), b.removeClass('color-red'), b.text(e.M), setTimeout(function(){
+                b.text(''), a.removeClass('active'), b.addClass('color-red'), b.removeClass('color-green'), f.removeAttr('style'), $('#content-newsletter').trigger("reset"), l(j, !1), l(m, !1)
+            }, 3000)) : (b.text(e.E), a.addClass('border-red'), a.addClass('boxshadow-red'), m.removeClass('spinner-is-loading'));
+        });<?php } ?>
+    })<?php if($TEMP['#frequency'] != 'all'){ ?>, setTimeout(n, 500)<?php } ?>
+</script>%%}

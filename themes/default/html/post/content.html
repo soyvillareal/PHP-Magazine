@@ -19,7 +19,7 @@
       </div>
    </div>
 
-   <div id="hfshare-modal" class="content-share-modal display-flex background-white padding-5 padding-l15 padding-r15 border-top border-grely animation-ease3s hidden" aria-modal="true" role="dialog">
+   <div id="hfshare-modal" class="content-share-modal display-flex background-white padding-5 padding-l15 padding-r15 border-top border-grely animation-ease3s hide-desktop hidden" aria-modal="true" role="dialog">
       <div class="margin-auto" role="toolbar" aria-label="{$word->social_copy_save_share_article}">
          <ul>
             <li class="item-share display-inline w-100 margin-r10">
@@ -235,39 +235,26 @@
           o = $('#btn-hfshare'),
           j = $('#hfshare-modal'),
           Q = $('#spinner-load'),
+          X = $('.btn_newsletter'),
           f = j.find('.item-share a'),
           GG = l.find('.btn_save'),
+          QQ = $('.item_place'),
           b = $('body'),
           y = h.height(),
           n = [{$post_id}],
           B = '{$url}',
           D = B,
           G = function(e){
-            var C = $("<input>");
-            $("body").append(C), C.val(D).select(), document.execCommand("copy"), J(e), C.remove();
-          }, H = function(){
-            navigator.clipboard ? navigator.clipboard.writeText(D).then(J(this)).catch(G(this)) : G(this);
-          }, J = function(e){
+            var C = $("<input>"),
+                H = $(e).attr('data-link');
+            $("body").append(C), C.val((H ? H : D)).select(), document.execCommand("copy"), J(e), C.remove();
+          },
+          J = function(e){
             var K = $(e).children().first();
             K.addClass('copied'), setTimeout(function(){
                K.removeClass('copied');
             }, 300);
           },
-          A = function(e){
-            e.removeClass('spinner-is-loading'), ZZ(e, !1)
-          },
-          AA = function(e){
-            e.addClass('border-red'), e.addClass('boxshadow-red')
-          },
-          BB = function(e){
-            e.removeClass('border-blue'), e.removeClass('color-blue'), e.addClass('border-red'), e.addClass('color-red');
-          }<?php if($TEMP['#loggedin'] == true){?>,
-          CC = function(){
-            var YY = $(this), XX = YY.attr('data-id'), DD = $('#post-'+XX+' .btn_save'), JJ, FF;
-            DD.index(GG[0]) == -1 && DD.push(GG[0]), DD.index(YY) == -1 && DD.push(YY), JJ = YY.siblings('.content_saved'), FF = DD.find('path'), ZZ(DD, !0), console.log(DD), $.post("{$url->{req/post/save}}?token={#token_session}", {'post_id': XX, 'post_ids': JSON.stringify(n)}, function(e){
-               e.S == 200 && ((e.AC == 'delete' ? (FF.attr('fill', 'none'), DD.attr('aria-checked', !1), ZZ(DD, !1)) : (JJ.addClass('saved-animation-image'), clearTimeout(KK), KK = setTimeout(function(){(FF.attr('fill', 'currentColor'), DD.attr('aria-checked', !0), JJ.removeClass('saved-animation-image'), YY.addClass('saved-animation-button'), clearTimeout(LL), LL = setTimeout(function(){YY.removeClass('saved-animation-button'), ZZ(DD, !1)}, 100))}, 600))), DD.blur());
-            })
-          }<?php } ?>,
           ZZ = function(e, i){
             e.attr('disabled', i);
           },
@@ -275,13 +262,19 @@
           N = $('.text_all'),
           O = $('.text_none'),
           L = M.children(),
+          U = !0,
           p,
           E,
           F,
           KK,
           LL;
-
-      <?php if($TEMP['#loggedin'] == true){?>$('.btn_save[data-id="{$post_id}"]').click(CC), <?php } ?>$('.close-newsletter').click(function(){
+          
+      <?php if($TEMP['#loggedin'] == true){?>$(document).on('click', '.btn_save', function(){
+         var YY = $(this), XX = YY.attr('data-id'), DD = $('#post-'+XX+' .btn_save'), JJ, FF;
+         DD.index(GG[0]) == -1 && DD.push(GG[0]), DD.index(YY) == -1 && DD.push(YY), JJ = YY.siblings('.content_saved'), FF = DD.find('path'), ZZ(DD, !0), $.post("{$url->{req/post/save}}?token={#token_session}", {'post_id': XX, 'post_ids': JSON.stringify(n)}, function(e){
+            e.S == 200 && ((e.AC == 'delete' ? (FF.attr('fill', 'none'), DD.attr('aria-checked', !1), ZZ(DD, !1)) : (JJ.addClass('saved-animation-image'), clearTimeout(KK), KK = setTimeout(function(){(FF.attr('fill', 'currentColor'), DD.attr('aria-checked', !0), JJ.removeClass('saved-animation-image'), YY.addClass('saved-animation-button'), clearTimeout(LL), LL = setTimeout(function(){YY.removeClass('saved-animation-button'), ZZ(DD, !1)}, 100))}, 600))), DD.blur());
+         })
+      }), <?php } ?>$('.close-newsletter').click(function(){
          $('.newsletter-fixed').addClass('hidden'), $('.personalize_newsletter').removeAttr('style'), b.removeClass('newsletter-personalized-active'), document.cookie = 'dismiss_newsletter=true;max-age=604800;path=/';
       }), $('.newsletter_type').change(function(){
          var R = $(this),
@@ -290,8 +283,10 @@
       }), M.change(function(e){
          $(this).children().length == $(this).val().length ? (N.addClass('hidden'), O.removeClass('hidden')) : (N.removeClass('hidden'), O.addClass('hidden'));
       }), $('.select_all').click(function(){
-         L.prop('selected', !L.prop('selected')), N.toggleClass('hidden'), O.toggleClass('hidden');
-      }), $('.btn-clink').click(H), o.click(function(){
+         L.prop('selected', U), U = !U, N.toggleClass('hidden'), O.toggleClass('hidden');
+      }), $(document).on('click', '.btn-clink', function(){
+         navigator.clipboard ? navigator.clipboard.writeText(D).then(J(this)).catch(G(this)) : G(this);
+      }), o.click(function(){
          j.toggleClass('hidden'), l.css('height', 'auto'), o.attr('aria-expanded', !$.parseJSON(o.attr('aria-expanded')));
       }), $(document).click(function(e){ 
          if (!$(e.target).parents().is('#btn-hfshare') && !$(e.target).parents().is('#hfshare-modal .item-share')){
@@ -301,31 +296,19 @@
 
 
 
-      $('.btn_newsletter').click(function(){
+      X.click(function(){
          var R = $(this),
              Y = R.parent(),
              V = Y.find('.newsletter_email'),
-             Z = Y.find('.newsletter_popular:checked'),
-             U = Y.find('.newsletter_type').val(),
-             S = Y.find('.newsletter_category').val(),
-             X = Y.find('.newsletter_frequency').val(),
-             P = Y.find('.personalize_newsletter'),
-             I = Y.find('.content-error'),
              T = V.siblings('.text-error');
-         if(V.val() == ''){
-            T.text('*{$word->this_field_is_empty}'), AA(V);
-         } else if(!(new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/)).test(V.val())){
-            BB(I), T.text("{$word->enter_a_valid_email}"), AA(V);
-         } else {
-            R.addClass('spinner-is-loading'), ZZ(R, !0), $.post("{$url->{req/newsletter/subscribe}}?token={#token_session}", {'email': V.val(), 'type': U, 'frequency': X, 'popular': (Z.length > 0 ? Z.val() : 'off'), 'category': JSON.stringify(S)}, function(e) {
-               e.S == 200 ? (P.removeAttr('style'), I.removeClass('border-red'), I.removeClass('color-red'), I.addClass('border-blue'), I.addClass('color-blue'), A(R), $('.content_newsletter').trigger("reset"), I.text(e.M), setTimeout(function(){
-                                    I.text(''), BB(I);
-                                 }, 5000)) : BB(I), I.text(e.E), e.EX == 1 && AA(V), A(R);
-            });
-         }
+         R.addClass('spinner-is-loading'), ZZ(R, !0), $.post("{$url->{req/newsletter/subscribe}}?token={#token_session}", {'email': V.val(), 'type': Y.find('.newsletter_type').val(), 'frequency': Y.find('.newsletter_frequency').val(), 'popular': Y.find('.newsletter_popular:checked').val(), 'category': JSON.stringify(Y.find('.newsletter_category').val())}, function(e) {
+            e.S == 200 ? (ZZ(QQ, !0), R.removeClass('spinner-is-loading'), T.addClass('color-green'), T.removeClass('color-red'), T.text(e.M), setTimeout(function(){
+                T.text(''), V.removeClass('active'), T.addClass('color-red'), T.removeClass('color-green'), Y.find('.personalize_newsletter').removeAttr('style'), $('.content_newsletter').trigger("reset"), ZZ(QQ, !1), ZZ(R, !1)
+            }, 3000)) : (T.text(e.E), V.addClass('border-red'), V.addClass('boxshadow-red'), R.removeClass('spinner-is-loading'));
+         });
       }), $('.newsletter_email').on('input', function(){
          var W = $(this);
-         W.val() != '' && (W.siblings('.text-error').text(''), W.removeClass('border-red'), W.removeClass('boxshadow-red'))
+         W.val() != '' && (W.siblings('.text-error').text(''), ZZ(X, !1), W.removeClass('border-red'), W.removeClass('boxshadow-red'))
       }), $(document).scroll(function(){
          var w = $(window).scrollTop(),
              m = $(p).length == 1 ? parseInt(((w - p.offset().top) / p.height()) * 100) : 0,
@@ -336,7 +319,7 @@
          } else {
             if(((w + $(window).height()) - x.offset().top) >= (x.height() - 100)){
                if(n[u] == n[n.length-1]){
-                  (k) && (k = !1, Q.removeClass('hidden'), $.post("{$url->{req/post/load}}?token={#token_session}", {'category_id': '{$category_id}', 'post_ids': JSON.stringify(n)}, function(e) {e.S == 200 ? (x.append(e.HT), n.push(e.ID), $('.btn-clink').click(H), k = !0, Q.addClass('hidden')<?php if($TEMP['#loggedin'] == true){?>, $('.btn_save[data-id="'+e.ID+'"]').click(CC)<?php } ?>) : Q.removeClass('hidden');}));
+                  (k) && (k = !1, Q.removeClass('hidden'), $.post("{$url->{req/post/load}}?token={#token_session}", {'category_id': '{$category_id}', 'post_ids': JSON.stringify(n)}, function(e) {e.S == 200 ? (x.append(e.HT), n.push(e.ID), k = !0, Q.addClass('hidden')) : Q.removeClass('hidden');}));
                }
             }
             (t >= 99 && n[u+1] != undefined) && (u++, d = !0), w >= y && z && (z = !1, b.addClass('header-fixed'));

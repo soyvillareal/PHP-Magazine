@@ -14,6 +14,11 @@ if (isset($_SESSION['_LOGIN_TOKEN'])) {
     }
 }
 
+$lang = array(
+    'es' => 'es_ES',
+    'en' => 'en_US'
+);
+$TEMP['#lang'] = $lang[$TEMP['#settings']['language']];
 $TEMP['#admin'] = Specific::Admin();
 $TEMP['#moderator'] = Specific::Moderator();
 $TEMP['#publisher'] = Specific::Publisher();

@@ -4,142 +4,171 @@ if($TEMP['#loggedin'] == true){
 		$input = Specific::Filter($_POST['input']);
 		$value = Specific::Filter($_POST['value']);
 
-		if(in_array($input, array('username', 'new_email', 'name', 'surname', 'about', 'birthday', 'gender', 'facebook', 'twitter', 'instagram'))){
-			$no_emptys = array('username', 'new_email', 'gender', 'birthday');
-			$red_social = array('facebook', 'twitter', 'instagram');
-			if(!empty($value) || !in_array($input, $no_emptys)){
-				$error = false;
-				if($input == 'birthday'){
-					$value = json_decode($value, true);
-		            if(!in_array($value[1], array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12))){
-		                $error = true;
-		            }
-		            if(strlen($value[2]) != 4){
-		                $error = true;
-		            }
-		            if(!checkdate($value[1], $value[0], $value[2])){
-		                $error = true;
-		            }
-		            if($TEMP['#user']['birthday_changed'] != 0){
-		                $error = true;
-		            }
-				}
-				if(($input == 'name' && strlen($value) <= 55) || $input != 'name'){
-					if(($input == 'surname' && strlen($value) <= 55) || $input != 'surname'){
-						if(($input == 'username' && preg_match('/^[a-zA-Z0-9]+$/', $value)) || $input != 'username'){
-							if(($input == 'new_email' && filter_var($value, FILTER_VALIDATE_EMAIL)) || $input != 'new_email'){
-								if((in_array($input, $red_social) && preg_match("#^(https?://www\.{$input}.com/(.+?)|https?://{$input}.com/(.+?)|www\.{$input}.com/(.+?))#i", $value) == true || empty($value)) || !in_array($input, $red_social)){
-									if($input == 'username' && (time() < $TEMP['#user']['user_changed'])){
-										$error = true;
-									}
-									if($input == 'about'){
-										if(strlen(strip_tags($value)) > 500){
-											$error = true;
-										}
-									}
-									if($input == 'gender' && !in_array($value, array('male', 'female'))){
-										$error = true;
-									}
-									if($error == false){
-										$pass = true;
-										if($input == 'birthday'){
-										    if($value[0] == $TEMP['#user']['birth_day'] && $value[1] == $TEMP['#user']['birthday_month'] && $value[2] == $TEMP['#user']['birthday_year']){
-										    	$pass = false;
-										    }
-								            $value = DateTime::createFromFormat('d-n-Y H:i:s', "{$value[0]}-{$value[1]}-{$value[2]} 00:00:00")->getTimestamp();
-										}
-										if($input != 'new_email' && $TEMP['#user'][$input] == $value){
-											$pass = false;
-										} else {
-											if($input == 'username'){
-												$time = strtotime("+3 month, 12:00am", time());
-												$update = ", user_changed = $time";
-												$deliver['EM'] = $TEMP['#word']['have_already_changed_username_change_day'].Specific::DateFormat($time);
-											} else if($input == 'birthday'){
-												$time = time();
-												$update = ', birthday_changed = '.$time;
-												$deliver['EM'] = $TEMP['#word']['just_changed_date_birth_day'].Specific::DateFormat($time);
-											} else if($input == 'new_email' && $TEMP['#settings']['verify_email'] == 'on'){
-												if($TEMP['#user']['email'] == $value){
-													$pass = false;
-													$deliver['EQ'] = 0;
-													$deliver['EV'] = 0;
-													if(!empty($TEMP['#user']['new_email'])){
-														$deliver['EV'] = 1;
-														$pass = true;
-													}
-													$deliver['EM'] = $TEMP['#word']['use_email_login_where_will_send'];
-													$update = ", email = '$value', new_email = NULL";
-												} else {
-													if(empty($TEMP['#user']['new_email'])){
-														$deliver['EQ'] = 1;
-														$deliver['EV'] = 1;
-														$deliver['EM'] = $TEMP['#word']['requested_change_email_need_verify'];
-														$update = ", new_email = '$value'";
-													} else {
+		if(in_array($input, array('username', 'new_email', 'name', 'surname', 'about', 'birthday', 'gender', 'newsletter', '2check', 'facebook', 'twitter', 'instagram'))){
+			if($input != 'newsletter'){
+				$no_emptys = array('username', 'new_email', 'gender', 'birthday');
+				$red_social = array('facebook', 'twitter', 'instagram');
+				if(!empty($value) || !in_array($input, $no_emptys)){
+					$error = false;
+					if($input == 'birthday'){
+						$value = json_decode($value, true);
+			            if(!in_array($value[1], array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12))){
+			                $error = true;
+			            }
+			            if(strlen($value[2]) != 4){
+			                $error = true;
+			            }
+			            if(!checkdate($value[1], $value[0], $value[2])){
+			                $error = true;
+			            }
+			            if($TEMP['#user']['birthday_changed'] != 0){
+			                $error = true;
+			            }
+					}
+					if($input == 'username' && (time() < $TEMP['#user']['user_changed'])){
+						$error = true;
+					}
+					if($input == 'about'){
+						if(strlen(strip_tags($value)) > 500){
+							$error = true;
+						}
+					}
+					if($input == 'gender' && !in_array($value, array('male', 'female'))){
+						$error = true;
+					}
+					if($input == '2check' && !in_array($value, array('deactivated', 'activated'))){
+						$error = true;
+					}
+					if($error == false){
+						if(($input == 'name' && strlen($value) <= 55) || $input != 'name'){
+							if(($input == 'surname' && strlen($value) <= 55) || $input != 'surname'){
+								if(($input == 'username' && preg_match('/^[a-zA-Z0-9]+$/', $value)) || $input != 'username'){
+									if(($input == 'new_email' && filter_var($value, FILTER_VALIDATE_EMAIL)) || $input != 'new_email'){
+										if((in_array($input, $red_social) && preg_match("#^(https?://www\.{$input}.com/(.+?)|https?://{$input}.com/(.+?)|www\.{$input}.com/(.+?))#i", $value) == true || empty($value)) || !in_array($input, $red_social)){
+											$pass = true;
+											if($input == 'birthday'){
+											    if($value[0] == $TEMP['#user']['birth_day'] && $value[1] == $TEMP['#user']['birthday_month'] && $value[2] == $TEMP['#user']['birthday_year']){
+											    	$pass = false;
+											    }
+									            $value = DateTime::createFromFormat('d-n-Y H:i:s', "{$value[0]}-{$value[1]}-{$value[2]} 00:00:00")->getTimestamp();
+											}
+											if($input != 'new_email' && $TEMP['#user'][$input] == $value){
+												$pass = false;
+											} else {
+												if($input == 'username'){
+													$time = strtotime("+3 month, 12:00am", time());
+													$update = ", user_changed = $time";
+													$deliver['EM'] = $TEMP['#word']['have_already_changed_username_change_day'].Specific::DateFormat($time);
+												} else if($input == 'birthday'){
+													$time = time();
+													$update = ', birthday_changed = '.$time;
+													$deliver['EM'] = $TEMP['#word']['just_changed_date_birth_day'].Specific::DateFormat($time);
+												} else if($input == 'new_email' && $TEMP['#settings']['verify_email'] == 'on'){
+													if($TEMP['#user']['email'] == $value){
+														$pass = false;
 														$deliver['EQ'] = 0;
-														if($TEMP['#user']['new_email'] == $value){
+														$deliver['EV'] = 0;
+														if(!empty($TEMP['#user']['new_email'])){
+															$deliver['EV'] = 1;
+															$pass = true;
+														}
+														$deliver['EM'] = $TEMP['#word']['use_email_login_where_will_send'];
+														$update = ", email = '$value', new_email = NULL";
+													} else {
+														if(empty($TEMP['#user']['new_email'])){
 															$deliver['EQ'] = 1;
-															$pass = false;
+															$deliver['EV'] = 1;
+															$deliver['EM'] = $TEMP['#word']['requested_change_email_need_verify'];
+															$update = ", new_email = '$value'";
+														} else {
+															$deliver['EQ'] = 0;
+															if($TEMP['#user']['new_email'] == $value){
+																$deliver['EQ'] = 1;
+																$pass = false;
+															}
 														}
 													}
 												}
 											}
-										}
 
-										if($pass == true){
-											if($dba->query("UPDATE ".T_USER." SET $input = ? $update WHERE id = ?", $value, $TEMP['#user']['id'])->returnStatus()){
-												$deliver['M'] = $value;
-												if(empty($value) && !in_array($input, $no_emptys)){
-													$deliver['M'] = $TEMP['#word'][$input];
-												} else {	
-													if($input == 'birthday'){
-														$deliver['M'] = Specific::DateFormat($value);
-													} else if($input == 'gender'){
-														$deliver['M'] = $TEMP['#word'][$value];
+											if($pass == true){
+												if($dba->query("UPDATE ".T_USER." SET $input = ? $update WHERE id = ?", $value, $TEMP['#user']['id'])->returnStatus()){
+													$deliver['M'] = $value;
+													if(empty($value) && !in_array($input, $no_emptys)){
+														$deliver['M'] = $TEMP['#word'][$input];
+													} else {	
+														if($input == 'birthday'){
+															$deliver['M'] = Specific::DateFormat($value);
+														} else if($input == 'gender'){
+															$deliver['M'] = $TEMP['#word'][$value];
+														} else if($input == '2check'){
+															$deliver['M'] = "{$TEMP['#word']['2check']} ({$TEMP['#word'][$value]})";
+														}
 													}
+													$deliver['S'] = 200;
 												}
+											} else {
 												$deliver['S'] = 200;
 											}
 										} else {
-											$deliver['S'] = 200;
+											$deliver = array(
+												'S' => 400,
+												'E' => "*{$TEMP['#word']['enter_a_valid_url']}"
+											);
 										}
+									} else {
+										$deliver = array(
+											'S' => 400,
+											'E' => "*{$TEMP['#word']['enter_a_valid_email']}"
+										);
 									}
 								} else {
 									$deliver = array(
 										'S' => 400,
-										'E' => "*{$TEMP['#word']['enter_a_valid_url']}"
+										'E' => "*{$TEMP['#word']['write_only_numbers_letters']}"
 									);
 								}
 							} else {
 								$deliver = array(
 									'S' => 400,
-									'E' => "*{$TEMP['#word']['enter_a_valid_email']}"
+									'E' => "*{$TEMP['#word']['name_large_maximum_characters']}"
 								);
 							}
 						} else {
 							$deliver = array(
 								'S' => 400,
-								'E' => "*{$TEMP['#word']['write_only_numbers_letters']}"
+								'E' => "*{$TEMP['#word']['surname_large_maximum_characters']}"
 							);
 						}
-					} else {
-						$deliver = array(
-							'S' => 400,
-							'E' => "*{$TEMP['#word']['name_large_maximum_characters']}"
-						);
 					}
 				} else {
 					$deliver = array(
 						'S' => 400,
-						'E' => "*{$TEMP['#word']['surname_large_maximum_characters']}"
+						'E' => "*{$TEMP['#word']['this_field_is_empty']}"
 					);
 				}
 			} else {
-				$deliver = array(
-					'S' => 400,
-					'E' => "*{$TEMP['#word']['this_field_is_empty']}"
-				);
+				if(in_array($value, array('disabled', 'enabled'))){
+					if($dba->query('SELECT COUNT(*) FROM '.T_NEWSLETTER.' WHERE email = ?', $TEMP['#user']['email'])->fetchArray(true) == 0){
+						$slug = Specific::RandomKey(12, 16);
+						if($dba->query('SELECT COUNT(*) FROM '.T_NEWSLETTER.' WHERE slug = ?', $slug)->fetchArray(true) > 0){
+							$slug = Specific::RandomKey(12, 16);
+						}
+						if($dba->query('INSERT INTO '.T_NEWSLETTER.' (slug, email, created_at) VALUES (?, ?, ?)', $slug, $TEMP['#user']['email'], time())){
+							$deliver = array(
+								'S' => 200,
+								'M' => "{$TEMP['#word']['newsletter_settings']} ({$TEMP['#word'][$value]})",
+								'HT' => "{$TEMP['#word']['configuration_tells_send_news']} <a class='color-blue hover-button animation-ease3s' href='".Specific::Url("{$TEMP['#r_newsletter']}/$slug")."' target='_self'>{$TEMP['#word']['see_detailed_settings']}</a>"
+							);
+						}
+					} else {
+						if($dba->query('UPDATE '.T_NEWSLETTER.' SET status = ? WHERE email = ?', $value, $TEMP['#user']['email'])){
+							$deliver['HT'] = $value == 'enabled' ? "{$TEMP['#word']['configuration_tells_send_news']} <a class='color-blue hover-button animation-ease3s' href='".Specific::Url("{$TEMP['#r_newsletter']}/$slug")."' target='_self'>{$TEMP['#word']['see_detailed_settings']}</a>" : $TEMP['#word']['configuration_tells_send_news'];
+							$deliver['S'] = 200;
+							$deliver['M'] = "{$TEMP['#word']['newsletter_settings']} ({$TEMP['#word'][$value]})";
+						}
+					}
+				}
 			}
 		}
 	} else if($one == 'send-code'){
@@ -243,5 +272,66 @@ if($TEMP['#loggedin'] == true){
 	        	);
 	        }
 	    }
+    } else if($one == 'change-password'){
+		$current_password = Specific::Filter($_POST['current-password']);
+		$password = Specific::Filter($_POST['password']);
+		$re_password = Specific::Filter($_POST['re-password']);
+		if(!empty($current_password) && !empty($password) && !empty($re_password) && $password == $re_password){
+			if(password_verify($current_password, $TEMP['#user']['password'])){
+				$password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+				if ($dba->query('UPDATE '.T_USER.' SET password = ? WHERE id = ?', $password, $TEMP['#user']['id'])->returnStatus()) {
+					$deliver['S'] = 200;
+				}
+			} else {
+				$deliver = array(
+					'S' => 400,
+					'E' => $TEMP['#word']['current_password_not_match'],
+					'EX' => 1
+				);
+			}
+		}
+	} else if ($one == 'delete-session'){
+    	$session_id = Specific::Filter($_POST['session_id']);
+        if (!empty($session_id)) {
+	        $session = $dba->query('SELECT user_id, token FROM '.T_SESSION.' WHERE id = ?', $session_id)->fetchArray();
+	        if (!empty($session)) {
+	            $deliver['RL'] = 0;
+	            if (($session['user_id'] == $TEMP['#user']['id'])) {
+		            if ($dba->query('DELETE FROM '.T_SESSION.' WHERE id = ?', $session_id)->returnStatus()) {
+		                $deliver['S'] = 200;
+		                if ((!empty($_SESSION['_LOGIN_TOKEN']) && $_SESSION['_LOGIN_TOKEN'] == $session['token']) || (!empty($_COOKIE['_LOGIN_TOKEN']) && $_COOKIE['_LOGIN_TOKEN'] == $session['token'])) {
+		                    setcookie('_LOGIN_TOKEN', null, -1, '/');
+							if (isset($_COOKIE['_SAVE_SESSION'])) {
+							    setcookie('_SAVE_SESSION', null, -1, '/');
+							}
+		                    session_destroy();
+		                    $deliver['RL'] = 1;
+		                }
+		            }
+		        }
+	        }
+	    }
+    } else if($one == 'table-sessions'){
+        $page = Specific::Filter($_POST['page_id']);
+        if(!empty($page) && is_numeric($page) && isset($page) && $page > 0){
+            $html = "";
+            $user_sessions = $dba->query("SELECT * FROM ".T_SESSION." WHERE user_id = {$TEMP['#user']['id']} ORDER BY id DESC LIMIT ? OFFSET ?", 10, $page)->fetchAll();
+            if (!empty($user_sessions)) {
+                foreach ($user_sessions as $value) {
+                    $TEMP['!id'] = $value['id'];
+                    $session = Specific::GetSessions($value);
+                    $TEMP['!ip'] = $session['ip'];
+                    $TEMP['!browser'] = $session['browser'];
+                    $TEMP['!platform'] = $session['platform'];
+                    $TEMP['!created_at'] = Specific::DateFormat($value['created_at']);
+                    $html .= Specific::Maket("settings/logins/includes/sessions");
+                }
+                Specific::DestroyMaket();
+            }
+            $deliver = array(
+            	'S' => 200,
+            	'HT' => $html
+            );
+        }
     }
 }

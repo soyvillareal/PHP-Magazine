@@ -106,14 +106,103 @@ class Specific {
 	        @imagedestroy($src_img);
 	}
 
-	public static function CreateDirImage(){
-		if (!file_exists('uploads/images/' . date('Y'))) {
-	        mkdir('uploads/images/' . date('Y'), 0777, true);
+	public static function CreateDirImage($folder){
+		$folder_first = "uploads/$folder/" . date('Y') . '-' . date('m');
+	    if (!file_exists($folder_first)) {
+		    mkdir($folder_first, 0777, true);
+		}
+		$dates = date('Y') . '-' . date('m') . '/' . date('m');
+		$folder_last = "uploads/$folder/$dates";
+	   	if (!file_exists($folder_last)) {
+		    mkdir($folder_last, 0777, true);
+		}
+	    return array(
+	    	'full' => $folder_last,
+	    	'dates' => $dates
+	    );
+	}
+
+
+	public static function UploadThumbnail($data) {
+	    $dir_image = self::CreateDirImage($data['folder']);
+	    $getImage = self::getContentUrl($data['media']);
+	    if($data['folder'] == 'posts'){
+	    	$image = sha1(rand(111,666).self::RandomKey()).'_'.time();
+	    	$file = "{$dir_image['full']}/{$image}";
+		    $filename_b = "{$file}-b.jpeg";
+		    $filename_s = "{$file}-s.jpeg";
+	    	if (!empty($getImage)){
+		        $importImage_b = file_put_contents($filename_b, $getImage);
+		        $importImage_s = file_put_contents($filename_s, $getImage);
+		        if ($importImage_b) {
+		            self::ResizeImage(780, 440, $filename_b, $filename_b, 100);
+		        }
+		        if ($importImage_s) {
+		            self::ResizeImage(400, 266, $filename_s, $filename_s, 100);
+		        }
+		        if (file_exists($filename_b) && file_exists($filename_s)){
+	    			$url_dates = "{$dir_image['dates']}/{$image}";
+			        return array(
+				    	'return' => true,
+			    		'image' => $url_dates,
+			    		'image_ext' => "{$url_dates}.jpeg"
+				    );
+		    	}
+		    }
+	    } else {
+	    	$image = "{$data['post_id']}-{$data['eorder']}-".md5(time().self::RandomKey());
+	    	$filename = "{$dir_image['full']}/{$image}.jpeg";
+		    if(file_put_contents($filename, $getImage)) {
+	    		$url_dates = "{$dir_image['dates']}/{$image}";
+			    return array(
+			    	'return' => true,
+			    	'image' => $url_dates,
+			    	'image_ext' => "{$url_dates}.jpeg"
+			    );
+		    }
 	    }
-	    if (!file_exists('uploads/images/' . date('Y') . '/' . date('m'))) {
-	        mkdir('uploads/images/' . date('Y') . '/' . date('m'), 0777, true);
+	    return array('return' => false);
+	}
+
+	public static function UploadImage($data = array()){
+	    $dir_image = self::CreateDirImage($data['folder']);
+	    if (empty($data)) {
+	        return false;
 	    }
-	    return 'uploads/images/' . date('Y') . '/' . date('m');
+	    if (!in_array(pathinfo($data['name'], PATHINFO_EXTENSION), array('jpeg','jpg','png')) || !in_array($data['type'], array('image/jpeg', 'image/png'))) {
+	        return array('return' => false);
+	    }
+	    if($data['folder'] == 'posts'){
+	    	$image = sha1(rand(111,666).self::RandomKey()).'_'.time();
+	    	$file = "{$dir_image['full']}/{$image}";
+		    $filename_b = "{$file}-b.jpeg";
+		    $filename_s = "{$file}-s.jpeg";
+		    if (move_uploaded_file($data['tmp_name'], $filename_b)) {
+	    		$url_dates = "{$dir_image['dates']}/{$image}";
+	            @self::ResizeImage(780, 440, $filename_b, $filename_b, 70);
+			    if (copy($filename_b, $filename_s)) {
+		            @self::ResizeImage(400, 266, $filename_s, $filename_s, 70);
+			    }
+			    return array(
+			    	'return' => true,
+			    	'image' => $url_dates,
+			    	'image_ext' => "{$url_dates}.jpeg"
+			    );
+		    }
+
+	    } else {
+	    	$image = "{$data['post_id']}-{$data['eorder']}-".md5(time().self::RandomKey());
+	    	$filename = "{$dir_image['full']}/{$image}.jpeg";
+		    if (move_uploaded_file($data['tmp_name'], $filename)) {
+	    		$url_dates = "{$dir_image['dates']}/{$image}";
+			    return array(
+			    	'return' => true,
+			    	'image' => $url_dates,
+			    	'image_ext' => "{$url_dates}.jpeg"
+			    );
+		    }
+	    }
+	    return array('return' => false);
 	}
 
 	public static function UploadAvatar($data = array()){
@@ -130,8 +219,8 @@ class Specific {
 	    }
 	    $image = "{$TEMP['#user']['username']}-".sha1(time().self::RandomKey());
 	    $file = 'uploads/users/' . $image;
-	    $filename_b = "$file-b.jpeg";
-	    $filename_s = "$file-s.jpeg";
+	    $filename_b = "{$file}-b.jpeg";
+	    $filename_s = "{$file}-s.jpeg";
 	    if (move_uploaded_file($data['avatar']['tmp_name'], $filename_b)) {
             @self::ResizeImage(200, 200, $filename_b, $filename_b, 70);
 		    if (copy($filename_b, $filename_s)) {
@@ -169,29 +258,58 @@ class Specific {
 	    }
 	}
 
-	public static function getContentUrl($url = '', $config = array()) {
+	public static function getContentUrl($url = '') {
 	    if (empty($url)) {
 	        return false;
 	    }
 	    $curl = curl_init($url);
-	    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-	    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-	    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
-	    curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.7.12) Gecko/20050915 Firefox/1.0.7");
-	    if (!empty($config['POST'])) {
-	        curl_setopt($curl, CURLOPT_POST, 1);
-	        curl_setopt($curl, CURLOPT_POSTFIELDS, $config['POST']);
-	    }
-	    if (!empty($config['bearer'])) {
-	        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-	            'Authorization: Bearer ' . $config['bearer']
-	        ));
-	    }
+
+	    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+	    // Start getImage
+	    curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+	    curl_setopt($curl, CURLOPT_ENCODING, 'gzip');
+	    curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+	    	'User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:45.0) Gecko/20100101 Firefox/45.0',
+	        'Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3',
+	        'Accept-Encoding: gzip, deflate'
+	    ));
+	    // End getImage
+
 	    //execute the session
 	    $curl_response = curl_exec($curl);
+
+	    // Start getImage
+	    $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+	    // End getImage
+
 	    //finish off the session
 	    curl_close($curl);
-	    return $curl_response;
+
+	    // Start getImage
+	    if ($code == 200) {
+	   		return $curl_response;
+	   	} else {
+	    	return false;
+	    }
+	    // End getImage
+
+	}
+
+	//function sanitize_title_with_dashes taken from wordpress
+	public static function CreateSlug($str, $char = "-", $tf = "lowercase", $max = 120){
+	    $str = iconv("UTF-8", "ASCII//TRANSLIT//IGNORE", $str); // transliterate
+	    $str = str_replace("'", "", $str); // remove “'” generated by iconv
+	    $str = substr($str, 0, $max);
+	    $str = preg_replace("~[^a-z0-9]+~ui", $char, $str); // replace unwanted by single “-”
+	    $str = trim($str, $char); // trim “-”
+
+	    if($tf == "lowercase"){
+	    	$str = mb_strtolower($str, "UTF-8"); // lowercase
+	    } else if($tf == "uppercase"){
+	    	$str = mb_strtoupper($str, "UTF-8");
+	    }
+	    return $str;
 	}
 
 	public static function Settings() {

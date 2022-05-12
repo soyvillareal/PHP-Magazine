@@ -49,18 +49,18 @@
       var a = $('#btn-deactivated'),
           b = $('#unlink-popup'),
           c = $('#btn-popup'),
+          f = $('.text-error'),
           x = function(e){
             b.addClass('hidden'), c.removeAttr('disabled'), c.attr('aria-expanded', !1);
           },
-          f = $('.text-error'),
-          C = function(e){
+          q = function(e){
             e.removeClass('spinner-is-loading'), e.removeAttr('disabled')
           };
       c.click(function(){
          b.removeClass('hidden'), c.attr('disabled', !0), c.attr('aria-expanded', !0), c.blur();
       }), $('#btn-cancel').click(x), a.click(function(){
          a.addClass('spinner-is-loading'), a.attr('disabled', !0), f.text(''), $.post("{$url->{req/to-access/deactivate-account}}?token={#token_session}", {'tokenu': '{$token}'}, function(e){
-               e.S == 200 ? ($('#unlink-title').text('{$word->the_account_been_deactivated}'), $('#unlink-pending').addClass('hidden'), $('#unlink-deactivated').removeClass('hidden'), C(a), x()) : (f.text('*'+e.E), C(a), x());
+               e.S == 200 ? ($('#unlink-title').text('{$word->the_account_been_deactivated}'), $('#unlink-pending').addClass('hidden'), $('#unlink-deactivated').removeClass('hidden'), q(a), x()) : (f.text(e.E), q(a), x());
          })
       })
    });
