@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" dir="ltr">
+<html lang="{$settings->language}" dir="ltr">
 <head>
    <meta charset="UTF-8" />
    <title>{$global_title}</title>
@@ -39,7 +39,7 @@
   <header id="header" class="content-header w-100 h-100 background-white margin-none animation-ease3s">
     <section class="section-one position-relative">
       <div class="mobile-left display-flex justify-around position-absolute">
-         <button id="btn-drawer" class="btn-noway button-menu border-rlow animation-ease3s display-inline-block display-none-desk background-hover" aria-haspopup="true" aria-expanded="false" aria-label="Sections Navigation">
+         <button id="btn-drawer" class="btn-noway button-menu border-rlow animation-ease3s display-inline-block display-none-desk background-hover" aria-haspopup="true" aria-expanded="false" aria-label="{$word->sections_navigation}">
             <svg class="icon-x vertical-sub" viewBox="0 0 16 16">
                <rect x="1" y="3" fill="#333" width="14" height="2"></rect>
                <rect x="1" y="7" fill="#333" width="14" height="2"></rect>
@@ -61,14 +61,14 @@
          </button>
          -->
          <?php if($TEMP['#loggedin'] === true){ ?>
-         <div class="content-dropdown-account margin-left-auto">
-            <button class="btn_account button-general display-flex direction-row align-center h-30 btn-noway display-none-mob background-hover border-rlow vertical-middle animation-ease3s" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Cuenta">
-               <span class="display-inline-block vertical-middle color-black margin-r5 font-low">Cuenta</span>
+         <div class="content-dropdown-account content-backdrop margin-left-auto">
+            <button class="btn_account button-general display-flex direction-row align-center h-30 btn-noway display-none-mob background-hover border-rlow vertical-middle animation-ease3s" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
+               <span class="display-inline-block vertical-middle color-black margin-r5 font-low">{$word->account}</span>
                <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                  <path fill="currentColor" d="M21.707,8.707l-9,9a1,1,0,0,1-1.414,0l-9-9A1,1,0,1,1,3.707,7.293L12,15.586l8.293-8.293a1,1,0,1,1,1.414,1.414Z"/>
                </svg>
             </button>
-            <div class="dropdown-account position-absolute background-white border-rlow border-all border-grely hidden" role="dialog" aria-label="Menu de la cuenta" aria-modal="true">
+            <div class="dropdown-account position-absolute background-white border-rlow border-all border-grely hidden" role="dialog" aria-label="{$word->account_menu}" aria-modal="true">
                <div class="dropdown-account-item padding-t10 padding-b10 padding-l10 padding-r10 border-bottom border-grely">
                   <a class="display-flex direction-row align-center" href="{$profile_slug}" target="_self" title="{$profile_username}">
                      <div class="dropdown-account-image margin-r5">
@@ -98,14 +98,14 @@
          <?php } ?>
          <div class="button-modal-login display-inline position-absolute">
             <?php if($TEMP['#loggedin'] == true){ ?>
-            <button class="btn_account btn-noway button-login border-rlow animation-ease3s display-inline-block display-none-desk background-hover" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Cuenta">
+            <button class="btn_account btn-noway button-login border-rlow animation-ease3s display-inline-block display-none-desk background-hover" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
                <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="#333">
                   <path d="M8,10c-2.5,0-7,1.1-7,3.5V16h14v-2.5C15,11.1,10.5,10,8,10z"></path>
                   <circle cx="8" cy="4" r="4"></circle>
                </svg>
             </button>
             <?php } else { ?>
-            <button id="btn-modal-login" class="btn-noway button-login border-rlow animation-ease3s display-inline-block display-none-desk background-hover" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Account">
+            <button id="btn-modal-login" class="btn-noway button-login border-rlow animation-ease3s display-inline-block display-none-desk background-hover" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
                <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="#333">
                   <path d="M8,10c-2.5,0-7,1.1-7,3.5V16h14v-2.5C15,11.1,10.5,10,8,10z"></path>
                   <circle cx="8" cy="4" r="4"></circle>
@@ -147,13 +147,13 @@
    </header>
    <aside class="drawer display-none-desk position-fixed w-100 background-white animation-ease3s hidden">
       <div class="padding-t25 padding-b25 padding-l20 padding-r20">
-         <div class="display-flex direction-row align-center">
+         <form class="display-flex direction-row align-center" novalidate>
             <div class="display-flex position-relative vertical-middle w-100 h-36 background-white margin-t5 margin-b5 margin-r10 padding-l15 padding-r20 border-all border-grely font-lowly border-rlow">
                <input id="key-search" class="color-grey w-100 h-100" type="text" placeholder="Buscar...">
-               <button id="key-reset" class="btn-noway hidden">{$word->clean_up}</button>
+               <button id="key-reset" class="btn-noway hidden" type="reset">{$word->clean_up}</button>
             </div>
-            <button id="btn-search" class="button-general display-inline-block vertical-middle h-36 background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase inhover-button animation-ease3s" disabled>{$word->to_go}</button>
-         </div>
+            <button id="btn-search" class="button-general display-inline-block vertical-middle h-36 background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase inhover-button animation-ease3s" type="submit" disabled>{$word->to_go}</button>
+         </form>
          <nav class="padding-t15">
             <section>
                <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->national}</span>
@@ -286,8 +286,8 @@
       </div>
    </footer>
    <?php } ?>
-   <div id="login-overlay" class="modal-login-overlay display-none-desk position-fixed w-100 h-100 animation-ease3s"></div>
-   <div class="content-login-modal display-none-desk position-fixed w-100 animation-ease3s">
+   <?php if($TEMP['#loggedin'] == false){ ?>
+   <div class="content-login-modal content-backdrop display-none-desk position-fixed w-100 animation-ease3s">
       <div class="item-login-modal display-flex background-white padding-t15 padding-b15 padding-l15 padding-r15 border-top border-grey">
          <div class="margin-auto">
             <a class="inhover-button margin-r10" href="{$url->{{#r_register}}}" target="_self" title="{$word->register}" role="button">
@@ -303,7 +303,7 @@
          </div>
       </div>
    </div>
-   <div id="dropdown-account-overlay" class="dropdown-account-overlay position-fixed w-100 h-100 animation-ease3s"></div>
+   <?php } ?>
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.fonts.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.general.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.modal.css}}" />
@@ -314,29 +314,27 @@
       $(document).ready(function(){
          let a = $('body'),
              b = $('#btn-search'),
-             c = $('#key-search'),
              d = $('#key-reset'),
              s = $('#btn-drawer'),
              h = $('.btn_account'),
              j = h.find('svg'),
              f = function(){
-               a.removeClass('modal-login-active');
+               a.removeClass('modal-login-active')
              },
              g = function(e){
-               e.attr('aria-expanded', !JSON.parse(e.attr('aria-expanded'))), e.blur()
+               e.attr('aria-expanded', !JSON.parse(e.attr('aria-expanded'))).blur()
              };
-         c.on('input', function(){
-            c.val().length == 0 ? (b.attr('disabled', true), d.addClass('hidden')) : (b.removeAttr('disabled'), d.removeClass('hidden'));
-         }), d.click(function(){
-            c.val('');
+         
+         $(document).click(function(e){
+            <?php echo($TEMP['#loggedin'] === true) ? "$(e.target).is('.content-dropdown-account') && (a.removeClass('backdrop-active'), h.removeClass('active').siblings().addClass('hidden'), j.removeAttr('transform'), g(h))" : "$(e.target).is('.content-login-modal') && f()" ?>
+         }), $('#key-search').keyup(function(){
+            $(this).val().length == 0 ? (b.attr('disabled', true), d.addClass('hidden')) : (b.removeAttr('disabled'), d.removeClass('hidden'))
          }), s.click(function(){
-            a.toggleClass('drawer-active'), g($(this))<?php echo($TEMP['#loggedin'] == false) ? ', f()' : '';?>;
+            a.toggleClass('drawer-active'), g($(this))<?php echo($TEMP['#loggedin'] == false) ? ', f()' : '';?>
          })<?php if($TEMP['#loggedin'] === true){ ?>, h.click(function(){
-            a.toggleClass('dropdown-account-active'), h.siblings().toggleClass('hidden'), h.toggleClass('active'), g(h), !$(this).hasClass('button-login') && !j.attr('transform') ? j.attr('transform', 'rotate(180)') : j.removeAttr('transform');
-         }), $('#dropdown-account-overlay').click(function(e){
-            a.removeClass('dropdown-account-active'), h.siblings().addClass('hidden'), h.removeClass('active'), j.removeAttr('transform'), g(h);
-         })<?php } else { ?>, $('#login-overlay').click(f), $('#btn-modal-login').click(function(){
-            a.toggleClass('modal-login-active'), g($(this));
+            a.toggleClass('backdrop-active'), h.toggleClass('active').siblings().toggleClass('hidden'), g(h), !$(this).hasClass('button-login') && !j.attr('transform') ? j.attr('transform', 'rotate(180)') : j.removeAttr('transform')
+         })<?php } else { ?>, $('#btn-modal-login').click(function(){
+            a.toggleClass('modal-login-active'), g($(this)), a.removeClass('drawer-active')
          })<?php } ?>;
       })
    </script>%%}

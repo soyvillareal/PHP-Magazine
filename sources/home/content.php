@@ -56,6 +56,14 @@ if(!empty($TEMP['#last_news'])){
 	Specific::DestroyMaket();
 }
 
+$show_alert = Specific::Filter($_GET['show-alert']);
+$TEMP['#show_alert'] = false;
+if($show_alert == 'deleted_post'){
+	if(isset($_SESSION['post_deleted'])){
+		unset($_SESSION['post_deleted']);
+		$TEMP['#show_alert'] = true;
+	}
+}
 
 $TEMP['#page']         = 'home';
 $TEMP['#title']        = $TEMP['#settings']['title'].' - '.$TEMP['#word']['latest_news_colombia_world'];

@@ -1,6 +1,7 @@
 <?php
 if($one == 'load'){
 	$post_ids = Specific::Filter($_POST['post_ids']);
+	$post_ids = html_entity_decode($post_ids);
 	$post_ids = json_decode($post_ids);
 	$category_id = Specific::Filter($_POST['category_id']);
 
@@ -11,6 +12,7 @@ if($one == 'load'){
 			$url = Specific::Url($post['slug']);
 			$post_views = $post['views'];
 			$avatar = Specific::Data($post['user_id'], array('avatar'));
+			$category = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $post['category_id'])->fetchArray();
 			$fingerprint = Specific::Fingerprint($TEMP['#user']['id']);
 
 			if($dba->query('SELECT COUNT(*) FROM '.T_VIEW.' WHERE post_id = ? AND fingerprint = ?', $post['id'], $fingerprint)->fetchArray(true) == 0){
@@ -21,7 +23,8 @@ if($one == 'load'){
 			}
 
 			$TEMP['title'] = $title;
-			$TEMP['category'] = $dba->query('SELECT name FROM '.T_CATEGORY.' WHERE id = ?', $post['category_id'])->fetchArray(true);
+			$TEMP['category'] = $category['name'];
+			$TEMP['category_slug'] = $category['slug'];
 			$TEMP['views'] = number_format($post_views);
 			$TEMP['post_id'] = $post['id'];
 			$TEMP['author_name'] = Specific::Data($post['user_id'], array('username'));
@@ -40,12 +43,46 @@ if($one == 'load'){
 
 
 			$TEMP['#is_loaded'] = true;
+
+			$post_sources = json_decode($post['post_sources'], true);
+			if(!empty($post_sources)){
+				$TEMP['#post_sources'] = array();
+				if(count($post_sources) > 1){
+					foreach ($post_sources as $key => $source) {
+						if($key != end(array_keys($post_sources))){
+							$TEMP['#post_sources'][] = " <a class='btn-noway color-blue hover-button' href='{$source['source']}' target='_blank'>{$source['name']}</a>";
+						}
+					}
+					$last_source = end($post_sources);
+					$TEMP['#post_sources'] = implode(',', $TEMP['#post_sources']);
+					$TEMP['#post_sources'] = "<b>{$TEMP['#word']['consulted_sources']}:</b> {$TEMP['#post_sources']} {$TEMP['#word']['and']} <a class='btn-noway color-blue hover-button' href='{$last_source['source']}' target='_blank'>{$last_source['name']}</a>";
+				} else {
+					$TEMP['#post_sources'] = "<b>{$TEMP['#word']['consulted_source']}:</b> <a class='btn-noway color-blue hover-button' href='{$post_sources[0]['source']}' target='_blank'>{$post_sources[0]['name']}</a>";
+				}
+			}
+			$thumb_sources = json_decode($post['thumb_sources'], true);
+			if(!empty($thumb_sources)){
+				$TEMP['#thumb_sources'] = array();
+				if(count($thumb_sources) > 1){
+					foreach ($thumb_sources as $key => $source) {
+						if($key != end(array_keys($thumb_sources))){
+							$TEMP['#thumb_sources'][] = " <a class='btn-noway color-blue hover-button' href='{$source['source']}' target='_blank'>{$source['name']}</a>";
+						}
+					}
+					$last_source = end($thumb_sources);
+					$TEMP['#thumb_sources'] = implode(',', $TEMP['#thumb_sources']);
+					$TEMP['#thumb_sources'] = "{$TEMP['#word']['images_taken_from']}: {$TEMP['#thumb_sources']} {$TEMP['#word']['and']} <a class='btn-noway color-blue hover-button' href='{$last_source['source']}' target='_blank'>{$last_source['name']}</a>";
+				} else {
+					$TEMP['#thumb_sources'] = "{$TEMP['#word']['image_taken_from']}: <a class='btn-noway color-blue hover-button' href='{$thumb_sources[0]['source']}' target='_blank'>{$thumb_sources[0]['name']}</a>";
+				}
+			}
+
 			$TEMP['#current_url'] = $post['slug'];
-			$TEMP['#thumb_source'] = $post['thumb_source'];
+			$TEMP['#thumb_sources'] = $post['thumb_sources'];
 			$TEMP['#entry_types'] = array();
 			$TEMP['#saved'] = $dba->query('SELECT COUNT(*) FROM '.T_SAVED.' WHERE user_id = ? AND post_id = ?', $TEMP['#user']['id'], $post['id'])->fetchArray(true);
 
-			$entries = $dba->query('SELECT * FROM '.T_ENTRY.' WHERE post_id = ?', $post['id'])->fetchAll();
+			$entries = $dba->query('SELECT * FROM '.T_ENTRY.' WHERE post_id = ? ORDER BY eorder', $post['id'])->fetchAll();
 			foreach ($entries as $key => $entry) {
 				$TEMP['#entry_types'][] = $entry['type'];
 			}
@@ -134,6 +171,7 @@ if($one == 'load'){
 	}
 } else if($one == 'save'){
 	$post_ids = Specific::Filter($_POST['post_ids']);
+	$post_ids = html_entity_decode($post_ids);
 	$post_ids = json_decode($post_ids);
 	$post_id = Specific::Filter($_POST['post_id']);
 	if(!empty($post_id) && is_numeric($post_id) && !empty($post_ids) && is_array($post_ids) && in_array($post_id, $post_ids)){
@@ -308,401 +346,19 @@ if($one == 'load'){
 			'E' => "*{$TEMP['#word']['this_field_is_empty']}"
 		);
 	}
-} else if($one == 'create-post'){
-	$empty = array();
-	$error = array();
+} else if($one == 'delete'){
+	$post_id = Specific::Filter($_POST['post_id']);
 
-	$title = Specific::Filter($_POST['title']);
-	$category = Specific::Filter($_POST['category']);
-	$type = Specific::Filter($_POST['type']);
-	$description = Specific::Filter($_POST['description']);
-	$entries = Specific::Filter($_POST['entries']);
-	$entries = html_entity_decode($entries);
-	$entries = json_decode($entries, true);
-
-
-	$post_sources = Specific::Filter($_POST['post_sources']);
-	$post_sources = html_entity_decode($post_sources);
-	$post_sources = json_decode($post_sources, true);
-
-	$thumb_sources = Specific::Filter($_POST['thumb_sources']);
-	$thumb_sources = html_entity_decode($thumb_sources);
-	$thumb_sources = json_decode($thumb_sources, true);
-
-	$thumbnail = !empty($_FILES['thumbnail']) ? $_FILES['thumbnail'] : Specific::Filter($_POST['thumbnail']);
-	$tags = Specific::Filter($_POST['tags']);
-	$action = Specific::Filter($_POST['action']);
-
-	if(empty($title)){
-		$empty[] = array(
-			'el' => '#title',
-			'text' => "*{$TEMP['#word']['this_field_is_empty']}"
-		);
-	}
-	if(empty($description)){
-		$empty[] = array(
-			'el' => '#description',
-			'text' => "*{$TEMP['#word']['this_field_is_empty']}"
-		);
-	} 
-	if(count($entries) == 0){
-		$empty[] = array(
-			'el' => '.btn_aentry',
-			'shadow' => 0,
-			'text' => "*{$TEMP['#word']['you_create_least_entry']}"
-		);
-	} else {
-		foreach ($entries as $key => $entry) {
-			if(empty($entries[$key][2])){
-				$empty[] = array(
-					'el' => $key,
-					'class' => $entry[0] == 'text' ? '.simditor' : ($entry[0] == 'image' ? '.item-placeholder' : '.item-input'),
-					'text' => "*{$TEMP['#word']['this_field_is_empty']}"
-				);
-			}
-		}
-	}
-	if(empty($thumbnail)){
-		$empty[] = array(
-			'el' => '#post-right .item-placeholder',
-			'text' => "*{$TEMP['#word']['this_field_is_empty']}"
-		);
-	}
-	if(empty($tags)){
-		$empty[] = array(
-			'el' => '#content-tags',
-			'text' => "*{$TEMP['#word']['this_field_is_empty']}"
-		);
-	}
-
-	if(!empty($post_sources)){
-		$empty_positions = array();
-		foreach($post_sources as $key => $source) {
-			if(empty($source['name']) && !empty($source['source'])){
-				$empty_positions[] = $key;
-			}
-			if(empty($source['name']) && empty($source['source'])){
-				unset($post_sources[$key]);
-			}
-		}
-		if(!empty($empty_positions)){
-			$empty[] = array(
-				'el' => '.post_sources',
-				'pos' => $empty_positions,
-				'content' => 0,
-				'field' => 1,
-				'shadow' => 0,
-				'text' => "*{$TEMP['#word']['some_fields_empty']}"
-			);
-		}
-	}
-	
-	if(!empty($thumb_sources)){
-		$empty_positions = array();
-		foreach($thumb_sources as $key => $source) {
-			if(empty($source['name']) && !empty($source['source'])){
-				$empty_positions[] = $key;
-			}
-			if(empty($source['name']) && empty($source['source'])){
-				unset($thumb_sources[$key]);
-			}
-		}
-		if(!empty($empty_positions)){
-			$empty[] = array(
-				'el' => '.post_sources',
-				'pos' => $empty_positions,
-				'content' => 1,
-				'field' => 1,
-				'shadow' => 0,
-				'text' => "*{$TEMP['#word']['some_fields_empty']}"
-			);
-		}
-	}
-
-	if(in_array($action, array('post', 'eraser'))){
-		if(empty($empty)){
-			if(!in_array($category, $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false))){
-				$error[] = array(
-					'el' => '#category',
-					'text' => "*{$TEMP['#word']['oops_error_has_occurred']}"
-				);
-			}
-			foreach ($entries as $key => $entry) {
-				if($entry[0] == 'video'){
-					if(preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?(?:youtu\.be|youtube\.com)\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/)([^\?&\"'>]+)/", $entry[2]) == false && preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?vimeo\.com\/([0-9]+)$/", $entry[2]) == false && preg_match("/^.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/", $entry[2]) == false){
-						$error[] = array(
-							'el' => $key,
-							'class' => '.item-input',
-							'text' => "*{$TEMP['#word']['enter_a_valid_url']}"
-						);
-					}
-				}
-
-				if($entry[0] == 'facebookpost'){
-					if(preg_match("/(?:(?:http|https):\/\/)?(?:www\.)?(?:facebook\.com)\/(\d+|[A-Za-z0-9\.]+)\/?/", $entry[2]) == false){
-						$error[] = array(
-							'el' => $key,
-							'class' => '.item-input',
-							'text' => "*{$TEMP['#word']['enter_a_valid_url']}"
-						);
-					}
-				}
-
-				if($entry[0] == 'instagrampost'){
-					if(preg_match("/(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/(?:p|tv|reel)\/([A-Za-z0-9-_\.]+)/", $entry[2]) == false){
-						$error[] = array(
-							'el' => $key,
-							'class' => '.item-input',
-							'text' => "*{$TEMP['#word']['enter_a_valid_url']}"
-						);
-					}
-				}
-
-				if($entry[0] == 'tweet'){
-					if(preg_match('/^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/', $entry[2]) == false){
-						$error[] = array(
-							'el' => $key,
-							'class' => '.item-input',
-							'text' => "*{$TEMP['#word']['enter_a_valid_url']}"
-						);
-					}
-				}
-
-				if($entry[0] == 'soundcloud'){
-					if(preg_match('/^(?:(https?):\/\/)?(?:(?:www|m)\.)?(soundcloud\.com|snd\.sc)\/[a-z0-9](?!.*?(-|_){2})[\w-]{1,23}[a-z0-9](?:\/.+)?$/', $entry[2]) == false){
-						$error[] = array(
-							'el' => $key,
-							'class' => '.item-input',
-							'text' => "*{$TEMP['#word']['enter_a_valid_url']}"
-						);
-					}
-				}
-			}
-
-			if(!in_array($type, array('normal', 'video'))){
-				$error[] = array(
-					'el' => '#type',
-					'text' => "*{$TEMP['#word']['oops_error_has_occurred']}"
-				);
-			}
-
-			if(!empty($post_sources)){
-				$error_positions = array();
-				if(count($post_sources) < $TEMP['#settings']['number_of_fonts']){
-					foreach($post_sources as $key => $source) {
-						if(!empty($source['name']) && !empty($source['source'])){
-							if(!filter_var($source['source'], FILTER_VALIDATE_URL)){
-								$error_positions[] = $key;
-							}
-						}
-					}
-					if(!empty($error_positions)){
-						$error[] = array(
-							'el' => '.post_sources',
-							'pos' => $error_positions,
-							'content' => 0,
-							'field' => 2,
-							'shadow' => 0,
-							'text' => "*{$TEMP['#word']['enter_a_valid_url']}"
-						);
-					}
-				} else {
-					$error[] = array(
-						'el' => '.post_sources',
-						'content' => 0,
-						'shadow' => 0,
-						'text' => "*{$TEMP['#word']['oops_error_has_occurred']}"
-					);
-				}	
-			}
-
-			if(!empty($thumb_sources)){
-				$error_positions = array();
-				if(count($thumb_sources) < $TEMP['#settings']['number_of_fonts']){
-					foreach($thumb_sources as $key => $source) {
-						if(!empty($source['name']) && !empty($source['source'])){
-							if(!filter_var($source['source'], FILTER_VALIDATE_URL)){
-								$error_positions[] = $key;
-							}
-						}
-					}
-					if(!empty($error_positions)){
-						$error[] = array(
-							'el' => '.post_sources',
-							'pos' => $error_positions,
-							'content' => 1,
-							'field' => 2,
-							'shadow' => 0,
-							'text' => "*{$TEMP['#word']['enter_a_valid_url']}"
-						);
-					}
-				} else {
-					$error[] = array(
-						'el' => '.post_sources',
-						'content' => 1,
-						'shadow' => 0,
-						'text' => "*{$TEMP['#word']['oops_error_has_occurred']}"
-					);
-				}	
-			}
-
-			$tags = explode(',', $tags);
-			if(count($tags) > $TEMP['#settings']['number_labels']){
-				$error[] = array(
-					'el' => '#content-tags',
-					'text' => "*{$TEMP['#word']['oops_error_has_occurred']}"
-				);
-			}
-
-			if(empty($error)){
-				if(!empty($_FILES['thumbnail'])){
-					$thumbnail = Specific::UploadImage(array(
-						'name' => $_FILES['thumbnail']['name'],
-						'tmp_name' => $_FILES['thumbnail']['tmp_name'],
-						'type' => $_FILES['thumbnail']['type'],
-						'folder' => 'posts',
-					));
-				} else {
-					$thumbnail = Specific::UploadThumbnail(array(
-						'media' => $thumbnail,
-						'folder' => 'posts'
-					));
-				}
-				if(!empty($post_sources)){
-					$post_sources = json_encode($post_sources);
-				} else {
-					$post_sources = NULL;
-				}
-				if(!empty($thumb_sources)){
-					$thumb_sources = json_encode($thumb_sources);
-				} else {
-					$thumb_sources = NULL;
-				}
-
-				$status = 'approved';
-				if($TEMP['#settings']['approve_posts'] == 'on' && !Specific::Admin()){
-					$status = 'pending';
-				}
-
-				if($thumbnail['return']){
-					$slug = Specific::CreateSlug($title);
-					$published_at = $created_at = time();
-					if($action == 'eraser'){
-						$published_at = 0;
-					}
-					$post_id = $dba->query('INSERT INTO '.T_POST.' (user_id, category_id, title, description, slug, thumbnail, post_sources, thumb_sources, type, status, published_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', $TEMP['#user']['id'], $category, $title, $description, $slug, $thumbnail['image'], $post_sources, $thumb_sources, $type, $status, $published_at, $created_at)->insertId();
-					if($post_id){
-						$arr_trues = array();
-						foreach ($entries as $key => $entry) {
-							$entry_title = NULL;
-							if(!empty($entry[1])){
-								$entry_title = $entry[1];
-							}
-							$entry_source = NULL;
-							if($entry[0] != 'image'){
-								if(isset($entry[3])){
-									$entry_source = $entry[3];
-								}
-							} else {
-								$entry_source = $entry[4];
-							}
-							
-							$content_text = NULL;
-							$content_frame = NULL;
-							if($entry[0] == 'text'){
-								$content_text = $entry[2];
-							} else {
-								if($entry[0] == 'image'){
-									if(!empty($_FILES['thumbnail_'.$key])){
-										$thumbnail = $_FILES['thumbnail_'.$key];
-										$content_frame = Specific::UploadImage(array(
-											'name' => $thumbnail['name'],
-											'tmp_name' => $thumbnail['tmp_name'],
-											'type' => $thumbnail['type'],
-											'post_id' => $post_id,
-											'eorder' => $key,
-											'folder' => 'entries'
-										));
-									} else {
-										$content_frame = Specific::UploadThumbnail(array(
-											'media' => $entry[2],
-											'post_id' => $post_id,
-											'eorder' => $key,
-											'folder' => 'entries'
-										));
-									}
-									$content_frame = $content_frame['image_ext'];
-								} else if($entry[0] == 'tweet' || $entry[0] == 'soundcloud'){
-									if($entry[0] == 'tweet'){
-										$api = 'https://api.twitter.com/1/statuses/oembed.json?url=';
-									} else if($entry[0] == 'soundcloud'){
-										$api = 'https://soundcloud.com/oembed?format=json&url=';
-									}
-									$json = Specific::getContentUrl("{$api}{$entry[2]}");
-									$json = json_decode($json, true);
-
-									if(!isset($json['error']) && !isset($json['errors'])){
-										if(!empty($json)){
-											$content_frame = $json['html'];
-											$arr_trues[] = true;
-										} else {
-											$arr_trues[] = false;
-										}
-									} else {
-										$arr_trues[] = false;
-									}
-								} else {
-									$content_frame = $entry[2];
-								}
-							}
-							
-							if($dba->query('INSERT INTO '.T_ENTRY.' (post_id, type, title, body, frame, esource, eorder, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', $post_id, $entry[0], $entry_title, $content_text, $content_frame, $entry_source, $key, $created_at)->returnStatus()){
-								$arr_trues[] = true;
-							} else {
-								$arr_trues[] = false;
-							}
-						}
-
-						foreach ($tags as $key => $tag) {
-							$label = $dba->query('SELECT id, COUNT(*) as count FROM '.T_LABEL.' WHERE name = ?', $tag)->fetchArray();
-							if($label['count'] > 0){
-								$label_id = $label['id'];
-							} else {
-								$label_id = $dba->query('INSERT INTO '.T_LABEL.' (name, slug, created_at) VALUES (?, ?, ?)', $tag, Specific::CreateSlug($tag), time())->insertId();
-								if($label_id){
-									$arr_trues[] = true;
-								} else {
-									$arr_trues[] = false;
-								}
-							}
-							if($dba->query('INSERT INTO '.T_TAG.' (post_id, label_id, created_at) VALUES (?, ?, ?)', $post_id, $label_id, time())->returnStatus()){
-								$arr_trues[] = true;
-							} else {
-								$arr_trues[] = false;
-							}
-						}
-
-						if(!in_array(false, $arr_trues)){
-							$deliver = array(
-								'S' => 200,
-								'LK' => Specific::Url($slug)
-							);
-						} else {
-							$dba->query('DELETE FROM '.T_POST.' WHERE id = ?', $post_id);
-						}
-					}
-				}
-			} else {
+	if(!empty($post_id) && is_numeric($post_id)){
+		$user_id = $dba->query('SELECT user_id FROM '.T_POST.' WHERE id = ?', $post_id)->fetchArray(true);
+		if(Specific::IsOwner($user_id)){
+			if($dba->query('UPDATE '.T_POST.' SET status = "deleted", deleted_at = ? WHERE id = ?', time(), $post_id)->returnStatus()){
+				$_SESSION['post_deleted'] = $post_id;
 				$deliver = array(
-					'S' => 400,
-					'E' => $error
+					'S' => 200,
+					'LK' => Specific::Url('?show-alert=deleted_post')
 				);
 			}
-		} else {
-			$deliver = array(
-				'S' => 400,
-				'E' => $empty
-			);
 		}
 	}
 }

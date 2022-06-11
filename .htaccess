@@ -17,7 +17,7 @@ RewriteRule ^desvincular-correo/([^/.]+)?$ index.php?one=unlink-mail&tokenu=$1 [
 
 
 RewriteRule ^crear-publicacion$ index.php?one=create-post [NC,QSA]
-RewriteRule ^editar-publicacion/([^/.]+)?$ index.php?one=edit-post&slug=$1 [NC,QSA]
+RewriteRule ^editar-publicacion/([^/.]+)?$ index.php?one=edit-post&post_id=$1 [NC,QSA]
 
 RewriteRule ^ajustes$ index.php?one=settings&page=account [NC,QSA]
 RewriteRule ^ajustes/cuenta$ index.php?one=settings&page=account [NC,QSA]

@@ -29,6 +29,7 @@
 .button-modal-login {
     right: 10px;
     top: 1px;
+    z-index: 996;
 }
 .button-login {
     padding: 7px 9px 9px;

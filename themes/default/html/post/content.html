@@ -52,14 +52,14 @@
                   </svg>
                </a>
             </li>
-            <li class="item-share display-inline w-100 border-right border-grely margin-r15">
+            <li class="item-share display-inline w-100 border-right border-grely padding-r10">
                <button class="btn-clink display-inline-block btn-noway border-rall" type="button" aria-haspopup="true" aria-label="{$word->copy_link_to_share}">
                   <svg class="share-icon display-inline-block icon-x padding-5 background-grely border-all border-grely border-rall vertical-middle animation-ease3s" viewBox="0 0 16 13" width="13" height="13" viewBox="0 0 13 13" fill="none">
                      <path fill="currentColor" d="M5.61876 7.38125C5.87501 7.625 5.87501 8.025 5.61876 8.26875C5.37501 8.5125 4.97501 8.5125 4.73126 8.26875C3.51251 7.05 3.51251 5.06875 4.73126 3.85L6.94376 1.6375C8.16251 0.418747 10.1438 0.418747 11.3625 1.6375C12.5813 2.85625 12.5813 4.8375 11.3625 6.05625L10.4313 6.9875C10.4375 6.475 10.3563 5.9625 10.1813 5.475L10.475 5.175C11.2125 4.44375 11.2125 3.25625 10.475 2.525C9.74376 1.7875 8.55626 1.7875 7.82501 2.525L5.61876 4.73125C4.88126 5.4625 4.88126 6.65 5.61876 7.38125ZM7.38126 4.73125C7.62501 4.4875 8.02501 4.4875 8.26876 4.73125C9.48751 5.95 9.48751 7.93125 8.26876 9.15L6.05626 11.3625C4.83751 12.5812 2.85626 12.5812 1.63751 11.3625C0.418762 10.1437 0.418762 8.1625 1.63751 6.94375L2.56876 6.0125C2.56251 6.525 2.64376 7.0375 2.81876 7.53125L2.52501 7.825C1.78751 8.55625 1.78751 9.74375 2.52501 10.475C3.25626 11.2125 4.44376 11.2125 5.17501 10.475L7.38126 8.26875C8.11876 7.5375 8.11876 6.35 7.38126 5.61875C7.12501 5.375 7.12501 4.975 7.38126 4.73125Z"></path>
                   </svg>
                </button>
             </li>
-            <li class="item-share display-inline position-relative w-100 margin-l10">
+            <li class="item-share display-inline position-relative w-100 margin-l15">
                <?php if($TEMP['#loggedin'] == true){ ?>
                <button class="btn_save btn-noway display-inline-block" type="button" role="switch" aria-label="{$word->save_article_for_reading_later}" aria-checked="<?php echo($TEMP['#saved'] > 0) ? 'true' : 'false';?>" data-id="{$post_id}">
                   <svg class="share-icon display-inline-block vertical-middle color-black animation-ease3s" stroke="none" width="16px" height="25px" viewBox="0 0 16 25">
@@ -212,7 +212,7 @@
    <div class="item-newsletter-fixed w-100">
       {$newsletter}
    </div>
-   <button id="close-newsletter" class="close-newsletter display-flex position-absolute border-rall border-none" type="button" aria-label="Cerrar boletin"></button>
+   <button id="close-newsletter" class="close-newsletter display-flex position-absolute border-rall border-none" type="button" aria-label="{$word->close_newsletter}"></button>
 </div>
 <?php } ?>
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.article.css}}" />
@@ -220,128 +220,21 @@
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.related-aside.css}}" />
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.related-bottom.css}}" />
 {%%<script src="{$theme->{assets/js/theia-sticky-sidebar.min.js}}"></script>%%}
+
+
 {%%<script type="text/javascript">
-   $(document).ready(function(){
-      var a = 0,
-          v = 0,
-          u = 0,
-          z = !0,
-          k = !0,
-          d = !1,
-          s = $('#header-progress'),
-          x = $('#posts'),
-          h = $('#header'),
-          l = $('#header-fixed'),
-          o = $('#btn-hfshare'),
-          j = $('#hfshare-modal'),
-          Q = $('#spinner-load'),
-          X = $('.btn_newsletter'),
-          f = j.find('.item-share a'),
-          GG = l.find('.btn_save'),
-          QQ = $('.item_place'),
-          b = $('body'),
-          y = h.height(),
-          n = [{$post_id}],
-          B = '{$url}',
-          D = B,
-          G = function(e){
-            var C = $("<input>"),
-                H = $(e).attr('data-link');
-            $("body").append(C), C.val((H ? H : D)).select(), document.execCommand("copy"), J(e), C.remove();
-          },
-          J = function(e){
-            var K = $(e).children().first();
-            K.addClass('copied'), setTimeout(function(){
-               K.removeClass('copied');
-            }, 300);
-          },
-          ZZ = function(e, i){
-            e.attr('disabled', i);
-          },
-          M = $('.newsletter_category'),
-          N = $('.text_all'),
-          O = $('.text_none'),
-          L = M.children(),
-          U = !0,
-          p,
-          E,
-          F,
-          KK,
-          LL;
-          
-      <?php if($TEMP['#loggedin'] == true){?>$(document).on('click', '.btn_save', function(){
-         var YY = $(this), XX = YY.attr('data-id'), DD = $('#post-'+XX+' .btn_save'), JJ, FF;
-         DD.index(GG[0]) == -1 && DD.push(GG[0]), DD.index(YY) == -1 && DD.push(YY), JJ = YY.siblings('.content_saved'), FF = DD.find('path'), ZZ(DD, !0), $.post("{$url->{req/post/save}}?token={#token_session}", {'post_id': XX, 'post_ids': JSON.stringify(n)}, function(e){
-            e.S == 200 && ((e.AC == 'delete' ? (FF.attr('fill', 'none'), DD.attr('aria-checked', !1), ZZ(DD, !1)) : (JJ.addClass('saved-animation-image'), clearTimeout(KK), KK = setTimeout(function(){(FF.attr('fill', 'currentColor'), DD.attr('aria-checked', !0), JJ.removeClass('saved-animation-image'), YY.addClass('saved-animation-button'), clearTimeout(LL), LL = setTimeout(function(){YY.removeClass('saved-animation-button'), ZZ(DD, !1)}, 100))}, 600))), DD.blur());
-         })
-      }), <?php } ?>$('.close-newsletter').click(function(){
-         $('.newsletter-fixed').addClass('hidden'), $('.personalize_newsletter').removeAttr('style'), b.removeClass('newsletter-personalized-active'), document.cookie = 'dismiss_newsletter=true;max-age=604800;path=/';
-      }), $('.newsletter_type').change(function(){
-         var R = $(this),
-             P = R.parents('.content_newsletter').find('.personalize_newsletter');
-         R.val() == 'personalized' ? (P.css('height', P.children().first().height()), b.addClass('newsletter-personalized-active')) : (P.removeAttr('style'), b.removeClass('newsletter-personalized-active'));
-      }), M.change(function(e){
-         $(this).children().length == $(this).val().length ? (N.addClass('hidden'), O.removeClass('hidden')) : (N.removeClass('hidden'), O.addClass('hidden'));
-      }), $('.select_all').click(function(){
-         L.prop('selected', U), U = !U, N.toggleClass('hidden'), O.toggleClass('hidden');
-      }), $(document).on('click', '.btn-clink', function(){
-         navigator.clipboard ? navigator.clipboard.writeText(D).then(J(this)).catch(G(this)) : G(this);
-      }), o.click(function(){
-         j.toggleClass('hidden'), l.css('height', 'auto'), o.attr('aria-expanded', !$.parseJSON(o.attr('aria-expanded')));
-      }), $(document).click(function(e){ 
-         if (!$(e.target).parents().is('#btn-hfshare') && !$(e.target).parents().is('#hfshare-modal .item-share')){
-            j.addClass('hidden'), l.removeAttr('style');
-         }
-      }), $('#post-right').theiaStickySidebar();
-
-
-
-      X.click(function(){
-         var R = $(this),
-             Y = R.parent(),
-             V = Y.find('.newsletter_email'),
-             T = V.siblings('.text-error');
-         R.addClass('spinner-is-loading'), ZZ(R, !0), $.post("{$url->{req/newsletter/subscribe}}?token={#token_session}", {'email': V.val(), 'type': Y.find('.newsletter_type').val(), 'frequency': Y.find('.newsletter_frequency').val(), 'popular': Y.find('.newsletter_popular:checked').val(), 'category': JSON.stringify(Y.find('.newsletter_category').val())}, function(e) {
-            e.S == 200 ? (ZZ(QQ, !0), R.removeClass('spinner-is-loading'), T.addClass('color-green'), T.removeClass('color-red'), T.text(e.M), setTimeout(function(){
-                T.text(''), V.removeClass('active'), T.addClass('color-red'), T.removeClass('color-green'), Y.find('.personalize_newsletter').removeAttr('style'), $('.content_newsletter').trigger("reset"), ZZ(QQ, !1), ZZ(R, !1)
-            }, 3000)) : (T.text(e.E), V.addClass('border-red'), V.addClass('boxshadow-red'), R.removeClass('spinner-is-loading'));
-         });
-      }), $('.newsletter_email').on('input', function(){
-         var W = $(this);
-         W.val() != '' && (W.siblings('.text-error').text(''), ZZ(X, !1), W.removeClass('border-red'), W.removeClass('boxshadow-red'))
-      }), $(document).scroll(function(){
-         var w = $(window).scrollTop(),
-             m = $(p).length == 1 ? parseInt(((w - p.offset().top) / p.height()) * 100) : 0,
-             t = m <= 0 ? 0 : m;
-         s.css('width', t+'%');
-         if(w < v){
-            (t <= 1 && n[u-1] != undefined) && (u--, d = !0), w <= y && (z = !0, j.addClass('hidden'), l.removeAttr('style'), o.attr('aria-expanded', !1), b.removeClass('header-fixed'));
-         } else {
-            if(((w + $(window).height()) - x.offset().top) >= (x.height() - 100)){
-               if(n[u] == n[n.length-1]){
-                  (k) && (k = !1, Q.removeClass('hidden'), $.post("{$url->{req/post/load}}?token={#token_session}", {'category_id': '{$category_id}', 'post_ids': JSON.stringify(n)}, function(e) {e.S == 200 ? (x.append(e.HT), n.push(e.ID), k = !0, Q.addClass('hidden')) : Q.removeClass('hidden');}));
-               }
-            }
-            (t >= 99 && n[u+1] != undefined) && (u++, d = !0), w >= y && z && (z = !1, b.addClass('header-fixed'));
-         }
-
-          v = w <= 0 ? 0 : w, p = $('#post-'+n[u]), d && (d = !1, F = p.find('.post-title'), E = F.parent(), l.find('img').attr('src', p.find('.post-thumbnail img').attr('src')).attr('title', F.text()), l.find('.item-header-title').text(F.text()), D = E.prop("tagName") == 'A' ? E.attr('href') : B, HH = p.find('.btn_save'), GG.attr('data-id', HH.attr('data-id')), GG.find('path').attr('fill', HH.find('path').attr('fill')), GG.attr('aria-checked', HH.attr('aria-checked')), p.find('.item-share').each(function(i){
-            $(f[i]).attr('href', $(this).find('a').attr('href'));
-         }));
-
-         $('.item-post').each(function() {
-            var q = $(this), r = q.find('.content-sticky'), c = q.offset().top;
-            if (w >= (c - 30)) {
-               r.addClass('sticky');
-               if (w >= (c + q.height() - (r.height() + 100))) {
-                  r.removeClass('sticky').css({'bottom': 0, 'top': 'auto'});
-               } else {
-                  r.addClass('sticky').removeAttr('style');
-               }
-            } else {
-               r.removeClass('sticky').removeAttr('style');
-            }
-         });
-      });
-   });
+   paper = {
+      'token': '{#token_session}',
+      'loggedin': '{#loggedin}',
+      'url': {
+         'save': '{$url->{req/post/save}}',
+         'subscribe': '{$url->{req/newsletter/subscribe}}',
+         'load': '{$url->{req/post/load}}',
+         'delete': '{$url->{req/post/delete}}'
+      },
+      'category_id': '{$category_id}',
+      'post_id': '{$post_id}',
+      'post_url': '{$url}'
+   }, $('#post-right').theiaStickySidebar();
 </script>%%}
+{%%<script src="{$theme->{assets/js/post/jquery.post.min.js}}"></script>%%}

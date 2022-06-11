@@ -1,5 +1,3 @@
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.main.css}}" />
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.recommended.css}}" />
 <?php if(!empty($TEMP['#main'])){ ?>
 <div class="content-main padding-t25">
    <div class="items-main display-flex vertical-slots">
@@ -62,3 +60,25 @@
    </section>
 </div>
 <?php } ?>
+<?php if($TEMP['#show_alert'] == true){ ?>
+<div id="alert-delete" class="content-adelete content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-dtitle" aria-describedby="alert-dcontent">
+   <div class="item-adelete background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
+      <span class="alert-dtitle display-block font-medium font-bold">{$word->removed}</span>
+      <p class="alert-dcontent font-mediumly color-black margin-t15">{$word->your_post_been_successfully_deleted}</p>
+      <button id="btn-close" class="button-access btn-noway w-100px h-36 background-red color-white margin-t15 font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->close}</button>
+   </div>
+</div>
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.modal.css}}" />
+{%%<script type="text/javascript">
+   $(document).ready(function(){
+      var w = $('#alert-delete');
+      setTimeout(function(){
+         w.removeClass('hidden');
+      }, 300), $('#btn-close').click(function(){
+         w.remove()
+      })
+   })
+</script>%%}
+<?php } ?>
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.main.css}}" />
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.recommended.css}}" />

@@ -12,7 +12,7 @@ $keywords = array();
 $url = Specific::Url($post['slug']);
 $post_views = $post['views'];
 $avatar = Specific::Data($post['user_id'], array('avatar'));
-$category = $dba->query('SELECT id, name FROM '.T_CATEGORY.' WHERE id = ?', $post['category_id'])->fetchArray();
+$category = $dba->query('SELECT id, name, slug FROM '.T_CATEGORY.' WHERE id = ?', $post['category_id'])->fetchArray();
 $fingerprint = Specific::Fingerprint($TEMP['#user']['id']);
 
 if($dba->query('SELECT COUNT(*) FROM '.T_VIEW.' WHERE post_id = ? AND fingerprint = ?', $post['id'], $fingerprint)->fetchArray(true) == 0){
@@ -24,6 +24,7 @@ if($dba->query('SELECT COUNT(*) FROM '.T_VIEW.' WHERE post_id = ? AND fingerprin
 
 $TEMP['title'] = $title;
 $TEMP['category'] = $category['name'];
+$TEMP['category_slug'] = $category['slug'];
 $TEMP['views'] = number_format($post_views);
 $TEMP['post_id'] = $post['id'];
 $TEMP['category_id'] = $category['id'];
@@ -41,14 +42,49 @@ $TEMP['published_date'] = date('c', $post['published_at']);
 $TEMP['updated_date'] = date('c', $post['updated_at']);
 $TEMP['published_at'] = Specific::DateString($post['published_at']);
 
+
+$TEMP['#is_owner'] = Specific::IsOwner($post['user_id']);
 $TEMP['#is_loaded'] = false;
 $TEMP['#type'] = $post['type'];
-$TEMP['#thumb_source'] = $post['thumb_source'];
+
+$post_sources = json_decode($post['post_sources'], true);
+if(!empty($post_sources)){
+	$TEMP['#post_sources'] = array();
+	if(count($post_sources) > 1){
+		foreach ($post_sources as $key => $source) {
+			if($key != end(array_keys($post_sources))){
+				$TEMP['#post_sources'][] = " <a class='btn-noway color-blue hover-underline' href='{$source['source']}' target='_blank'>{$source['name']}</a>";
+			}
+		}
+		$last_source = end($post_sources);
+		$TEMP['#post_sources'] = implode(',', $TEMP['#post_sources']);
+		$TEMP['#post_sources'] = "<b>{$TEMP['#word']['consulted_sources']}:</b> {$TEMP['#post_sources']} {$TEMP['#word']['and']} <a class='btn-noway color-blue hover-underline' href='{$last_source['source']}' target='_blank'>{$last_source['name']}</a>";
+	} else {
+		$TEMP['#post_sources'] = "<b>{$TEMP['#word']['consulted_source']}:</b> <a class='btn-noway color-blue hover-underline' href='{$post_sources[0]['source']}' target='_blank'>{$post_sources[0]['name']}</a>";
+	}
+}
+$thumb_sources = json_decode($post['thumb_sources'], true);
+if(!empty($thumb_sources)){
+	$TEMP['#thumb_sources'] = array();
+	if(count($thumb_sources) > 1){
+		foreach ($thumb_sources as $key => $source) {
+			if($key != end(array_keys($thumb_sources))){
+				$TEMP['#thumb_sources'][] = " <a class='btn-noway color-blue hover-button' href='{$source['source']}' target='_blank'>{$source['name']}</a>";
+			}
+		}
+		$last_source = end($thumb_sources);
+		$TEMP['#thumb_sources'] = implode(',', $TEMP['#thumb_sources']);
+		$TEMP['#thumb_sources'] = "{$TEMP['#word']['images_taken_from']}: {$TEMP['#thumb_sources']} {$TEMP['#word']['and']} <a class='btn-noway color-blue hover-button' href='{$last_source['source']}' target='_blank'>{$last_source['name']}</a>";
+	} else {
+		$TEMP['#thumb_sources'] = "{$TEMP['#word']['image_taken_from']}: <a class='btn-noway color-blue hover-button' href='{$thumb_sources[0]['source']}' target='_blank'>{$thumb_sources[0]['name']}</a>";
+	}
+}
+
 $TEMP['#entry_types'] = array();
 $TEMP['#saved'] = $dba->query('SELECT COUNT(*) FROM '.T_SAVED.' WHERE user_id = ? AND post_id = ?', $TEMP['#user']['id'], $post['id'])->fetchArray(true);
 $TEMP['#categories'] = $dba->query('SELECT id, name FROM '.T_CATEGORY)->fetchAll();
 
-$entries = $dba->query('SELECT * FROM '.T_ENTRY.' WHERE post_id = ?', $post['id'])->fetchAll();
+$entries = $dba->query('SELECT * FROM '.T_ENTRY.' WHERE post_id = ? ORDER BY eorder', $post['id'])->fetchAll();
 foreach ($entries as $key => $entry) {
 	$TEMP['#entry_types'][] = $entry['type'];
 }

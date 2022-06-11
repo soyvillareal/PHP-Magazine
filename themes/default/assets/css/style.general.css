@@ -715,7 +715,20 @@ ul {
 .cursor-pointer {
     cursor: pointer;
 }
-
+.content-backdrop {
+    z-index: 996;
+}
+.content-backdrop.has-backdrop:before,
+body.backdrop-active .content-backdrop:before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(18, 18, 18, 0.5);
+    z-index: -1;
+}
 
 
 

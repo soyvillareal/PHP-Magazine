@@ -112,13 +112,13 @@
     <div class="content_get w-100 position-relative margin-auto">
       <input class="item-get-url item-input item_key h-36 background-white color-black w-100 padding-t20 padding-b5 padding-l10 border-all border-black border-rlow border-focus-blue sizing-box" type="text">
       <div class="color-red text-left text-error font-low margin-t5"></div>
-      <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">Introduzca la url</label>
+      <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->enter_the_url}</label>
       <button class="{$btn_get} area_validate btn-right position-absolute color-white border-none hover-button animation-ease3s" type="button">
         <span class="color-white">
           <svg class="icon-y vertical-sub" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path fill="currentColor" d="M17,10.48h-.92l-2.3,2.3a2.475,2.475,0,0,1-3.53,0l-2.3-2.3H7a4.5,4.5,0,0,0-4.5,4.5v1A4.494,4.494,0,0,0,7,20.48H17a4.5,4.5,0,0,0,4.5-4.5v-1A4.507,4.507,0,0,0,17,10.48Zm0,5.75a1.25,1.25,0,1,1,1.24-1.25A1.253,1.253,0,0,1,17,16.23ZM8.31,8.72a1,1,0,0,1,0-1.41,1,1,0,0,1,1.41,0L11.01,8.6V4.02a1,1,0,0,1,2,0V8.6l1.3-1.29a1,1,0,0,1,1.41,0,1,1,0,0,1,0,1.41l-1.76,1.76-1.24,1.24a.978.978,0,0,1-1.41,0Z"></path>
           </svg>
-          <span class="color-white">Probar</span>
+          <span class="color-white">{$word->try_out}</span>
         </span>
         <div class="content-spinner-circle position-absolute">
           <div class="spinner-circle"></div>
@@ -128,14 +128,14 @@
     <?php if($TEMP['#type'] == 'video'){ ?>
     <div class="margin-t15 text-center">
       <div class="font-low color-blackly">
-        <b>Sitios compatibles:</b> <span class="youtube animation-ease3s">Youtube</span>, <span class="dailymotion animation-ease3s">Dailymotion</span>, <span class="vimeo animation-ease3s">Vimeo</span>.
+        <b>{$word->compatible_sites}:</b> <span class="youtube animation-ease3s">{$word->youtube}</span>, <span class="dailymotion animation-ease3s">{$word->dailymotion}</span>, <span class="vimeo animation-ease3s">{$word->vimeo}</span>.
       </div>
     </div>
     <?php } ?>
     <?php } else if($TEMP['#type'] == 'embed') { ?>
     <textarea class="item-input item_key background-white color-black w-100 padding-t25 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="text"></textarea>
     <div class="color-red text-left text-error font-low margin-t5"></div>
-    <label class="item-label background-white w-100 first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">Codigo insertado</label>
+    <label class="item-label background-white w-100 first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->embedded_code}</label>
     <?php } ?>
   </div>
   <?php if($TEMP['#type'] == 'text' || $TEMP['#type'] == 'image'){ ?>
@@ -145,8 +145,8 @@
       <label class="item-label first-capitalize font-mediumly position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->source} ({$word->optional})</label>
     </div>
     <button class="btn_esource display-flex direction-row align-center btn-noway font-low margin-auto color-blackly" type="button">
-      <span class="color-blackly margin-r5">Mas detalles</span>
-      <span class="color-blackly margin-r5 hidden">Menos detalles</span>
+      <span class="color-blackly margin-r5">{$word->more_details}</span>
+      <span class="color-blackly margin-r5 hidden">{$word->less_details}</span>
       <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path fill="currentColor" d="M21.707,8.707l-9,9a1,1,0,0,1-1.414,0l-9-9A1,1,0,1,1,3.707,7.293L12,15.586l8.293-8.293a1,1,0,1,1,1.414,1.414Z"/>
       </svg>

@@ -1,7 +1,7 @@
 <?php
 
-if (false) {
-    header("Location: ".Specific::Url('404'));
+if ($TEMP['#loggedin'] == false) {
+    header("Location: ".Specific::Url($TEMP['#r_login']));
     exit();
 }
 
