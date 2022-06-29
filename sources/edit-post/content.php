@@ -63,20 +63,11 @@ foreach ($entries as $entry) {
             $TEMP['!image'] = Specific::GetFile($entry['frame'], 3);
         } else {
             $TEMP['!frame'] = $entry['frame'];
-            $youtube = preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?(?:youtu\.be|youtube\.com)\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/)([^\?&\"'>]+)/", $entry['frame'], $yt_video);
-            $TEMP['#youtube'] = $youtube == true && strlen($yt_video[1]) == 11;
 
-            $TEMP['#vimeo'] = preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?vimeo\.com\/([0-9]+)$/", $entry['frame'], $vm_video);
-            $TEMP['#dailymotion'] = preg_match("/^.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/", $entry['frame'], $dm_video);
-
-            if($youtube == true || $TEMP['#vimeo'] == true || $TEMP['#dailymotion'] == true){
-                if($TEMP['#youtube']){
-                    $TEMP['!frame'] = '<iframe src="https://www.youtube.com/embed/'.$yt_video[1].'" width="100%" height="450" frameborder="0" allowfullscreen></iframe>';
-                } else if($TEMP['#vimeo'] == true){
-                    $TEMP['!frame'] = '<iframe src="//player.vimeo.com/video/'.$vm_video[1].'" width="100%" height="450" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
-                } else if($TEMP['#dailymotion'] == true){
-                    $TEMP['!frame'] = '<iframe src="//www.dailymotion.com/embed/video/'.$dm_video[2].'" width="100%" height="450" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
-                }
+            $frame = Specific::IdentifyFrame($entry['frame']);
+            if($frame['return']){
+                $TEMP['!frame'] = $frame['html'];
+                $TEMP['!type_frame'] = $frame['type'];
             }
 
             if(preg_match("/(?:(?:http|https):\/\/)?(?:www\.)?(?:facebook\.com)\/(\d+|[A-Za-z0-9\.]+)\/?/", $entry['frame'])){
@@ -95,7 +86,6 @@ foreach ($entries as $entry) {
 Specific::DestroyMaket();
 
 $TEMP['#post_id'] = $post_id;
-$TEMP['#categories'] = $dba->query('SELECT id, name FROM '.T_CATEGORY)->fetchAll();
 
 $TEMP['#page']        = 'edit-post';
 $TEMP['#title']       = $TEMP['#word']['edit_post'] . ' - ' . $TEMP['#settings']['title'];

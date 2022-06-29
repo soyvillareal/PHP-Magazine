@@ -8,6 +8,7 @@ require_once('libraries/PHPMailer-master/src/SMTP.php');
 require_once('libraries/PHPMailer-master/src/Exception.php');
 
 require_once('includes/class.specific.php');
+require_once('includes/class.load.php');
 require_once('includes/request_init.php');
 require_once('includes/rutes.php');
 ?>

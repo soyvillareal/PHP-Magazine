@@ -1,0 +1,377 @@
+<div id="container-snews" class="container-snews padding-b15">
+      <form method="GET" action="{#r_search}" class="display-flex direction-row align-center margin-t15" novalidate>
+         <div class="display-flex position-relative vertical-middle w-100 h-36 background-white margin-t5 margin-b5 margin-r10 padding-l15 padding-r20 border-all border-grely font-lowly border-rlow">
+            <input id="key-search" class="color-black w-100 h-100" type="text" name="{#p_keyword}" placeholder="Buscar..." value="{#keyword_search}">
+            <input id="type-date" type="hidden" name="{#p_date}" value="{#type_date}">
+            <input id="type-category" type="hidden" name="{#p_category}" value="{#type_category}">
+            <input id="type-author" type="hidden" name="{#p_author}" value="{#type_author}">
+            <input id="type-sort" type="hidden" name="{#p_sort}" value="{#type_sort}">
+            <button id="key-reset" class="btn-noway hover-button animation-ease3s<?php echo(empty($TEMP['#keyword_search'])) ? ' hidden' : '';?>" type="button">
+               <svg class="icon-c vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 10.303L3.515 1.818 1.818 3.515 10.303 12l-8.485 8.485 1.697 1.697L12 13.697l8.485 8.485 1.697 -1.697L13.697 12l8.485 -8.485 -1.697 -1.697L12 10.303z"/>
+               </svg>
+            </button>
+         </div>
+         <button id="btn-search" class="button-general display-inline-block vertical-middle background-blue border-rall border-all border-blue color-white font-lowly font-bold text-uppercase inhover-button animation-ease3s" type="submit"<?php echo(empty($TEMP['#keyword_search'])) ? ' disabled' : '';?>>
+            <svg class="icon-x" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path fill="none" stroke="currentColor" stroke-width="2" d="M15,15 L22,22 L15,15 Z M9.5,17 C13.6421356,17 17,13.6421356 17,9.5 C17,5.35786438 13.6421356,2 9.5,2 C5.35786438,2 2,5.35786438 2,9.5 C2,13.6421356 5.35786438,17 9.5,17 Z"/>
+            </svg>
+         </button>
+      </form>
+      <div class="display-flex">
+         <div class="content-snews display-flex direction-colum">
+            <div id="content-sfilter" class="content-sfiltero verflow-autox display-flex font-medium margin-t15 padding-b15 border-bottom border-grely">
+               <div class="display-flex">
+                  <div class="position-relative">
+                     <button class="btn-ddown btn_ddown display-flex direction-row align-center btn-noway padding-t5 padding-b5 padding-l20 padding-r20 border-all border-grely border-r25px ellipsis-horizontal animation-ease3s" type="button" aria-label="{$word->filter_by_news_date}" aria-haspopup="true" aria-expanded="false" data-type="date">
+                        <span class="color-black margin-r5 animation-ease3s">{$word->date} ({$type_ndate})</span>
+                        <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path fill="currentColor" d="M21.707,8.707l-9,9a1,1,0,0,1-1.414,0l-9-9A1,1,0,1,1,3.707,7.293L12,15.586l8.293-8.293a1,1,0,1,1,1.414,1.414Z"></path>
+                        </svg>
+                     </button>
+                     <div class="content-dfilter item_dfilter display-flex direction-colum position-fixed background-white margin-t5 boxshadow-grey hidden" role="dialog" aria-label="{$word->filters_by_date}" aria-modal="true">
+                        <div class="padding-t15 padding-b15 padding-l10 padding-r10">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway color-grey<?php echo($TEMP['#type_date'] == 'all') ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="all">
+                              <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                 <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                              </svg>
+                              <span class="color-black animation-ease3s">{$word->all_}</span>
+                           </button>
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_date'] == 'today') ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_todays_news}" data-type="today">
+                              <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                 <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                              </svg>
+                              <span class="color-black animation-ease3s">{$word->today}</span>
+                           </button>
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_date'] == 'this_week') ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_week}" data-type="this_week">
+                              <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                 <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                              </svg>
+                              <span class="color-black animation-ease3s">{$word->this_week}</span>
+                           </button>
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_date'] == 'this_month') ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_month}" data-type="this_month">
+                              <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                 <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                              </svg>
+                              <span class="color-black animation-ease3s">{$word->this_month}</span>
+                           </button>
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_date'] == 'this_year') ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_year}" data-type="this_year">
+                              <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                 <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                              </svg>
+                              <span class="color-black animation-ease3s">{$word->this_year}</span>
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+
+
+                  <div class="position-relative">
+                     <button class="btn-ddown btn_ddown display-flex direction-row align-center btn-noway margin-l10 margin-r10 padding-t5 padding-b5 padding-l20 padding-r20 border-all border-grely border-r25px ellipsis-horizontal animation-ease3s" type="button" aria-label="{$word->filter_by_category}" aria-haspopup="true" aria-expanded="false" data-type="category">
+                        <span class="color-black margin-r5 animation-ease3s">{$word->category} ({$type_ncategory})</span>
+                        <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path fill="currentColor" d="M21.707,8.707l-9,9a1,1,0,0,1-1.414,0l-9-9A1,1,0,1,1,3.707,7.293L12,15.586l8.293-8.293a1,1,0,1,1,1.414,1.414Z"></path>
+                        </svg>
+                     </button>
+                     <div class="content-dfilter item_dfilter display-flex direction-colum position-fixed background-white margin-t5 boxshadow-grey hidden" role="dialog" aria-label="{$word->filters_by_category}" aria-modal="true">
+                        <div class="padding-t15 padding-b15 padding-l10 padding-r10">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway color-grey<?php echo($TEMP['#type_category'] == 'all') ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="all">
+                              <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                 <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                              </svg>
+                              <span class="color-black animation-ease3s">{$word->all}</span>
+                           </button>
+                           <?php foreach($TEMP['#categories'] as $cat){ ?>
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_category'] == $cat['id']) ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_category_} <?php echo $cat['name'];?>" data-type="<?php echo $cat['id'];?>">
+                              <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                 <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                              </svg>
+                              <span class="color-black animation-ease3s"><?php echo $cat['name'];?></span>
+                           </button>
+                           <?php } ?>
+                        </div>
+                     </div>
+                  </div>
+
+
+                  <div class="position-relative padding-r10">
+                     <button class="btn-ddown btn_ddown display-flex direction-row align-center btn-noway padding-t5 padding-b5 padding-l20 padding-r20 border-all border-grely border-r25px ellipsis-horizontal animation-ease3s" type="button" aria-label="{$word->filter_by_author}" aria-haspopup="true" aria-expanded="false" data-type="author">
+                        <span class="color-black margin-r5 animation-ease3s">{$word->author} ({$type_nauthor})</span>
+                        <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                           <path fill="currentColor" d="M21.707,8.707l-9,9a1,1,0,0,1-1.414,0l-9-9A1,1,0,1,1,3.707,7.293L12,15.586l8.293-8.293a1,1,0,1,1,1.414,1.414Z"></path>
+                        </svg>
+                     </button>
+                     <div class="content-dfilter item_dfilter display-flex direction-colum position-fixed background-white margin-t5 boxshadow-grey hidden" role="dialog" aria-label="{$word->filters_by_author}" aria-modal="true">
+                        <div class="padding-t15 padding-b15 padding-l10 padding-r10">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway color-grey<?php echo($TEMP['#type_author'] == 'all') ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="all">
+                              <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                 <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                              </svg>
+                              <span class="color-black animation-ease3s">{$word->all_}</span>
+                           </button>
+                           <?php foreach($TEMP['#users'] as $user){ ?>
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_author'] == $user['id']) ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_author_} <?php echo $user['fullname'];?>" data-type="<?php echo $user['id'];?>">
+                              <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                 <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                              </svg>
+                              <span class="color-black animation-ease3s"><?php echo $user['fullname'];?></span>
+                           </button>
+                           <?php } ?>
+                        </div>
+                     </div>
+                  </div>
+
+
+                  <div class="position-relative">
+                     <button class="btn-ddown btn_ddown display-flex direction-row align-center btn-noway padding-t5 padding-b5 padding-l20 padding-r20 border-all border-grely border-r25px ellipsis-horizontal animation-ease3s" type="button" aria-label="{$word->filter_by_news_date}" aria-haspopup="true" aria-expanded="false" data-type="sort">
+                        <span class="color-black margin-r5 animation-ease3s">{$word->sort_by} ({$type_nsort})</span>
+                        <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path fill="currentColor" d="M21.707,8.707l-9,9a1,1,0,0,1-1.414,0l-9-9A1,1,0,1,1,3.707,7.293L12,15.586l8.293-8.293a1,1,0,1,1,1.414,1.414Z"></path>
+                        </svg>
+                     </button>
+                     <div class="content-dfilter item_dfilter display-flex direction-colum position-fixed background-white margin-t5 boxshadow-grey hidden" role="dialog" aria-label="{$word->filters_by_order}" aria-modal="true">
+                        <div class="padding-t15 padding-b15 padding-l10 padding-r10">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway color-grey<?php echo($TEMP['#type_sort'] == 'newest') ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="newest">
+                              <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                 <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                              </svg>
+                              <span class="color-black animation-ease3s">{$word->newest}</span>
+                           </button>
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_sort'] == 'oldest') ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="oldest">
+                              <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                 <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                              </svg>
+                              <span class="color-black animation-ease3s">{$word->oldest}</span>
+                           </button>
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_sort'] == 'views') ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_todays_news}" data-type="views">
+                              <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                 <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                              </svg>
+                              <span class="color-black animation-ease3s">{$word->views}</span>
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+            </div>
+            <div id="content-sinfo" class="font-medium margin-t15 padding-b15 border-bottom border-grely ellipsis-horizontal<?php echo($TEMP['#show_sinfo']) ? ' hidden' : '';?>">
+               {$search_info}
+            </div>
+            <section id="content-sresults" class="content-sresults">
+               {$news_result}
+            </section>
+            <div id="content-load-si" class="content-load-si margin-t15 hidden">
+               <div class="info-sload animate-content-load w-100"></div>
+            </div>
+            <div id="content-load-sc" class="content-load-sc hidden">
+               <div class="padding-b15">
+                  <div class="display-flex direction-colum margin-t15 padding-t15 border-top border-grely">
+                     <div class="display-flex">
+                        <div class="display-flex direction-colum w-100 padding-r10">
+                           <div class="category-sload animate-content-load w-50px margin-b5"></div>
+                           <div class="title-sload animate-content-load w-100 color-black margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                           <div class="title-sload animate-content-load w-100 margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                           <div class="title-sload animate-content-load w-50 ellipsis-vertical ellipsis-v3"></div>
+                        </div>
+                        <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                     </div>
+                  </div>
+               </div>
+               <div class="padding-t15 padding-b15 border-top border-grely">
+                  <div class="display-flex direction-colum">
+                     <div class="display-flex">
+                        <div class="display-flex direction-colum w-100 padding-r10">
+                           <div class="category-sload animate-content-load w-50px margin-b5"></div>
+                           <div class="title-sload animate-content-load w-100 color-black margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                           <div class="title-sload animate-content-load w-100 margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                           <div class="title-sload animate-content-load w-50 ellipsis-vertical ellipsis-v3"></div>
+                        </div>
+                        <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                     </div>
+                  </div>
+               </div>
+               <div class="padding-t15 padding-b15 border-top border-grely">
+                  <div class="display-flex direction-colum">
+                     <div class="display-flex">
+                        <div class="display-flex direction-colum w-100 padding-r10">
+                           <div class="category-sload animate-content-load w-50px margin-b5"></div>
+                           <div class="title-sload animate-content-load w-100 color-black margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                           <div class="title-sload animate-content-load w-100 margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                           <div class="title-sload animate-content-load w-50 ellipsis-vertical ellipsis-v3"></div>
+                        </div>
+                        <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                     </div>
+                  </div>
+               </div>
+               <div class="padding-t15 padding-b15 border-top border-grely">
+                  <div class="display-flex direction-colum">
+                     <div class="display-flex">
+                        <div class="display-flex direction-colum w-100 padding-r10">
+                           <div class="category-sload animate-content-load w-50px margin-b5"></div>
+                           <div class="title-sload animate-content-load w-100 color-black margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                           <div class="title-sload animate-content-load w-100 margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                           <div class="title-sload animate-content-load w-50 ellipsis-vertical ellipsis-v3"></div>
+                        </div>
+                        <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+         </div>
+         <div id="search-right" class="search-right display-none-mob">
+            <div class="theiaStickySidebar">
+               <aside class="search-aside direction-colum h-100 padding-t25 padding-l20">
+                  <div class="content-related-aside display-block position-relative">
+                     <h2 class="color-black font-medium font-bold text-uppercase">{$word->recommended_news}</h2>
+                     <ul>
+                        {$related_aside}   
+                     </ul>
+                  </div>
+                  {$newsletter}
+               </aside>
+            </div>
+         </div>
+      </div>
+</div>
+
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/search/style.search.newsletter.min.css}}" />
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/search/style.search.related-aside.min.css}}" />
+
+{%%<script src="{$theme->{assets/js/theia-sticky-sidebar.min.js}}"></script>%%}
+{%%<script type="text/javascript">
+   paper_s = {
+      token: '{#token_session}',
+      url: {
+         normal_search: '{$url->{req/search/normal-search}}',
+         table_search: '{$url->{req/search/table-search}}',
+         subscribe: '{$url->{req/newsletter/subscribe}}'
+      },
+      word: {
+         date: '{$word->date}',
+         category: '{$word->category}',
+         sort_by: '{$word->sort_by}'
+      }
+   }, $('#search-right').theiaStickySidebar();
+
+
+(function(){
+   var t = $(window),
+       x = $('body'),
+       j = $('#content-sfilter'),
+       r = $('#content-sinfo'),
+       s = $('#content-load-si'),
+       n = $('#content-load-sc'),
+       d = $('#key-reset'),
+       u = $('#key-search'),
+       c = $('#content-sresults'),
+       w = function(e, i){
+         e.attr('disabled', i);
+       },
+       g = function(e){
+         e.attr('aria-expanded', !JSON.parse(e.attr('aria-expanded'))).blur()
+       },
+       i = function(e){
+         return $('.btn_ddown[data-type='+e+']').siblings().find('.btn_dfilter.selected').attr('data-type')
+       },
+       y = function(e){
+         var z = $('.btn_dfilter'),
+             k = $('#btn-search'),
+             p = function(e){
+               window.history.pushState({state:'new'}, '', e[0]), $('#type-date').val(e[1]), $('#type-category').val(e[2]), $('#type-author').val(e[3]), $('#type-sort').val(e[4])
+             };
+
+         w(z, !0), u.val().length > 0 ? (w(k, !1), d.removeClass('hidden')) : (w(k, !0), d.addClass('hidden')), r.addClass('hidden'), c.addClass('hidden'), s.removeClass('hidden'), n.removeClass('hidden'), $.post(paper_s.url.normal_search+"?token="+paper_s.token, {keyword: u.val(), date: i('date'), category: i('category'), author: i('author'), sort: i('sort')}, function(e){
+            if(e.S == 200){
+               p([e.URL, e.DT, e.CT, e.AT, e.ST]), s.addClass('hidden'), e.KW && r.removeClass('hidden').html(e.IO), n.addClass('hidden'), c.html(e.HT).removeClass('hidden'), l = e.IDS, b = !0, w(z, !1);
+            } else {
+               p([e.URL, e.DT, e.CT, e.AT, e.ST]), c.removeClass('hidden').html(e.HT), r.addClass('hidden'), s.addClass('hidden'), n.addClass('hidden'), w(z, !1)
+            }
+         })
+       },
+       l = [{$search_ids}],
+       b = !0;
+
+   (function(){
+      var m = $('.btn_ddown'),
+          q = function(){
+            var v = $('.btn_ddown[aria-expanded=true]'),
+                o = v.siblings(),
+                z = v.parent();
+            v.length > 0 && o.css({'left': ((z.width() - o.width() + (t.width() - x.width())) / 2) + z.position().left})
+          },
+          a = !0;
+      m.click(function(){
+         var v = $(this),
+             o = v.siblings(),
+             p = $('.btn_ddown[aria-expanded=true]'),
+             f = m.index(v),
+             h = j.width(),
+             k = j.children().width(),
+             z = v.parent();
+         a = !1, p.length > 0 && (p.siblings().addClass('hidden'), g(p)), $(document).scrollTop(0), x.addClass('overflow-hidden'), g(v), o.removeClass('hidden'), o.css({'left': ((z.width() - o.width() + (t.width() - x.width())) / 2) + z.position().left}), h < t.width() && j.animate({scrollLeft: (f == 0 ? 0 : (f == m.length - 1 ? k : ((k - h) / 2)))}, 750, function(){
+            a = !0
+         });
+      }), j.scroll(function(){
+         var v = $('.btn_ddown[aria-expanded=true]'),
+             o = v.siblings(),
+             z = j.width(),
+             p = (j.scrollLeft() + (t.width() - 40));
+         ((m.index(v) == 0 && p > z || m.index(v) == 2 && p < j.children().width()) && a) && (o.addClass('hidden'), x.removeClass('overflow-hidden')), q()
+      }), $('.btn_dfilter').click(function(){
+         var p = $(this),
+             z = p.parents('.item_dfilter'),
+             o = z.prev(),
+             v = o.attr('data-type');
+         z.find('.btn_dfilter.selected').removeClass('selected'), p.addClass('selected'), y(), o.text((v == 'date' ? paper_s.word.date : (v == 'category' ? paper_s.word.category : paper_s.word.sort_by))+' ('+$.trim(p.text())+')');
+      }), t.resize(q), $(document).click(function(e){
+         var v = $('.btn_ddown[aria-expanded=true]');
+         $('.item_dfilter, .item_dfilter *, .btn_ddown, .btn_ddown *').index(e.target) == -1 && v.length > 0 && (v.siblings().addClass('hidden'), j.removeClass('pointer-events-none'), g(v), x.removeClass('overflow-hidden'))
+      })
+   })(), (function(){
+      var q = $('#container-snews');
+      d.click(function(){
+         u.val(''), r.addClass('hidden'), y()
+      }), u.keyup(y), $(document).scroll(function(){
+         if(b && ($(document).scrollTop() + $(window).height()) >= q.height()){
+            b = !1, n.removeClass('hidden'), $.post(paper_s.url.table_search+"?token="+paper_s.token, {keyword: u.val(), search_ids: JSON.stringify(l), date: i('date'), category: i('category'), author: i('author'), sort: i('sort')}, function(e){
+               e.S == 200 ? (c.append(e.HT), l = e.IDS, n.addClass('hidden'), b = !0) : n.addClass('hidden')
+            })
+         }
+      })
+   })(), (function(){
+      var c = $('.newsletter_category'),
+          q = c.children(),
+          v = $('.text_all'),
+          m = $('.text_none'),
+          g = $('.btn_newsletter'),
+          p = $('.item_place'),
+          d = !0;
+      $('.close-newsletter').click(function(){
+         $('.newsletter-fixed').addClass('hidden'), $('.personalize_newsletter').removeAttr('style'), document.cookie = 'dismiss_newsletter=true;max-age=604800;path=/';
+      }), $('.newsletter_type').change(function(){
+         var k = $(this),
+             y = k.parents('.content_newsletter').find('.personalize_newsletter');
+         k.val() == 'personalized' ? y.css('height', y.children().first().height()) : y.removeAttr('style');
+      }), c.change(function(e){
+         $(this).children().length == $(this).val().length ? (v.addClass('hidden'), m.removeClass('hidden')) : (v.removeClass('hidden'), m.addClass('hidden'));
+      }), $('.select_all').click(function(){
+         q.prop('selected', d), d = !d, v.toggleClass('hidden'), m.toggleClass('hidden');
+      }), g.click(function(){
+         var v = $(this),
+             q = v.parent(),
+             k = q.find('.newsletter_email'),
+             z = k.siblings('.text-error');
+         v.addClass('spinner-is-loading'), w(v, !0), $.post(paper_s.url.subscribe+"?token="+paper_s.token, {'email': k.val(), 'type': q.find('.newsletter_type').val(), 'frequency': q.find('.newsletter_frequency').val(), 'popular': q.find('.newsletter_popular:checked').val(), 'category': JSON.stringify(q.find('.newsletter_category').val())}, function(e) {
+            e.S == 200 ? (w(p, !0), v.removeClass('spinner-is-loading'), z.addClass('color-green').removeClass('color-red').text(e.M), setTimeout(function(){
+               k.removeClass('active'), z.text('').addClass('color-red').removeClass('color-green'), q.find('.personalize_newsletter').removeAttr('style'), $('.content_newsletter').trigger("reset"), w(p, !1), w(v, !1)
+            }, 3000)) : (z.text(e.E), k.addClass('border-red').addClass('boxshadow-red'), v.removeClass('spinner-is-loading'));
+         });
+      }), $('.newsletter_email').on('input', function(){
+         var v = $(this);
+         v.val() != '' && (v.removeClass('border-red').removeClass('boxshadow-red').siblings('.text-error').text(''), w(g, !1))
+      })
+   })();
+})(paper_s);
+</script>%%}

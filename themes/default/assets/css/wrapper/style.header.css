@@ -67,7 +67,11 @@
         text-align: center;
     }
     .mobile-left {
+        top: 18px;
         left: 0;
+    }
+    .mobile-below .content-date {
+        margin-left: 47px;
     }
     .date-one {
         width: 100%;

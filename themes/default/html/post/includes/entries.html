@@ -18,7 +18,7 @@
         </figure>
     </div>
     <?php } ?>
-    <?php if($TEMP['!type'] == 'video' || $TEMP['!type'] == 'tweet' || $TEMP['!type'] == 'facebookpost' || $TEMP['!type'] == 'embed' || $TEMP['!type'] == 'soundcloud' || $TEMP['!type'] == 'instagrampost'){ ?>
+    <?php if(in_array($TEMP['!type'], array('video', 'tweet', 'facebookpost', 'embed', 'soundcloud', 'instagrampost', 'tiktok'))){ ?>
     <?php if($TEMP['!type'] == 'facebookpost'){ ?>
     <div class="@fb-post display-block margin-b15" data-href="{!frame}" data-width="100%"></div>
     <?php } else if($TEMP['!type'] == 'instagrampost'){ ?>

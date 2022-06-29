@@ -158,6 +158,24 @@ if(in_array($action, array('post', 'eraser'))){
 				}
 			}
 
+			if($entry[0] == 'tiktok'){
+				$tiktok_url = preg_match("/(?:http(?:s)?:\/\/)?(?:(?:www)\.(?:tiktok\.com)(?:\/)(?!foryou)(@[a-zA-z0-9]+)(?:\/)(?:video)(?:\/)([\d]+)|(?:m)\.(?:tiktok\.com)(?:\/)(?!foryou)(?:v)(?:\/)?(?=([\d]+)\.html))/", $entry[2], $tk_video_url);
+				$tiktok_param = preg_match("/#\/(?P<username>@[a-zA-z0-9]*|.*)(?:\/)?(?:v|video)(?:\/)?(?P<id>[\d]+)/", $entry[2], $tk_video_param);
+
+				if($tiktok_param == true || ($tiktok_param == true && filter_var($entry[2], FILTER_VALIDATE_URL))){
+					$tiktok_url = true;
+					$entries[$key][2] = "https://www.tiktok.com/{$tk_video_param['username']}/video/{$tk_video_param['id']}";
+				}
+
+				if($tiktok_url == false){
+					$error[] = array(
+						'EL' => $key,
+						'CS' => '.item-input',
+						'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
+					);
+				}
+			}
+
 			if($entry[0] == 'soundcloud'){
 				if(preg_match('/^(?:(https?):\/\/)?(?:(?:www|m)\.)?(soundcloud\.com|snd\.sc)\/[a-z0-9](?!.*?(-|_){2})[\w-]{1,23}[a-z0-9](?:\/.+)?$/', $entry[2]) == false){
 					$error[] = array(
@@ -322,18 +340,23 @@ if(in_array($action, array('post', 'eraser'))){
 									));
 								}
 								$content_frame = $content_frame['image_ext'];
-							} else if($entry[0] == 'tweet' || $entry[0] == 'soundcloud'){
+							} else if($entry[0] == 'tweet' || $entry[0] == 'soundcloud' || $entry[0] == 'tiktok'){
 								if($entry[0] == 'tweet'){
 									$api = 'https://api.twitter.com/1/statuses/oembed.json?omit_script1&url=';
 								} else if($entry[0] == 'soundcloud'){
 									$api = 'https://soundcloud.com/oembed?format=json&url=';
+								} else if($entry[0] == 'tiktok'){
+									$api = 'https://www.tiktok.com/oembed?format=json&url=';
 								}
 								$json = Specific::getContentUrl("{$api}{$entry[2]}");
 								$json = json_decode($json, true);
 
-								if(!isset($json['error']) && !isset($json['errors'])){
+								if(!isset($json['error']) && !isset($json['errors']) && !isset($json['status_msg'])){
 									if(!empty($json)){
 										$content_frame = $json['html'];
+										if($entry[0] == 'tiktok'){
+											$content_frame = preg_replace('/(\s+)?(?:<script [^>]*><\/script>)/', '', $content_frame);
+										}
 										$arr_trues[] = true;
 									} else {
 										$arr_trues[] = false;

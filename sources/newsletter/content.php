@@ -29,8 +29,6 @@ if($newsletter['count'] > 0){
     $TEMP['#cats'] = explode(',', $newsletter['categories']);
 }
 
-$TEMP['#categories'] = $dba->query('SELECT id, name FROM '.T_CATEGORY)->fetchAll();
-
 $TEMP['#page']        = 'newsletter';
 $TEMP['#title']       = $TEMP['#word']['newsletter_settings'] . ' - ' . $TEMP['#settings']['title'];
 $TEMP['#description'] = $TEMP['#settings']['description'];

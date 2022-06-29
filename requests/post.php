@@ -6,166 +6,20 @@ if($one == 'load'){
 	$category_id = Specific::Filter($_POST['category_id']);
 
 	if(!empty($category_id) && is_numeric($category_id) && !empty($post_ids) && is_array($post_ids)){
-		$post = $dba->query('SELECT * FROM '.T_POST.' WHERE category_id = ? AND id NOT IN (?) AND status = "approved" ORDER BY RAND()', $category_id, implode(',', $post_ids))->fetchArray();
+		$post = $dba->query('SELECT * FROM '.T_POST.' WHERE category_id = ? AND id NOT IN ('.implode(',', $post_ids).') AND status = "approved" ORDER BY RAND()', $category_id)->fetchArray();
 		if(!empty($post)){
-			$title = $post['title'];
-			$url = Specific::Url($post['slug']);
-			$post_views = $post['views'];
-			$avatar = Specific::Data($post['user_id'], array('avatar'));
-			$category = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $post['category_id'])->fetchArray();
-			$fingerprint = Specific::Fingerprint($TEMP['#user']['id']);
+			$post_load = Load::Post($post, true);
+			$html = $post_load['html'];
 
-			if($dba->query('SELECT COUNT(*) FROM '.T_VIEW.' WHERE post_id = ? AND fingerprint = ?', $post['id'], $fingerprint)->fetchArray(true) == 0){
-				$post_views = ($post['views']+1);
-				if($dba->query('INSERT INTO '.T_VIEW.' (post_id, fingerprint, created_at) VALUES (?, ?, ?)', $post['id'], $fingerprint, time())->returnStatus()){
-					$dba->query('UPDATE '.T_POST.' SET views = ? WHERE id = ?', $post['id'], $post_views);
-				};
-			}
-
-			$TEMP['title'] = $title;
-			$TEMP['category'] = $category['name'];
-			$TEMP['category_slug'] = $category['slug'];
-			$TEMP['views'] = number_format($post_views);
-			$TEMP['post_id'] = $post['id'];
-			$TEMP['author_name'] = Specific::Data($post['user_id'], array('username'));
-			$TEMP['author_url'] = Specific::ProfileUrl($TEMP['author_name']);
-			$TEMP['author_avatar'] = $avatar['avatar_s'];
-			$TEMP['thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 'b');
-			$TEMP['url'] = $url;
-			$TEMP['type'] = $post['type'];
-
-			$TEMP['title_encoded'] = urlencode($title);
-			$TEMP['description_encoded'] = urlencode($post['description']);
-			$TEMP['url_encoded'] = urlencode($url);
-			$TEMP['slug_encoded'] = urlencode($post['slug']);
-			$TEMP['published_date'] = date('c', $post['published_at']);
-			$TEMP['published_at'] = Specific::DateString($post['published_at']);
-
-
-			$TEMP['#is_loaded'] = true;
-
-			$post_sources = json_decode($post['post_sources'], true);
-			if(!empty($post_sources)){
-				$TEMP['#post_sources'] = array();
-				if(count($post_sources) > 1){
-					foreach ($post_sources as $key => $source) {
-						if($key != end(array_keys($post_sources))){
-							$TEMP['#post_sources'][] = " <a class='btn-noway color-blue hover-button' href='{$source['source']}' target='_blank'>{$source['name']}</a>";
-						}
-					}
-					$last_source = end($post_sources);
-					$TEMP['#post_sources'] = implode(',', $TEMP['#post_sources']);
-					$TEMP['#post_sources'] = "<b>{$TEMP['#word']['consulted_sources']}:</b> {$TEMP['#post_sources']} {$TEMP['#word']['and']} <a class='btn-noway color-blue hover-button' href='{$last_source['source']}' target='_blank'>{$last_source['name']}</a>";
-				} else {
-					$TEMP['#post_sources'] = "<b>{$TEMP['#word']['consulted_source']}:</b> <a class='btn-noway color-blue hover-button' href='{$post_sources[0]['source']}' target='_blank'>{$post_sources[0]['name']}</a>";
+			if($post_load['return']){
+				$HTMLFormatter = Specific::HTMLFormatter($html, true);
+				if($HTMLFormatter['status'] == true){
+					$deliver = array(
+						'S' => 200,
+						'ID' => $post['id'],
+						'HT' => $HTMLFormatter['content']
+					);
 				}
-			}
-			$thumb_sources = json_decode($post['thumb_sources'], true);
-			if(!empty($thumb_sources)){
-				$TEMP['#thumb_sources'] = array();
-				if(count($thumb_sources) > 1){
-					foreach ($thumb_sources as $key => $source) {
-						if($key != end(array_keys($thumb_sources))){
-							$TEMP['#thumb_sources'][] = " <a class='btn-noway color-blue hover-button' href='{$source['source']}' target='_blank'>{$source['name']}</a>";
-						}
-					}
-					$last_source = end($thumb_sources);
-					$TEMP['#thumb_sources'] = implode(',', $TEMP['#thumb_sources']);
-					$TEMP['#thumb_sources'] = "{$TEMP['#word']['images_taken_from']}: {$TEMP['#thumb_sources']} {$TEMP['#word']['and']} <a class='btn-noway color-blue hover-button' href='{$last_source['source']}' target='_blank'>{$last_source['name']}</a>";
-				} else {
-					$TEMP['#thumb_sources'] = "{$TEMP['#word']['image_taken_from']}: <a class='btn-noway color-blue hover-button' href='{$thumb_sources[0]['source']}' target='_blank'>{$thumb_sources[0]['name']}</a>";
-				}
-			}
-
-			$TEMP['#current_url'] = $post['slug'];
-			$TEMP['#thumb_sources'] = $post['thumb_sources'];
-			$TEMP['#entry_types'] = array();
-			$TEMP['#saved'] = $dba->query('SELECT COUNT(*) FROM '.T_SAVED.' WHERE user_id = ? AND post_id = ?', $TEMP['#user']['id'], $post['id'])->fetchArray(true);
-
-			$entries = $dba->query('SELECT * FROM '.T_ENTRY.' WHERE post_id = ? ORDER BY eorder', $post['id'])->fetchAll();
-			foreach ($entries as $key => $entry) {
-				$TEMP['#entry_types'][] = $entry['type'];
-			}
-
-			$tags = $dba->query('SELECT * FROM '.T_LABEL.' t WHERE (SELECT label_id FROM '.T_TAG.' WHERE post_id = ? AND label_id = t.id) = id', $post['id'])->fetchAll();
-			foreach ($tags as $tag) {
-				$TEMP['!name'] = $tag['name'];
-				$TEMP['!url'] = Specific::Url("{$TEMP['#r_tag']}/{$tag['slug']}");
-				$TEMP['tags'] .= Specific::Maket('post/includes/tags');
-			}
-			Specific::DestroyMaket();
-
-			$related_body = 0;
-			foreach ($entries as $key => $entry) {
-				$TEMP['!frame'] = $entry['frame'];
-				if($entry['type'] == 'text'){
-			        $j = 0;
-			        $paragraph = explode('</p>', $entry['body']);
-			        $paragraph_count = count($paragraph);
-			        $paragraph_body = round($paragraph_count/2);
-			        $entry['body'] = '';
-			        for ($i = 0; $i < $paragraph_count; $i++){
-			            if($paragraph_count >= 6 && $i == $paragraph_body && $paragraph_body != ($j+4) && $key == 0){
-	                		$realted_bo = $dba->query('SELECT * FROM '.T_POST.' WHERE id != ? AND category_id = ? AND status = "approved" ORDER BY RAND()', $post['id'], $post['category_id'])->fetchArray();
-	                		$TEMP['!title'] = $realted_bo['title'];
-	                		$TEMP['!url'] = Specific::Url($realted_bo['slug']);
-							$TEMP['!thumbnail'] = Specific::GetFile($realted_bo['thumbnail'], 1, 's');
-	                    	$entry['body'] .= Specific::Maket('post/includes/related-body');
-	                		$related_body = $realted_bo['id'];
-			            } else if($i == 2 || $i == ($j+4)){
-			                $j = $i;
-			                $entry['body'] .= Specific::Maket('post/includes/advertisement-body');
-			            }
-			            $entry['body'] .= $paragraph[$i];
-			        }
-				} else if($entry['type'] == 'image'){
-					$TEMP['!frame'] = Specific::GetFile($entry['frame'], 3);
-				} else if($entry['type'] == 'video'){
-					$youtube = preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?(?:youtu\.be|youtube\.com)\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/)([^\?&\"'>]+)/", $entry['frame'], $yt_video);
-					$vimeo = preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?vimeo\.com\/([0-9]+)$/", $entry['frame'], $vm_video);
-					$dailymotion = preg_match("/^.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/", $entry['frame'], $dm_video);
-
-					if($youtube == true || $vimeo == true || $dailymotion == true){
-						if($youtube == true && strlen($yt_video[1]) == 11){
-							$TEMP['!frame'] = '<iframe src="https://www.youtube.com/embed/'.$yt_video[1].'" width="100%" height="450" frameborder="0" allowfullscreen></iframe>';
-						} else if($vimeo == true){
-							$TEMP['!frame'] = '<iframe src="//player.vimeo.com/video/'.$vm_video[1].'" width="100%" height="450" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
-						} else if($dailymotion == true){
-							$TEMP['!frame'] = '<iframe src="//www.dailymotion.com/embed/video/'.$dm_video[2].'" width="100%" height="450" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
-						}
-					}
-				}
-
-				$TEMP['!id'] = $entry['id'];
-				$TEMP['!title'] = $entry['title'];
-				$TEMP['!body'] = $entry['body'];
-				$TEMP['!type'] = $entry['type'];
-				$TEMP['!eorder'] = $entry['eorder'];
-				$TEMP['!esource'] = $entry['esource'];
-				$TEMP['entries'] .= Specific::Maket('post/includes/entries');
-			}
-			Specific::DestroyMaket();
-
-			$relateds = $dba->query('SELECT * FROM '.T_POST.' WHERE id != ? AND id != ? AND status = "approved" ORDER BY RAND() LIMIT 3', $post['id'], $related_body)->fetchAll();
-
-			if(!empty($relateds)){
-				foreach ($relateds as $rl) {
-					$TEMP['!title'] = $rl['title'];
-					$TEMP['!url'] = Specific::Url($rl['slug']);
-					$TEMP['!thumbnail'] = Specific::GetFile($rl['thumbnail'], 1, 's');
-					$TEMP['!published_at'] = Specific::DateString($rl['published_at']);
-					$TEMP['related_bottom'] .= Specific::Maket('post/includes/related-bottom');
-				}
-				Specific::DestroyMaket();
-			}
-			$content = Specific::Maket('post/includes/main');
-			$noscrapping = Specific::NoScrapping($content, true);
-			if($noscrapping['status'] == true){
-				$deliver = array(
-					'S' => 200,
-					'ID' => $post['id'],
-					'HT' => $noscrapping['content']
-				);
 			}
 		}
 	}
@@ -195,7 +49,7 @@ if($one == 'load'){
 	}
 } else if($one == 'entry'){
 	$type = Specific::Filter($_POST['type']);
-	$types = array('text', 'image', 'video', 'embed', 'tweet', 'soundcloud', 'facebookpost', 'instagrampost');
+	$types = array('text', 'image', 'video', 'embed', 'tweet', 'soundcloud', 'facebookpost', 'instagrampost', 'tiktok');
 	if(is_numeric($type) && isset($types[$type])){
 		$TEMP['#type'] = $types[$type];
 		$TEMP['btn_get'] = 'btn_giframe';
@@ -240,7 +94,7 @@ if($one == 'load'){
 	if(!empty($url)){
 		if(filter_var($url, FILTER_VALIDATE_URL)){
 			if(!empty($type)){
-				if(in_array($type, array('tweet', 'soundcloud', 'instagrampost', 'facebookpost'))){
+				if(in_array($type, array('tweet', 'soundcloud', 'facebookpost', 'instagrampost', 'tiktok'))){
 					if($type == 'facebookpost'){
 						if(preg_match("/(?:(?:http|https):\/\/)?(?:www\.)?(?:facebook\.com)\/(\d+|[A-Za-z0-9\.]+)\/?/", $url)){
 							$deliver = array(
@@ -260,16 +114,28 @@ if($one == 'load'){
 					} else {
 						$tweet = preg_match('/^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/', $url);
 						$soundcloud = preg_match('/^(?:(https?):\/\/)?(?:(?:www|m)\.)?(soundcloud\.com|snd\.sc)\/[a-z0-9](?!.*?(-|_){2})[\w-]{1,23}[a-z0-9](?:\/.+)?$/', $url);
-						if($tweet == true || $soundcloud == true){
+
+						$tiktok_url = preg_match("/(?:http(?:s)?:\/\/)?(?:(?:www)\.(?:tiktok\.com)(?:\/)(?!foryou)(@[a-zA-z0-9]+)(?:\/)(?:video)(?:\/)([\d]+)|(?:m)\.(?:tiktok\.com)(?:\/)(?!foryou)(?:v)(?:\/)?(?=([\d]+)\.html))/", $url, $tk_video_url);
+
+						$tiktok_param = preg_match("/#\/(?P<username>@[a-zA-z0-9]*|.*)(?:\/)?(?:v|video)(?:\/)?(?P<id>[\d]+)/", $url, $tk_video_param);
+
+						if($tiktok_param == true){
+							$tiktok_url = true;
+							$url = "https://www.tiktok.com/{$tk_video_param['username']}/video/{$tk_video_param['id']}";
+						}
+
+						if($tweet == true || $soundcloud == true || $tiktok_url == true){
 							if($tweet == true && $type == 'tweet'){
 								$api = 'https://api.twitter.com/1/statuses/oembed.json?url=';
 							} else if($soundcloud == true && $type == 'soundcloud'){
 								$api = 'https://soundcloud.com/oembed?format=json&url=';
+							} else if($tiktok_url == true && $type == 'tiktok'){
+								$api = 'https://www.tiktok.com/oembed?format=json&url=';
 							}
 							$json = Specific::getContentUrl("{$api}{$url}");
 							$json = json_decode($json, true);
-
-							if(!isset($json['error']) && !isset($json['errors'])){
+							
+							if(!isset($json['error']) && !isset($json['errors']) && !isset($json['status_msg'])){
 								if(!empty($json)){
 									if(isset($json['title'])){
 										$deliver['TT'] = $json['title'];
@@ -278,23 +144,23 @@ if($one == 'load'){
 									$deliver['HT'] = $json['html'];
 								}
 							}
+						} else {
+							$deliver = array(
+								'S' => 400,
+								'E' => "*{$TEMP['#word']['enter_a_valid_url']}"
+							);
 						}
 					}
 				} else if($type == 'video'){
-					$youtube = preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?(?:youtu\.be|youtube\.com)\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/)([^\?&\"'>]+)/", $url, $yt_video);
-					$vimeo = preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?vimeo\.com\/([0-9]+)$/", $url, $vm_video);
-					$dailymotion = preg_match("/^.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/", $url, $dm_video);
-
-					if($youtube == true || $vimeo == true || $dailymotion == true){
-						if($youtube == true && strlen($yt_video[1]) == 11){
-							$html = '<iframe src="https://www.youtube.com/embed/'.$yt_video[1].'" width="100%" height="450" frameborder="0" allowfullscreen></iframe>';
-						} else if($vimeo == true){
-							$html = '<iframe src="//player.vimeo.com/video/'.$vm_video[1].'" width="100%" height="450" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
-						} else if($dailymotion == true){
-							$html = '<iframe src="//www.dailymotion.com/embed/video/'.$dm_video[2].'" width="100%" height="450" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
-						}
+					$frame = Specific::IdentifyFrame($url);
+					if($frame['return']){
 						$deliver['S'] = 200;
-						$deliver['HT'] = $html;
+						$deliver['HT'] = $frame['html'];
+					} else {
+						$deliver = array(
+							'S' => 400,
+							'E' => "*{$TEMP['#word']['enter_a_valid_url']}"
+						);
 					}
 				}
 			}

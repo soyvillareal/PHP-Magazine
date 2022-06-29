@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="{$settings->language}" dir="ltr">
+<head>
+   <meta charset="UTF-8" />
+   <title>{$global_title}</title>
+   <meta name="title" content="{$global_title}">
+   <meta name="description" content="{$global_description}">
+   <meta name="keywords" content="{$global_keywords}">
+   <meta name="news_keywords" content="{$global_keywords}">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+   <meta name="format-detection" content="telephone=no">
+   <link rel="shortcut icon" type="image/png" href="{$theme->{images/favicon.ico}}" />
+   {%%<script src="{$theme->{assets/js/jquery-3.6.0.min.js}}"></script>%%}
+   <?php if ($TEMP['#settings']['recaptcha'] == 'on') { ?>
+   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+   <?php } ?>
+
+</head>
+<body class="position-relative w-100 mw-1170 h-100 background-white color-black margin-auto">
+   <noscript>
+      <div class="display-flex w-100 h-100vh">
+         <div class="w-450px background-grely border-rlow margin-auto padding-t15 padding-b15 padding-l15 padding-r15 text-center">
+            <style type="text/css">
+               #global-content, #header, .drawer {
+                  display: none;
+               }
+            </style>
+            <div class="padding-t25 padding-b25 padding-l20 padding-r20">
+               <h1 class="color-black font-megaly font-bold margin-b15">{$word->no_js_title}</h1>
+               <p class="font-medium">
+                  {$word->no_js_message}
+                  <br>
+                  <a class="color-blue hover-button" href="https://www.whatismybrowser.com/guides/how-to-enable-javascript/" target="_blank" title="{$word->more_information}">{$word->more_information}</a>
+               </p>
+            </div>
+         </div>
+      </div>
+   </noscript>
+  <header id="header" class="content-header w-100 h-100 background-white margin-none animation-ease3s">
+    <section class="section-one position-relative">
+      <div class="mobile-left display-flex justify-around position-absolute">
+         <button class="btn_drawer btn-noway button-menu border-rlow animate-tab-button animation-ease3s display-inline-block background-hover" aria-haspopup="true" aria-expanded="false" aria-label="{$word->sections_navigation}">
+            <svg class="icon-x vertical-sub" viewBox="0 0 16 16">
+               <rect x="1" y="3" fill="#333" width="14" height="2"></rect>
+               <rect x="1" y="7" fill="#333" width="14" height="2"></rect>
+               <rect x="1" y="11" fill="#333" width="14" height="2"></rect>
+            </svg>
+         </button>
+      </div>
+      <div class="mobile-center display-none-desk">
+         <a href="{$url->{{#r_home}}}" target="_self" title="{$settings->title}" aria-label="{$settings->title}">
+            <div class="site-logo position-relative vertical-middle margin-auto"></div>
+         </a>
+      </div>
+      <div class="mobile-right display-flex direction-row h-0 padding-t5">
+         <?php if($TEMP['#loggedin'] === true){ ?>
+         <div class="content-dropdown-account content-backdrop-ac margin-left-auto">
+            <button class="btn_account button-general display-flex direction-row align-center h-30 btn-noway display-none-mob background-hover border-rlow vertical-middle animate-tab-button animation-ease3s" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
+               <span class="display-inline-block vertical-middle color-black margin-r5 font-low">{$word->account}</span>
+               <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                 <path fill="currentColor" d="M21.707,8.707l-9,9a1,1,0,0,1-1.414,0l-9-9A1,1,0,1,1,3.707,7.293L12,15.586l8.293-8.293a1,1,0,1,1,1.414,1.414Z"/>
+               </svg>
+            </button>
+            <div class="dropdown-account position-absolute background-white border-rlow border-all border-grely hidden" role="dialog" aria-label="{$word->account_menu}" aria-modal="true">
+               <div class="dropdown-account-item padding-t10 padding-b10 padding-l10 padding-r10 border-bottom border-grely">
+                  <a class="display-flex direction-row align-center" href="{$profile_slug}" target="_self" title="{$profile_username}">
+                     <div class="dropdown-account-image margin-r5">
+                        <img class="border-rall" src="{$profile_avatar}" alt="{$profile_username}">
+                     </div>
+                     <span class="color-blackly font-medium text-capitalize">{$profile_username}</span>
+                  </a>
+               </div>
+               <div class="dropdown-account-item padding-t10 padding-b10 padding-l10 padding-r10 border-bottom border-grely">
+                  <a class="color-grey font-medium hover-button" href="{$url->{{#r_create_post}}}" target="_self" title="Configuraciones">Crear publicación</a>
+               </div>
+               <div class="dropdown-account-item padding-t10 padding-b10 padding-l10 padding-r10 border-bottom border-grely">
+                  <a class="color-grey font-medium hover-button" href="{$url->{{#r_settings}}}" target="_self" title="Configuraciones">Configuraciones</a>
+               </div>
+               <div class="dropdown-account-item padding-t10 padding-b10 padding-l10 padding-r10">
+                  <a class="color-grey font-medium hover-button" href="{$url->{{#r_logout}}}" target="_self" title="Salir">Salir</a>
+               </div>
+            </div>
+         </div>
+         <?php } else { ?>
+         <a class="display-none-mob margin-left-auto margin-r10 inhover-button" href="{$url->{{#r_register}}}" target="_self" title="{$word->register}" role="button">
+            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase animation-ease3s">{$word->register}</span>
+         </a>
+         <a class="display-none-mob inhover-button" href="{$url->{{#r_login}}}" target="_self" title="{$word->login}" role="button">
+            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase animation-ease3s">{$word->login}</span>
+         </a>
+         <?php } ?>
+         <div class="button-modal-login display-inline position-absolute">
+            <?php if($TEMP['#loggedin'] == true){ ?>
+            <button class="btn_account btn-noway button-login border-rlow animation-ease3s display-inline-block display-none-desk background-hover" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
+               <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="#333">
+                  <path d="M8,10c-2.5,0-7,1.1-7,3.5V16h14v-2.5C15,11.1,10.5,10,8,10z"></path>
+                  <circle cx="8" cy="4" r="4"></circle>
+               </svg>
+            </button>
+            <?php } else { ?>
+            <button id="btn-modal-login" class="btn-noway button-login border-rlow animation-ease3s display-inline-block display-none-desk background-hover" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
+               <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="#333">
+                  <path d="M8,10c-2.5,0-7,1.1-7,3.5V16h14v-2.5C15,11.1,10.5,10,8,10z"></path>
+                  <circle cx="8" cy="4" r="4"></circle>
+               </svg>
+            </button>
+            <?php } ?>
+         </div>
+      </div>
+    </section>
+    <section class="mobile-below h-36 display-flex align-center justify-around font-lowly padding-l20 padding-r20 background-grely border-bottom border-grely">
+      <div class="content-date">
+         <div class="date-one display-flex direction-row align-center position-relative overflow-hidden font-lowly font-bold">
+            <span>{$time}</span>
+         </div>
+         <div class="date-two display-inline-block display-none-mob">
+            <span class="color-black">Colombia</span>
+         </div>
+      </div>
+      <div class="display-none-desk font-lowly margin-left-auto">
+         <span class="color-black">Colombia</span>
+      </div>
+    </section>
+    <div class="content-logo display-none-mob">
+      <div class="item-logo">
+         <a class="display-flex hover-button" href="{$url->{{#r_home}}}" target="_self" title="{$settings->title}" aria-label="{$settings->title}">
+            <div class="site-logo display-inline-block position-relative vertical-middle margin-auto"></div>
+         </a>
+      </div>
+    </div>
+    <div class="content-categories display-none-mob border-top border-grey">
+      <ul class="item-categories display-flex align-center">
+         <?php foreach($TEMP['#categories'] as $cat){ ?>
+         <li class="item-category animation-ease3s display-inline-block">
+            <a class="color-black hover-underline" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+         </li>
+         <?php } ?>
+      </ul>
+    </div>
+   </header>
+   <aside id="drawer" class="container-drawer content-backdrop-as display-none-mob position-fixed w-100 animation-ease3s">
+      <div class="content-drawer background-white h-100">
+         <div class="container-snews padding-t25 padding-b25 padding-l20 padding-r20">
+            <div class="container-slogo display-flex display-none-mob position-relative margin-b15">
+               <button class="btn_drawer btn-noway button-menu position-absolute border-rlow background-hover animate-tab-button animation-ease3s" aria-haspopup="true" aria-expanded="false" aria-label="{$word->sections_navigation}">
+                  <svg class="icon-x vertical-sub" viewBox="0 0 16 16">
+                     <rect x="1" y="3" fill="#333" width="14" height="2"></rect>
+                     <rect x="1" y="7" fill="#333" width="14" height="2"></rect>
+                     <rect x="1" y="11" fill="#333" width="14" height="2"></rect>
+                  </svg>
+               </button>
+               <a class="display-flex margin-auto hover-button" href="{$url->{{#r_home}}}" target="_self" title="{$settings->title}" aria-label="{$settings->title}">
+                  <div class="site-logo display-inline-block position-relative vertical-middle margin-auto"></div>
+               </a>
+            </div>
+            <form method="GET" action="{#r_search}" class="display-flex direction-row align-center" novalidate>
+               <div class="display-flex position-relative vertical-middle w-100 h-36 background-white margin-t5 margin-b5 margin-r10 padding-l15 padding-r20 border-all border-grely font-lowly border-rlow">
+                  <input id="key-hsearch" class="color-grey w-100 h-100" type="text" name="{#p_keyword}" placeholder="Buscar...">
+                  <input id="type-hdate" type="hidden" name="{#p_date}">
+                  <input id="type-hcategory" type="hidden" name="{#p_category}">
+                  <input id="type-hauthor" type="hidden" name="{#p_author}">
+                  <input id="type-hsort" type="hidden" name="{#p_sort}">
+                  <button id="key-hreset" class="btn-noway hover-button animation-ease3s hidden" type="reset">{$word->clean_up}</button>
+               </div>
+               <button id="btn-hsearch" class="button-general display-inline-block vertical-middle h-36 background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase inhover-button animation-ease3s" type="submit" disabled>{$word->to_go}</button>
+            </form>
+            <div class=" display-flex direction-colum background-white w-100">
+               <div id="content-shfilter" class="content-sfilter overflow-autox display-flex font-medium margin-t15 padding-b15 border-bottom border-grely hidden">
+                  <div class="display-flex">
+                     <div class="position-relative">
+                        <button class="btn-ddown btn_hddown display-flex direction-row align-center btn-noway padding-t5 padding-b5 padding-l20 padding-r20 border-all border-grely border-r25px ellipsis-horizontal animation-ease3s" type="button" aria-label="{$word->filter_by_news_date}" aria-haspopup="true" aria-expanded="false" data-type="date">
+                           <span class="color-black margin-r5 animation-ease3s">{$word->date} ({$word->all_})</span>
+                           <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                             <path fill="currentColor" d="M21.707,8.707l-9,9a1,1,0,0,1-1.414,0l-9-9A1,1,0,1,1,3.707,7.293L12,15.586l8.293-8.293a1,1,0,1,1,1.414,1.414Z"></path>
+                           </svg>
+                        </button>
+                        <div class="content-dfilter item_hdfilter display-flex direction-colum position-fixed background-white margin-t5 boxshadow-grey hidden" role="dialog" aria-label="{$word->filters_by_date}" aria-modal="true">
+                           <div class="padding-t15 padding-b15 padding-l10 padding-r10">
+                              <button class="btn-dfilter btn_hdfilter display-flex direction-row align-center btn-noway color-grey selected" type="button" aria-label="{$word->show_everything}" data-type="all">
+                                 <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                                 </svg>
+                                 <span class="color-black animation-ease3s">{$word->all_}</span>
+                              </button>
+                              <button class="btn-dfilter btn_hdfilter display-flex direction-row align-center btn-noway margin-t10 color-grey" type="button" aria-label="{$word->filter_by_todays_news}" data-type="today">
+                                 <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                                 </svg>
+                                 <span class="color-black animation-ease3s">{$word->today}</span>
+                              </button>
+                              <button class="btn-dfilter btn_hdfilter display-flex direction-row align-center btn-noway margin-t10 color-grey" type="button" aria-label="{$word->filter_by_week}" data-type="this_week">
+                                 <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                                 </svg>
+                                 <span class="color-black animation-ease3s">{$word->this_week}</span>
+                              </button>
+                              <button class="btn-dfilter btn_hdfilter display-flex direction-row align-center btn-noway margin-t10 color-grey" type="button" aria-label="{$word->filter_by_month}" data-type="this_month">
+                                 <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                                 </svg>
+                                 <span class="color-black animation-ease3s">{$word->this_month}</span>
+                              </button>
+                              <button class="btn-dfilter btn_hdfilter display-flex direction-row align-center btn-noway margin-t10 color-grey" type="button" aria-label="{$word->filter_by_year}" data-type="this_year">
+                                 <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                                 </svg>
+                                 <span class="color-black animation-ease3s">{$word->this_year}</span>
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+
+
+                     <div class="position-relative">
+                        <button class="btn-ddown btn_hddown display-flex direction-row align-center btn-noway margin-l10 margin-r10 padding-t5 padding-b5 padding-l20 padding-r20 border-all border-grely border-r25px ellipsis-horizontal animation-ease3s" type="button" aria-label="{$word->filter_by_news_date}" aria-haspopup="true" aria-expanded="false" data-type="category">
+                           <span class="color-black margin-r5 animation-ease3s">{$word->category} ({$word->all})</span>
+                           <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                             <path fill="currentColor" d="M21.707,8.707l-9,9a1,1,0,0,1-1.414,0l-9-9A1,1,0,1,1,3.707,7.293L12,15.586l8.293-8.293a1,1,0,1,1,1.414,1.414Z"></path>
+                           </svg>
+                        </button>
+                        <div class="content-dfilter item_hdfilter display-flex direction-colum position-fixed background-white margin-t5 boxshadow-grey hidden" role="dialog" aria-label="{$word->filters_by_category}" aria-modal="true">
+                           <div class="padding-t15 padding-b15 padding-l10 padding-r10">
+                              <button class="btn-dfilter btn_hdfilter display-flex direction-row align-center btn-noway color-grey selected" type="button" aria-label="{$word->show_everything}" data-type="all">
+                                 <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                                 </svg>
+                                 <span class="color-black animation-ease3s">{$word->all}</span>
+                              </button>
+                              <?php foreach($TEMP['#categories'] as $cat){ ?>
+                              <button class="btn-dfilter btn_hdfilter display-flex direction-row align-center btn-noway margin-t10 color-grey" type="button" aria-label="{$word->filter_by_category_} <?php echo $cat['name'];?>" data-type="<?php echo $cat['id'];?>">
+                                 <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                                 </svg>
+                                 <span class="color-black animation-ease3s"><?php echo $cat['name'];?></span>
+                              </button>
+                              <?php } ?>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div class="position-relative">
+                        <button class="btn-ddown btn_hddown display-flex direction-row align-center btn-noway margin-l10 margin-r10 padding-t5 padding-b5 padding-l20 padding-r20 border-all border-grely border-r25px ellipsis-horizontal animation-ease3s" type="button" aria-label="{$word->filter_by_author}" aria-haspopup="true" aria-expanded="false" data-type="author">
+                           <span class="color-black margin-r5 animation-ease3s">{$word->author} ({$word->all_})</span>
+                           <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                             <path fill="currentColor" d="M21.707,8.707l-9,9a1,1,0,0,1-1.414,0l-9-9A1,1,0,1,1,3.707,7.293L12,15.586l8.293-8.293a1,1,0,1,1,1.414,1.414Z"></path>
+                           </svg>
+                        </button>
+                        <div class="content-dfilter item_hdfilter display-flex direction-colum position-fixed background-white margin-t5 boxshadow-grey hidden" role="dialog" aria-label="{$word->filters_by_author}" aria-modal="true">
+                           <div class="padding-t15 padding-b15 padding-l10 padding-r10">
+                              <button class="btn-dfilter btn_hdfilter display-flex direction-row align-center btn-noway color-grey selected" type="button" aria-label="{$word->show_everything}" data-type="all">
+                                 <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                                 </svg>
+                                 <span class="color-black animation-ease3s">{$word->all_}</span>
+                              </button>
+                              <?php foreach($TEMP['#users'] as $user){ ?>
+                              <button class="btn-dfilter btn_hdfilter display-flex direction-row align-center btn-noway margin-t10 color-grey" type="button" aria-label="{$word->filter_by_author_} <?php echo $user['fullname'];?>" data-type="<?php echo $user['id'];?>">
+                                 <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                                 </svg>
+                                 <span class="color-black animation-ease3s"><?php echo $user['fullname'];?></span>
+                              </button>
+                              <?php } ?>
+                           </div>
+                        </div>
+                     </div>
+
+
+
+                     <div class="position-relative">
+                        <button class="btn-ddown btn_hddown display-flex direction-row align-center btn-noway padding-t5 padding-b5 padding-l20 padding-r20 border-all border-grely border-r25px ellipsis-horizontal animation-ease3s" type="button" aria-label="Filtrar por fecha de la noticia" aria-haspopup="true" aria-expanded="false" data-type="sort">
+                           <span class="color-black margin-r5 animation-ease3s">{$word->sort_by} ({$word->date})</span>
+                           <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                             <path fill="currentColor" d="M21.707,8.707l-9,9a1,1,0,0,1-1.414,0l-9-9A1,1,0,1,1,3.707,7.293L12,15.586l8.293-8.293a1,1,0,1,1,1.414,1.414Z"></path>
+                           </svg>
+                        </button>
+                        <div class="content-dfilter item_hdfilter display-flex direction-colum position-fixed background-white margin-t5 boxshadow-grey hidden" role="dialog" aria-label="{$word->filters_by_order}" aria-modal="true">
+                           <div class="padding-t15 padding-b15 padding-l10 padding-r10">
+                              <button class="btn-dfilter btn_hdfilter display-flex direction-row align-center btn-noway color-grey selected" type="button" aria-label="{$word->show_everything}" data-type="newest">
+                                 <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                                 </svg>
+                                 <span class="color-black animation-ease3s">{$word->newest}</span>
+                              </button>
+                              <button class="btn-dfilter btn_hdfilter display-flex direction-row align-center btn-noway margin-t10 color-grey" type="button" aria-label="{$word->show_everything}" data-type="oldest">
+                                 <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                                 </svg>
+                                 <span class="color-black animation-ease3s">{$word->oldest}</span>
+                              </button>
+                              <button class="btn-dfilter btn_hdfilter display-flex direction-row align-center btn-noway margin-t10 color-grey" type="button" aria-label="{$word->filter_by_todays_news}" data-type="views">
+                                 <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
+                                 </svg>
+                                 <span class="color-black animation-ease3s">{$word->views}</span>
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+
+               </div>
+               <div id="content-shinfo" class="content-sitems position-relative background-white font-medium margin-t15 padding-b15 border-bottom border-grely ellipsis-horizontal hidden"></div>
+               <section id="content-shresults" class="content-sresults content-sitems position-relative background-white hidden"></section>
+               <div id="content-load-shi" class="content-load-shi content-sitems position-relative background-white margin-t15 hidden">
+                  <div class="info-sload animate-content-load w-100"></div>
+               </div>
+               <div id="content-load-shc" class="content-load-shc content-sitems position-relative background-white hidden">
+                  <div class="padding-b15">
+                     <div class="display-flex direction-colum margin-t15 padding-t15 border-top border-grely">
+                        <div class="display-flex">
+                           <div class="display-flex direction-colum w-100 padding-r10">
+                              <div class="category-sload animate-content-load w-50px margin-b5"></div>
+                              <div class="title-sload animate-content-load w-100 color-black margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                              <div class="title-sload animate-content-load w-100 margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                              <div class="title-sload animate-content-load w-50 ellipsis-vertical ellipsis-v3"></div>
+                           </div>
+                           <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="padding-t15 padding-b15 border-top border-grely">
+                     <div class="display-flex direction-colum">
+                        <div class="display-flex">
+                           <div class="display-flex direction-colum w-100 padding-r10">
+                              <div class="category-sload animate-content-load w-50px margin-b5"></div>
+                              <div class="title-sload animate-content-load w-100 color-black margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                              <div class="title-sload animate-content-load w-100 margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                              <div class="title-sload animate-content-load w-50 ellipsis-vertical ellipsis-v3"></div>
+                           </div>
+                           <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="padding-t15 padding-b15 border-top border-grely">
+                     <div class="display-flex direction-colum">
+                        <div class="display-flex">
+                           <div class="display-flex direction-colum w-100 padding-r10">
+                              <div class="category-sload animate-content-load w-50px margin-b5"></div>
+                              <div class="title-sload animate-content-load w-100 color-black margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                              <div class="title-sload animate-content-load w-100 margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                              <div class="title-sload animate-content-load w-50 ellipsis-vertical ellipsis-v3"></div>
+                           </div>
+                           <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="padding-t15 padding-b15 border-top border-grely">
+                     <div class="display-flex direction-colum">
+                        <div class="display-flex">
+                           <div class="display-flex direction-colum w-100 padding-r10">
+                              <div class="category-sload animate-content-load w-50px margin-b5"></div>
+                              <div class="title-sload animate-content-load w-100 color-black margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                              <div class="title-sload animate-content-load w-100 margin-b5 ellipsis-vertical ellipsis-v3"></div>
+                              <div class="title-sload animate-content-load w-50 ellipsis-vertical ellipsis-v3"></div>
+                           </div>
+                           <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+            </div>
+            <nav id="content-nav" class="display-none-desk padding-t15">
+               <section>
+                  <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->national}</span>
+                  <ul class="padding-b15 colums-auto-2">
+                     <?php foreach($TEMP['#categories'] as $cat){ ?>
+                     <?php if($cat['footer'] == 'national'){ ?>
+                     <li class="display-flex direction-row align-center h-36">
+                        <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                     </li>
+                     <?php } ?>
+                     <?php } ?>
+                  </ul>
+               </section>
+               <section>
+                  <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->social}</span>
+                  <ul class="padding-b15 colums-auto-2">
+                     <?php foreach($TEMP['#categories'] as $cat){ ?>
+                     <?php if($cat['footer'] == 'social'){ ?>
+                     <li class="display-flex direction-row align-center h-36">
+                        <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                     </li>
+                     <?php } ?>
+                     <?php } ?>
+                  </ul>
+               </section>
+               <section>
+                  <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->more}</span>
+                  <ul class="padding-b15 colums-auto-2">
+                     <?php foreach($TEMP['#categories'] as $cat){ ?>
+                     <?php if($cat['footer'] == 'more'){ ?>
+                     <li class="display-flex direction-row align-center h-36">
+                        <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                     </li>
+                     <?php } ?>
+                     <?php } ?>
+                  </ul>
+               </section>
+               <section>
+                  <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->about_us}</span>
+                  <ul class="colums-auto-2">
+                     {$aside_pages}
+                     <?php foreach($TEMP['#pages'] as $page){ ?>
+                     <?php if($page['status'] == 'enabled'){ ?>
+                     <li class="display-flex direction-row align-center h-36">
+                        <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url($page['slug']);?>" target="_self" title="<?php echo $page['name'];?>"><?php echo $page['name'];?></a>
+                     </li>
+                     <?php } ?>
+                     <?php } ?>
+                  </ul>
+               </section>
+            </nav>
+            <div id="content-smessage" class="content-smessage position-absolute display-none-mob">
+               <span class="color-black font-bigly margin-auto">{$word->what_we_going_look_today}</span>
+            </div>
+         </div>
+      </div>
+   </aside>
+   <div id="global-content">
+      {$content}
+   </div>
+   <?php if($TEMP['#page'] != 'post'){ ?>
+   <footer id="footer" class="content-footer w-100 padding-t15 border-top border-grey">
+      <div class="items-footer padding-r15 padding-l15 margin-left-auto margin-right-auto margin-b10">
+         <!-- footer widget about-->
+         <div class="margin-auto flex-2 padding-r15 padding-l15">
+            <div class="footer-logo text-center">
+               <div class="site-logo display-inline-block position-relative vertical-middle"></div>
+            </div>
+            <p class="color-black font-low text-center margin-t10">
+               {$word->footer_message}
+            </p>
+         </div>
+         <div class="footer-pages flex-1">
+            <div class="font-mediumly font-bold margin-b5">      
+               {$word->about_us}
+            </div>
+            <ul>
+               <?php foreach($TEMP['#pages'] as $page){ ?>
+               <?php if($page['status'] == 'enabled'){ ?>
+               <li class="margin-b5">
+                  <a class="color-black font-low inhover-button" href="<?php echo Specific::Url($page['slug']);?>" target="_self" title="<?php echo $page['name'];?>"><?php echo $page['name'];?></a>
+               </li>
+               <?php } ?>
+               <?php } ?>
+            </ul>
+         </div>
+         <div class="footer-pages flex-1 display-none-footer">
+            <div class="font-mediumly font-bold margin-b5">      
+               {$word->national}
+            </div>
+            <ul>
+               <?php foreach($TEMP['#categories'] as $cat){ ?>
+               <?php if($cat['footer'] == 'national'){ ?>
+               <li class="margin-b5">
+                  <a class="color-black font-low inhover-button" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+               </li>
+               <?php } ?>
+               <?php } ?>
+            </ul>
+         </div>
+         <div class="footer-pages flex-1 display-none-footer">
+            <div class="font-mediumly font-bold margin-b5">      
+               {$word->social}
+            </div>
+            <ul>
+               <?php foreach($TEMP['#categories'] as $cat){ ?>
+               <?php if($cat['footer'] == 'social'){ ?>
+               <li class="margin-b5">
+                  <a class="color-black font-low inhover-button" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+               </li>
+               <?php } ?>
+               <?php } ?>
+            </ul>
+         </div>
+         <div class="footer-pages flex-1 display-none-footer">
+            <div class="font-mediumly font-bold margin-b5">      
+               {$word->more}
+            </div>
+            <ul>
+               <?php foreach($TEMP['#categories'] as $cat){ ?>
+               <?php if($cat['footer'] == 'more'){ ?>
+               <li class="margin-b5">
+                  <a class="color-black font-low inhover-button" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+               </li>
+               <?php } ?>
+               <?php } ?>
+            </ul>
+         </div>
+      </div>
+      <div class="position-relative font-low text-center padding-t25 padding-b25 border-top border-grey">
+         <div class="text-center padding-l15 padding-r15">
+            {$word->footer_copyright_message}
+         </div>
+      </div>
+   </footer>
+   <?php } ?>
+   <?php if($TEMP['#loggedin'] == false){ ?>
+   <div class="content-login-modal content-backdrop display-none-desk position-fixed w-100 animation-ease3s">
+      <div class="item-login-modal display-flex background-white padding-t15 padding-b15 padding-l15 padding-r15 border-top border-grey">
+         <div class="margin-auto">
+            <a class="inhover-button margin-r10" href="{$url->{{#r_register}}}" target="_self" title="{$word->register}" role="button">
+               <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase animation-ease3s">{$word->register}</span>
+            </a>
+            <a class="inhover-button" href="{$url->{{#r_login}}}" target="_self" title="{$word->login}" role="button">
+               <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase animation-ease3s">{$word->login}</span>
+            </a>
+            <div class="text-center margin-t15 margin-b15">
+               <p>{$word->did_you_forget_your_password}</p>
+               <a class="color-black font-medium font-bold text-underline" href="{$url->{{#r_forgot_password}}}" target="_self" title="{$word->retrieve_it_here}">{$word->retrieve_it_here}</a>
+            </div>
+         </div>
+      </div>
+   </div>
+   <?php } ?>
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.fonts.css}}" />
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.search.min.css}}" />
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.general.css}}" />
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.modal.css}}" />
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.header.css}}" />
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.footer.css}}" />
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.aside.css}}" />
+   {%%<script type="text/javascript">
+      $(document).ready(function(){
+         let a = $('body'),
+             h = $('.btn_account'),
+             j = h.find('svg'),
+             g = function(e){
+               e.attr('aria-expanded', !JSON.parse(e.attr('aria-expanded'))).blur()
+             };
+         
+         $(window).on('popstate', function(){
+            location.reload();
+         }), $(document).click(function(e){
+            $(e.target).is('.container-drawer') && a.removeClass('backdrop-active-as'), <?php echo($TEMP['#loggedin'] === true) ? "$(e.target).is('.content-dropdown-account') && (a.removeClass('backdrop-active-ac'), h.removeClass('active').siblings().addClass('hidden'), j.removeAttr('transform'), g(h))" : "$(e.target).is('.content-login-modal') && a.removeClass('modal-login-active')" ?>
+         })<?php if($TEMP['#loggedin'] === true){ ?>, h.click(function(){
+            a.toggleClass('backdrop-active-ac'), h.toggleClass('active').siblings().toggleClass('hidden'), g(h), !$(this).hasClass('button-login') && !j.attr('transform') ? j.attr('transform', 'rotate(180)') : j.removeAttr('transform'), a.removeClass('backdrop-active-as')
+         })<?php } else { ?>, $('#btn-modal-login').click(function(){
+            a.toggleClass('modal-login-active'), g($(this)), a.removeClass('backdrop-active-as')
+         })<?php } ?>
+      })
+
+         paper_w = {
+            token: '{#token_session}',
+            loggedin: '{#loggedin}',
+            url: {
+               normal_search: '{$url->{req/search/normal-search}}',
+               table_search: '{$url->{req/search/table-search}}'
+            },
+            word: {
+               date: '{$word->date}',
+               category: '{$word->category}',
+               sort_by: '{$word->sort_by}'
+            }
+         };
+
+         (function(){
+            var t = $(window),
+                x = $('#drawer'),
+                j = $('#content-shfilter'),
+                r = $('#content-shinfo'),
+                s = $('#content-load-shi'),
+                n = $('#content-load-shc'),
+                d = $('#key-hreset'),
+                u = $('#key-hsearch'),
+                c = $('#content-shresults'),
+                g = function(e){
+                  e.attr('aria-expanded', !JSON.parse(e.attr('aria-expanded'))).blur()
+                },
+                i = function(e){
+                  return $('.btn_hddown[data-type='+e+']').siblings().find('.btn_hdfilter.selected').attr('data-type')
+                },
+                y = function(e){
+                  var v = $('#content-smessage'),
+                      z = $('.btn_hdfilter'),
+                      k = $('#btn-hsearch'),
+                      p = function(e){
+                        $('#type-hdate').val(e[0]), $('#type-hcategory').val(e[1]), $('#type-hauthor').val(e[2]), $('#type-hsort').val(e[3])
+                      };
+
+                  z.attr('disabled', !0), $('#content-nav').addClass('hidden'), j.removeClass('hidden'), u.val().length > 0 ? (k.removeAttr('disabled'), d.removeClass('hidden')) : (k.attr('disabled', !0), d.addClass('hidden')), r.addClass('hidden'), c.addClass('hidden'), s.removeClass('hidden'), n.removeClass('hidden'), $.post(paper_w.url.normal_search+"?token="+paper_w.token, {keyword: u.val(), date: i('date'), category: i('category'), author: i('author'), sort: i('sort')}, function(e){
+                     if(e.S == 200){
+                        p([e.DT, e.CT, e.AT, e.ST]), v.removeClass('hidden'), s.addClass('hidden'), e.KW && (r.removeClass('hidden').html(e.IO)), n.addClass('hidden'), c.html(e.HT).removeClass('hidden'), l = e.IDS, b = w = !0, z.attr('disabled', !1);
+                     } else {
+                        p([e.DT, e.CT, e.AT, e.ST]), w = !1, v.addClass('hidden'), c.removeClass('hidden').html(e.HT), r.addClass('hidden'), s.addClass('hidden'), n.addClass('hidden'), z.attr('disabled', !1)
+                     }
+                  })
+                },
+                l = [],
+                w = !1,
+                b = !0;
+
+            (function(){
+               var m = $('.btn_hddown'),
+                   q = function(){
+                     var v = $('.btn_hddown[aria-expanded=true]'),
+                         o = v.siblings(),
+                         z = v.parent();
+                     v.length > 0 && o.css({'left': ((z.width() - o.width()) / 2) + z.position().left})
+                   },
+                   a = !0;
+               m.click(function(){
+                  var v = $(this),
+                      o = v.siblings(),
+                      p = $('.btn_hddown[aria-expanded=true]'),
+                      f = m.index(v),
+                      h = j.width(),
+                      k = j.children().width(),
+                      z = v.parent();
+                  a = !1, p.length > 0 && (p.siblings().addClass('hidden'), g(p)), x.scrollTop(0).addClass('overflow-hidden'), g(v), o.removeClass('hidden').css({'left': ((z.width() - o.width()) / 2) + z.position().left}), h < t.width() && j.animate({scrollLeft: (f == 0 ? 0 : (f == m.length - 1 ? k : ((k - h) / 2)))}, 750, function(){
+                     a = !0
+                  });
+               }), j.scroll(function(){
+                  var v = $('.btn_hddown[aria-expanded=true]'),
+                      o = v.siblings(),
+                      z = j.width(),
+                      p = (j.scrollLeft() + (t.width() - 40));
+                  ((m.index(v) == 0 && p > z || m.index(v) == 2 && p < j.children().width()) && a) && (o.addClass('hidden'), x.removeClass('overflow-hidden')), q()
+               }), $('.btn_hdfilter').click(function(){
+                  var p = $(this),
+                      z = p.parents('.item_hdfilter'),
+                      o = z.prev(),
+                      v = o.attr('data-type');
+                  z.find('.btn_hdfilter.selected').removeClass('selected'), p.addClass('selected'), y(), o.text((v == 'date' ? paper_w.word.date : (v == 'category' ? paper_w.word.category : paper_w.word.sort_by))+' ('+$.trim(p.text())+')');
+               }), t.resize(q), $(document).click(function(e){
+                  var v = $('.btn_hddown[aria-expanded=true]');
+                  $('.item_hdfilter, .item_hdfilter *, .btn_hddown, .btn_hddown *').index(e.target) == -1 && v.length > 0 && (v.siblings().addClass('hidden'), j.removeClass('pointer-events-none'), g(v), x.removeClass('overflow-hidden'))
+               })
+            })();
+
+            (function(){
+               var a = $('body'),
+                   q = x.children(),
+                   o = $('#content-nav'),
+                   k = function(){
+                     w = !1, $('#content-smessage').removeClass('hidden'), j.addClass('hidden'), n.addClass('hidden'), o.removeClass('hidden'), c.addClass('hidden').html(''), s.addClass('hidden'), r.addClass('hidden').html('')
+                   };
+               d.click(k), $('.btn_drawer').click(function(){
+                  k(), u.val(''), a.toggleClass('backdrop-active-as'), g($(this)), paper_w.loggedin ? a.removeClass('modal-login-active') : $('.btn_account').removeClass('active').siblings().addClass('hidden')
+               }), u.keyup(y), q.scroll(function(){
+                  if(w && b && (q.scrollTop() + q.height()) >= (q.children().height() - 100)){
+                     b = !1, n.removeClass('hidden'), $.post(paper_w.url.table_search+"?token="+paper_w.token, {keyword: u.val(), search_ids: JSON.stringify(l), date: i('date'), category: i('category'), author: i('author'), sort: i('sort')}, function(e){
+                        e.S == 200 ? (c.append(e.HT), l = e.IDS, n.addClass('hidden'), b = !0) : n.addClass('hidden')
+                     })
+                  }
+               })
+            })();
+         })(paper_w);
+
+
+   </script>%%}
+   {*HERE*}
+</body>
+</html>

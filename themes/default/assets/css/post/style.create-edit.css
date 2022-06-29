@@ -192,6 +192,9 @@ ul.content-tags .item_tag.item-tag-active {
 .vimeo.active {
     color: #86c9ef;
 }
+.twitch.active {
+    color: #6441a5;
+}
 .content-alert-popup {
     z-index: 102;
     top: 152px;
@@ -223,7 +226,15 @@ ul.content-tags .item_tag.item-tag-active {
     animation: showSweetAlert .3s;
     will-change: transform;
 }
-
+.item-rb-one {
+    width: 150px;
+}
+.item-rb-two {
+    width: calc(100% - 165px);
+}
+.content-related-body:not(:last-child) {
+    border-bottom: 1px solid;
+}
 @media (min-width: 768px) {
     .content-left-fields {
         border-left: 1px solid;
@@ -240,6 +251,20 @@ ul.content-tags .item_tag.item-tag-active {
     }
     .content-post .content-right-fields {
         width: 300px;
+    }
+}
+@media (max-width: 599px) {
+    .item-rb-one {
+        width: 120px;
+    }
+    .related-body .related-btitle {
+        font-size: 14px;
+    }
+    .related-body .related-bnews {
+        font-size: 16px;
+    }
+    .item-rb-two {
+        width: calc(100% - 135px);
     }
 }
 @media(pointer: fine){

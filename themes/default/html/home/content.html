@@ -1,36 +1,86 @@
+<?php if($TEMP['#show_breaking'] == true){ ?>
+<section id="content-bnews" class="content-breaking-news display-inline-block w-100 margin-t15 padding-b15 border-bottom border-grely">
+   <div class="display-flex direction-row align-center background-red padding-t5 padding-b5 padding-l10 padding-r10">
+      <span class="font-bigly font-bold text-uppercase color-white margin-left-auto">Última hora: </span>
+      <a class="margin-right-auto hover-underline animation-ease3s" href="{$breaking_url}" target="_self" title="{$breaking_title}" data-id="{$breaking_id}">
+         <h3 class="main-two-title font-postoni-bodo font-bigly ellipsis-vertical ellipsis-v2 color-white">{$breaking_title}</h3>
+      </a>
+      <button id="btn-cbreaking" class="btn-noway icon-x margin-l5 hover-button animation-ease3s" aria-label="Cerrar anuncio de noticia de última hora">
+         <svg class="color-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+           <path fill="none" stroke="currentColor" stroke-width="3" d="M3,3 L21,21 M3,21 L21,3"/>
+         </svg>
+      </button>
+   </div>
+</section>
+<?php } ?>
 <?php if(!empty($TEMP['#main'])){ ?>
 <div class="content-main padding-t25">
    <div class="items-main display-flex vertical-slots">
       <div class="main-one">
          <div class="content-news-left display-flex vertical-slots">
             <div class="left-news-left">
-               {$main_left_one}
+               <div id="content-left-news" class="content-left-news">
+                  {$main_left_one}
+               </div>
+               <div id="content-mlload" class="content-mlload padding-t25 border-top border-grely hidden">
+                  <div class="main-news-wrapper">
+                     <div class="content-mlload-image animate-content-load w-100"></div>
+                     <div class="content-news-wrapper margin-t10">
+                        <div class="content-mlload-title animate-content-load"></div>
+                        <div class="content-mlload-title animate-content-load w-50 margin-t5"></div>
+                        <div class="contentmlload-summary animate-content-load margin-t10"></div>
+                        <div class="contentmlload-summary animate-content-load margin-t5"></div>
+                        <div class="contentmlload-summary animate-content-load w-50px margin-t5"></div>
+                     </div>
+                  </div>
+                  <div class="main-news-wrapper">
+                     <div class="content-mlload-image animate-content-load w-100"></div>
+                     <div class="content-news-wrapper margin-t10">
+                        <div class="content-mlload-title animate-content-load"></div>
+                        <div class="content-mlload-title animate-content-load w-50 margin-t5"></div>
+                        <div class="contentmlload-summary animate-content-load margin-t10"></div>
+                        <div class="contentmlload-summary animate-content-load margin-t5"></div>
+                        <div class="contentmlload-summary animate-content-load w-50px margin-t5"></div>
+                     </div>
+                  </div>
+               </div>
             </div>
             <div class="right-news-left">
-               <section class="main-news-wrapper">
+               <section class="<?php echo($TEMP['#main_right_type'] == 'video') ? 'content-video-animate ' : '';?>main-news-wrapper position-relative" data-id="{$main_right_id}">
                   <a class="hover-all" href="{$main_right_url}">
                      <div class="content-news-right no-hover">
-                        <figure class="figure-news-right margin-none no-hover">
-                           <div class="news-right-one no-hover">
-                              <picture class="picture-news-right no-hover">
-                                 <img src="{$main_right_thumbnail}" alt="{$main_right_title}" role="presentation">
-                              </picture>
-                              <figcaption class="figcaption-news-right display-flex no-hover">
-                                 <span class="color-grey font-lowly ellipsis-horizontal margin-t5 margin-b5 margin-left-auto no-hover">{$main_right_published_at}</span>
-                              </figcaption>
+                        <figure class="content-gradient position-relative margin-none no-hover">
+                           <?php if($TEMP['#main_right_type'] == 'video'){ ?>
+                           <div class="content-vanimate display-flex direction-row align-center position-absolute no-hover">
+                              <svg class="icon-video no-hover" viewBox="0 0 40 40">
+                                 <path class="no-hover" d="M3 40V0l34 20z" fill="#F7F7F7" fill-rule="evenodd"></path>
+                                 <circle class="no-hover" cx="20" cy="20" r="19" stroke="#F7F7F7" fill="transparent" stroke-width="2px"></circle>
+                              </svg>
                            </div>
+                           <?php } ?>
+                           <picture class="no-hover">
+                              <img src="{$main_right_thumbnail}" alt="{$main_right_title}" role="presentation">
+                           </picture>
+                           <figcaption class="content-hpublished position-absolute no-hover">
+                              <time class="color-white font-lowly ellipsis-horizontal no-hover" datetime="{$main_right_published_date}">{$main_right_published_at}</time>
+                           </figcaption>
                         </figure>
-                        <section class="main-news-wrapper">
+                        <section class="margin-t10">
                            <h3 class="main-news-title font-postoni-bodo font-big ellipsis-vertical ellipsis-v3 color-black margin-b5 animation-ease3s">{$main_right_title}</h3>
                            <p class="main-news-summary font-mediumly ellipsis-vertical ellipsis-v4 color-grey animation-ease3s">{$main_right_description}</p>
                         </section>
                      </div>
                   </a>
+                  <div class="container-category position-absolute">
+                    <div class="content-category display-inline-block border-rlow">
+                        <a class="btn-noway background-black color-white font-low text-uppercase border-rlow hover-button animation-ease3s" href="{$main_right_category_slug}" target="_self">{$main_right_category}</a>
+                     </div>
+                  </div>
                </section>
             </div>
          </div>
       </div>
-      <div class="main-two">
+      <div id="content-slider" class="main-two">
          {$main_two}
       </div>
    </div>
@@ -48,14 +98,150 @@
    </section>
 </div>
 <?php } ?>
-<?php if($TEMP['#last_news']){ ?>
+<?php if(!empty($TEMP['#video'])){ ?>
+<div class="container-video-news padding-b15 margin-b15 border-bottom border-grely">
+   <div class="display-block background-blue position-relative padding-l20 padding-r20">
+      <section class="content-frame-news display-flex direction-row align-center w-100 margin-b15 padding-t25 padding-b15 border-bottom border-grely" data-id="{$id}">
+         <div id="content-video-news" class="content-video-news display-flex align-center position-relative background-blackly w-50 cursor-pointer margin-r15">
+            <button class="btn-play-video display-flex position-absolute background-blackly btn-noway text-center border-rall hover-all">
+               <span class="hidden">{$word->close}</span>
+               <svg class="icon-z margin-auto animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="none" stroke="#fff" stroke-width="2" d="M3,22.0000002 L21,12 L3,2 L3,22.0000002 Z M5,19 L17.5999998,11.9999999 L5,5 L5,19 Z M7,16 L14.1999999,12 L7,8 L7,16 Z M9,13 L10.8,12 L9,11 L9,13 Z"/>
+               </svg>
+            </button>
+            <figure class="display-flex direction-colum background-grely">
+               <picture>
+                  <img src="{$thumbnail}" alt="{$title}">
+               </picture>
+            </figure>
+         </div>
+         <div class="content-vn-text w-50 padding-t25 padding-b25">
+            <div class="content-category display-flex margin-b10">
+               <a class="btn-noway background-black color-white text-uppercase border-rlow hover-button animation-ease3s" href="{$category_slug}" target="_self">{$category}</a>
+               <time datetime="{$published_date}" class="color-white font-lowly ellipsis-horizontal margin-t5 margin-b5 margin-left-auto no-hover">{$published_at}</time>
+            </div>
+            <section class="video-wrapper">
+               <a class="hover-button animation-ease3s" href="{$url}" target="_self" title="{$title}">
+                  <h3 class="font-postoni-bodo font-supraly ellipsis-vertical ellipsis-v3 color-white margin-b5 animation-ease3s">{$title}</h3>
+               </a>
+               <p class="font-mediumly ellipsis-vertical ellipsis-v4 color-white animation-ease3s">{$description}</p>
+            </section>
+         </div>
+      </section>
+      <?php if($TEMP['#main_recommended_videos'] == true){ ?>
+      <div class="content-more-news padding-b25">
+         <section class="items-recommended position-relative">
+            <div class="recommended-title">
+               <span class="color-white font-postoni-bodo font-mediumly font-bold">Más videos</span>
+            </div>
+            <div class="content-bvideos display-flex direction-row align-center position-absolute">
+               <button class="btn_bvideo display-flex btn-noway background-black margin-r10 padding-5 border-rall border-all border-grely animate-tab-button animation-ease3s" data-type="prev" disabled>
+                  <svg class="icon-z color-white margin-auto" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                     <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M14.5303 18.5303C14.2374 18.8232 13.7626 18.8232 13.4697 18.5303L7.46967 12.5303C7.17678 12.2374 7.17678 11.7626 7.46967 11.4697L13.4697 5.46967C13.7626 5.17678 14.2374 5.17678 14.5303 5.46967C14.8232 5.76256 14.8232 6.23744 14.5303 6.53033L9.06066 12L14.5303 17.4697C14.8232 17.7626 14.8232 18.2374 14.5303 18.5303Z"/>
+                  </svg>
+               </button>
+               <button class="btn_bvideo display-flex btn-noway background-black padding-5 border-rall border-all border-grely animate-tab-button animation-ease3s" data-type="next">
+                  <svg class="icon-z color-white margin-auto" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                     <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M9.46967 5.46967C9.76256 5.17678 10.2374 5.17678 10.5303 5.46967L16.5303 11.4697C16.8232 11.7626 16.8232 12.2374 16.5303 12.5303L10.5303 18.5303C10.2374 18.8232 9.76256 18.8232 9.46967 18.5303C9.17678 18.2374 9.17678 17.7626 9.46967 17.4697L14.9393 12L9.46967 6.53033C9.17678 6.23744 9.17678 5.76256 9.46967 5.46967Z"/>
+                  </svg>
+               </button>
+            </div>
+            <div class="display-flex direction-row align-center position-relative">
+               <div class="content-recommended-video display-flex margin-t15 padding-b10 pointer-events-none">
+                  <div id="content-vnews" class="display-flex">
+                     {$main_recommended_videos}
+                  </div>
+                  <div id="content-vhload" class="display-flex hidden">
+                     <div class="content-vhload margin-l15 padding-l15 border-left border-grely">
+                       <div class="animate-content-load w-100 h-100"></div>
+                     </div>
+                     <div class="content-vhload margin-l15 padding-l15 border-left border-grely">
+                       <div class="animate-content-load w-100 h-100"></div>
+                     </div>
+                     <div class="content-vhload margin-l15 padding-l15 border-left border-grely">
+                       <div class="animate-content-load w-100 h-100"></div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </section>
+      </div>
+      <?php } ?>
+   </div>
+</div>
+
+
+<?php } ?>
+<?php if(!empty($TEMP['#last_news_one']) || !empty($TEMP['#last_news_two'])){ ?>
 <div class="content-more-news">
    <section class="items-recommended">
       <div class="recommended-title">
-         <span class="color-black font-postoni-bodo font-mediumly font-bold">Últimas noticias</span>
+         <span class="color-black font-postoni-bodo font-mediumly font-bold">Más noticias</span>
       </div>
-      <div class="recommended-news display-flex vertical-slots margin-t15 margin-b15 padding-b15">
-         {$last_news}
+      <div id="content-mnews" class="content-mnews">
+         {$more_news}
+      </div>
+      <div id="content-lhload" class="container-lhload display-flex vertical-slots padding-t15 border-top border-grely hidden">
+         <div class="content-lhload item-recommended display-block position-relative margin-b15">
+            <div class="content-lhload-image figure-recommended animate-content-load margin-b10"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-50 animate-content-load margin-b5"></div>
+         </div>
+         <div class="content-lhload item-recommended display-block position-relative margin-b15">
+            <div class="content-lhload-image figure-recommended animate-content-load margin-b10"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-50 animate-content-load margin-b5"></div>
+         </div>
+         <div class="content-lhload item-recommended display-block position-relative margin-b15">
+            <div class="content-lhload-image figure-recommended animate-content-load margin-b10"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-50 animate-content-load margin-b5"></div>
+         </div>
+         <div class="content-lhload item-recommended display-block position-relative margin-b15">
+            <div class="content-lhload-image figure-recommended animate-content-load margin-b10"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-50 animate-content-load margin-b5"></div>
+         </div>
+         <div class="content-lhload item-recommended display-block position-relative margin-b15">
+            <div class="content-lhload-image figure-recommended animate-content-load margin-b10"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-50 animate-content-load margin-b5"></div>
+         </div>
+         <div class="content-lhload item-recommended display-block position-relative margin-b15">
+            <div class="content-lhload-image figure-recommended animate-content-load margin-b10"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-50 animate-content-load margin-b5"></div>
+         </div>
+         <div class="content-lhload item-recommended display-block position-relative margin-b15">
+            <div class="content-lhload-image figure-recommended animate-content-load margin-b10"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-50 animate-content-load margin-b5"></div>
+         </div>
+         <div class="content-lhload item-recommended display-block position-relative margin-b15">
+            <div class="content-lhload-image figure-recommended animate-content-load margin-b10"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-50 animate-content-load margin-b5"></div>
+         </div>
+         <div class="content-lhload item-recommended display-block position-relative margin-b15">
+            <div class="content-lhload-image figure-recommended animate-content-load margin-b10"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-50 animate-content-load margin-b5"></div>
+         </div>
+         <div class="content-lhload item-recommended display-block position-relative margin-b15">
+            <div class="content-lhload-image figure-recommended animate-content-load margin-b10"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
+            <div class="content-lhload-title w-50 animate-content-load margin-b5"></div>
+         </div>
       </div>
    </section>
 </div>
@@ -80,5 +266,114 @@
    })
 </script>%%}
 <?php } ?>
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.general.css}}" />
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.main.css}}" />
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.video.css}}" />
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.recommended.css}}" />
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.last-news-two.css}}" />
+{%%<script type="text/javascript">
+   paper_h = {
+      token: '{#token_session}',
+      <?php if($TEMP['#show_breaking']){ ?>
+      breaking_id: {$breaking_id},
+      <?php } ?>
+      post_ids: [{$home_ids}],
+      url: {
+         load_more: '{$url->{req/home/load_more}}',
+         load_videos: '{$url->{req/home/load_videos}}',
+         load_main_left: '{$url->{req/home/load_main_left}}'
+      }
+   }, $('#content-video-news').click(function(){
+      $(this).html('{$frame}')
+   }), $('#btn-cbreaking').click(function(){
+      $('#content-bnews').remove(), document.cookie = 'breaking_news='+paper_h.breaking_id+';max-age=604800;path=/';
+   });
+
+
+   (function(){
+      var n = $(window);
+
+      (function(){
+         var z = $('#content-mlload'),
+             c = $('#content-left-news'),
+             b = $('#content-slider'),
+             a = c.parent(),
+             f = !0;
+
+         a.scroll(function(){
+            var t = a.scrollTop();
+            if(f && (t + a.height()) >= (c.height() - 100)){
+               f = !1, z.removeClass('hidden'), $.post(paper_h.url.load_main_left+"?token="+paper_h.token, {post_ids: JSON.stringify(paper_h.post_ids)}, function(e){
+                  if(e.S == 200){
+                     c.append(e.HT), paper_h.post_ids = e.IDS, z.addClass('hidden'), f = !0;
+                  } else {
+                     z.addClass('hidden')
+                  }
+               })
+            }
+         })
+
+      })();
+
+      (function(){
+         var k = !0,
+             b = !0,
+             g = $('#global-content'),
+             x = $('#content-mnews'),
+             u = $('#content-vnews'),
+             d = u.parent(),
+             v = u.children(),
+             f = $('#content-lhload'),
+             h = $('#content-vhload'),
+             a = $('.btn_bvideo[data-type="prev"]'),
+             j = function(e, i){
+               e.attr('disabled', i)
+             }, t = function(){
+               v.each(function(e, i){
+                 var y = $(i).width();
+                  if(s < (d.width() - (y + 31))){
+                     s += y + 31;
+                  }
+               })
+               return s;
+             },
+             s = 0,
+             q = 0,
+             w = 0,
+             o = !0,
+             l = !0;
+
+         $(document).scroll(function(){
+            (n.scrollTop() + n.height()) > g.height() && k && (k = !1, f.removeClass('hidden'), $.post(paper_h.url.load_more+"?token="+paper_h.token, {'post_ids': JSON.stringify(paper_h.post_ids)}, function(e) {
+               e.S == 200 ? (x.append(e.HT), paper_h.post_ids = e.IDS, k = !0, f.addClass('hidden'))
+               :
+               f.removeClass('hidden');
+            }));
+         }), d.scroll(function(){
+            (d.scrollLeft() + n.width()) > u.width() && b && (b = !1, h.removeClass('hidden'), $.post(paper_h.url.load_videos+"?token="+paper_h.token, {'post_ids': JSON.stringify(paper_h.post_ids)}, function(e) {
+               e.S == 200 ? (u.append(e.HT), paper_h.post_ids = e.IDS, b = !0, h.addClass('hidden')) : h.removeClass('hidden');
+            }));
+         }), n.resize(function(){
+            l && (o = l = !1, d.animate({scrollLeft: 0}, 750, function(){
+               s = q = w = 0, o = l = !0, j(a, !0)
+            }))
+         }), $('.btn_bvideo').click(function(){
+            if(o){
+               var p = $('.btn_bvideo[data-type="next"]'),
+                   r = ((d.width() - ($(v[0]).width() + 31)) <= 0),
+                   y = $(v[0]).width() + 31;
+
+               if($(this).attr('data-type') == 'next'){
+                  j(a, !1), o = !1, r ? (w < v.length ? w += 1 : v.length, q += y) : q += t(), d.animate({scrollLeft: q}, 750, function(){
+                     o = !0, (d.scrollLeft() + d.width()) == u.width() && j(p, !0)
+                  })
+               } else {
+                  j(p, !1), (q-s) >= 0 && (o = !1, r ? (w > 0 ? w -= 1 : 0, q -= y) : q -= t(), d.animate({scrollLeft: q}, 750, function(){
+                     o = !0
+                  }), q == 0 && j(a, !0))
+               }
+            }
+         })
+      })();
+   })(paper_h);
+</script>%%}

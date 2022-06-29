@@ -27,4 +27,10 @@ $TEMP['#r_logout'] = 'salir';
 $TEMP['#p_return'] = 'regresar';
 $TEMP['#p_provider'] = 'proveedor';
 $TEMP['#p_insert'] = 'insertar';
+$TEMP['#p_keyword'] = 'palabra-clave';
+$TEMP['#p_date'] = 'fecha';
+$TEMP['#p_category'] = 'categoria';
+$TEMP['#p_author'] = 'autor';
+$TEMP['#p_sort'] = 'orden';
+$TEMP['#p_show_alert'] = 'mostrar-alerta';
 ?>

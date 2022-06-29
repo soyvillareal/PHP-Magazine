@@ -1,4 +1,5 @@
 <?php
+define('T_BREAKING', 'breaking');
 define('T_CATEGORY', 'category');
 define('T_ENTRY', 'entry');
 define('T_LABEL', 'label');

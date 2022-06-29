@@ -323,7 +323,7 @@ class Specific {
 	}
 
 	public static function Data($data, $type = 1) {
-	    global $TEMP, $dba;
+	    global $dba, $TEMP;
 
 	    if(is_numeric($type)){
 		    if($type == 1){
@@ -344,6 +344,7 @@ class Specific {
 	    }
 	    if(!empty($user['username'])){
 	    	$user['username'] = $user['username'];
+	   		$user['fullname'] = $user['username'];
 	   	}
 	    if(!empty($user['name']) && !empty($user['surname'])){
 	    	$user['fullname'] = "{$user['name']} {$user['surname']}";
@@ -460,6 +461,71 @@ class Specific {
 		return self::Url("{$TEMP['#r_user']}/$username");
 	}
 
+	public static function IdentifyFrame($frame, $autoplay = false){
+		global $domain;
+
+		$youtube = preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?(?:youtu\.be|youtube\.com)\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/)([^\?&\"'>]+)/", $frame, $yt_video);
+		$vimeo = preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?vimeo\.com\/([0-9]+)$/", $frame, $vm_video);
+		$dailymotion = preg_match("/^.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/", $frame, $dm_video);
+
+		$twitch = preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?twitch\.tv\/videos\/([0-9]+)$/", $frame, $tw_video);
+
+		$tiktok = preg_match("/^(@[a-zA-z0-9]*|.*)(\/.*\/|trending.?shareId=)([\d]*)/", $frame, $tk_video);
+
+		/*
+
+		"/(?x)https?://(?:(?:www|m)\.(?:tiktok.com)(?:\/)?(@[a-zA-z0-9]*|.*)?(?:v|video|embed|trending)(?:\/)?(?:(\?shareId=|\&item_id=)(\#)$)?)(?P<id>[\da-z]+)/"
+
+		"/^(?:http(?:s)?:\/\/)?(?:(?:www|m)\.(?:tiktok\.com)(?:\/)?(@[a-zA-z0-9]*|.*)?(?:v|video|embed|trending)(?:\/)?(?:\?shareId=)?)(?P<id>[\d]+)/"
+
+		(.*)\/video\/(\d+)
+
+		// /(^http(s)?://)?((www|en-es|en-gb|secure|beta|ro|www-origin|en-ca|fr-ca|lt|zh-tw|he|id|ca|mk|lv|ma|tl|hi|ar|bg|vi|th)\.)?twitch.tv/(?!directory|p|user/legal|admin|login|signup|jobs)(?P<channel>\w+)
+
+
+		 else if($tiktok == true){
+				$type = 'tiktok';
+				$html = '<iframe src="//www.tiktok.com/embed/v2/'.$tk_video[3].'" width="100%" height="100%" frameborder="0"></iframe>';
+
+			}
+
+			*/
+
+		
+		$auparam = '';
+		$autag = '';
+		if($autoplay){
+			$auparam = 'autoplay=1';
+			$autag = ' allow="autoplay"';
+		}
+
+		if($youtube == true || $vimeo == true || $dailymotion == true || $twitch == true){
+			if($youtube == true && strlen($yt_video[1]) == 11){
+				$type = 'youtube';
+				$html = '<iframe src="https://www.youtube.com/embed/'.$yt_video[1]."?{$auparam}".'" width="100%" height="450" frameborder="0" allowfullscreen'.$autag.'></iframe>';
+			} else if($vimeo == true){
+				$type = 'vimeo';
+				$html = '<iframe src="//player.vimeo.com/video/'.$vm_video[1]."?{$auparam}".'" width="100%" height="450" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen'.$autag.'></iframe>';
+			} else if($dailymotion == true){
+				$type = 'dailymotion';
+				$html = '<iframe src="//www.dailymotion.com/embed/video/'.$dm_video[2]."?{$auparam}".'" width="100%" height="450" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen'.$autag.'></iframe>';
+			} else if($twitch == true){
+				$html = '<iframe src="//player.twitch.tv/?video='.$tw_video[1]."&{$auparam}&parent=".$domain.'&autoplay=true" frameborder="0" allowfullscreen="true" scrolling="no" width="100%" height="450" allowfullscreen'.$autag.'></iframe>';
+				//?channel=blastpremier
+			}
+		} else {
+			return array(
+				'return' => false
+			);
+		}
+
+		return array(
+			'return' => true,
+			'type' => $type,
+			'html' => $html
+		);
+	}
+
 	public static function GetSessions($value = array()){
 	    $data = array();
 	    $data['ip'] = 'Unknown';
@@ -508,7 +574,7 @@ class Specific {
 	        if ($was >= 1) {
 	            $was_int = intval($was);
 	            $string = $was_int > 1 ? $value[1] : $value[0];
-	            return "{$TEMP['#word']['published']} {$TEMP['#word']['does']} $was_int $string";
+	            return "{$TEMP['#word']['does']} $was_int $string";
 	        }
 	    }
 	}
@@ -657,10 +723,43 @@ class Specific {
 	    );
 	}
 
-	public static function Fingerprint($data = ''){
+	public static function Fingerprint($user_id = 0){
 		$client_details = self::BrowserDetails();
+		$fingerprint = sha1(md5("{$client_details['validate']['is_mobile']}{$client_details['details']['ip']}{$client_details['details']['userAgent']}{$client_details['details']['name']}{$client_details['details']['version']}{$client_details['details']['platform']}{$client_details['details']['pattern']}{getallheaders()['Accept']}"));
 
-		return sha1(md5("{$client_details['validate']['is_mobile']}{$client_details['details']['ip']}{$client_details['details']['userAgent']}{$client_details['details']['name']}{$client_details['details']['version']}{$client_details['details']['platform']}{$client_details['details']['pattern']}{getallheaders()['Accept']}$data"));
+		return "{$fingerprint}-{$user_id}";
+	}
+
+	public static function MainNews($post_ids = array()){
+		global $dba, $TEMP;
+
+		$query = '';
+		if(!empty($post_ids)){
+			$query = ' AND id NOT IN ('.implode(',', $post_ids).')';
+		}
+
+		$main = $dba->query('SELECT * FROM '.T_POST.' WHERE published_at >= ?'.$query.' ORDER BY published_at ASC LIMIT 15', (time()-(60*60*24*7)))->fetchAll();
+
+		if(count($main) < 15){
+			if(!empty($main)){
+				$main_ids = array();
+				$count = 15-count($main);
+				foreach ($main as $post) {
+					$main_ids[] = $post['id'];
+				}
+				$new_main = $dba->query('SELECT * FROM '.T_POST.' WHERE id NOT IN ('.implode(',', $main_ids).') ORDER BY published_at ASC LIMIT '.$count)->fetchAll();
+				foreach ($new_main as $key => $post) {
+					$main[] = $post;
+				}
+			} else {
+				if(!empty($post_ids)){
+					$query = ' WHERE id NOT IN ('.implode(',', $post_ids).')';
+				}
+				$main = $dba->query('SELECT * FROM '.T_POST.$query.' ORDER BY published_at ASC LIMIT 15')->fetchAll();
+			}
+		}
+
+		return $main;
 	}
 
 	public static function CheckRecaptcha($token){
@@ -768,7 +867,7 @@ class Specific {
 	    return $page;
 	}
 
-	public static function NoScrapping($page, $async = false){
+	public static function HTMLFormatter($page, $async = false){
 		global $TEMP;
 		$page = preg_replace('/<!--[^\[](.*)[^\]]-->/Uuis', '', $page);
 

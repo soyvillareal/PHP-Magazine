@@ -53,9 +53,6 @@ textarea.item-input:focus ~ .item-label {
 .checkbox-popular:checked + .slider-popular{
     background-color: #326891;
 }
-.item-category {
-  min-height: 36px;
-}
 .item-category::-webkit-scrollbar {
     width: 8px;
 }

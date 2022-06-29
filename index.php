@@ -11,6 +11,10 @@ if (isset($one)) {
     }
 }
 
+//"/(?:http(?:s)?:\/\/)?(?:(?:www|m)\.(?:tiktok\.com)(?:\/)?(@[a-zA-z0-9]*|.*)?(?:v|video)(?:\/)?)(?P<id>[\d]+)/"
+
+//'https://www.tiktok.com/foryou?is_copy_url=1&is_from_webapp=v1&item_id=7103185591575088411#/@jd77777778/video/7103185591575088411';
+
 $return = Specific::Filter($_GET[$TEMP['#p_return']]);
 $TEMP['#return_url'] = $TEMP['#site_url'];
 if(!empty($return)){
@@ -41,6 +45,14 @@ if($TEMP['#loggedin'] === true){
     $TEMP['profile_slug'] = Specific::ProfileUrl($TEMP['#user']['username']);
     $TEMP['profile_avatar'] = $TEMP['#user']['avatar_s'];
 }
+
+$TEMP['#categories'] = $dba->query('SELECT * FROM '.T_CATEGORY)->fetchAll();
+$users = $dba->query('SELECT id FROM '.T_USER.' WHERE role = "publisher" OR role = "moderator" OR role = "admin"')->fetchAll();
+$TEMP['#users'] = array();
+foreach ($users as $user){
+    $TEMP['#users'][] = Specific::Data($user['id']);
+}
+
 if (file_exists("./sources/$page")) {
     require_once("./sources/$page");
 } else {
@@ -51,7 +63,6 @@ if (file_exists("./sources/$page")) {
     }
 }
 $TEMP['#pages'] = $dba->query('SELECT * FROM '.T_PAGE)->fetchAll();
-$TEMP['#categories'] = $dba->query('SELECT name, slug, footer FROM '.T_CATEGORY)->fetchAll();
 
 $TEMP['global_title'] = $TEMP['#title'];
 $TEMP['global_description'] = $TEMP['#description'];
@@ -59,9 +70,9 @@ $TEMP['global_keywords'] = $TEMP['#keyword'];
 $TEMP['year_now'] = date('Y');
 $TEMP['time'] = Specific::DateFormat(time(), true);
 $TEMP['content'] = $TEMP['#content'];
-$content = Specific::Maket('wrapper/content');
-$noscrapping = Specific::NoScrapping($content);
-echo $noscrapping['content'];
+$content = Specific::Maket('content');
+$HTMLFormatter = Specific::HTMLFormatter($content);
+echo $HTMLFormatter['content'];
 $dba->close();
 unset($TEMP);
 ?>

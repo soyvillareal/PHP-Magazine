@@ -335,7 +335,6 @@
     z-index: 2;
 }
 .content-category a {
-    background-color: #000;
     padding: 4px 8px;
 }
 @media (max-width: 380px) { 

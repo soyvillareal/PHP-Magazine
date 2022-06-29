@@ -24,6 +24,7 @@ RewriteRule ^ajustes/cuenta$ index.php?one=settings&page=account [NC,QSA]
 RewriteRule ^ajustes/inicios-de-sesion$ index.php?one=settings&page=logins [NC,QSA]
 RewriteRule ^ajustes/cambiar-contrasena$ index.php?one=settings&page=change-password [NC,QSA]
 RewriteRule ^cambiar-correo$ index.php?one=change-email [NC,QSA]
+RewriteRule ^buscar$ index.php?one=search [NC,QSA]
 
 
 RewriteRule ^boletin$ index.php?one=newsletter [NC,QSA]
