@@ -1,0 +1,31 @@
+<div class="content-middle-ntwo margin-r15 padding-r15 border-right border-grely" data-id="{!id_middle}">
+  <div class="item-middle-ntwo position-relative padding-l20 padding-r20">
+    <a class="<?php echo($TEMP['!type_middle'] == 'video') ? 'content-video-animate ' : '';?>hover-all" href="{!url_middle}" target="_self" title="{!title_middle}">
+      <figure class="content-ntwo-image content-gradient position-relative no-hover">
+        <?php if($TEMP['!type_middle'] == 'video'){ ?>
+        <div class="content-vanimate display-flex direction-row align-center position-absolute no-hover">
+          <svg class="icon-video no-hover" viewBox="0 0 40 40">
+            <path class="no-hover" d="M3 40V0l34 20z" fill="#F7F7F7" fill-rule="evenodd"></path>
+            <circle class="no-hover" cx="20" cy="20" r="19" stroke="#F7F7F7" fill="transparent" stroke-width="2px"></circle>
+          </svg>
+        </div>
+        <?php } ?>
+        <picture class="no-hover">
+          <img class="border-rlow" alt="{!title_middle}" title="Resultados loterías y chances lunes" src="{!thumbnail_middle}">
+        </picture>
+        <figcaption class="content-hpublished position-absolute no-hover">
+          <time class="color-white font-lowly ellipsis-horizontal no-hover" datetime="{!published_date_middle}">{!published_at_middle}</time>
+        </figcaption>
+      </figure>
+      <section class="padding-t10 padding-b15">
+        <h3 class="font-postoni-bodo font-big ellipsis-vertical ellipsis-v3 color-black margin-b5 animation-ease3s">{!title_middle}</h3>
+        <p class="font-low ellipsis-vertical ellipsis-v4 color-grey animation-ease3s">{!description_middle}</p>
+      </section>
+    </a>
+    <div class="item-ntwo-one position-absolute">
+      <div class="content-category display-inline-block border-rlow">
+        <a class="btn-noway background-black color-white text-uppercase border-rlow hover-button animation-ease3s" href="{!category_slug_middle}" target="_self">{!category_middle}</a>
+      </div>
+    </div>
+  </div>
+</div>

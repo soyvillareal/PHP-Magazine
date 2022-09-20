@@ -5,21 +5,21 @@ if($one == 'load_more'){
 	$post_ids = json_decode($post_ids);
 
 	if(!empty($post_ids) && is_array($post_ids)){
-		$last_news = Load::LastNews($post_ids);
-		$TEMP['#last_news_one'] = $last_news['last_news_one'];
-		$TEMP['#last_news_two'] = $last_news['last_news_two'];
+		$last_posts = Load::LastPosts($post_ids);
+		$TEMP['#last_posts_one'] = $last_posts['last_posts_one'];
+		$TEMP['#last_posts_two'] = $last_posts['last_posts_two'];
 		
-		if($TEMP['#last_news_one'] == true || $TEMP['#last_news_two'] == true){
-			if($last_news['last_news_one'] == true){
-				$TEMP['last_news_one'] = $last_news['last_news_one_html'];
+		if($TEMP['#last_posts_one'] == true || $TEMP['#last_posts_two'] == true){
+			if($last_posts['last_posts_one'] == true){
+				$TEMP['last_posts_one'] = $last_posts['last_posts_one_html'];
 			}
-			if($last_news['last_news_two'] == true){
-				$TEMP['last_news_two'] = $last_news['last_news_two_html'];
+			if($last_posts['last_posts_two'] == true){
+				$TEMP['last_posts_two'] = $last_posts['last_posts_two_html'];
 			}
 			$deliver = array(
 				'S' => 200,
-				'IDS' => $last_news['home_ids'],
-				'HT' => Specific::Maket('home/includes/more-news')
+				'IDS' => $last_posts['home_ids'],
+				'HT' => Specific::Maket('home/includes/more-posts')
 			);
 		}
 	}
@@ -47,7 +47,7 @@ if($one == 'load_more'){
 
 	if(!empty($post_ids) && is_array($post_ids)){
 
-		$main_left = Specific::MainNews($post_ids);
+		$main_left = Specific::MainPosts($post_ids);
 
 		if(!empty($main_left)){
 			foreach ($main_left as $post) {
@@ -76,7 +76,6 @@ if($one == 'load_more'){
 				'HT' => $html
 			);
 		}
-
 	}
 }
 ?>

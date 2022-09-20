@@ -32,43 +32,17 @@
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.general.min.css}}" />
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.forgot.min.css}}" />
 {%%<script type="text/javascript">
-   $(document).ready(function(){
-      var x = $('#btn-rpassword'),
-          D = $('#email'),
-          F = D.siblings('.text-error'),
-          y = function(e, i){
-            i.attr('disabled', e)
-          },
-          W = function(e){
-            e.addClass('border-red'), e.addClass('boxshadow-red');
-          },
-          P = function(e){
-            e.removeClass('border-red'), e.removeClass('boxshadow-red');
-          },
-          C = function(e){
-            e.removeClass('spinner-is-loading'), e.removeAttr('disabled');
-          };
-      x.click(function(e){
-         var Y = D.val();
-         Y.length == 0 ? (e.preventDefault(), F.text('*{$word->this_field_is_empty}'), W(D)) : ((new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/)).test(Y) ? (x.addClass('spinner-is-loading'), y(!0, x), F.html(''), P(D), $.post("{$url->{req/to-access/forgot-password}}?token={#token_session}", {'email': Y}, function(e){
-                                 e.S == 200 ?
-                                    (C(x), F.text(e.M), F.removeClass('color-red'), F.addClass('color-green'), P(D), setTimeout(function(){
-                                                                     y(!1, x), F.text(''), F.removeClass('color-green'), F.addClass('color-red')
-                                                                  }, 3000))
-                                    :
-                                    (e.S == 401 ? (F.html('*'+e.E), W(D), C(x), e.EE == 'pending' && $('#btn-rcode').click(function(){
-                              var r = $(this);
-                              y(!0, r), r.text('{$word->please_wait}');
-                              $.post("{$url->{req/to-access/resend-code}}?token={#token_session}", {'tokenu': e.TK, 'type': 'verify_email'}, function(e){
-                                 (e.S == 200) ? (F.text(e.M), F.removeClass('color-red'), F.addClass('color-green'), P(D), setTimeout(function(){
-                                                            y(!1, r), F.text(''), F.removeClass('color-green'), F.addClass('color-red')
-                                                         }, 3000)) : (y(!1, r), F.text('*'+e.E))
-                              })
-                           })) : (F.text('*'+e.E), W(D), C(x)));
-                              })) : (e.preventDefault(), F.text('*{$word->enter_a_valid_email}'), W(D)))
-      }), $('.item_input').on('input', function(){
-         var U = $(this);
-         D.val() != '' ? y(!1, x) : y(!0, x), P(D), F.text(''), U.val().length > 0 ? U.addClass('active') : U.removeClass('active');
-      }), D.focus();
-   });
+   paper_af = {
+      token: '{#token_session}',
+      url: {
+         forgot_password: '{$url->{req/to-access/forgot-password}}',
+         resend_code: '{$url->{req/to-access/resend-code}}'
+      },
+      word: {
+         this_field_is_empty: '{$word->this_field_is_empty}',
+         please_wait: '{$word->please_wait}',
+         enter_a_valid_email: '{$word->enter_a_valid_email}'
+      }
+   };
 </script>%%}
+{%%<script src="{$theme->{assets/js/auth/jquery.forgot-password.min.js}}"></script>%%}

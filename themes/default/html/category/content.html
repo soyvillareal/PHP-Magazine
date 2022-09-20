@@ -1,0 +1,93 @@
+<main class="container-pcategory">
+    <div class="content-pcategory display-flex direction-row align-center justify-center h-100px padding-t20 padding-b20 border-bottom border-grely">
+        <h1 class="font-postoni-bodo font-supraly font-bold text-uppercase ellipsis-horizontal">{$category}</h1>
+    </div>
+    <div id="container-sposts" class="container-sposts display-flex">
+        <div class="content-sposts display-flex direction-colum">
+            <h2 class="font-bigly font-bold">{$word->latest_in} {$category}</h2>
+            <section id="content-sresults" class="content-sresults">
+                {$posts_result}
+            </section>
+            <div id="content-load-sc" class="content-load-sc hidden">
+               <div class="padding-b15">
+                  <div class="display-flex direction-colum margin-t15 padding-t15 border-top border-grely">
+                     <div class="display-flex">
+                        <div class="display-flex direction-colum w-100 padding-r10">
+                           <div class="title-sload animate-content-load w-100 color-black margin-b5"></div>
+                           <div class="title-sload animate-content-load w-100 margin-b5"></div>
+                           <div class="title-sload animate-content-load w-50"></div>
+                        </div>
+                        <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                     </div>
+                  </div>
+               </div>
+               <div class="padding-t15 padding-b15 border-top border-grely">
+                  <div class="display-flex direction-colum">
+                     <div class="display-flex">
+                        <div class="display-flex direction-colum w-100 padding-r10">
+                           <div class="title-sload animate-content-load w-100 color-black margin-b5"></div>
+                           <div class="title-sload animate-content-load w-100 margin-b5"></div>
+                           <div class="title-sload animate-content-load w-50"></div>
+                        </div>
+                        <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                     </div>
+                  </div>
+               </div>
+               <div class="padding-t15 padding-b15 border-top border-grely">
+                  <div class="display-flex direction-colum">
+                     <div class="display-flex">
+                        <div class="display-flex direction-colum w-100 padding-r10">
+                           <div class="title-sload animate-content-load w-100 color-black margin-b5"></div>
+                           <div class="title-sload animate-content-load w-100 margin-b5"></div>
+                           <div class="title-sload animate-content-load w-50"></div>
+                        </div>
+                        <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                     </div>
+                  </div>
+               </div>
+               <div class="padding-t15 padding-b15 border-top border-grely">
+                  <div class="display-flex direction-colum">
+                     <div class="display-flex">
+                        <div class="display-flex direction-colum w-100 padding-r10">
+                           <div class="title-sload animate-content-load w-100 color-black margin-b5"></div>
+                           <div class="title-sload animate-content-load w-100 margin-b5"></div>
+                           <div class="title-sload animate-content-load w-50"></div>
+                        </div>
+                        <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+        </div>
+
+        <div id="profile-right" class="profile-right display-none-mob">
+            <div class="theiaStickySidebar">
+               <aside class="content-saside direction-colum h-100 margin-b15 padding-l20">
+                  <div class="content-related-aside display-block position-relative">
+                     <h2 class="color-black font-mediumly font-bold text-uppercase">{$word->recommended_posts}</h2>
+                     <ul>
+                        {$related_aside}   
+                     </ul>
+                  </div>
+                  {$newsletter}
+               </aside>
+            </div>
+         </div>
+    </div>
+</main>
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/category/style.category.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/category-tag/style.category-tag.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/search-profile-category-tag/style.search.related-aside.min.css}}" />%%}
+{%%<script src="{$theme->{assets/js/theia-sticky-sidebar.min.js}}"></script>%%}
+{%%<script type="text/javascript">
+   paper_c = {
+      token: '{#token_session}',
+      url: {
+         load_posts: '{$url->{req/load/catag}}'
+      },
+      type: 'category',
+      catag_id: {$catag_id},
+      catag_ids: [{$catag_ids}]
+   }, $('#profile-right').theiaStickySidebar();
+</script>%%}
+{%%<script src="{$theme->{assets/js/category-tag/jquery.category-tag.min.js}}"></script>%%}

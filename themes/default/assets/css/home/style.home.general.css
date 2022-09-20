@@ -1,78 +1,5 @@
-@keyframes rotate {
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
-@-webkit-keyframes rotate {
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
-}
-@keyframes dash {
-    0% {
-        stroke-dasharray: 1, 150;
-        stroke-dashoffset: 0;
-    }
-    50% {
-        stroke-dasharray: 90, 150;
-        stroke-dashoffset: -35;
-    }
-    100% {
-        stroke-dasharray: 90, 150;
-        stroke-dashoffset: -124;
-    }
-}
-@-webkit-keyframes dash {
-    0% {
-        stroke-dasharray: 1, 150;
-        stroke-dashoffset: 0;
-    }
-    50% {
-        stroke-dasharray: 90, 150;
-        stroke-dashoffset: -35;
-    }
-    100% {
-        stroke-dasharray: 90, 150;
-        stroke-dashoffset: -124;
-    }
-}
-.icon-video {
-    width: 32px;
-    height: 32px;
-}
-.content-vanimate {
-    left: 10px;
-    bottom: 10px;
-    z-index: 1;
-}
-.content-video-animate .icon-video path {
-    transform: scale(1) translateX(0);
-    transform-origin: center center;
-    transition: transform .3s ease-in 0s;
-}
-.content-video-animate .icon-video circle {
-    opacity: 0;
-    transition: opacity .3s ease-out 0s;
-}
 .content-breaking-news span {
     width: 130px;
-}
-.spinner-container {
-    top: 0;
-    left: 50%;
-    z-index: 124;
-    margin-left: -22px;
-    -webkit-animation: rotate 2s linear infinite;
-    animation: rotate 2s linear infinite;
-}
-.spinner-container circle {
-    stroke-dasharray: 1,150;
-    stroke-dashoffset: 0;
-    stroke: #326891;
-    stroke-linecap: round;
-    -webkit-animation: dash 1.5s ease-in-out infinite;
-    animation: dash 1.5s ease-in-out infinite;
 }
 @media (max-width: 767px){
     .content-breaking-news span {
@@ -95,16 +22,5 @@
     }
     .content-breaking-news a {
         width: calc(100% - 90px);
-    }
-}
-@media (pointer: fine){ 
-    .content-video-animate:hover .icon-video path {
-        transform: scale(.5) translateX(4px);
-        transform-origin: center center;
-        transition: transform .3s ease-out 0s;
-    }
-    .content-video-animate:hover .icon-video circle {
-        opacity: 1;
-        transition: opacity .3s ease-in 0s;
     }
 }

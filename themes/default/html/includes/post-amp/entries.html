@@ -1,0 +1,39 @@
+<div class="entry<?php echo(strpos($TEMP['!frame'], 'youtube')) ? ' yt-video' : '' ?> margin-b5" id="section_{!eorder}" entry="{!id}"> 
+    <?php if(!empty($TEMP['!title'])){ ?>
+    <h3 class="sub-title margin-b15<?php echo($TEMP['!type'] == 'carousel') ? ' text-center' : ''?>"> 
+        {!title}
+    </h3>
+    <?php } ?>
+    <?php if($TEMP['!type'] == 'image'){ ?>
+    <div class="entry-image w-100 margin-b15">
+        <figure class="item-entry-figure" aria-label="media" role="group">
+            <picture class="item-entry-picture">
+                <?php if($TEMP['#is_amp'] == true){ ?>
+                <amp-img src="{!frame}" alt="{!title}" width="100" height="100" layout="responsive"></amp-img>
+                <?php } else { ?>
+                <img src="{!frame}" alt="{!title}">
+                <?php } ?>
+            </picture>
+            <?php if(!empty($TEMP['!esource'])){ ?>
+            <figcaption class="color-grey margin-t10 text-center break-all">
+                <span class="font-thumb-source">{!esource}</span>
+            </figcaption>
+            <?php } ?>
+        </figure>
+    </div>
+    <?php } ?>
+    <?php if($TEMP['!type'] == 'carousel'){ ?>
+    {!carousel}
+    <?php } ?>
+    <?php if(in_array($TEMP['!type'], array('video', 'tweet', 'facebookpost', 'embed', 'soundcloud', 'spotify', 'instagrampost', 'tiktok'))){ ?>
+    {!frame}
+    <?php } ?>
+    <?php if($TEMP['!type'] == 'text'){ ?>
+    {!body}
+    <?php if(!empty($TEMP['!esource'])){ ?>
+    <small class="color-grey">
+        {!esource}
+    </small>
+    <?php } ?>
+    <?php } ?>
+</div> 

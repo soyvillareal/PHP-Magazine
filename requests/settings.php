@@ -4,8 +4,13 @@ if($TEMP['#loggedin'] == true){
 		$input = Specific::Filter($_POST['input']);
 		$value = Specific::Filter($_POST['value']);
 
-		if(in_array($input, array('username', 'new_email', 'name', 'surname', 'about', 'birthday', 'gender', 'newsletter', '2check', 'facebook', 'twitter', 'instagram'))){
-			if($input != 'newsletter'){
+		if(in_array($input, array('username', 'new_email', 'name', 'surname', 'about', 'birthday', 'gender', 'newsletter', '2check', 'facebook', 'twitter', 'instagram', 'main_sonet', 'contact_email', 'followers', 'messages'))){
+			if(in_array($input, array('followers', 'messages'))){
+				$shows = Specific::Shows($input, $value);
+				if($shows['return']){
+					$deliver = $shows['data'];
+				}
+			} else if($input != 'newsletter'){
 				$no_emptys = array('username', 'new_email', 'gender', 'birthday');
 				$red_social = array('facebook', 'twitter', 'instagram');
 				if(!empty($value) || !in_array($input, $no_emptys)){
@@ -39,12 +44,16 @@ if($TEMP['#loggedin'] == true){
 					if($input == '2check' && !in_array($value, array('deactivated', 'activated'))){
 						$error = true;
 					}
+					if($input == 'main_sonet' && !in_array($value, $red_social)){
+						$error = true;
+					}
 					if($error == false){
 						if(($input == 'name' && strlen($value) <= 55) || $input != 'name'){
 							if(($input == 'surname' && strlen($value) <= 55) || $input != 'surname'){
 								if(($input == 'username' && preg_match('/^[a-zA-Z0-9]+$/', $value)) || $input != 'username'){
-									if(($input == 'new_email' && filter_var($value, FILTER_VALIDATE_EMAIL)) || $input != 'new_email'){
-										if((in_array($input, $red_social) && preg_match("#^(https?://www\.{$input}.com/(.+?)|https?://{$input}.com/(.+?)|www\.{$input}.com/(.+?))#i", $value) == true || empty($value)) || !in_array($input, $red_social)){
+									$emails = in_array($input, array('new_email', 'contact_email'));
+									if(($emails && (filter_var($value, FILTER_VALIDATE_EMAIL) || ($input == 'contact_email' && empty($value)))) || !$emails){
+										if((in_array($input, $red_social) && filter_var($value, FILTER_VALIDATE_URL) === false || empty($value)) || !in_array($input, $red_social)){
 											$pass = true;
 											if($input == 'birthday'){
 											    if($value[0] == $TEMP['#user']['birth_day'] && $value[1] == $TEMP['#user']['birthday_month'] && $value[2] == $TEMP['#user']['birthday_year']){
@@ -98,12 +107,25 @@ if($TEMP['#loggedin'] == true){
 														$deliver['M'] = $TEMP['#word'][$input];
 													} else {	
 														if($input == 'birthday'){
-															$deliver['M'] = Specific::DateFormat($value);
+															$date_of_birth = Specific::DateFormat($value);
+															$deliver['M'] = "{$TEMP['#word']['date_of_birth']} ({$date_of_birth})";
 														} else if($input == 'gender'){
-															$deliver['M'] = $TEMP['#word'][$value];
+															$deliver['M'] = ucfirst($TEMP['#word']['gender'])." ({$TEMP['#word'][$value]})";
 														} else if($input == '2check'){
 															$deliver['M'] = "{$TEMP['#word']['2check']} ({$TEMP['#word'][$value]})";
+														} else if($input == 'facebook'){
+															$deliver['M'] = "{$TEMP['#word']['facebook']} ({$value})";
+														} else if($input == 'twitter'){
+															$deliver['M'] = "{$TEMP['#word']['twitter']} ({$value})";
+														} else if($input == 'instagram'){
+															$deliver['M'] = "{$TEMP['#word']['instagram']} ({$value})";
+														} else if($input == 'main_sonet'){
+															$deliver['M'] = "{$TEMP['#word']['main_social_network']} (".$TEMP['#word']["{$value}_"].")";
+														} else if($input == 'contact_email'){
+															$deliver['M'] = "{$TEMP['#word']['contact_email']} ({$value})";
 														}
+
+
 													}
 													$deliver['S'] = 200;
 												}
@@ -113,7 +135,7 @@ if($TEMP['#loggedin'] == true){
 										} else {
 											$deliver = array(
 												'S' => 400,
-												'E' => "*{$TEMP['#word']['enter_a_valid_url']}"
+												'E' => "*{$TEMP['#word']['please_enter_valid_username']}"
 											);
 										}
 									} else {
@@ -154,22 +176,28 @@ if($TEMP['#loggedin'] == true){
 						if($dba->query('SELECT COUNT(*) FROM '.T_NEWSLETTER.' WHERE slug = ?', $slug)->fetchArray(true) > 0){
 							$slug = Specific::RandomKey(12, 16);
 						}
-						if($dba->query('INSERT INTO '.T_NEWSLETTER.' (slug, email, created_at) VALUES (?, ?, ?)', $slug, $TEMP['#user']['email'], time())){
+						if($dba->query('INSERT INTO '.T_NEWSLETTER.' (slug, email, created_at) VALUES (?, ?, ?)', $slug, $TEMP['#user']['email'], time())->returnStatus()){
 							$deliver = array(
 								'S' => 200,
 								'M' => "{$TEMP['#word']['newsletter_settings']} ({$TEMP['#word'][$value]})",
-								'HT' => "{$TEMP['#word']['configuration_tells_send_news']} <a class='color-blue hover-button animation-ease3s' href='".Specific::Url("{$TEMP['#r_newsletter']}/$slug")."' target='_self'>{$TEMP['#word']['see_detailed_settings']}</a>"
+								'HT' => "{$TEMP['#word']['configuration_tells_send_news']} <a class='color-blue hover-button animation-ease3s' href='".Specific::Url("{$TEMP['#r_newsletter']}/{$slug}")."' target='_self'>{$TEMP['#word']['see_detailed_settings']}</a>"
 							);
 						}
 					} else {
-						if($dba->query('UPDATE '.T_NEWSLETTER.' SET status = ? WHERE email = ?', $value, $TEMP['#user']['email'])){
-							$deliver['HT'] = $value == 'enabled' ? "{$TEMP['#word']['configuration_tells_send_news']} <a class='color-blue hover-button animation-ease3s' href='".Specific::Url("{$TEMP['#r_newsletter']}/$slug")."' target='_self'>{$TEMP['#word']['see_detailed_settings']}</a>" : $TEMP['#word']['configuration_tells_send_news'];
+						if($dba->query('UPDATE '.T_NEWSLETTER.' SET reason = NULL, status = ? WHERE email = ?', $value, $TEMP['#user']['email'])->returnStatus()){
+							$slug = $dba->query('SELECT slug FROM '.T_NEWSLETTER.' WHERE email = ?', $TEMP['#user']['email'])->fetchArray(true);
+							$deliver['HT'] = $value == 'enabled' ? "{$TEMP['#word']['configuration_tells_send_news']} <a class='color-blue hover-button animation-ease3s' href='".Specific::Url("{$TEMP['#r_newsletter']}/{$slug}")."' target='_self'>{$TEMP['#word']['see_detailed_settings']}</a>" : $TEMP['#word']['configuration_tells_send_news'];
 							$deliver['S'] = 200;
 							$deliver['M'] = "{$TEMP['#word']['newsletter_settings']} ({$TEMP['#word'][$value]})";
 						}
 					}
 				}
 			}
+		}
+	} else if($one == 'shows'){
+		$shows = Specific::Shows($_POST['input'], $_POST['show']);
+		if($shows['return']){
+			$deliver = $shows['data'];
 		}
 	} else if($one == 'send-code'){
 		if(!empty($TEMP['#user']['new_email'])){

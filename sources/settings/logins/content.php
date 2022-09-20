@@ -4,12 +4,6 @@ if ($TEMP['#loggedin'] === false) {
     exit();
 }
 
-if (!empty($user_id)) {
-    $TEMP['href_setting'] = "?id=$user_id";
-    $TEMP['href_settings'] = "&id=$user_id";
-}
-
-
 $user_sessions = $dba->query('SELECT * FROM session WHERE user_id = '.$TEMP['#user']['id'].' ORDER BY id DESC LIMIT ? OFFSET ?', 10, 1)->fetchAll();
 $TEMP['#total_pages'] = $dba->totalPages;
 

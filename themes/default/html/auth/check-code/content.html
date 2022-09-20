@@ -33,102 +33,27 @@
 </main>
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.general.min.css}}" />
 {%%<script type="text/javascript">
-   $(document).ready(function(){
-      var k = $('.input_key'),
-          l = $('.number'),
-          m = $('#one'),
-          n = $('#two'),
-          o = $('#three'),
-          p = $('#four'),
-          q = $('#five'),
-          w = $('#six'),
-          x = $('#btn-login'),
-          v = "{$token}",
-          j = $('#btn-rcode'),
-          g = m.parent().siblings('.text-error'),
-          r = function(){
-            var Q = m.val() != '' && n.val() != '' && o.val() != '' && p.val() != '' && q.val() != '' && w.val() != '';
-            k.each(function(){
-               var h = $(this);
-               h.val() == '' ? (f(h), g.text('*{$word->this_field_is_empty}')) : (h.removeClass('border-red'), h.removeClass('boxshadow-red'), Q && g.text(''));
-            });
-            if(!Q) return false;
-            x.addClass('spinner-is-loading'), y(x, !0);
-            <?php if($TEMP['#page'] != 'change-email'){ ?>
-            $.post("{$url->{req/to-access/verify-code}}?token={#token_session}", {'code': m.val()+n.val()+o.val()+p.val()+q.val()+w.val(), 'return_url': '{#return_url}', 'type': '{$type}'}, function(e){
-               e.S == 200 ? window.location = e.UR : (x.removeClass('spinner-is-loading'), y(x, !1), f(k), g.text('*'+e.E))
-            })
-            <?php } else { ?>
-            $.post("{$url->{req/settings/verify-code}}?token={#token_session}", {'code': m.val()+n.val()+o.val()+p.val()+q.val()+w.val()}, function(e){
-               e.S == 200 ? window.location = '{$url->{{#r_settings}}}' : (x.removeClass('spinner-is-loading'), y(x, !1), f(k), g.text('*'+e.E))
-            })
-            <?php } ?>
-          },
-          y = function(e, i){
-            e.attr('disabled', i)
-          },
-          s = function(e){
-            e.removeClass('border-red'), e.removeClass('boxshadow-red')
-          },
-          f = function(e){
-            e.addClass('border-red'), e.addClass('boxshadow-red')
-          };
-
-      <?php echo(empty($TEMP['#descode'])) ? 'm.focus()' : 'r()'?>, x.click(r), j.click(function(){
-         y(j, !0), j.text('{$word->please_wait}');
-         <?php if($TEMP['#page'] != 'change-email'){ ?>
-         $.post("{$url->{req/to-access/resend-code}}?token={#token_session}", {'tokenu': v, 'type': '{$type}'}, function(e){
-               e.S == 200 ? (v = e.TK, window.history.pushState({state:'new'}, '', '{$url}/'+v+'{#return_param}'), j.addClass('color-green'), j.removeClass('color-black'), j.text(e.M), setTimeout(function(){
-                  j.addClass('color-black'), j.removeClass('color-green'), j.text('{$word->resend_code}'), y(j, !1);
-               }, 3000)) : (j.addClass('color-red'), j.removeClass('color-black'), j.text('*'+e.E), setTimeout(function(){
-                  j.addClass('color-black'), j.removeClass('color-red'), j.text('{$word->resend_code}'), y(j, !1);
-               }, 3000))
-         })
-         <?php } else { ?>
-         $.post("{$url->{req/settings/send-code}}?token={#token_session}", function(e){
-            (e.S == 200) ? (j.addClass('color-green'), j.removeClass('color-black'), j.text(e.M), setTimeout(function(){
-                  j.addClass('color-black'), j.removeClass('color-green'), j.text('{$word->resend_code}'), y(j, !1);
-               }, 3000)) : (j.addClass('color-red'), j.removeClass('color-black'), j.text('*'+e.E), setTimeout(function(){
-                  j.addClass('color-black'), j.removeClass('color-red'), j.text('{$word->resend_code}'), y(j, !1);
-               }, 3000))
-         })
-         <?php } ?>
-      }), l.on('input', function(){
-         $(this).val() == '' ? y(x, !0) : $(this).val($(this).val().replace(/[^0-9]/gi, ''));
-      }), l.on('paste', function(e){
-         var u = e.originalEvent.clipboardData.getData('text');
-         u && !/[^0-9]/gi.test(u) && (m.val(u.slice(0,1)), n.val(u.slice(1,2)), o.val(u.slice(2,3)), p.val(u.slice(3,4)), q.val(u.slice(4,5)), w.val(u.slice(5,6)), $(k[k.length-1]).focus(), r())
-      }), k.on('input', function(e){
-         m.val() != '' && n.val() != '' && o.val() != '' && p.val() != '' && q.val() != '' && w.val() != '' && y(x, !1), m.val() == '' && n.val() == '' && o.val() == '' && p.val() == '' && q.val() == '' && w.val() == '' && (s(k), g.text('')), $(this).val().length > 1 && $(this).val($(this).val().slice(0, 1))
-      }), k.keydown(function(e){
-         var i = $(this),
-             z = k.index(i),
-             d = $(k[z-1]),
-             t = e.which || e.keyCode,
-             a = {48: 0, 49: 1, 50: 2, 51: 3, 52: 4, 53: 5, 54: 6, 55: 7, 56: 8, 57: 9},
-             b = {96: 0, 97: 1, 98: 2, 99: 3, 100: 4, 101: 5, 102: 6, 103: 7, 104: 8, 105: 9},
-             c = function(){
-               setTimeout(function(){
-                  $(k[z+1]).focus();
-               })
-             };
-
-         ([13, 8, 37, 38, 39, 40].indexOf(t) == -1 && ((t > 47 && t < 58) || (t > 95 && t < 106)) && !((e.ctrlKey || e.metaKey) && t == 86))
-         ?
-         (i.val().length > 0 && ((t > 47 && t < 58) ? i.val(a[t]) : i.val(b[t])), c())
-         : ((t == 8) 
-            ? 
-            ((m.val() == '' || n.val() == '' || o.val() == '' || p.val() == '' || q.val() == '' || w.val() == '') && y(x, !0), setTimeout(function(){
-               $(k[z]).val(''), d.focus();
-            }))
-            :
-            ((t == 37 || t == 40)
-               ?
-               setTimeout(function(){
-                  d.focus();
-               })
-               :
-               (t == 39 || t == 38) && c()))
-      });
-   });
+   paper_ac = {
+      token: '{#token_session}',
+      return_url: '{#return_url}',
+      return_param: '{#return_param}',
+      url: {
+         sverify_code: '{$url->{req/settings/verify-code}}',
+         tverify_code: '{$url->{req/to-access/verify-code}}',
+         sresend_code: '{$url->{req/settings/send-code}}',
+         tresend_code: '{$url->{req/to-access/resend-code}}',
+         r_settings: '{$url->{{#r_settings}}}'
+      },
+      word: {
+         please_wait: '{$word->please_wait}',
+         resend_code: '{$word->resend_code}',
+         this_field_is_empty: '{$word->this_field_is_empty}'
+      },
+      page: '{#page}',
+      type: '{$type}',
+      descode: '{#descode}',
+      tokenu: '{$token}',
+      url_check: '{$url}'
+   };
 </script>%%}
+{%%<script src="{$theme->{assets/js/auth/jquery.check-code.min.js}}"></script>%%}

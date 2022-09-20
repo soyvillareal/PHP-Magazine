@@ -1,0 +1,88 @@
+<?php
+
+$username = Specific::Filter($_GET['username']);
+
+if(empty($username)){
+	header("Location: " . Specific::Url('404'));
+	exit();
+}
+
+$user = $dba->query('SELECT * FROM '.T_USER.' WHERE username = ?', $username)->fetchArray();
+
+if(empty($user)){
+	header("Location: " . Specific::Url('404'));
+	exit();
+}
+
+$TEMP['#profile'] = $user = Specific::Data($user, 3);
+
+$profile_load = Load::Profile($user['id']);
+
+$TEMP['posts_result'] = $profile_load['html'];
+
+$query = '';
+if(!empty($profile_load['profile_ids'])){
+	$query = ' AND id NOT IN ('.implode(',', $profile_load['profile_ids']).')';
+}
+
+$related_cat = $dba->query('SELECT * FROM '.T_POST.' WHERE status = "approved"'.$query.' ORDER BY RAND() DESC LIMIT 5')->fetchAll();
+
+if(!empty($related_cat)){
+	foreach ($related_cat as $rlc) {
+		$category = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $rlc['category_id'])->fetchArray();
+		$TEMP['!type'] = $rlc['type'];
+
+		$TEMP['!key'] += 1;
+		$TEMP['!title'] = $rlc['title'];
+		$TEMP['!category'] = $category['name'];
+		$TEMP['!category_slug'] = $category['slug'];
+		$TEMP['!url'] = Specific::Url($rlc['slug']);
+		$TEMP['!thumbnail'] = Specific::GetFile($rlc['thumbnail'], 1, 's');
+		$TEMP['!published_date'] = date('c', $rlc['published_at']);
+		$TEMP['!published_at'] = Specific::DateString($rlc['published_at']);
+		$TEMP['related_aside'] .= Specific::Maket('includes/search-post-profile-category-tag/related-aside');
+	}
+	Specific::DestroyMaket();
+}
+
+$TEMP['user'] = $username;
+$TEMP['username'] = $user['username'];
+$TEMP['birthday_format'] = $user['birthday_format'];
+$TEMP['gender_txt'] = $user['gender_txt'];
+$TEMP['avatar_b'] = $user['avatar_b'];
+$TEMP['profile_ids'] = implode(',', $profile_load['profile_ids']);
+
+$TEMP['#user_id'] = $user['id'];
+$TEMP['#contact_email'] = $user['contact_email'];
+$TEMP['#twitter'] = $user['twitter'];
+$TEMP['#instagram'] = $user['instagram'];
+$TEMP['#facebook'] = $user['facebook'];
+$TEMP['#about'] = $user['about'];
+$TEMP['#followers'] = $dba->query('SELECT COUNT(*) FROM '.T_FOLLOWER.' WHERE profile_id = ?', $user['id'])->fetchArray(true);
+
+$followers = Specific::NumberShorten($TEMP['#followers']);
+$TEMP['followers'] = "{$followers} {$TEMP['#word']['follower']}";
+if($TEMP['#followers'] > 1){
+	$TEMP['followers'] = "{$followers} {$TEMP['#word']['followers']}";
+}
+
+$TEMP['#type'] = 'follow';
+$TEMP['btn_ftext'] = $TEMP['#word']['follow'];
+
+if($dba->query('SELECT COUNT(*) FROM '.T_FOLLOWER.' WHERE user_id = ? AND profile_id = ?', $TEMP['#user']['id'], $user['id'])->fetchArray(true) > 0){
+	$TEMP['#type'] = 'following';
+	$TEMP['btn_ftext'] = $TEMP['#word']['following'];
+}
+
+$TEMP['form_newsletter'] = Specific::Maket('includes/search-post-profile-category-tag/includes/form-newsletter');
+$TEMP['newsletter'] = Specific::Maket('includes/search-post-profile-category-tag/newsletter');
+
+
+
+$TEMP['#page']        = 'user';
+$TEMP['#title']       = $user['username'] . ' - ' . $TEMP['#settings']['title'];
+$TEMP['#description'] = $TEMP['#settings']['description'];
+$TEMP['#keyword']     = $TEMP['#settings']['keyword'];
+
+$TEMP['#content']     = Specific::Maket("user/content");
+?>

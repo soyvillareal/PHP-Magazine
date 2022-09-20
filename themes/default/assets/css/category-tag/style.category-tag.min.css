@@ -1,0 +1,15 @@
+.container-pcategory .content-pcategory {
+	margin-bottom: 20px;
+}
+@media(max-width: 590px){
+	.container-pcategory .content-pcategory {
+		padding: 0 12px;
+		margin-bottom: 12px;
+	}
+	.content-pcategory h1 {
+		font-size: 28px;
+	}
+	.content-sposts h2 {
+		font-size: 17px;
+	}
+}

@@ -22,7 +22,7 @@
                                 <strong>{$word->enter_a_new} {$word->username}</strong>
                             </div>
                             <div class="content-fields w-100 position-relative">
-                                <input id="username" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue text-capitalize sizing-box<?php echo(!empty($TEMP['#user']['username'])) ? ' active' : '';?>" type="text"<?php echo(time() < $TEMP['#user']['user_changed']) ? ' readonly' : '';?> maxlength="16" aria-label="{$word->username}" autocomplete="username" autocapitalize="off" data-send="username" value="{$me->username}">
+                                <input id="username" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue text-capitalize sizing-box animation-ease3s<?php echo(!empty($TEMP['#user']['username'])) ? ' active' : '';?>" type="text"<?php echo(time() < $TEMP['#user']['user_changed']) ? ' readonly' : '';?> maxlength="16" aria-label="{$word->username}" autocomplete="username" autocapitalize="off" data-send="username" value="{$me->username}">
                                 <div class="color-red text-left text-error font-low margin-t5"></div>
                                 <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->username}</label>
                                 <div class="content-spinner-circle position-absolute">
@@ -69,7 +69,7 @@
                                 <strong>{$word->enter_a_new} {$word->email}</strong>
                             </div>
                             <div class="content-fields w-100 position-relative">
-                                <input id="new_email" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box<?php echo(!empty($TEMP['#user']['email']) ||!empty($TEMP['#user']['new_email'])) ? ' active' : '';?>" type="text" aria-label="{$word->email}" autocomplete="new_email" autocapitalize="off" data-send="new_email" value="{$email}">
+                                <input id="new_email" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s<?php echo(!empty($TEMP['#user']['email']) ||!empty($TEMP['#user']['new_email'])) ? ' active' : '';?>" type="text" aria-label="{$word->email}" autocomplete="new_email" autocapitalize="off" data-send="new_email" value="{$email}">
                                 <div class="color-red text-left text-error font-low margin-t5"></div>
                                 <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->email}</label>
                                 <div class="content-spinner-circle position-absolute">
@@ -200,6 +200,13 @@
                                             <?php } ?>
                                         </select>
                                     </div>
+                                    <div class="display-flex direction-row align-center margin-t10">
+                                        <span class="color-black">{$word->show_on_my_profile}</span>
+                                        <label class="ishow-checkbox display-inline-block position-relative margin-l5">
+                                           <input class="ishow_check hidden" data-send="birthday" type="checkbox"<?php echo($TEMP['#user']['shows']['birthday'] == 'on') ? ' checked' : '';?>>
+                                           <span class="slider-check position-absolute background-grely cursor-pointer animation-ease3s"></span>
+                                        </label>
+                                    </div>
                                     <div class="color-red text-left text-error font-low margin-t5"></div>
                                 </div>
                             </div>
@@ -233,7 +240,14 @@
                                 <select id="gender" class="item_input color-black padding-l10 border-focus-blue border-rlow border-all border-grely caret-down background-grely animation-ease3s" data-send="gender">
                                     <option value="male" <?php echo ($TEMP['#user']['gender'] == 'male') ? 'selected': '';?>>{$word->male}</option>
                                     <option value="female" <?php echo ($TEMP['#user']['gender'] == 'female') ? 'selected': '';?>>{$word->female}</option>
-                                </select>
+                                </select> 
+                                <div class="display-flex direction-row align-center margin-t10">
+                                    <span class="color-black">{$word->show_on_my_profile}</span>
+                                    <label class="ishow-checkbox display-inline-block position-relative margin-l5">
+                                       <input class="ishow_check hidden" data-send="gender" type="checkbox"<?php echo($TEMP['#user']['shows']['gender'] == 'on') ? ' checked' : '';?>>
+                                       <span class="slider-check position-absolute background-grely cursor-pointer animation-ease3s"></span>
+                                    </label>
+                                </div>
                                 <div class="color-red text-left text-error font-low margin-t5"></div>
                             </div>
                             <div class="margin-t10">
@@ -327,7 +341,7 @@
                                 <strong>{$word->enter_a_new} {$word->name}</strong>
                             </div>
                             <div class="w-100 position-relative">
-                                <input id="name" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue text-capitalize sizing-box<?php echo(!empty($TEMP['#user']['name'])) ? ' active' : '';?>" type="text" aria-label="{$word->name}" autocomplete="name" autocapitalize="off" data-send="name" value="{$me->name}">
+                                <input id="name" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue text-capitalize sizing-box animation-ease3s<?php echo(!empty($TEMP['#user']['name'])) ? ' active' : '';?>" type="text" aria-label="{$word->name}" autocomplete="name" autocapitalize="off" data-send="name" value="{$me->name}">
                                 <div class="color-red text-left text-error font-low margin-t5"></div>
                                 <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->name}</label>
                             </div>
@@ -355,7 +369,7 @@
                                 <strong>{$word->enter_a_new} {$word->surname}</strong>
                             </div>
                             <div class="w-100 position-relative">
-                                <input id="surname" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue text-capitalize sizing-box<?php echo(!empty($TEMP['#user']['surname'])) ? ' active' : '';?>" type="text" aria-label="{$word->surname}" autocomplete="surname" autocapitalize="off" data-send="surname" value="{$me->surname}">
+                                <input id="surname" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue text-capitalize sizing-box animation-ease3s<?php echo(!empty($TEMP['#user']['surname'])) ? ' active' : '';?>" type="text" aria-label="{$word->surname}" autocomplete="surname" autocapitalize="off" data-send="surname" value="{$me->surname}">
                                 <div class="color-red text-left text-error font-low margin-t5"></div>
                                 <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->surname}</label>
                             </div>
@@ -382,7 +396,7 @@
                                 <strong>{$word->enter_a_new_} {$word->description}</strong>
                             </div>
                             <div class="w-100 position-relative">
-                                <textarea id="about" class="item_input background-white color-black w-100 padding-t25 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box<?php echo(!empty($TEMP['#user']['about'])) ? ' active' : '';?>" type="text" aria-label="{$me->about}" maxlength="500" autocomplete="about" autocapitalize="off" data-send="about">{$about_br2nl}</textarea>
+                                <textarea id="about" class="item_input background-white color-black w-100 padding-t25 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s<?php echo(!empty($TEMP['#user']['about'])) ? ' active' : '';?>" type="text" aria-label="{$me->about}" maxlength="500" autocomplete="about" autocapitalize="off" data-send="about">{$about_br2nl}</textarea>
                                 <div class="color-red text-left text-error font-low margin-t5"></div>
                                 <label class="item-label background-white w-100 first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->description}</label>
                             </div>
@@ -415,7 +429,7 @@
                                 <strong>{$word->enter_a_new} {$word->facebook}</strong>
                             </div>
                             <div class="w-100 position-relative">
-                                <input id="facebook" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box<?php echo(!empty($TEMP['#user']['facebook'])) ? ' active' : '';?>" type="text" aria-label="{$word->facebook}" autocomplete="facebook" autocapitalize="off" data-send="facebook" value="{$me->facebook}">
+                                <input id="facebook" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s<?php echo(!empty($TEMP['#user']['facebook'])) ? ' active' : '';?>" type="text" aria-label="{$word->facebook}" autocomplete="facebook" autocapitalize="off" data-send="facebook" value="{$me->facebook}">
                                 <div class="color-red text-left text-error font-low margin-t5"></div>
                                 <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->facebook}</label>
                             </div>
@@ -442,7 +456,7 @@
                                 <strong>{$word->enter_a_new} {$word->twitter}</strong>
                             </div>
                             <div class="w-100 position-relative">
-                                <input id="twitter" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box<?php echo(!empty($TEMP['#user']['twitter'])) ? ' active' : '';?>" type="text" aria-label="{$word->twitter}" autocomplete="twitter" autocapitalize="off" data-send="twitter" value="{$me->twitter}">
+                                <input id="twitter" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s<?php echo(!empty($TEMP['#user']['twitter'])) ? ' active' : '';?>" type="text" aria-label="{$word->twitter}" autocomplete="twitter" autocapitalize="off" data-send="twitter" value="{$me->twitter}">
                                 <div class="color-red text-left text-error font-low margin-t5"></div>
                                 <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->twitter}</label>
                             </div>
@@ -469,7 +483,7 @@
                                 <strong>{$word->enter_a_new} {$word->instagram}</strong>
                             </div>
                             <div class="w-100 position-relative">
-                                <input id="instagram" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box<?php echo(!empty($TEMP['#user']['instagram'])) ? ' active' : '';?>" type="text" aria-label="{$word->instagram}" autocomplete="instagram" autocapitalize="off" data-send="instagram" value="{$me->instagram}">
+                                <input id="instagram" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s<?php echo(!empty($TEMP['#user']['instagram'])) ? ' active' : '';?>" type="text" aria-label="{$word->instagram}" autocomplete="instagram" autocapitalize="off" data-send="instagram" value="{$me->instagram}">
                                 <div class="color-red text-left text-error font-low margin-t5"></div>
                                 <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->instagram}</label>
                             </div>
@@ -485,6 +499,137 @@
                         </form>
                     </div>
                 </div>
+
+
+                <div class="container_collapse font-mediumly margin-b10">
+                    <div class="content_cheader display-flex">
+                        <label class="text_label first-capitalize ellipsis-horizontal">{$main_social_network}</label>
+                        <button class="btn_collapse btn-noway color-blue inhover-underline">{$word->change}</button>
+                    </div>
+                    <div class="content_citems margin-b15 margin-b5 hidden">
+                        <form novalidate>
+                            <div class="margin-b10">
+                                <strong>{$word->enter_a_new_} {$word->main_social_network}</strong>
+                            </div>
+                            <div class="w-100 position-relative">
+                                <select id="main_sonet" class="item_input color-black padding-l10 border-focus-blue border-rlow border-all border-grely caret-down background-grely animation-ease3s" data-send="main_sonet">
+                                    <option value="facebook" <?php echo ($TEMP['#user']['main_sonet'] == 'facebook') ? 'selected': '';?>>{$word->facebook_}</option>
+                                    <option value="twitter" <?php echo ($TEMP['#user']['main_sonet'] == 'twitter') ? 'selected': '';?>>{$word->twitter_}</option>
+                                    <option value="instagram" <?php echo ($TEMP['#user']['main_sonet'] == 'instagram') ? 'selected': '';?>>{$word->instagram_}</option>
+                                </select>
+                                <div class="color-red text-left text-error font-low margin-t5"></div>
+                            </div>
+                            <div class="margin-t10">
+                                <button class="btn_save btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit" disabled>
+                                   <span class="color-white">{$word->save}</span>
+                                   <div class="content-spinner-circle position-absolute">
+                                      <div class="spinner-circle"></div>
+                                   </div>
+                                </button>
+                                <button type="button" class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                            </div>
+                        </form>
+                        <div class="margin-b10">{$word->setting_helps_understand_social_network}</div>
+                    </div>
+                </div>
+
+                <span class="display-block font-big font-bold padding-t10">{$word->other_settings}</span>
+                <div class="container_collapse font-mediumly margin-t15 margin-b10">
+                    <div class="content_cheader display-flex">
+                        <label class="text_label first-capitalize ellipsis-horizontal">{$contact_email}</label>
+                        <button class="btn_collapse btn-noway color-blue inhover-underline">{$word->change}</button>
+                    </div>
+                    <div class="content_citems margin-b15 margin-b5 hidden">
+                        <form novalidate>
+                            <div class="margin-b10">
+                                <strong>{$word->enter_a_new} {$word->contact_email}</strong>
+                            </div>
+                            <div class="w-100 position-relative">
+                                <input id="contact_email" class="item_input background-white color-black w-100 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s<?php echo(!empty($TEMP['#user']['contact_email'])) ? ' active' : '';?>" type="text" aria-label="{$word->contact_email}" autocomplete="contact_email" autocapitalize="off" data-send="contact_email" value="{$me->contact_email}">
+                                <div class="display-flex direction-row align-center margin-t10">
+                                    <span class="color-black">{$word->show_on_my_profile}</span>
+                                    <label class="ishow-checkbox display-inline-block position-relative margin-l5">
+                                        <input class="ishow_check hidden" data-send="contact_email" type="checkbox"<?php echo($TEMP['#user']['shows']['contact_email'] == 'on') ? ' checked' : '';?>>
+                                        <span class="slider-check position-absolute background-grely cursor-pointer animation-ease3s"></span>
+                                    </label>
+                                </div>
+                                <div class="color-red text-left text-error font-low margin-t5"></div>
+                                <label class="item-label first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->contact_email}</label>
+                            </div>
+                            <div class="margin-t10">
+                                <button class="btn_save btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit" disabled>
+                                   <span class="color-white">{$word->save}</span>
+                                   <div class="content-spinner-circle position-absolute">
+                                      <div class="spinner-circle"></div>
+                                   </div>
+                                </button>
+                                <button type="button" class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="container_collapse font-mediumly margin-b10">
+                    <div class="content_cheader display-flex">
+                        <label class="text_label first-capitalize ellipsis-horizontal">{$followers}</label>
+                        <button class="btn_collapse btn-noway color-blue inhover-underline">{$word->change}</button>
+                    </div>
+                    <div class="content_citems margin-b15 margin-b5 hidden">
+                        <form novalidate>
+                            <div class="margin-b10">
+                                <strong>{$word->enter_a_new_} {$word->followers_settings}</strong>
+                            </div>
+                            <div class="w-100 position-relative">
+                                <select id="followers" class="item_input color-black padding-l10 border-focus-blue border-rlow border-all border-grely caret-down background-grely animation-ease3s" data-send="followers">
+                                    <option value="false"<?php echo ($TEMP['#user']['shows']['followers'] == 'off') ? ' selected': '';?>>{$word->disabled}</option>
+                                    <option value="true"<?php echo ($TEMP['#user']['shows']['followers'] == 'on') ? ' selected': '';?>>{$word->enabled}</option>
+                                </select>
+                                <div class="color-red text-left text-error font-low margin-t5"></div>
+                            </div>
+                            <div class="margin-t10">
+                                <button class="btn_save btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit" disabled>
+                                   <span class="color-white">{$word->save}</span>
+                                   <div class="content-spinner-circle position-absolute">
+                                      <div class="spinner-circle"></div>
+                                   </div>
+                                </button>
+                                <button type="button" class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                            </div>
+                        </form>
+                        <div class="margin-b10">{$word->setting_allows_users_followers}</div>
+                    </div>
+                </div>
+                <div class="container_collapse font-mediumly margin-b10">
+                    <div class="content_cheader display-flex">
+                        <label class="text_label first-capitalize ellipsis-horizontal">{$messages}</label>
+                        <button class="btn_collapse btn-noway color-blue inhover-underline">{$word->change}</button>
+                    </div>
+                    <div class="content_citems margin-b15 margin-b5 hidden">
+                        <form novalidate>
+                            <div class="margin-b10">
+                                <strong>{$word->enter_a_new_} {$word->message_settings}</strong>
+                            </div>
+                            <div class="w-100 position-relative">
+                                <select id="messages" class="item_input color-black padding-l10 border-focus-blue border-rlow border-all border-grely caret-down background-grely animation-ease3s" data-send="messages">
+                                    <option value="false"<?php echo ($TEMP['#user']['shows']['messages'] == 'off') ? ' selected': '';?>>{$word->disabled}</option>
+                                    <option value="true"<?php echo ($TEMP['#user']['shows']['messages'] == 'on') ? ' selected': '';?>>{$word->enabled}</option>
+                                </select>
+                                <div class="color-red text-left text-error font-low margin-t5"></div>
+                            </div>
+                            <div class="margin-t10">
+                                <button class="btn_save btn-noway w-100px h-36 background-blue color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" type="submit" disabled>
+                                   <span class="color-white">{$word->save}</span>
+                                   <div class="content-spinner-circle position-absolute">
+                                      <div class="spinner-circle"></div>
+                                   </div>
+                                </button>
+                                <button type="button" class="btn_ccancel btn-noway w-100px h-36 background-red color-white font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">{$word->cancel}</button>
+                            </div>
+                        </form>
+                        <div class="margin-b10">{$word->setting_allows_decide_receive_messages}</div>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -492,173 +637,30 @@
 </div>
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/settings/style.settings.account.css}}" />
 {%%<script type="text/javascript">
-    $(document).ready(function(){
-        var s = $('#username'),
-            d = $('#day'),
-            m = $('#month'),
-            y = $('#year'),
-            W = $('#btn-verify-email'),
-            H = $('#btn-show-verify'),
-            S = W.siblings('.text-error'),
-            A = $('#content-vemail'),
-            J = $('#email-alert'),
-            X = $('#upload-file'),
-            N = $('#btn-upload'),
-            AA = N.parent().siblings('.text-error'),
-            GG = $('#text-email-count'),
-            JJ = GG.parent(),
-            L = $('#btn-ucancel'),
-            C = $('#content-avatar img'),
-            D = A.children(),
-            FF = $('.text_email'),
-            h = function(){
-                var x = $(this),
-                    g = x.parents('.container_collapse'),
-                    y = x.parents('form'),
-                    c = y.find('.item_input'),
-                    v = y.find('.text-error');
-                z(g.find('.content_cheader')), z(g.find('.content_citems')), v.text(''), q(c)<?php if($TEMP['#user']['type'] != 'normal'){ ?>, Z($('#content-disconnect')), z(y)<?php } ?>;
-            },
-            l = function(){
-                var g = $(this).parents('.container_collapse');
-                z(A), z(g.find('.content_cheader'));
-            },
-            u = function(i, e){
-                var p = i.parent();
-                p.addClass('spinner-is-loading'), $.post("{$url->{req/to-access/validate}}?token={#token_session}", e, function(e){
-                   e.S == 200 ? (n(p), i.siblings('.text-error').text(e.E), b(i)) : n(p);
-                })
-            },
-            M = function(e){
-                C.attr('src', e), Z(C), B = !0, BB = !0, N.text('{$word->upload}'), AA.text(''), Z(L), L.text('{$word->cancel}'), N.blur()
-            },
-            Z = function(e){
-                e.removeClass('hidden')
-            },
-            EE = function(e){
-                e.addClass('hidden')
-            },
-            z = function(e){
-                e.toggleClass('hidden')
-            },
-            t = function(e, i){
-                e.attr('disabled', i)
-            },
-            n = function(e){
-                e.removeClass('spinner-is-loading'), t(e, !0)
-            },
-            b = function(e){
-                e.addClass('border-red'), e.addClass('boxshadow-red')
-            },
-            q = function(e){
-                e.removeClass('border-red'), e.removeClass('boxshadow-red');
-            },
-            Q = [{$me->birth_day}, {$me->birthday_month}, {$me->birthday_year}],
-            CC = '{$me->avatar_s}',
-            B = !1,
-            BB = !1,
-            DD = {$default_holder},
-            I;
-
-        <?php if($TEMP['#user']['type'] != 'normal'){ ?>$('#btn-disconnect').click(function(){
-            var K = $(this).parent();
-            K.siblings('form').removeAttr('class'), EE(K);
-        }), <?php } ?>N.click(function(){
-            if(B){
-                I = new FormData(), I.append('avatar', X[0].files[0]), N.text('{$word->please_wait}'), t(N, !0), AA.text(''), $.ajax({
-                    url: "{$url->{req/settings/upload-avatar}}?token={#token_session}",
-                    type: 'POST',
-                    data: I,
-                    contentType: false,
-                    processData: false,
-                    success: function(e) {
-                        if(e.S == 200){
-                            N.text(e.EM), X.val(''), t(N, !1), DD = 1, CC = e.AV, L.text(e.ED), B = !1, BB = !1, Z(L);
-                        } else {
-                            N.text(e.EM), X.val(''), t(N, !1), e.DH == 1 && (L.text(e.ED), BB = !1), B = !1, C.attr('src', CC), AA.text(e.E);
-                        }
-                    }
-                });
-            } else {
-                X.trigger('click');
-            }
-        }), L.click(function(){
-            BB ? (C.attr('src', CC), X.val(''), B = !1, BB = !1, N.text('{$word->upload_a_picture}'), L.text('{$word->delete}'), AA.text(''), DD == 0 && EE(L)) : (L.text('{$word->please_wait}'), t(L, !0), AA.text(''), $.post("{$url->{req/settings/reset-avatar}}?token={#token_session}", function(e){
-                    e.S == 200 ? (DD = 0, CC = e.AV, C.attr('src', CC), N.text(e.EM), EE(L), L.text(e.ED), t(L, !1), N.blur()) : (AA.text(e.E));
-                }));
-        }), X.change(function(){
-            if (this.files && this.files[0]) {
-                var V = new FileReader();
-                if(V && V.readAsDataURL){
-                    V.readAsDataURL(this.files[0]), $(V).on('load', function(){
-                        M(V.result)
-                    })
-                } else if(window.URL.createObjectURL){
-                    M(window.URL.createObjectURL(this.files[0]))
-                }
-            }
-        }), $('.btn_cgeneral').click(function(){
-                var g = $(this).parents('.container_cgeneral'), k = $(this).find('svg');
-                z(g.find('.content_cgitems')), !k.attr('transform') ? k.attr('transform', 'rotate(180)') : k.removeAttr('transform');
-        }), $('.btn_save').click(function(e){
-            e.preventDefault();
-            var x = $(this),
-                y = x.parents('form'),
-                F = x.parents('.container_collapse'),
-                G = F.find('.text_label'),
-                c = y.find('.item_input'),
-                v = y.find('.text-error'),
-                w =  c.attr('data-send'),
-                r = w != 'birthday' ? c.val() : JSON.stringify(Q);
-
-            x.addClass('spinner-is-loading'), t(x, !0), $.post("{$url->{req/settings/account}}?token={#token_session}", {'input': w, 'value': r}, function(e) {
-                if(e.S == 200) {
-                    G.html(e.M), z(F.find('.content_cheader')), z(F.find('.content_citems')), q(c), n(x), w == 'new_email' && (e.EQ == 1 ? ($(FF[0]).attr('class', 'text_email display-block'), $(FF[1]).attr('class', 'text_email display-flex'), J.text(e.EM)) : ($(FF[0]).attr('class', 'text_email display-flex'), $(FF[1]).attr('class', 'display-inline-block ellipsis-horizontal'), J.text(e.EM)), e.EV == 1 && z(H)), w == 'username' && (c.attr('readonly', !0), $('#username-alert').text(e.EM)), w == 'birthday' && (t(c, !0), $('#birthday-alert').text(e.EM)), w == 'newsletter' && ($('#newsletter-alert').html(e.HT));
-                } else {
-                    v.text(e.E), b(c), n(x);
-                }
-            });
-        }), $('.item_input').on('input', function(){
-            var x = $(this),
-                y = x.parents('form'),
-                v = y.find('.text-error'),
-                R = y.find('.item_input'),
-                w = x.attr('data-send'),
-                o = y.find('.btn_save'),
-                r = x.val(),
-                HH = r.length;
-
-            v.text(''), q(R);
-            if(w == 'username'){
-                if((new RegExp("^[a-zA-Z0-9]+$")).test(r)){
-                   u(s, {'username': r});
-                } else if(HH > 0){
-                   v.text('*{$word->write_only_numbers_letters}'), b(s)
-                }
-                if(HH > 16) {
-                   x.val(r.slice(0, 16))
-                }
-            } else if(w == 'new_email'){
-                u(x, {'email': r});
-            } else if(w == 'birthday'){
-                if(Q.length == 3){
-                    var T = x.attr('id'),
-                        Y = T == '{#day#}' ? 0 : (T == '{#month#}' ? 1 : 2);
-                    Q[Y] = parseInt(r), t(o, !1); 
-                }
-                if(T == 'month' || T == 'year'){
-                    var a = (new Date(y.val(), m.val(), 0)).getDate(), j = d.val(), f;
-                    d.html('<option value disabled selected>{$word->year}</option>');
-                    for (var i = 1; i <= a; i++) f = $('<option>'), f.attr('value', i), f.text(i), i == j && f.attr('selected', !0), d.append(f);
-                }
-            } else if(w == 'about'){
-                (HH > 400) ? (JJ.addClass('color-red'), JJ.removeClass('color-green'), JJ.removeClass('color-orange')) : ((HH > 250) ? (JJ.addClass('color-orange'), JJ.removeClass('color-red'), JJ.removeClass('color-green')) : (JJ.addClass('color-green'), JJ.removeClass('color-red'), JJ.removeClass('color-orange'))), GG.text(HH), x.val(r.slice(0, 500))
-            }
-            ['username', 'new_email', 'gender', 'birthday'].indexOf(w) != -1 && r == '' ? (v.text('*{$word->this_field_is_empty}'), b(x), t(o, !0)) : t(o, !1), HH > 0 ? x.addClass('active') : x.removeClass('active')
-        }), W.click(function(){
-            S.text(''), W.addClass('spinner-is-loading'), t(W, !0), $.post("{$url->{req/settings/send-code}}?token={#token_session}", function(e){
-                (e.S == 200) ? EE($(D[0]), Z($(D[1])), n(W)) : (S.text(e.E), n(W))
-            })
-        }), H.click(l), $('.btn_vcancel').click(l), $('.btn_collapse').click(h), $('.btn_ccancel').click(h);
-    })
+    paper_s = {
+        token: '{#token_session}',
+        url: {
+            validate: '{$url->{req/to-access/validate}}',
+            upload_avatar: '{$url->{req/settings/upload-avatar}}',
+            reset_avatar: '{$url->{req/settings/reset-avatar}}',
+            account: '{$url->{req/settings/account}}',
+            shows: '{$url->{req/settings/shows}}',
+            send_code: '{$url->{req/settings/send-code}}'
+        },
+        word: {
+            upload: '{$word->upload}',
+            please_wait: '{$word->please_wait}',
+            upload_a_picture: '{$word->upload_a_picture}',
+            delete: '{$word->delete}',
+            write_only_numbers_letters: '{$word->write_only_numbers_letters}',
+            year: '{$word->year}',
+            this_field_is_empty: '{$word->this_field_is_empty}',
+            cancel: '{$word->cancel}'
+        },
+        user_type: '{$me->type}',
+        user_avatar_s: '{$me->avatar_s}',
+        default_holder: {$default_holder},
+        arr_birthday: [{$me->birth_day}, {$me->birthday_month}, {$me->birthday_year}]
+    };
 </script>%%}
+{%%<script src="{$theme->{assets/js/settings/jquery.settings.min.js}}"></script>%%}

@@ -16,6 +16,8 @@ $TEMP['title'] = $TEMP['#word']['subscribe_to_our_newsletters'];
 $TEMP['subtitle'] = $TEMP['#word']['so_that_you_well_informed_we_invite'];
 $TEMP['button'] = $TEMP['#word']['subscribe'];
 $TEMP['aria_button'] = $TEMP['#word']['subscribe_the_newsletter'];
+
+$TEMP['#count_exists'] = true;
 if($newsletter['count'] > 0){
     $TEMP['title'] = $TEMP['#word']['you_are_subscribed'];
     $TEMP['subtitle'] = $TEMP['#word']['currently_receive_best_information_newsletter'];
@@ -26,7 +28,8 @@ if($newsletter['count'] > 0){
 
     $TEMP['#frequency'] = $newsletter['frequency'];
     $TEMP['#popular'] = $newsletter['popular'];
-    $TEMP['#cats'] = explode(',', $newsletter['categories']);
+    $TEMP['#cats'] = $dba->query('SELECT category_id FROM '.T_NEWSCATE.' WHERE newsletter_id = ?', $newsletter['id'])->fetchAll(false);
+    $TEMP['#count_exists'] = count($TEMP['#cats']) < count($TEMP['#categories']);
 }
 
 $TEMP['#page']        = 'newsletter';

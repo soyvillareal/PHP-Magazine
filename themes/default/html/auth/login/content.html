@@ -58,49 +58,18 @@
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.general.min.css}}" />
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.login.min.css}}" />
 {%%<script type="text/javascript">
-   $(document).ready(function(){
-      var x = $('#btn-login'),
-          D = $('#username'),
-          v = $('#password'),
-          F = v.siblings('.text-error'),
-          y = function(e, i){
-            i.attr('disabled', e)
-          },
-          W = function(e){
-            e.addClass('border-red'), e.addClass('boxshadow-red');
-          },
-          P = function(e){
-            e.removeClass('border-red'), e.removeClass('boxshadow-red');
-          },
-          H = function(e){
-            e.siblings('.text-error').text('*{$word->this_field_is_empty}'), W(e);
-          },
-          C = function(e){
-            e.removeClass('spinner-is-loading'), e.removeAttr('disabled');
-          };
-      x.click(function(e){
-         var Y = D.val(),
-             T = v.val();
-         Y.length == 0 ? (e.preventDefault(), H(D)) : (v.val().length == 0 ? (e.preventDefault(), H(v)) 
-            :
-            (x.addClass('spinner-is-loading'), y(!0, x), F.html(''), P(D), P(v), $.post("{$url->{req/to-access/login}}?token={#token_session}", {'username': Y, 'password': T, 'save-session': $('#accept-checkbox:checked').val(), 'return_url': '{#return_url}', 'return_param': '{#return_param}'}, function(e){
-                        e.S == 200 ?
-                           window.location.href = e.UR
-                           :
-                           (e.S == 401 ? (F.html('*'+e.E), W(D), W(v), C(x), e.EE == 'pending' && $('#btn-rcode').click(function(){
-                              var r = $(this);
-                              y(!0, r), r.text('{$word->please_wait}');
-                              $.post("{$url->{req/to-access/resend-code}}?token={#token_session}", {'tokenu': e.TK, 'type': 'verify_email'}, function(e){
-                                 (e.S == 200) ? (F.text(e.M), F.removeClass('color-red'), F.addClass('color-green'), P(D), P(v), setTimeout(function(){
-                                                            y(!1, r), F.text(''), F.removeClass('color-green'), F.addClass('color-red')
-                                                         }, 3000)) : (y(!1, r), F.text('*'+e.E))
-                              })
-                           })) : (F.text('*'+e.E), W(D), W(v), C(x)));
-                     }))
-                  )
-      }), $('.item_input').on('input', function(){
-         var U = $(this);
-         D.val() != '' && v.val() != '' ? y(!1, x) : y(!0, x), P(D), P(v), F.text(''), U.val().length > 0 ? U.addClass('active') : U.removeClass('active');
-      }), D.focus();
-   });
+   paper_al = {
+      token: '{#token_session}',
+      return_url: '{#return_url}',
+      return_param: '{#return_param}',
+      url: {
+         login: '{$url->{req/to-access/login}}',
+         resend_code: '{$url->{req/to-access/resend-code}}'
+      },
+      word: {
+         please_wait: '{$word->please_wait}',
+         this_field_is_empty: '{$word->this_field_is_empty}'
+      }
+   };
 </script>%%}
+{%%<script src="{$theme->{assets/js/auth/jquery.login.min.js}}"></script>%%}

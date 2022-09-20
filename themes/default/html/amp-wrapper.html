@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html amp lang="{$settings->language}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css?ver=4.7.5" type="text/css" media="all"/>
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,500,600,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="{$theme->{images/logo.ico}}" />
+    <style amp-custom>
+        {$style_fonts}
+        {$style_general}
+        {$style_header}
+        {$style_post}
+        {$style_apostb}
+        {$style_apostc}
+    </style>
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script async custom-element="amp-form" src="https://cdn.ampproject.org/v0/amp-form-0.1.js"></script>
+    <script async custom-element="amp-lightbox" src="https://cdn.ampproject.org/v0/amp-lightbox-0.1.js"></script>
+    <script async custom-element="amp-mega-menu" src="https://cdn.ampproject.org/v0/amp-mega-menu-0.1.js"></script>
+    <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
+    <script custom-element="amp-accordion" async src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
+    <script custom-element="amp-analytics" async src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+    <script async custom-element="amp-truncate-text" src="https://cdn.ampproject.org/v0/amp-truncate-text-0.1.js"></script>
+    <style amp-boilerplate>
+        body{-webkit-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-moz-animation:-amp-start 8s steps(1,end) 0s 1 normal both;-ms-animation:-amp-start 8s steps(1,end) 0s 1 normal both;animation:-amp-start 8s steps(1,end) 0s 1 normal both}@-webkit-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-moz-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-ms-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@-o-keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}@keyframes -amp-start{from{visibility:hidden}to{visibility:visible}}</style>
+    <noscript>
+        <style amp-boilerplate>
+            body {
+                -webkit-animation:none;
+                -moz-animation:none;
+                -ms-animation:none;
+                animation:none
+            }
+        </style>
+    </noscript>
+    <script type="application/ld+json">
+        {
+            "@context": "http:\/\/schema.org\/",
+            "@type": "organization",
+            "@id":"#organization",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "{$theme->{images/logo.png}}"
+            },
+            "url": "{$url->{{#r_home}}}",
+            "name": "{#settings->title}",
+            "description":"{$settings->description}"
+        }
+    </script>
+    <script type="application/ld+json">
+        {
+            "@context": "http:\/\/schema.org\/",
+            "@type": "WebSite",
+            "name": "{#settings->title}",
+            "url":"{$url->{{#r_home}}}"
+        }
+    </script>
+    
+
+
+
+    <title>{$global_title}</title>
+    <link rel="canonical" href="{$url}" />
+    <meta property="fb:app_id" content="{$settings->fb_app_id}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="{$settings->title}" />
+    <meta property="og:title" content="{$global_title}" />
+    <meta property="og:description" content="{$global_description}}" />
+    <meta property="og:url" content="{$amp_url}" />
+    <meta property="og:locale" content="{#lang}" />
+    <meta property="og:image" content="{$thumbnail}" />
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{$global_title}" />
+    <meta name="twitter:url" content="{$amp_url}">
+    <meta name="twitter:description" content="{$global_description}}" />
+    <meta name="twitter:image" content="{$thumbnail}" />
+    <meta name="amp-experiments-opt-in" content="amp-next-page" />
+
+    <script async custom-element="amp-next-page" src="https://cdn.ampproject.org/v0/amp-next-page-0.1.js"></script>
+    <script async custom-element="amp-selector" src="https://cdn.ampproject.org/v0/amp-selector-0.1.js"></script>
+    <script async custom-element="amp-iframe" src="https://cdn.ampproject.org/v0/amp-iframe-0.1.js"></script>
+    <script async custom-element="amp-soundcloud" src="https://cdn.ampproject.org/v0/amp-soundcloud-0.1.js"></script>
+    <script async custom-element="amp-youtube" src="https://cdn.ampproject.org/v0/amp-youtube-0.1.js"></script>
+    <script async custom-element="amp-twitter" src="https://cdn.ampproject.org/v0/amp-twitter-0.1.js"></script>
+    <script async custom-element="amp-instagram" src="https://cdn.ampproject.org/v0/amp-instagram-0.1.js"></script>
+    <script async custom-element="amp-tiktok" src="https://cdn.ampproject.org/v0/amp-tiktok-0.1.js"></script>
+    <script async custom-element="amp-dailymotion" src="https://cdn.ampproject.org/v0/amp-dailymotion-0.1.js"></script>
+    <script async custom-element="amp-vimeo" src="https://cdn.ampproject.org/v0/amp-vimeo-0.1.js"></script>
+    <script async custom-element="amp-carousel" src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"></script>
+    <script custom-element="amp-social-share" src="https://cdn.ampproject.org/v0/amp-social-share-0.1.js" async></script>
+    <script async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"></script>
+    <script async custom-element="amp-sticky-ad" src="https://cdn.ampproject.org/v0/amp-sticky-ad-1.0.js"></script>
+    <script async custom-element="amp-facebook-comments" src="https://cdn.ampproject.org/v0/amp-facebook-comments-0.1.js"></script>
+    <script async custom-element="amp-facebook" src="https://cdn.ampproject.org/v0/amp-facebook-0.1.js"></script>
+
+
+
+
+</head>
+<body class="body">
+    <amp-sidebar id="sidebar" class="container-drawer w-100" layout="nodisplay">
+        <div class="content-drawer background-white h-100">
+             <div class="container-sposts padding-t25 padding-b25 padding-l20 padding-r20">
+                <form action="{$url->{{#r_search}}}" target="_top" method="GET" class="display-flex direction-row align-center" novalidate>
+                   <div class="display-flex position-relative vertical-middle w-100 h-36 background-white margin-t5 margin-b5 margin-r10 padding-l15 padding-r20 border-all border-grely font-lowly border-rlow">
+                      <input id="key-hsearch" class="color-grey w-100 h-100" type="text" name="{#p_keyword}" placeholder="Buscar...">
+                      <button id="key-hreset" class="btn-noway hover-button" type="reset">{$word->clean_up}</button>
+                   </div>
+                   <button id="btn-hsearch" class="button-general display-inline-block vertical-middle h-36 background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase inhover-button animation-ease3s" type="submit">{$word->to_go}</button>
+                </form>
+
+                <nav id="content-nav" class="padding-t15">
+                   <section>
+                      <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->national}</span>
+                      <ul class="padding-b15 colums-auto-2">
+                         <?php foreach($TEMP['#categories'] as $cat){ ?>
+                         <?php if($cat['footer'] == 'national'){ ?>
+                         <li class="display-flex direction-row align-center h-36">
+                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                         </li>
+                         <?php } ?>
+                         <?php } ?>
+                      </ul>
+                   </section>
+                   <section>
+                      <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->social}</span>
+                      <ul class="padding-b15 colums-auto-2">
+                         <?php foreach($TEMP['#categories'] as $cat){ ?>
+                         <?php if($cat['footer'] == 'social'){ ?>
+                         <li class="display-flex direction-row align-center h-36">
+                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                         </li>
+                         <?php } ?>
+                         <?php } ?>
+                      </ul>
+                   </section>
+                   <section>
+                      <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->more}</span>
+                      <ul class="padding-b15 colums-auto-2">
+                         <?php foreach($TEMP['#categories'] as $cat){ ?>
+                         <?php if($cat['footer'] == 'more'){ ?>
+                         <li class="display-flex direction-row align-center h-36">
+                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                         </li>
+                         <?php } ?>
+                         <?php } ?>
+                      </ul>
+                   </section>
+                   <section>
+                      <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->about_us}</span>
+                      <ul class="colums-auto-2">
+                         {$aside_pages}
+                         <?php foreach($TEMP['#pages'] as $page){ ?>
+                         <?php if($page['status'] == 'enabled'){ ?>
+                         <li class="display-flex direction-row align-center h-36">
+                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url($page['slug']);?>" target="_self" title="<?php echo $page['name'];?>"><?php echo $page['name'];?></a>
+                         </li>
+                         <?php } ?>
+                         <?php } ?>
+                      </ul>
+                   </section>
+                </nav>
+            </div>
+        </div>
+
+        <!--
+        <?php if(!empty($TEMP['#settings']['facebook_page']) || !empty($TEMP['#settings']['twitter_page']) || !empty($TEMP['#settings']['instagram_page'])){ ?>
+        <ul class="social-net">{$word->social_media}</li>
+            <?php if(!empty($TEMP['#settings']['facebook_page'])){ ?>
+            <li class="social-item-side facebook">
+                <a href="{$settings->facebook_page}" title="{$word->follow_us_on} {$word->facebook_}" target="_blank">
+                    <i class="fa fa-facebook"></i>
+                </a>
+            </li>
+            <?php } ?>
+            <?php if(!empty($TEMP['#settings']['twitter_page'])){ ?>
+            <li class="social-item-side google-plus">
+                <a href="{$settings->twitter_page}" title="{$word->follow_us_on} {$word->twitter_}" target="_blank">
+                    <i class="fa fa-google-plus"></i>
+                </a>
+            </li>
+            <?php } ?>
+            <?php if(!empty($TEMP['#settings']['instagram_page'])){ ?>
+            <li class="social-item-side instagram">
+                <a href="{$settings->instagram_page}" title="{$word->follow_us_on} {$word->instagram_}" target="_blank">
+                    <i class="fa fa-instagram"></i>
+                </a>
+            </li>
+            <?php } ?>
+        </ul>
+        <?php } ?>
+        -->
+    </amp-sidebar>
+    
+    <div class="amp-wrapper margin-auto">
+        <header itemscope itemtype="https://schema.org/WPHeader" next-page-hide>
+            <section class="section-one display-flex direction-row align-center">
+                <div class="mobile-left">
+                    <button on="tap:sidebar.toggle" class="button-menu btn-noway background-hover border-rlow" aria-label="{$word->sections_navigation}">
+                        <svg class="icon-x vertical-sub" viewBox="0 0 16 16">
+                            <rect x="1" y="3" fill="#333" width="14" height="2"></rect>
+                            <rect x="1" y="7" fill="#333" width="14" height="2"></rect>
+                            <rect x="1" y="11" fill="#333" width="14" height="2"></rect>
+                        </svg>
+                    </button>
+                </div>
+                <div class="mobile-center margin-auto">
+                    <a href="{$url->{{#r_home}}}" target="_self" title="{$settings->title}" aria-label="{$settings->title}">
+                        <div class="site-logo position-relative vertical-middle"></div>
+                    </a>
+                </div>
+                <div class="mobile-right">
+                    <amp-mega-menu class="content-dropdown-account" height="34" layout="fixed-height">
+                        <nav>
+                            <ul>
+                                <li>
+                                    <?php if($TEMP['#loggedin'] == true){ ?>
+                                    <button class="button-login btn-noway background-hover border-rlow" aria-expanded="false" aria-haspopup="dialog" aria-label="Cuenta">
+                                        <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="#333">
+                                            <path d="M8,10c-2.5,0-7,1.1-7,3.5V16h14v-2.5C15,11.1,10.5,10,8,10z"></path>
+                                            <circle cx="8" cy="4" r="4"></circle>
+                                        </svg>
+                                    </button>
+                                    <div id="container-menu" class="dropdown-account w-auto background-white border-rlow border-all border-grely" role="dialog" aria-modal="false" aria-label="{$word->account_menu}">
+                                       <div class="dropdown-account-item padding-t10 padding-b10 padding-l10 padding-r10 border-bottom border-grely">
+                                          <a class="display-flex direction-row align-center hover-button animation-ease3s" href="{$me->slug}" target="_self" title="{$me->username}">
+                                             <div class="dropdown-account-image margin-r5">
+                                                <amp-img class="border-rall" src="{$me->avatar_s}" alt="{$me->username}" width="40" height="40"></amp-img>
+                                             </div>
+                                             <span class="color-blackly font-medium text-capitalize">{$me->username}</span>
+                                          </a>
+                                       </div>
+                                       <div class="dropdown-account-item display-flex border-bottom border-grely">
+                                          <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button" href="{$url->{{#r_create_post}}}" target="_self" title="{$word->create_post}">{$word->create_post}</a>
+                                       </div>
+                                       <div class="dropdown-account-item display-flex border-bottom border-grely">
+                                          <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button" href="{$url->{{#r_settings}}}" target="_self" title="{$word->settings}">{$word->settings}</a>
+                                       </div>
+                                       <div class="dropdown-account-item display-flex border-bottom border-grely">
+                                          <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button" href="{$url->{{#r_saved}}}" target="_self" title="{$word->saved}">{$word->saved}</a>
+                                       </div>
+                                       <div class="dropdown-account-item display-flex">
+                                          <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button" href="{$url->{{#r_logout}}}" target="_self" title="{$word->logout}">{$word->logout}</a>
+                                       </div>
+                                    </div>
+                                    <?php } else { ?>
+                                    <button on="tap:container-llightbox" class="button-login btn-noway background-hover border-rlow" aria-label="Cuenta">
+                                        <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="#333">
+                                            <path d="M8,10c-2.5,0-7,1.1-7,3.5V16h14v-2.5C15,11.1,10.5,10,8,10z"></path>
+                                            <circle cx="8" cy="4" r="4"></circle>
+                                        </svg>
+                                    </button>
+                                    <?php } ?>
+                                </li>
+                            </ul>
+                        </nav>
+                    </amp-mega-menu>
+                </div>
+            </section>
+        </header>
+
+
+        <div class="mobile-below h-36 display-flex direction-row align-center font-lowly padding-l20 padding-r20 background-grely border-bottom border-grely" next-page-hide>
+            <div class="date-one">
+                <span class="color-black font-lowly font-bold">{$time}</span>
+            </div>
+            <div class="date-two font-lowly margin-left-auto">
+                <span class="color-black">Colombia</span>
+            </div>
+        </div>
+        <div id="global-content" class="padding-l15 padding-r15">
+          {$content}
+        </div>
+        <footer class="content-footer w-100" next-page-hide>
+
+            <?php if($TEMP['#page'] == 'amp-post' && !empty($TEMP['#next_page'])){ ?>
+            <amp-next-page>
+                <script type = "application/json">
+                    {#next_page}
+                </script>
+            </amp-next-page>
+            <?php } ?>
+
+            <div class="items-footer margin-b10 margin-left-auto padding-t15 padding-r15 padding-l15 margin-right-auto border-top border-grey">
+                <!-- footer widget about-->
+                <div class="margin-auto padding-r15 padding-l15">
+                    <div class="footer-logo text-center">
+                       <div class="site-logo display-inline-block position-relative vertical-middle"></div>
+                    </div>
+                    <p class="color-black font-low text-center margin-t10">
+                       {$word->footer_message}
+                    </p>
+                </div>
+                <div class="footer-pages margin-t10 text-center">
+                    <div class="font-mediumly font-bold margin-b5">      
+                       {$word->about_us}
+                    </div>
+                    <ul>
+                       <?php foreach($TEMP['#pages'] as $page){ ?>
+                       <?php if($page['status'] == 'enabled'){ ?>
+                       <li class="margin-b5">
+                          <a class="color-black font-low inhover-button" href="<?php echo Specific::Url($page['slug']);?>" target="_self" title="<?php echo $page['name'];?>"><?php echo $page['name'];?></a>
+                       </li>
+                       <?php } ?>
+                       <?php } ?>
+                    </ul>
+                </div>
+            </div>
+            <div class="position-relative font-low text-center padding-t25 padding-b25 border-top border-grey">
+                <div class="text-center padding-l15 padding-r15">
+                    {$word->footer_copyright_message}
+                </div>
+            </div>
+            <?php if($TEMP['#settings']['google_analytics']){ ?>
+            <amp-analytics type="googleanalytics">
+                <script type="application/json">
+                    {
+                        "vars":{
+                          "account": "{$settings->google_analytics}"
+                        },
+                        "triggers":{
+                            "trackPageview": {
+                                "on":"visible",
+                                "request":"pageview"
+                            }
+                        }
+                    }
+                </script>
+            </amp-analytics>
+            <?php } ?>
+
+            <amp-lightbox id="container-lightbox" layout="nodisplay">
+                <div class="content-aoverlay position-fixed" tabindex="0" role="button" on="tap:container-lightbox.close"></div>
+                <div class="content-lightbox w-100 background-white position-absolute overflow-hidden text-center padding-t15 padding-b15 padding-l15 padding-r15 border-rlow" role="button" tabindex="0">
+                    <p>{$word->using_amp_version_platform_from_full_version}</p>
+                    <span class="display-block font-medium font-bold margin-t10">{$word->do_you_wish_continue}</span>
+                    <div class="margin-t10">
+                        <a href="{$url}" target="_self">
+                            <button class="btn-noway background-blue color-white margin-r10 padding-t5 padding-b5 padding-l20 padding-r20 border-rlow hover-button">{$word->yes}</button>
+                        </a>
+                        <button on="tap:container-lightbox.close" class="btn-noway background-red color-white padding-t5 padding-b5 padding-l20 padding-r20 border-rlow hover-button">{$word->no}</button>
+                    </div>
+                </div>
+            </amp-lightbox>
+            <amp-lightbox id="container-llightbox" layout="nodisplay">
+                <div class="content-aoverlay position-fixed" tabindex="0" role="button" on="tap:container-llightbox.close"></div>
+                <div class="content-lightbox display-flex direction-colum w-100 background-white position-absolute overflow-hidden text-center padding-t15 padding-b15 padding-l15 padding-r15 border-rlow" role="button" tabindex="0" aria-label="{$word->account_menu}">
+                    <div class="display-flex direction-row align-center margin-b15">
+                        <span class="font-medium margin-right-auto">{$word->get_into}</span>
+                        <button on="tap:container-llightbox.close" class="btn-noway">
+                            <svg class="icon-y" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <title>{$word->close}</title>
+                                <path fill="none" stroke="#000" stroke-width="2" d="M3,3 L21,21 M3,21 L21,3"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="">
+                        <a class="inhover-button margin-r10" href="{$url->{{#r_register}}}" target="_self" title="{$word->register}" role="button">
+                            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase animation-ease3s">{$word->register}</span>
+                        </a>
+                        <a class="inhover-button" href="{$url->{{#r_login}}}" target="_self" title="{$word->login}" role="button">
+                            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase animation-ease3s">{$word->login}</span>
+                        </a>
+                    </div>
+                    <div class="text-center margin-t15 margin-b5">
+                        <p>{$word->did_you_forget_your_password}</p>
+                        <a class="display-block color-black font-medium font-bold text-underline margin-t5" href="{$url->{{#r_forgot_password}}}" target="_self" title="{$word->retrieve_it_here}">{$word->retrieve_it_here}</a>
+                    </div>
+                </div>
+            </amp-lightbox>
+        </footer>
+
+    </div>
+</body>
+</html>

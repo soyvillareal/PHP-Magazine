@@ -16,8 +16,15 @@ RewriteRule ^cambiar-contrasena/([^\/]+)(\/|)$ index.php?one=reset-password&toke
 RewriteRule ^desvincular-correo/([^/.]+)?$ index.php?one=unlink-mail&tokenu=$1 [NC,QSA]
 
 
+
+
+RewriteRule ^amp/([^/.]+)?$ index.php?one=amp&slug=$1 [NC,QSA]
 RewriteRule ^crear-publicacion$ index.php?one=create-post [NC,QSA]
 RewriteRule ^editar-publicacion/([^/.]+)?$ index.php?one=edit-post&post_id=$1 [NC,QSA]
+
+RewriteRule ^usuario/([^/.]+)?$ index.php?one=user&username=$1 [NC,QSA]
+RewriteRule ^seccion/([^/.]+)?$ index.php?one=category&category=$1 [NC,QSA]
+RewriteRule ^noticias/([^/.]+)?$ index.php?one=tags&label=$1 [NC,QSA]
 
 RewriteRule ^ajustes$ index.php?one=settings&page=account [NC,QSA]
 RewriteRule ^ajustes/cuenta$ index.php?one=settings&page=account [NC,QSA]
@@ -25,6 +32,7 @@ RewriteRule ^ajustes/inicios-de-sesion$ index.php?one=settings&page=logins [NC,Q
 RewriteRule ^ajustes/cambiar-contrasena$ index.php?one=settings&page=change-password [NC,QSA]
 RewriteRule ^cambiar-correo$ index.php?one=change-email [NC,QSA]
 RewriteRule ^buscar$ index.php?one=search [NC,QSA]
+RewriteRule ^guardado$ index.php?one=save [NC,QSA]
 
 
 RewriteRule ^boletin$ index.php?one=newsletter [NC,QSA]

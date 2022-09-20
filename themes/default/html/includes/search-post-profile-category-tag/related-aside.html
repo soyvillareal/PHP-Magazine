@@ -1,0 +1,48 @@
+<li class="item-related-aside display-flex direction-colum padding-t15 padding-b15">
+   <?php if($TEMP['!key'] == 1) { ?>
+   <a class="<?php echo($TEMP['!type'] == 'video') ? 'content-video-animate ' : '';?>display-block position-relative w-100 margin-b15" href="{!url}" target="_self" title="{!title}" aria-hidden="true" tabindex="-1">
+      <figure class="content-gradient position-relative">
+         <?php if($TEMP['!type'] == 'video'){ ?>
+         <div class="content-vanimate display-flex direction-row align-center position-absolute no-hover">
+            <svg class="icon-video no-hover" viewBox="0 0 40 40">
+               <path class="no-hover" d="M3 40V0l34 20z" fill="#F7F7F7" fill-rule="evenodd"></path>
+               <circle class="no-hover" cx="20" cy="20" r="19" stroke="#F7F7F7" fill="transparent" stroke-width="2px"></circle>
+            </svg>
+         </div>
+         <?php } ?>
+         <picture class="picture-related no-hover">
+            <img src="{!thumbnail}" alt="{!title}">
+         </picture>
+         <figcaption class="content-hpublished position-absolute no-hover">
+            <time class="color-white font-lowly ellipsis-horizontal no-hover" datetime="{!published_date}">{!published_at}</time>
+         </figcaption>
+      </figure>
+      <div class="container-category position-absolute">
+         <div class="content-category display-inline-block border-rlow">
+            <a class="btn-noway background-black color-white font-low text-uppercase border-rlow hover-button animation-ease3s" href="{!category_slug}" target="_self">{!category}</a>
+         </div>
+      </div>
+   </a>
+   <div class="display-flex margin-t15">
+      <div class="display-inline-block color-black font-postoni-gara font-supraly margin-r15 border-bottom border-black">{!key}</div>
+      <div class="w-100">
+         <a href="{!url}" target="_self" title="{!title}">
+            <h3 class="color-black font-postoni-gara font-bigly break-all hover-blue">{!title}</h3>
+         </a>
+      </div>
+   </div>
+   <?php } else { ?>
+   <div class="display-flex">
+      <div class="display-inline-block color-black font-postoni-gara font-megaly margin-r15 border-bottom border-black">{!key}</div>
+      <div class="w-100">
+         <a class="display-flex" href="{!url}" target="_self" title="{!title}">
+            <h3 class="color-black font-medium font-normal break-all hover-blue margin-r10">{!title}</h3>
+            <figure class="position-relative" aria-hidden="true">
+               <img src="{!thumbnail}" alt="{!title}">
+            </figure>
+         </a>
+      </div>
+   </div>
+   <?php } ?>
+</li>
+         

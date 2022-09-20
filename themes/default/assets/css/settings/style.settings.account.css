@@ -66,9 +66,43 @@ body {
 	color: #414141;
   	background-color: #E0E0E0;
 }
+.ishow_check:checked + .slider-check {
+    background-color: #092f8d;
+}
+.ishow-checkbox {
+  width: 35px;
+  height: 18px;
+}
+.slider-check {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 34px;
+}
+.slider-check:before {
+  content: "";
+  position: absolute;
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  bottom: 2px;
+  border-radius: 50%;
+  background-color: white;
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+.ishow_check:checked + .slider-check:before {
+  -webkit-transform: translateX(17px);
+  -ms-transform: translateX(17px);
+  transform: translateX(17px);
+}
 @media(min-width: 768px){
 	.btn_cgeneral {
 		pointer-events: none;
+	}
+	.content-account .content_cgitems {
+		display: block !important;
 	}
 }
 @media(max-width: 767px){

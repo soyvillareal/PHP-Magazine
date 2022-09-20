@@ -1,0 +1,68 @@
+<?php if(count($TEMP['#collaborators']) > 1){ ?>
+<li class="content-cpost display-flex direction-colum align-center position-relative" data-id="{!id}">
+  <a class="hover-button animate-tab-button animation-ease3s" href="{!collab_url}" target="_blank" title="{!collab_name}">
+    <figure class="w-100px h-100px margin-auto overflow-hidden border-rall border-grely boxshadow-grey animation-ease3s">
+      <?php if($TEMP['#is_amp'] == true){ ?>
+      <amp-img class="w-100px h-100px" src="{!collab_avatar}" alt="{!collab_name}" width="100" height="100" layout="responsive"></amp-img>
+      <?php } else { ?>
+      <img src="{!collab_avatar}" alt="{!collab_name}" draggable="false">
+      <?php } ?>
+    </figure>
+    <h3 class="color-black text-center margin-t15">{!collab_name}</h3>
+  </a>
+  <?php if(!empty($TEMP['!social_media'])){ ?>
+  <a class="display-flex direction-row align-center" href="{!url_csocial}" target="_blank">
+    <span class="display-inline-flex vertical-middle color-grey margin-r5">
+      <?php if($TEMP['!main_sonet'] == 'instagram'){ ?>
+      <svg class="icon-x" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path fill="currentColor" d="M23.928 7.053a8.808 8.808 0 0 0 -0.557 -2.913 5.883 5.883 0 0 0 -1.385 -2.125A5.883 5.883 0 0 0 19.86 0.629a8.808 8.808 0 0 0 -2.912 -0.557C15.667 0.013 15.259 0 12 0S8.333 0.013 7.053 0.072a8.808 8.808 0 0 0 -2.913 0.557A5.883 5.883 0 0 0 2.013 2.015 5.883 5.883 0 0 0 0.629 4.14a8.808 8.808 0 0 0 -0.557 2.912C0.013 8.333 0 8.741 0 12s0.013 3.667 0.072 4.947a8.808 8.808 0 0 0 0.557 2.913 5.883 5.883 0 0 0 1.385 2.125 5.881 5.881 0 0 0 2.125 1.385 8.808 8.808 0 0 0 2.912 0.557C8.333 23.987 8.741 24 12 24s3.667 -0.013 4.947 -0.072a8.808 8.808 0 0 0 2.913 -0.557 6.136 6.136 0 0 0 3.511 -3.511 8.808 8.808 0 0 0 0.557 -2.912C23.987 15.667 24 15.259 24 12s-0.013 -3.667 -0.072 -4.947zm-2.16 9.796a6.637 6.637 0 0 1 -0.413 2.227 3.973 3.973 0 0 1 -2.277 2.279 6.639 6.639 0 0 1 -2.228 0.413c-1.267 0.057 -1.645 0.069 -4.849 0.069s-3.584 -0.012 -4.849 -0.069a6.639 6.639 0 0 1 -2.227 -0.413 3.717 3.717 0 0 1 -1.381 -0.897 3.717 3.717 0 0 1 -0.897 -1.38 6.637 6.637 0 0 1 -0.413 -2.228c-0.057 -1.267 -0.069 -1.645 -0.069 -4.849s0.012 -3.584 0.069 -4.849a6.639 6.639 0 0 1 0.413 -2.227 3.717 3.717 0 0 1 0.897 -1.381 3.717 3.717 0 0 1 1.38 -0.897 6.639 6.639 0 0 1 2.228 -0.413c1.267 -0.057 1.645 -0.069 4.849 -0.069s3.584 0.012 4.849 0.069a6.639 6.639 0 0 1 2.227 0.413 3.717 3.717 0 0 1 1.381 0.897 3.717 3.717 0 0 1 0.897 1.38 6.639 6.639 0 0 1 0.413 2.228c0.057 1.267 0.069 1.645 0.069 4.849s-0.012 3.584 -0.069 4.849zM12 5.837A6.163 6.163 0 1 0 18.163 12 6.163 6.163 0 0 0 12 5.837zM12 16a4 4 0 1 1 4 -4 4 4 0 0 1 -4 4zm7.845 -10.405a1.44 1.44 0 1 1 -1.44 -1.44 1.44 1.44 0 0 1 1.44 1.44z"/>
+      </svg>
+      <?php } else if($TEMP['!main_sonet'] == 'twitter'){ ?>
+      <svg class="icon-x" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-width="0" fill="currentColor" d="M22.5 6L20.25 6.375L21.75 4.5L19.125 5.25C15.75 1.5 10.5 5.625 12 9C6 9 3 4.5 3 4.5C3 4.5 0.75 7.875 4.5 10.5L2.25 9.75C2.25 12 3.75 13.5 6.375 14.25L3.75 14.25C5.25 17.25 7.875 17.25 7.875 17.25C7.875 17.25 5.625 19.125 1.5 19.125C13.875 25.125 21.375 13.875 20.25 7.875Z"/>
+      </svg>
+      <?php } else { ?>
+      <svg class="icon-x" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path fill="currentColor" d="M20.4 1.2H3.6c-1.32 0 -2.4 1.08 -2.4 2.4v16.8c0 1.321 1.08 2.4 2.4 2.4h8.4v-8.4H9.6V11.43h2.4v-2.46c0 -2.597 1.454 -4.421 4.519 -4.421l2.164 0.002v3.126h-1.436c-1.193 0 -1.646 0.895 -1.646 1.726v2.028h3.082L18 14.4h-2.4v8.4h4.8c1.32 0 2.4 -1.079 2.4 -2.4V3.6c0 -1.32 -1.08 -2.4 -2.4 -2.4z"/>
+      </svg>
+      <?php } ?>
+    </span>
+    <span class="color-grey margin-b5 border-bottom border-grely hover-button animation-ease3s">{!social_media}</span>
+  </a>
+  <?php } ?>
+</li>
+<?php } else { ?>
+<div class="content-cpost display-flex">
+  <div class="content-cpfigure display-flex">
+    <figure class="w-100px h-100px margin-auto overflow-hidden border-rall border-grely boxshadow-grey animation-ease3s">
+      <img src="{!collab_avatar}" alt="{!collab_name}">
+    </figure>
+  </div>
+  <div class="content-cpinfo display-flex direction-colum">
+    <a class="item-cpname font-bold color-black text-left margin-t15" href="{!collab_url}" target="_blank" title="{!collab_name}">{!collab_name}</a>
+    <span class="item-cpsmedia color-grey">
+      <p class="display-inline color-black">{!about}</p>
+      <?php if(!empty($TEMP['!social_media'])){ ?>
+      <a class="content-smedia ellipsis-horizontal" href="{!url_csocial}" target="_blank">
+        <span class="display-inline-flex vertical-middle color-grey">
+          <?php if($TEMP['!main_sonet'] == 'instagram'){ ?>
+          <svg class="icon-x" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path fill="currentColor" d="M23.928 7.053a8.808 8.808 0 0 0 -0.557 -2.913 5.883 5.883 0 0 0 -1.385 -2.125A5.883 5.883 0 0 0 19.86 0.629a8.808 8.808 0 0 0 -2.912 -0.557C15.667 0.013 15.259 0 12 0S8.333 0.013 7.053 0.072a8.808 8.808 0 0 0 -2.913 0.557A5.883 5.883 0 0 0 2.013 2.015 5.883 5.883 0 0 0 0.629 4.14a8.808 8.808 0 0 0 -0.557 2.912C0.013 8.333 0 8.741 0 12s0.013 3.667 0.072 4.947a8.808 8.808 0 0 0 0.557 2.913 5.883 5.883 0 0 0 1.385 2.125 5.881 5.881 0 0 0 2.125 1.385 8.808 8.808 0 0 0 2.912 0.557C8.333 23.987 8.741 24 12 24s3.667 -0.013 4.947 -0.072a8.808 8.808 0 0 0 2.913 -0.557 6.136 6.136 0 0 0 3.511 -3.511 8.808 8.808 0 0 0 0.557 -2.912C23.987 15.667 24 15.259 24 12s-0.013 -3.667 -0.072 -4.947zm-2.16 9.796a6.637 6.637 0 0 1 -0.413 2.227 3.973 3.973 0 0 1 -2.277 2.279 6.639 6.639 0 0 1 -2.228 0.413c-1.267 0.057 -1.645 0.069 -4.849 0.069s-3.584 -0.012 -4.849 -0.069a6.639 6.639 0 0 1 -2.227 -0.413 3.717 3.717 0 0 1 -1.381 -0.897 3.717 3.717 0 0 1 -0.897 -1.38 6.637 6.637 0 0 1 -0.413 -2.228c-0.057 -1.267 -0.069 -1.645 -0.069 -4.849s0.012 -3.584 0.069 -4.849a6.639 6.639 0 0 1 0.413 -2.227 3.717 3.717 0 0 1 0.897 -1.381 3.717 3.717 0 0 1 1.38 -0.897 6.639 6.639 0 0 1 2.228 -0.413c1.267 -0.057 1.645 -0.069 4.849 -0.069s3.584 0.012 4.849 0.069a6.639 6.639 0 0 1 2.227 0.413 3.717 3.717 0 0 1 1.381 0.897 3.717 3.717 0 0 1 0.897 1.38 6.639 6.639 0 0 1 0.413 2.228c0.057 1.267 0.069 1.645 0.069 4.849s-0.012 3.584 -0.069 4.849zM12 5.837A6.163 6.163 0 1 0 18.163 12 6.163 6.163 0 0 0 12 5.837zM12 16a4 4 0 1 1 4 -4 4 4 0 0 1 -4 4zm7.845 -10.405a1.44 1.44 0 1 1 -1.44 -1.44 1.44 1.44 0 0 1 1.44 1.44z"/>
+          </svg>
+          <?php } else if($TEMP['!main_sonet'] == 'twitter'){ ?>
+          <svg class="icon-x" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-width="0" fill="currentColor" d="M22.5 6L20.25 6.375L21.75 4.5L19.125 5.25C15.75 1.5 10.5 5.625 12 9C6 9 3 4.5 3 4.5C3 4.5 0.75 7.875 4.5 10.5L2.25 9.75C2.25 12 3.75 13.5 6.375 14.25L3.75 14.25C5.25 17.25 7.875 17.25 7.875 17.25C7.875 17.25 5.625 19.125 1.5 19.125C13.875 25.125 21.375 13.875 20.25 7.875Z"/>
+          </svg>
+          <?php } else { ?>
+          <svg class="icon-x" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path fill="currentColor" d="M20.4 1.2H3.6c-1.32 0 -2.4 1.08 -2.4 2.4v16.8c0 1.321 1.08 2.4 2.4 2.4h8.4v-8.4H9.6V11.43h2.4v-2.46c0 -2.597 1.454 -4.421 4.519 -4.421l2.164 0.002v3.126h-1.436c-1.193 0 -1.646 0.895 -1.646 1.726v2.028h3.082L18 14.4h-2.4v8.4h4.8c1.32 0 2.4 -1.079 2.4 -2.4V3.6c0 -1.32 -1.08 -2.4 -2.4 -2.4z"/>
+          </svg>
+          <?php } ?>
+        </span>
+        <span class="item-smtitle color-grey margin-b5 border-bottom border-grely hover-button animation-ease3s">{!social_media}</span>
+      </a>
+      <?php } ?>
+    </span>
+  </div>
+</div>
+<?php } ?>

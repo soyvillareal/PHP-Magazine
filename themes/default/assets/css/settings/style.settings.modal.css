@@ -1,0 +1,30 @@
+@keyframes showADelete {
+  0% {
+    transform: scale(1);
+  }
+  1% {
+    transform: scale(0.5);
+  }
+
+  45% {
+    transform: scale(1.05);
+  }
+
+  80% {
+    transform: scale(0.95);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+.content-adelete {
+    width: 220px;
+    top: 40%;
+    left: calc(50% - 110px);
+}
+.item-adelete {
+    -webkit-animation: showADelete .3s;
+    animation: showADelete .3s;
+    will-change: transform;
+}

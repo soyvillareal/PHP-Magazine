@@ -19,12 +19,18 @@
   }
 }
 .content-adelete {
-    width: 400px;
+    width: 270px;
     top: 40%;
-    left: 33%;
+    left: calc(50% - 135px);
 }
 .item-adelete {
     -webkit-animation: showADelete .3s;
     animation: showADelete .3s;
     will-change: transform;
+}
+@media(max-width: 300px){
+  .content-adelete {
+      width: 220px;
+      left: calc(50% - 110px);
+  }
 }

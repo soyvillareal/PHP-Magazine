@@ -10,7 +10,7 @@
             <span class="item-header-title color-black font-medium ellipsis-vertical ellipsis-v2 break-all">{$title}</span>
          </div>
       </div>
-      <div class="hide-desktop padding-r20">
+      <div class="hide-desktop margin-left-auto padding-r20">
          <button id="btn-hfshare" class="display-inline-block btn-noway border-rall margin-right-auto animate-tab-button" type="button" aria-haspopup="true" aria-label="{$word->sharing_options}" aria-expanded="false">
             <svg class="share-icon display-inline-block icon-x padding-5 background-grely border-all border-grely border-rall vertical-middle animation-ease3s" viewBox="0 0 16 13" width="16" height="13">
                <path fill-rule="evenodd" clip-rule="evenodd" d="M15.406 5.359L8.978 0v3.215C3.82 3.215.406 8.107.406 12.66 1.653 9.133 4.29 7.517 8.978 7.517v3.2l6.428-5.358z" fill="#000"></path>
@@ -187,15 +187,13 @@
       <div id="posts" class="display-block">
          {$main}
       </div>
-      <div id="spinner-load" class="content-spinner display-flex align-center justify-center position-relative w-100 h-45 margin-t15 margin-b15 hidden">
-         <svg class="spinner-container position-absolute" width="45px" height="45px" viewBox="0 0 52 52">
-            <circle cx="26px" cy="26px" r="20px" fill="none" stroke-width="4px"></circle>
-         </svg>
+      <div id="spinner-load" class="content-wspinner display-flex align-center justify-center position-relative w-100 h-45 margin-t15 margin-b15 padding-t15 padding-b15 hidden">
+         <div class="item-wspinner position-relative"></div>
       </div>
    </div>
    <div id="post-right" class="post-right display-none-mob">
       <div class="theiaStickySidebar">
-         <aside class="post-aside direction-colum h-100 padding-t25 padding-b15 padding-l20">
+         <aside class="post-aside direction-colum h-100 margin-b15 padding-t25 padding-l20">
             <div class="content-related-aside display-block position-relative">
                <h2 class="color-black font-medium font-bold text-uppercase">{$word->most_viewed} - {$category}</h2>
                <ul>
@@ -207,34 +205,194 @@
       </div>
    </div>
 </main>
-<?php if(empty($_COOKIE['dismiss_newsletter'])){ ?>
-<div class="newsletter-fixed display-flex display-none-desk position-fixed">
-   <div class="item-newsletter-fixed w-100">
-      {$newsletter}
+{%%<div id="alert-pdelete" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-dptitle" aria-describedby="alert-dpcontent">
+   <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
+      <span id="alert-dptitle" class="display-block font-medium font-bold">{$word->are_you_sure}</span>
+      <p id="alert-dpcontent" class="font-mediumly color-black margin-t15 margin-b15">{$word->do_really_want_delete_post}</p>
+      <button id="btn-pcancel" class="button-access btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
+      <button id="btn-pdelete" class="button-access btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+         <span class="color-white">{$word->yes}</span>
+         <div class="content-spinner-circle position-absolute">
+            <div class="spinner-circle"></div>
+         </div>
+      </button>
    </div>
-   <button id="close-newsletter" class="close-newsletter display-flex position-absolute border-rall border-none" type="button" aria-label="{$word->close_newsletter}"></button>
-</div>
+</div>%%}
+
+
+{%%<div id="alert-cdelete" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-dctitle" aria-describedby="alert-dccontent">
+   <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
+      <span id="alert-dctitle" class="display-block font-medium font-bold">{$word->are_you_sure}</span>
+      <p id="alert-dccontent" class="font-mediumly color-black margin-t15 margin-b15">{$word->do_really_want_delete_comment}</p>
+      <button id="btn-ccancel" class="button-access btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
+      <button id="btn-cdelete" class="button-access btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+         <span class="color-white">{$word->yes}</span>
+         <div class="content-spinner-circle position-absolute">
+            <div class="spinner-circle"></div>
+         </div>
+      </button>
+   </div>
+</div>%%}
+
+
+{%%<div id="content-lnotify" class="content-lnotify display-flex direction-row align-center position-fixed border-rlow padding-t10 padding-b10 padding-l10 padding-r10 animation-ease3s">
+  <p class="color-white margin-r10"></p>
+  <button id="btn-dnotify" class="btn-noway color-white">
+    <svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path fill="currentColor" d="M 12 13.17 L 5.17 20 L 4 18.832 L 10.83 12 L 4 5.17 L 5.17 4 L 12 10.83 L 18.832 4 L 20 5.17 L 13.17 12 L 20 18.832 L 18.832 20 Z"></path>
+    </svg>
+  </button>
+</div>%%}
+
+<?php if($TEMP['#loggedin'] == true){ ?>
+{%%<div id="alert-preport" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-rtitle" aria-describedby="alert-rcontent">
+   <div id="item-ralert" class="item-alert background-white border-rlow boxshadow-grey">
+      <div id="alert-rtitle" class="display-block">
+         <span class="display-block font-medium font-bold padding-t15 padding-l20 padding-r20">{$word->report_post}</span>
+      </div>
+      <div id="item-acontent" class="item-acontent display-flex padding-l20 padding-r20 overflow-autoy">
+         <div class="display-block margin-auto">
+            <div class="display-flex direction-colum align-center padding-t5">
+               <ul class="content_rpreport">
+                  <li>
+                     <input id="report-1" class="item_rinput radio-paper hidden" name="option" type="radio" value="r_spam">
+                     <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-1">{$word->r_spam}</label>
+                  </li>
+                  <li class="item_rpost">
+                     <input id="report-2" class="item_rinput radio-paper hidden" name="option" type="radio" value="rp_writing">
+                     <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-2">{$word->rp_writing}</label>
+                     <div class="content_description position-relative margin-t5 hidden">
+                        <textarea class="item_rtextarea background-white color-black w-100 padding-t10 padding-b10 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s" type="text" maxlength="500" placeholder="{$word->describe_the_error}" autocomplete="off" autocapitalize="off"></textarea>
+                        <div class="display-flex">
+                           <div class="margin-left-auto color-green">
+                              <span class="text_email_count">0</span>/500
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+                  <li class="item_rpost">
+                     <input id="report-3" class="item_rinput radio-paper hidden" name="option" type="radio" value="rp_thumbnail">
+                     <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-3">{$word->rp_thumbnail}</label>
+                  </li>
+                  <li class="item_rpost">
+                     <input id="report-4" class="item_rinput radio-paper hidden" name="option" type="radio" value="rp_copyright">
+                     <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-4">{$word->rp_copyright}</label>
+                  </li>
+                  <li class="item_rcomment">
+                     <input id="report-5" class="item_rinput radio-paper hidden" name="option" type="radio" value="rc_offensive">
+                     <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-5">{$word->rc_offensive}</label>
+                  </li>
+                  <li class="item_rcomment">
+                     <input id="report-6" class="item_rinput radio-paper hidden" name="option" type="radio" value="rc_abusive">
+                     <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-6">{$word->rc_abusive}</label>
+                  </li>
+                  <li class="item_rcomment">
+                     <input id="report-7" class="item_rinput radio-paper hidden" name="option" type="radio" value="rc_disagree">
+                     <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-7">{$word->rc_disagree}</label>
+                  </li>
+                  <li class="item_rcomment">
+                     <input id="report-8" class="item_rinput radio-paper hidden" name="option" type="radio" value="rc_marketing">
+                     <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-8">{$word->rc_marketing}</label>
+                  </li>
+                  <li>
+                     <input id="report-9" class="item_rinput radio-paper hidden" name="option" type="radio" value="r_none">
+                     <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-9">{$word->r_none}</label>
+                     <div class="content_description position-relative margin-t5 hidden">
+                        <textarea class="item_rtextarea background-white color-black w-100 padding-t10 padding-b10 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s" type="text" maxlength="500" placeholder="{$word->describe_reason_report}" autocomplete="off" autocapitalize="off"></textarea>
+                        <div class="display-flex">
+                           <div class="margin-left-auto color-green">
+                              <span class="text_email_count">0</span>/500
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+            <p id="alert-dpcontent" class="font-mediumly color-black padding-t10 padding-b10">{$word->posts_reported_users_reviewed_staff}</p>
+         </div>
+      </div>
+      <div id="item-abuttons" class="display-block border-top border-grely">
+         <div class="display-flex">
+            <div class="margin-auto padding-t15 padding-b15 padding-l20 padding-r20">
+               <button id="btn-rcancel" class="button-access btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+               <button id="btn-rsend" class="button-access btn-noway w-100px h-36 background-green color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button" disabled>
+                  <span class="color-white">{$word->send}</span>
+                  <div class="content-spinner-circle position-absolute">
+                     <div class="spinner-circle"></div>
+                  </div>
+               </button>
+            </div>
+         </div>
+         <div class="color-red text-center text-error font-low padding-b5"></div>
+      </div>
+   </div>
+</div>%%}
+{%%<div id="alert-spalert" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-sptitle" aria-describedby="alert-spcontent">
+   <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
+      <span id="alert-sptitle" class="display-block font-medium font-bold">{$word->report_sent}</span>
+      <p id="alert-spcontent" class="font-mediumly color-black margin-t15">{$word->report_sent_successfully_reviewed}</p>
+      <button id="btn-spclose" class="button-access btn-noway w-100px h-36 background-red color-white margin-t15 font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->close}</button>
+   </div>
+</div>%%}
 <?php } ?>
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.article.css}}" />
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.newsletter.css}}" />
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.related-aside.css}}" />
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.related-bottom.css}}" />
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.comments.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.article.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.related-aside.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.related-bottom.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.modal.min.css}}" />%%}
 {%%<script src="{$theme->{assets/js/theia-sticky-sidebar.min.js}}"></script>%%}
-
-
 {%%<script type="text/javascript">
    paper_p = {
       token: '{#token_session}',
-      loggedin: '{#loggedin}',
+      loggedin: {#loggedin},
       url: {
          save: '{$url->{req/post/save}}',
-         subscribe: '{$url->{req/newsletter/subscribe}}',
          load: '{$url->{req/post/load}}',
-         delete: '{$url->{req/post/delete}}'
+         delete: '{$url->{req/post/delete}}',
+         report: '{$url->{req/post/report}}',
+         post_reaction: '{$url->{req/reaction/post-reaction}}',
+         comment_reaction: '{$url->{req/reaction/comment-reaction}}',
+         comment: '{$url->{req/comment/comment}}',
+         reply: '{$url->{req/comment/reply}}',
+         pin: '{$url->{req/comment/pin}}',
+         unpin: '{$url->{req/comment/unpin}}',
+         load_replies: '{$url->{req/post/load-replies}}',
+         load_comments: '{$url->{req/post/load-comments}}',
+         sort_comments: '{$url->{req/post/sort-comments}}',
+         delete_comment: '{$url->{req/comment/delete}}'
+      },
+      word: {
+         report_post: '{$word->report_post}',
+         report_comment: '{$word->report_comment}',
+         hide: '{$word->hide}',
+         show: '{$word->show}',
+         link_copied_clipboard: '{$word->link_copied_clipboard}'
       },
       category_id: '{$category_id}',
       post_id: '{$post_id}',
       post_url: '{$url}'
    }, $('#post-right').theiaStickySidebar();
 </script>%%}
+<?php if($TEMP['#settings']['system_comments'] == 'on'){ ?>
+{%%<script src="{$theme->{assets/js/post/jquery.post.comments.min.js}}"></script>%%}
+<?php if($TEMP['#has_cfeatured'] == true || $TEMP['#has_rfeatured'] == true){ ?>
+{%%<script type="text/javascript">
+   <?php if($TEMP['#has_cfeatured'] == true){ ?>
+   (function(){
+      var a = $('.content_comment[data-id={#featured_cid}]');
+      setTimeout(function(){
+         $('html').animate({scrollTop: (a.offset().top - a.height())}, 750)
+      }, 500)
+   })();
+   <?php } else if($TEMP['#has_rfeatured'] == true){ ?>
+   (function(){
+      var a = $('.content_reply[data-id={#featured_rid}]');
+      setTimeout(function(){
+         $('html').animate({scrollTop: (a.offset().top - a.height())}, 750)
+      }, 500)
+   })();
+   <?php } ?>
+</script>%%}
+<?php } ?>
+<?php } ?>
 {%%<script src="{$theme->{assets/js/post/jquery.post.min.js}}"></script>%%}

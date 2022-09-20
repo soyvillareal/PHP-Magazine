@@ -1,0 +1,288 @@
+<div class="item-post">
+    <article>
+        <header class="margin-t15">
+            <h1 class="post-title color-black font-postoni-gara margin-b15">{$title}</h1>
+
+            <div class="post-share display-flex margin-t15 padding-t15 border-top border-grely">
+                <div class="margin-b5" role="toolbar" aria-label="{$word->social_copy_save_share_article}">
+                  <ul class="display-flex direction-row align-center">
+                        <li class="item-share display-flex w-100 margin-r10">
+                            <amp-social-share class="display-inline-block background-grely padding-5 border-rall border-all border-grely" type="facebook" width="16" height="16" data-param-text="{$title}" data-param-href="{$url_encoded}" data-param-app_id="{$settings->fb_app_id}"></amp-social-share>
+                        </li>
+                        <li class="item-share display-flex w-100 margin-r10">
+                            <amp-social-share class="display-inline-block background-grely padding-5 border-rall border-all border-grely" type="twitter" width="16" height="16"></amp-social-share>
+                        </li>
+                        <li class="item-share display-flex w-100 margin-r10">
+                            <amp-social-share class="display-inline-block background-grely padding-5 border-rall border-all border-grely" type="whatsapp" width="16" height="16" data-share-endpoint="whatsapp://send" data-param-text="{$title}"></amp-social-share>
+                        </li>
+                        <li class="item-share display-flex w-100 border-right border-grely padding-r10">
+                            <amp-social-share class="display-inline-block background-grely padding-5 border-rall border-all border-grely" type="email" width="16" height="16"></amp-social-share>
+                        </li>
+                        <li class="item-share display-flex w-100 margin-l15">
+                            <form id="content-fsave" method="POST" action-xhr="{$url->{amp.php}}" target="_top">
+                                <input type="hidden" name="type" value="save">
+                                <input type="hidden" name="post_id" value="{$post_id}">
+                                <button class="btn-noway<?php echo($TEMP['#saved'] > 0) ? ' saved' : '';?>" type="submit">
+
+                                    <svg class="share-icon display-inline-block vertical-middle" stroke="none" width="16px" height="25px" viewBox="0 0 16 25">
+                                       <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                            <g stroke="currentColor" fill="none" submit-success>
+                                                <path fill="currentColor" d="M0.5,0.5 L0.5,24.5 L8.1716264,19.5137775 L15.5,24.4404006 L15.5,0.5 L0.5,0.5 Z"></path>
+                                            </g>
+                                            <g stroke="currentColor" fill="none" submit-error>
+                                                <path fill="none" d="M0.5,0.5 L0.5,24.5 L8.1716264,19.5137775 L15.5,24.4404006 L15.5,0.5 L0.5,0.5 Z"></path>
+                                            </g>
+                                       </g>
+                                    </svg>
+
+                                    
+                                    <div class="content-amp-loader" submitting>
+                                        <div class="item-alactive position-absolute background-black"></div>
+                                    </div>
+
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="post-thumbnail content-gradient position-relative">
+                <div class="content-category position-absolute margin-t10 margin-l10">
+                    <a class="btn-noway background-black color-white text-uppercase border-rlow hover-button" href="{$category_slug}">{$category}</a>
+                </div>
+                <figure class="margin-t15" aria-label="{$word->illustration}" role="group">
+                    <picture>
+                        <amp-img src="{$thumbnail}" alt="{$title}" width="728" height="410" layout="responsive">
+                        </amp-img>
+                    </picture>
+                    <?php if(!empty($TEMP['#thumb_sources'])){ ?>
+                    <figcaption class="position-absolute w-100 margin-b10 text-center">
+                        <span class="font-thumb-source color-white">{#thumb_sources}</span>
+                    </figcaption>
+                    <?php } ?>
+                </figure>
+            </div>
+            
+            <div class="display-flex margin-t15 margin-b15">
+
+                <div class="item-photo display-inline-block w-50px margin-r10" aria-hidden="true">
+                    <a href="{$author_url}" target="_self" title="{$author_name}">
+                        <amp-img class="margin-r10" alt="{$author_name}" src="{$author_avatar}" width="50" height="50"></amp-img>
+                    </a>
+                </div>
+               <div class="display-flex direction-colum align-start">
+                  <p class="item-author display-inline-block">
+                     <a class="color-blackly font-bold" href="{$author_url}" target="_self" title="{$author_name}">{$author_name}</a>
+                  </p>
+                  <div class="item-time margin-t5">
+                     <time datetime="{$published_date}">
+                        <span class="color-blackly font-low">{$word->published} {$published_at}</span>
+                     </time>
+                     <?php if(!empty($TEMP['#update_date'])){ ?>
+                     <time class="item-pmodified" datetime="{$published_date}">
+                        <span class="color-blackly font-low">• {$word->modified} {$updated_at}</span>
+                     </time>
+                     <?php } ?>
+                  </div>
+               </div>
+               <div class="display-flex direction-colum margin-left-auto">
+                  <b class="color-black font-georgia font-mediumly font-bold text-right">{$views}</b>
+                  <span class="color-black font-georgia font-mediumly text-right">{$word->views}</span>
+               </div>
+            </div>
+        </header>
+
+        <section class="content-article font-georgia" name="articleBody">
+            {$entries}
+        </section>
+    </article>
+        
+      <?php if(!empty($TEMP['#collaborators'])){ ?>
+      <div class="display-block padding-t15 margin-b15 border-top border-bottom border-grely">
+         <?php if(count($TEMP['#collaborators']) > 1){ ?>
+         <h2 class="color-black font-postoni-bodo font-bigly font-bold text-uppercase text-center margin-b15">{$word->collaborators}</h2>
+         <div class="container-apost display-flex w-100">
+            <ul class="display-flex direction-row align-center margin-auto padding-b15">
+               {$collaborators}
+            </ul>
+         </div>
+         <?php } else { ?>
+         <h2 class="color-black font-postoni-bodo font-bigly font-bold text-uppercase text-center margin-b5">{$word->collaborator}</h2>
+         <div class="container-apost display-flex w-100 margin-b15">
+            {$collaborators}
+         </div>
+         <?php } ?>
+      </div>
+      <?php } ?>
+      <?php if(!empty($TEMP['#post_sources'])){ ?>
+      <div class="content-source font-georgia margin-b15">
+         <section class="items-sources">
+            {#post_sources}
+         </section>
+      </div>
+      <?php } ?>
+
+    <!-- tags -->
+    <div class="content-tags padding-b5">
+        <section class="items-tags">
+            <span class="color-black font-georgia font-low font-bold">{$word->tags}:</span>
+            {$tags}
+        </section>
+    </div>
+
+    <div class="display-flex direction-row align-center margin-t10 padding-t10 border-top border-grely">
+         <div class="display-flex margin-right-auto">
+            <div class="container_likes display-flex">
+                <?php if($TEMP['#loggedin'] == true){ ?>
+                <button on="tap:container-lightbox" class="display-flex direction-row align-center btn-noway margin-r15 hover-button<?php echo($TEMP['#likes_active'] > 0) ? ' color-blue' : ' color-grey';?>">
+                  <svg class="icon-t margin-r5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                     <path fill="currentColor" d="M 6.56 16.667 C 6.56 16.485 6.497 16.329 6.37 16.197 C 6.243 16.065 6.093 16 5.92 16 C 5.74 16 5.588 16.065 5.465 16.197 C 5.342 16.329 5.28 16.485 5.28 16.667 C 5.28 16.853 5.342 17.012 5.465 17.14 C 5.588 17.268 5.74 17.333 5.92 17.333 C 6.093 17.333 6.243 17.268 6.37 17.14 C 6.497 17.012 6.56 16.853 6.56 16.667 Z M 8.16 11.332 L 8.16 18 C 8.16 18.18 8.097 18.336 7.97 18.468 C 7.843 18.6 7.693 18.667 7.52 18.667 L 4.64 18.667 C 4.467 18.667 4.317 18.6 4.19 18.468 C 4.063 18.336 4 18.18 4 18 L 4 11.332 C 4 11.152 4.063 10.996 4.19 10.864 C 4.317 10.732 4.467 10.667 4.64 10.667 L 7.52 10.667 C 7.693 10.667 7.843 10.732 7.97 10.864 C 8.097 10.996 8.16 11.152 8.16 11.333 Z M 20 11.332 C 20 11.929 19.817 12.447 19.45 12.884 C 19.55 13.191 19.6 13.455 19.6 13.676 C 19.62 14.204 19.477 14.68 19.17 15.104 C 19.283 15.493 19.283 15.899 19.17 16.323 C 19.07 16.719 18.89 17.045 18.63 17.303 C 18.69 18.08 18.527 18.708 18.14 19.188 C 17.713 19.715 17.056 19.987 16.17 20 L 14.879 20 C 14.439 20 13.959 19.947 13.439 19.839 C 12.919 19.731 12.514 19.631 12.225 19.537 C 11.935 19.443 11.533 19.305 11.02 19.125 C 10.199 18.827 9.673 18.673 9.439 18.667 C 9.266 18.66 9.116 18.592 8.989 18.464 C 8.863 18.335 8.799 18.18 8.799 18 L 8.799 11.323 C 8.799 11.149 8.859 10.997 8.979 10.869 C 9.099 10.741 9.242 10.669 9.409 10.656 C 9.569 10.643 9.823 10.437 10.17 10.041 C 10.516 9.645 10.853 9.225 11.18 8.781 C 11.633 8.177 11.969 7.76 12.189 7.531 C 12.309 7.405 12.413 7.239 12.499 7.031 C 12.586 6.823 12.644 6.653 12.674 6.525 C 12.704 6.397 12.749 6.187 12.809 5.896 C 12.855 5.625 12.897 5.413 12.934 5.26 C 12.97 5.107 13.036 4.927 13.129 4.719 C 13.222 4.511 13.336 4.337 13.469 4.199 C 13.596 4.067 13.745 4 13.919 4 C 14.225 4 14.5 4.036 14.744 4.109 C 14.987 4.183 15.187 4.272 15.344 4.38 C 15.501 4.488 15.634 4.628 15.744 4.803 C 15.854 4.976 15.934 5.132 15.984 5.271 C 16.034 5.409 16.074 5.583 16.104 5.792 C 16.133 6 16.15 6.156 16.154 6.26 C 16.157 6.364 16.159 6.5 16.159 6.667 C 16.159 6.931 16.127 7.195 16.064 7.459 C 16.001 7.723 15.937 7.931 15.874 8.084 C 15.81 8.236 15.719 8.431 15.599 8.667 C 15.579 8.708 15.545 8.771 15.499 8.855 C 15.452 8.937 15.416 9.013 15.389 9.084 C 15.362 9.153 15.335 9.236 15.309 9.333 L 18.079 9.333 C 18.599 9.333 19.049 9.532 19.428 9.928 C 19.808 10.324 19.998 10.792 19.999 11.333 Z"></path>
+                  </svg>
+                  <span class="font-bold font-mediumly">{$likes}</span>
+                </button>
+                <button on="tap:container-lightbox" class="display-flex direction-row align-center btn-noway hover-button<?php echo($TEMP['#dislikes_active'] > 0) ? ' color-blue' : ' color-grey';?>">
+                  <svg class="icon-t margin-r5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                     <path fill="currentColor" d="M 6.557 16.667 C 6.557 16.485 6.493 16.329 6.367 16.197 C 6.239 16.065 6.089 16 5.915 16 C 5.736 16 5.583 16.065 5.46 16.197 C 5.337 16.329 5.276 16.485 5.276 16.667 C 5.276 16.853 5.337 17.012 5.46 17.14 C 5.583 17.268 5.736 17.332 5.915 17.332 C 6.089 17.332 6.239 17.268 6.367 17.14 C 6.493 17.012 6.557 16.853 6.557 16.667 Z M 8.157 11.332 L 8.157 18 C 8.157 18.18 8.095 18.336 7.967 18.468 C 7.841 18.6 7.689 18.665 7.517 18.665 L 4.635 18.665 C 4.462 18.665 4.312 18.6 4.184 18.468 C 4.058 18.336 3.996 18.18 3.996 18 L 3.996 11.332 C 3.996 11.152 4.058 10.996 4.184 10.864 C 4.312 10.732 4.462 10.665 4.635 10.665 L 7.517 10.665 C 7.689 10.665 7.841 10.732 7.967 10.864 C 8.095 10.996 8.157 11.152 8.157 11.332 Z M 19.453 12.884 C 19.82 12.461 20.003 11.944 20.003 11.332 C 19.995 10.791 19.805 10.323 19.427 9.927 C 19.052 9.531 18.604 9.333 18.082 9.332 L 15.311 9.332 C 15.338 9.235 15.365 9.152 15.391 9.083 C 15.418 9.013 15.453 8.937 15.501 8.853 C 15.548 8.769 15.582 8.707 15.601 8.665 C 15.721 8.409 15.812 8.211 15.871 8.072 C 15.931 7.933 15.995 7.729 16.061 7.463 C 16.128 7.196 16.161 6.929 16.161 6.665 C 16.161 6.499 16.158 6.364 16.155 6.26 C 16.153 6.156 16.136 6 16.107 5.791 C 16.076 5.583 16.037 5.409 15.986 5.271 C 15.936 5.132 15.855 4.976 15.746 4.801 C 15.636 4.628 15.502 4.488 15.346 4.38 C 15.19 4.272 14.989 4.183 14.746 4.109 C 14.502 4.036 14.226 4 13.92 4 C 13.747 4 13.597 4.065 13.47 4.197 C 13.337 4.337 13.222 4.511 13.13 4.719 C 13.037 4.927 12.972 5.107 12.935 5.26 C 12.897 5.413 12.856 5.624 12.81 5.895 C 12.749 6.187 12.705 6.397 12.675 6.525 C 12.645 6.653 12.586 6.823 12.5 7.031 C 12.413 7.239 12.311 7.405 12.19 7.531 C 11.97 7.76 11.633 8.176 11.179 8.78 C 10.852 9.225 10.515 9.645 10.169 10.041 C 9.821 10.437 9.569 10.643 9.409 10.656 C 9.241 10.669 9.098 10.741 8.978 10.869 C 8.859 10.997 8.798 11.149 8.798 11.323 L 8.798 18 C 8.798 18.18 8.862 18.335 8.988 18.463 C 9.114 18.592 9.264 18.66 9.439 18.667 C 9.672 18.673 10.199 18.827 11.019 19.125 C 11.533 19.305 11.935 19.443 12.225 19.536 C 12.514 19.631 12.919 19.731 13.441 19.839 C 13.96 19.947 14.441 20 14.881 20 L 16.172 20 C 17.058 19.987 17.716 19.715 18.143 19.187 C 18.529 18.708 18.693 18.08 18.633 17.301 C 18.893 17.045 19.074 16.719 19.173 16.323 C 19.287 15.899 19.287 15.493 19.173 15.104 C 19.481 14.68 19.623 14.204 19.604 13.676 C 19.604 13.455 19.553 13.191 19.454 12.884 Z" transform="matrix(-1, 0, 0, -1, 23.999, 24)"></path>
+                  </svg>
+                  <span class="font-bold font-mediumly">{$dislikes}</span>
+                </button>
+                <?php } else { ?>
+                <a class="display-flex direction-row align-center btn-noway color-grey margin-r15 hover-button" href="{$url->{{#r_login}}}" target="_self">
+                  <svg class="icon-t margin-r5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                     <path fill="currentColor" d="M 6.56 16.667 C 6.56 16.485 6.497 16.329 6.37 16.197 C 6.243 16.065 6.093 16 5.92 16 C 5.74 16 5.588 16.065 5.465 16.197 C 5.342 16.329 5.28 16.485 5.28 16.667 C 5.28 16.853 5.342 17.012 5.465 17.14 C 5.588 17.268 5.74 17.333 5.92 17.333 C 6.093 17.333 6.243 17.268 6.37 17.14 C 6.497 17.012 6.56 16.853 6.56 16.667 Z M 8.16 11.332 L 8.16 18 C 8.16 18.18 8.097 18.336 7.97 18.468 C 7.843 18.6 7.693 18.667 7.52 18.667 L 4.64 18.667 C 4.467 18.667 4.317 18.6 4.19 18.468 C 4.063 18.336 4 18.18 4 18 L 4 11.332 C 4 11.152 4.063 10.996 4.19 10.864 C 4.317 10.732 4.467 10.667 4.64 10.667 L 7.52 10.667 C 7.693 10.667 7.843 10.732 7.97 10.864 C 8.097 10.996 8.16 11.152 8.16 11.333 Z M 20 11.332 C 20 11.929 19.817 12.447 19.45 12.884 C 19.55 13.191 19.6 13.455 19.6 13.676 C 19.62 14.204 19.477 14.68 19.17 15.104 C 19.283 15.493 19.283 15.899 19.17 16.323 C 19.07 16.719 18.89 17.045 18.63 17.303 C 18.69 18.08 18.527 18.708 18.14 19.188 C 17.713 19.715 17.056 19.987 16.17 20 L 14.879 20 C 14.439 20 13.959 19.947 13.439 19.839 C 12.919 19.731 12.514 19.631 12.225 19.537 C 11.935 19.443 11.533 19.305 11.02 19.125 C 10.199 18.827 9.673 18.673 9.439 18.667 C 9.266 18.66 9.116 18.592 8.989 18.464 C 8.863 18.335 8.799 18.18 8.799 18 L 8.799 11.323 C 8.799 11.149 8.859 10.997 8.979 10.869 C 9.099 10.741 9.242 10.669 9.409 10.656 C 9.569 10.643 9.823 10.437 10.17 10.041 C 10.516 9.645 10.853 9.225 11.18 8.781 C 11.633 8.177 11.969 7.76 12.189 7.531 C 12.309 7.405 12.413 7.239 12.499 7.031 C 12.586 6.823 12.644 6.653 12.674 6.525 C 12.704 6.397 12.749 6.187 12.809 5.896 C 12.855 5.625 12.897 5.413 12.934 5.26 C 12.97 5.107 13.036 4.927 13.129 4.719 C 13.222 4.511 13.336 4.337 13.469 4.199 C 13.596 4.067 13.745 4 13.919 4 C 14.225 4 14.5 4.036 14.744 4.109 C 14.987 4.183 15.187 4.272 15.344 4.38 C 15.501 4.488 15.634 4.628 15.744 4.803 C 15.854 4.976 15.934 5.132 15.984 5.271 C 16.034 5.409 16.074 5.583 16.104 5.792 C 16.133 6 16.15 6.156 16.154 6.26 C 16.157 6.364 16.159 6.5 16.159 6.667 C 16.159 6.931 16.127 7.195 16.064 7.459 C 16.001 7.723 15.937 7.931 15.874 8.084 C 15.81 8.236 15.719 8.431 15.599 8.667 C 15.579 8.708 15.545 8.771 15.499 8.855 C 15.452 8.937 15.416 9.013 15.389 9.084 C 15.362 9.153 15.335 9.236 15.309 9.333 L 18.079 9.333 C 18.599 9.333 19.049 9.532 19.428 9.928 C 19.808 10.324 19.998 10.792 19.999 11.333 Z"></path>
+                  </svg>
+                  <span class="color-grey font-bold font-mediumly">{$likes}</span>
+               </a>
+               <a class="display-flex direction-row align-center btn-noway color-grey hover-button" href="{$url->{{#r_login}}}" target="_self">
+                  <svg class="icon-t margin-r5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                     <path fill="currentColor" d="M 6.557 16.667 C 6.557 16.485 6.493 16.329 6.367 16.197 C 6.239 16.065 6.089 16 5.915 16 C 5.736 16 5.583 16.065 5.46 16.197 C 5.337 16.329 5.276 16.485 5.276 16.667 C 5.276 16.853 5.337 17.012 5.46 17.14 C 5.583 17.268 5.736 17.332 5.915 17.332 C 6.089 17.332 6.239 17.268 6.367 17.14 C 6.493 17.012 6.557 16.853 6.557 16.667 Z M 8.157 11.332 L 8.157 18 C 8.157 18.18 8.095 18.336 7.967 18.468 C 7.841 18.6 7.689 18.665 7.517 18.665 L 4.635 18.665 C 4.462 18.665 4.312 18.6 4.184 18.468 C 4.058 18.336 3.996 18.18 3.996 18 L 3.996 11.332 C 3.996 11.152 4.058 10.996 4.184 10.864 C 4.312 10.732 4.462 10.665 4.635 10.665 L 7.517 10.665 C 7.689 10.665 7.841 10.732 7.967 10.864 C 8.095 10.996 8.157 11.152 8.157 11.332 Z M 19.453 12.884 C 19.82 12.461 20.003 11.944 20.003 11.332 C 19.995 10.791 19.805 10.323 19.427 9.927 C 19.052 9.531 18.604 9.333 18.082 9.332 L 15.311 9.332 C 15.338 9.235 15.365 9.152 15.391 9.083 C 15.418 9.013 15.453 8.937 15.501 8.853 C 15.548 8.769 15.582 8.707 15.601 8.665 C 15.721 8.409 15.812 8.211 15.871 8.072 C 15.931 7.933 15.995 7.729 16.061 7.463 C 16.128 7.196 16.161 6.929 16.161 6.665 C 16.161 6.499 16.158 6.364 16.155 6.26 C 16.153 6.156 16.136 6 16.107 5.791 C 16.076 5.583 16.037 5.409 15.986 5.271 C 15.936 5.132 15.855 4.976 15.746 4.801 C 15.636 4.628 15.502 4.488 15.346 4.38 C 15.19 4.272 14.989 4.183 14.746 4.109 C 14.502 4.036 14.226 4 13.92 4 C 13.747 4 13.597 4.065 13.47 4.197 C 13.337 4.337 13.222 4.511 13.13 4.719 C 13.037 4.927 12.972 5.107 12.935 5.26 C 12.897 5.413 12.856 5.624 12.81 5.895 C 12.749 6.187 12.705 6.397 12.675 6.525 C 12.645 6.653 12.586 6.823 12.5 7.031 C 12.413 7.239 12.311 7.405 12.19 7.531 C 11.97 7.76 11.633 8.176 11.179 8.78 C 10.852 9.225 10.515 9.645 10.169 10.041 C 9.821 10.437 9.569 10.643 9.409 10.656 C 9.241 10.669 9.098 10.741 8.978 10.869 C 8.859 10.997 8.798 11.149 8.798 11.323 L 8.798 18 C 8.798 18.18 8.862 18.335 8.988 18.463 C 9.114 18.592 9.264 18.66 9.439 18.667 C 9.672 18.673 10.199 18.827 11.019 19.125 C 11.533 19.305 11.935 19.443 12.225 19.536 C 12.514 19.631 12.919 19.731 13.441 19.839 C 13.96 19.947 14.441 20 14.881 20 L 16.172 20 C 17.058 19.987 17.716 19.715 18.143 19.187 C 18.529 18.708 18.693 18.08 18.633 17.301 C 18.893 17.045 19.074 16.719 19.173 16.323 C 19.287 15.899 19.287 15.493 19.173 15.104 C 19.481 14.68 19.623 14.204 19.604 13.676 C 19.604 13.455 19.553 13.191 19.454 12.884 Z" transform="matrix(-1, 0, 0, -1, 23.999, 24)"></path>
+                  </svg>
+                  <span class="color-grey font-bold font-mediumly">{$dislikes}</span>
+               </a>
+               <?php } ?>
+            </div>
+            <?php if($TEMP['#settings']['system_comments'] == 'on' && $TEMP['#settings']['fb_comments'] == 'off'){ ?>
+            <div on="tap:AMP.scrollTo(id='container-comments', position='center')" class="display-flex direction-row align-center margin-l10 padding-l10 border-left border-grely">
+               <button class="btn_spcomment display-flex direction-row align-center btn-noway color-grey hover-button">
+                  <svg class="icon-z margin-r10" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                     <path fill="currentColor" d="M12 1.5C5.372 1.5 0 5.864 0 11.25c0 2.325 1.003 4.453 2.672 6.127C2.086 19.739 0.127 21.844 0.103 21.867c-0.103 0.108 -0.131 0.267 -0.07 0.408S0.225 22.5 0.375 22.5c3.108 0 5.438 -1.491 6.591 -2.409 1.533 0.577 3.234 0.909 5.034 0.909 6.628 0 12 -4.364 12 -9.75S18.628 1.5 12 1.5z"/>
+                  </svg>
+                  <span class="item_comments font-bold font-mediumly">{#count_comments}</span>
+               </button>
+            </div>
+            <?php } ?>
+         </div>
+         <?php if($TEMP['#is_owner'] == false){ ?>
+         <?php if($TEMP['#loggedin'] == true){ ?>
+         <button on="tap:container-lightbox" class="btn_report btn-noway color-grey margin-r15 hover-button">
+            <svg class="icon-z vertical-sub" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+               <path fill="currentColor" d="M22.167 0.128A0.75 0.75 0 0 1 22.5 0.75V12a0.75 0.75 0 0 1 -0.471 0.696L21.75 12l0.279 0.696 -0.005 0.002 -0.009 0.005 -0.035 0.013a18.652 18.652 0 0 1 -0.596 0.225c-0.396 0.143 -0.947 0.335 -1.571 0.525 -1.224 0.378 -2.819 0.784 -4.065 0.784 -1.27 0 -2.322 -0.42 -3.237 -0.788l-0.042 -0.015C11.52 13.065 10.71 12.75 9.75 12.75c-1.05 0 -2.457 0.345 -3.655 0.716A29.439 29.439 0 0 0 4.5 14.013V23.25a0.75 0.75 0 0 1 -1.5 0V0.75a0.75 0.75 0 0 1 1.5 0v0.423c0.339 -0.118 0.744 -0.255 1.185 -0.39C6.909 0.408 8.505 0 9.75 0c1.26 0 2.286 0.416 3.181 0.778l0.065 0.027C13.929 1.182 14.742 1.5 15.75 1.5c1.05 0 2.457 -0.345 3.655 -0.716a29.38 29.38 0 0 0 2.023 -0.714l0.028 -0.011 0.006 -0.003h0.002"/>
+            </svg>
+         </button>
+         <?php } else { ?>
+         <a class="btn-noway color-grey margin-r15 hover-button" href="{$url->{{#r_login}}}" target="_self">
+            <svg class="icon-z vertical-sub" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+               <path fill="currentColor" d="M22.167 0.128A0.75 0.75 0 0 1 22.5 0.75V12a0.75 0.75 0 0 1 -0.471 0.696L21.75 12l0.279 0.696 -0.005 0.002 -0.009 0.005 -0.035 0.013a18.652 18.652 0 0 1 -0.596 0.225c-0.396 0.143 -0.947 0.335 -1.571 0.525 -1.224 0.378 -2.819 0.784 -4.065 0.784 -1.27 0 -2.322 -0.42 -3.237 -0.788l-0.042 -0.015C11.52 13.065 10.71 12.75 9.75 12.75c-1.05 0 -2.457 0.345 -3.655 0.716A29.439 29.439 0 0 0 4.5 14.013V23.25a0.75 0.75 0 0 1 -1.5 0V0.75a0.75 0.75 0 0 1 1.5 0v0.423c0.339 -0.118 0.744 -0.255 1.185 -0.39C6.909 0.408 8.505 0 9.75 0c1.26 0 2.286 0.416 3.181 0.778l0.065 0.027C13.929 1.182 14.742 1.5 15.75 1.5c1.05 0 2.457 -0.345 3.655 -0.716a29.38 29.38 0 0 0 2.023 -0.714l0.028 -0.011 0.006 -0.003h0.002"/>
+            </svg>
+         </a>
+         <?php } ?>
+         <?php } ?>
+    </div>
+
+    <?php if(!empty($TEMP['#relateds'])){ ?>
+    <div class="content-related margin-t10 padding-t10 border-top border-grely">
+        <section class="items-related">
+            <div class="related-title border-bottom border-grely padding-b10">
+               <h2 class="color-black font-postoni-bodo font-medium font-bold">{$word->recommended_posts}</h2>
+            </div>
+            <div class="related-posts display-flex margin-t15">
+               {$related_bottom}
+            </div>
+        </section>
+    </div>
+    <?php } ?>
+
+
+    <?php if($TEMP['#settings']['fb_comments'] == 'on' || $TEMP['#settings']['system_comments'] == 'on'){ ?>
+    <div class="content-comments container_comments position-relative margin-t15 padding-t15">
+        <div class="item_notab display-flex direction-row align-center w-100 border-bottom border-black padding-b5 margin-b10">
+            <span class="item-ctitle color-black font-medium font-bold">{$word->comments}</span>
+        </div>
+        <?php if($TEMP['#settings']['fb_comments'] == 'on' && $TEMP['#settings']['system_comments'] == 'on'){ ?>
+        <div class="item_notab margin-b5 padding-b10 border-bottom border-grely">
+            <amp-selector class="content-ctabs display-flex direction-row align-center position-relative" role="tablist" on="select:commentsTabPanels.toggle(index=event.targetOption, value=true)" keyboard-select-mode="focus">
+                <button id="btn-ctab1" class="btn_ctchange display-flex direction-row align-center btn-noway color-grey margin-r15 padding-5 hover-button" role="tab" aria-controls="comment-tabpanel1" option="0" selected>
+                    <svg class="icon-z margin-auto" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="currentColor" d="M20.4 1.2H3.6c-1.32 0 -2.4 1.08 -2.4 2.4v16.8c0 1.321 1.08 2.4 2.4 2.4h8.4v-8.4H9.6V11.43h2.4v-2.46c0 -2.597 1.454 -4.421 4.519 -4.421l2.164 0.002v3.126h-1.436c-1.193 0 -1.646 0.895 -1.646 1.726v2.028h3.082L18 14.4h-2.4v8.4h4.8c1.32 0 2.4 -1.079 2.4 -2.4V3.6c0 -1.32 -1.08 -2.4 -2.4 -2.4z"/>
+                    </svg>
+                </button>
+                <button id="btn-ctab2" class="btn_ctchange display-flex direction-row align-center btn-noway color-grey padding-5 hover-button" role="tab" aria-controls="comment-tabpanel2" option="1">
+                    <svg class="icon-z margin-left-auto margin-r10" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="currentColor" d="M12 1.5C5.372 1.5 0 5.864 0 11.25c0 2.325 1.003 4.453 2.672 6.127C2.086 19.739 0.127 21.844 0.103 21.867c-0.103 0.108 -0.131 0.267 -0.07 0.408S0.225 22.5 0.375 22.5c3.108 0 5.438 -1.491 6.591 -2.409 1.533 0.577 3.234 0.909 5.034 0.909 6.628 0 12 -4.364 12 -9.75S18.628 1.5 12 1.5z"/>
+                    </svg>
+                    <span class="item_comments font-bold font-mediumly margin-right-auto">{#count_comments}</span>
+                </button>
+                <div class="item_ctbackground position-absolute"></div>
+            </amp-selector>
+        </div>
+        <?php } ?>
+        <amp-selector id="commentsTabPanels">
+            <?php if($TEMP['#settings']['fb_comments'] == 'on'){ ?>
+            <section id="comment-tabpanel1" class="items_comments"<?php echo($TEMP['#settings']['system_comments'] == 'on') ? ' role="tabpanel" aria-labelledby="btn-ctab1" option selected' : '';?>>
+                <amp-facebook-comments id="container-comments" width="1000" height="100" layout="responsive" data-numposts="5" data-href="{$url}"></amp-facebook-comments>
+            </section>
+            <?php } ?>
+            <?php if($TEMP['#settings']['system_comments'] == 'on'){ ?>
+            <section id="comment-tabpanel2" class="items_comments display-flex direction-colum padding-t10 padding-b10 padding-l10 padding-r10"<?php echo($TEMP['#settings']['fb_comments'] == 'on') ? ' role="tabpanel" aria-labelledby="btn-ctab2" option' : '';?>>
+                <div class="content-cmessage display-flex direction-colum align-center position-absolute z-index-1 padding-t10 padding-b10 padding-l10 padding-r10">
+                    <span class="color-black text-center margin-top-auto">{$word->using_amp_version_platform_comment}</span>
+                    <a class="background-blue color-white margin-bottom-auto margin-t15 padding-t5 padding-b5 padding-l20 padding-r20 border-rlow hover-button boxshadow-grey" href="{$url}" target="_blank">{$word->to_go}</a>
+                </div>
+                <div class="display-flex direction-row align-center w-100 margin-t15 margin-b15">
+                    <div class="margin-bottom-auto margin-r10">
+                        <amp-img class="border-rall" alt="{$cusername}" src="{$avatar_cs}" width="45" height="45"></amp-img>
+                    </div>
+                    <div class="content-pcomment content_comment display-flex direction-colum w-100 margin-bottom-auto">
+                        <textarea class="text_carea w-100 background-white color-black padding-5 resize-none border-none border-bottom border-grely sizing-box" rows="1" placeholder="{$word->write_something}"></textarea>
+                        <div class="content_cbuttons display-flex direction-row align-center margin-t10 margin-left-auto">
+                            <div class="container_cprogress">
+                                <div class="content_cprogress" role="progressbar" aria-valuemax="100" aria-valuemin="0" aria-valuenow="0">
+                                    <div class="display-flex direction-row align-center">
+                                        <svg class="icon-z color-blue" viewBox="0 0 20 20">
+                                            <circle cx="50%" cy="50%" fill="none" stroke-width="2" r="9" stroke="#EFF3F4"></circle>
+                                            <circle cx="50%" cy="50%" fill="none" stroke-width="2" r="9" stroke="currentColor" stroke-linecap="round" stroke-dasharray="100" stroke-dashoffset="100"></circle>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item-cdivider background-blue margin-l10 margin-r10"></div>
+                            <button class="btn_ccancel btn-noway background-grely font-mediumly font-bold text-uppercase color-grey margin-r10 padding-t5 padding-b5 padding-l10 padding-r10 border-rlow boxshadow-grey">
+                                <span class="item-cbtext">{$word->cancel}</span>
+                                <span class="item-cbicon">
+                                   <svg class="icon-y vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                      <path fill="currentColor" d="M13.68 12l5.88 -5.88a1.188 1.188 0 0 0 -1.68 -1.68L12 10.32 6.12 4.44A1.188 1.188 0 0 0 4.44 6.12l5.88 5.88L4.44 17.88a1.188 1.188 0 0 0 1.68 1.68l5.88 -5.88 5.88 5.88a1.188 1.188 0 0 0 1.68 -1.68Z"/>
+                                   </svg>
+                                </span>
+                            </button>
+                            <?php if($TEMP['#loggedin'] == true){ ?>
+                            <button class="btn_comment btn-noway font-mediumly font-bold text-uppercase background-blue color-white padding-t5 padding-b5 padding-l10 padding-r10 border-rlow boxshadow-grey">
+                                <span class="item-cbtext color-white">{$word->comment}</span>
+                                <span class="item-cbicon">
+                                    <svg class="icon-y vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill="currentColor" d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"/>
+                                    </svg>
+                                </span>
+                            </button>
+                            <?php } else { ?>
+                            <a class="font-mediumly font-bold text-uppercase background-blue color-white padding-t5 padding-b5 padding-l10 padding-r10 border-rlow boxshadow-grey" href="{$url->{{#r_login}}}" target="_self">{$word->comment}</a>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <?php } ?>
+        </amp-selector>
+    </div>
+    <?php } ?>
+</div>

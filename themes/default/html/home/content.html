@@ -5,7 +5,7 @@
       <a class="margin-right-auto hover-underline animation-ease3s" href="{$breaking_url}" target="_self" title="{$breaking_title}" data-id="{$breaking_id}">
          <h3 class="main-two-title font-postoni-bodo font-bigly ellipsis-vertical ellipsis-v2 color-white">{$breaking_title}</h3>
       </a>
-      <button id="btn-cbreaking" class="btn-noway icon-x margin-l5 hover-button animation-ease3s" aria-label="Cerrar anuncio de noticia de última hora">
+      <button id="btn-cbreaking" class="btn-noway icon-x margin-l5 hover-button animation-ease3s" aria-label="{$word->close_breaking_news_ad}">
          <svg class="color-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
            <path fill="none" stroke="currentColor" stroke-width="3" d="M3,3 L21,21 M3,21 L21,3"/>
          </svg>
@@ -17,15 +17,15 @@
 <div class="content-main padding-t25">
    <div class="items-main display-flex vertical-slots">
       <div class="main-one">
-         <div class="content-news-left display-flex vertical-slots">
-            <div class="left-news-left">
-               <div id="content-left-news" class="content-left-news">
+         <div class="content-posts-left display-flex vertical-slots">
+            <div class="left-posts-left">
+               <div id="content-left-posts" class="content-left-posts">
                   {$main_left_one}
                </div>
                <div id="content-mlload" class="content-mlload padding-t25 border-top border-grely hidden">
-                  <div class="main-news-wrapper">
+                  <div class="main-posts-wrapper">
                      <div class="content-mlload-image animate-content-load w-100"></div>
-                     <div class="content-news-wrapper margin-t10">
+                     <div class="content-posts-wrapper margin-t10">
                         <div class="content-mlload-title animate-content-load"></div>
                         <div class="content-mlload-title animate-content-load w-50 margin-t5"></div>
                         <div class="contentmlload-summary animate-content-load margin-t10"></div>
@@ -33,9 +33,9 @@
                         <div class="contentmlload-summary animate-content-load w-50px margin-t5"></div>
                      </div>
                   </div>
-                  <div class="main-news-wrapper">
+                  <div class="main-posts-wrapper">
                      <div class="content-mlload-image animate-content-load w-100"></div>
-                     <div class="content-news-wrapper margin-t10">
+                     <div class="content-posts-wrapper margin-t10">
                         <div class="content-mlload-title animate-content-load"></div>
                         <div class="content-mlload-title animate-content-load w-50 margin-t5"></div>
                         <div class="contentmlload-summary animate-content-load margin-t10"></div>
@@ -45,10 +45,10 @@
                   </div>
                </div>
             </div>
-            <div class="right-news-left">
-               <section class="<?php echo($TEMP['#main_right_type'] == 'video') ? 'content-video-animate ' : '';?>main-news-wrapper position-relative" data-id="{$main_right_id}">
-                  <a class="hover-all" href="{$main_right_url}">
-                     <div class="content-news-right no-hover">
+            <div class="right-posts-left">
+               <section class="main-posts-wrapper position-relative" data-id="{$main_right_id}">
+                  <a class="<?php echo($TEMP['#main_right_type'] == 'video') ? 'content-video-animate ' : '';?>hover-all" href="{$main_right_url}">
+                     <div class="content-posts-right no-hover">
                         <figure class="content-gradient position-relative margin-none no-hover">
                            <?php if($TEMP['#main_right_type'] == 'video'){ ?>
                            <div class="content-vanimate display-flex direction-row align-center position-absolute no-hover">
@@ -66,8 +66,8 @@
                            </figcaption>
                         </figure>
                         <section class="margin-t10">
-                           <h3 class="main-news-title font-postoni-bodo font-big ellipsis-vertical ellipsis-v3 color-black margin-b5 animation-ease3s">{$main_right_title}</h3>
-                           <p class="main-news-summary font-mediumly ellipsis-vertical ellipsis-v4 color-grey animation-ease3s">{$main_right_description}</p>
+                           <h3 class="main-posts-title font-postoni-bodo font-big ellipsis-vertical ellipsis-v3 color-black margin-b5 animation-ease3s">{$main_right_title}</h3>
+                           <p class="main-posts-summary font-mediumly ellipsis-vertical ellipsis-v4 color-grey animation-ease3s">{$main_right_description}</p>
                         </section>
                      </div>
                   </a>
@@ -90,19 +90,19 @@
 <div class="content-recommended">
    <section class="items-recommended">
       <div class="recommended-title">
-         <span class="color-black font-postoni-bodo font-mediumly font-bold">Noticias recomendadas</span>
+         <span class="color-black font-postoni-bodo font-mediumly font-bold">{$word->recommended_posts}</span>
       </div>
-      <div class="recommended-news display-flex margin-t15 margin-b15 padding-b15 border-bottom border-grely">
-         {$recommended_news}
+      <div class="recommended-posts display-flex margin-t15 margin-b15 padding-b15 border-bottom border-grely">
+         {$recommended_posts}
       </div>
    </section>
 </div>
 <?php } ?>
 <?php if(!empty($TEMP['#video'])){ ?>
-<div class="container-video-news padding-b15 margin-b15 border-bottom border-grely">
+<div class="container-video-posts padding-b15 margin-b15 border-bottom border-grely">
    <div class="display-block background-blue position-relative padding-l20 padding-r20">
-      <section class="content-frame-news display-flex direction-row align-center w-100 margin-b15 padding-t25 padding-b15 border-bottom border-grely" data-id="{$id}">
-         <div id="content-video-news" class="content-video-news display-flex align-center position-relative background-blackly w-50 cursor-pointer margin-r15">
+      <section class="content-frame-posts display-flex direction-row align-center w-100 margin-b15 padding-t25 padding-b15 border-bottom border-grely" data-id="{$id}">
+         <div id="content-video-posts" class="content-video-posts display-flex align-center position-relative background-blackly w-50 cursor-pointer margin-r15">
             <button class="btn-play-video display-flex position-absolute background-blackly btn-noway text-center border-rall hover-all">
                <span class="hidden">{$word->close}</span>
                <svg class="icon-z margin-auto animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -129,7 +129,7 @@
          </div>
       </section>
       <?php if($TEMP['#main_recommended_videos'] == true){ ?>
-      <div class="content-more-news padding-b25">
+      <div class="content-more-posts padding-b25">
          <section class="items-recommended position-relative">
             <div class="recommended-title">
                <span class="color-white font-postoni-bodo font-mediumly font-bold">Más videos</span>
@@ -147,10 +147,10 @@
                </button>
             </div>
             <div class="display-flex direction-row align-center position-relative">
-               <div class="content-recommended-video display-flex margin-t15 padding-b10 pointer-events-none">
-                  <div id="content-vnews" class="display-flex">
+               <div class="content-recommended-video display-flex w-100 margin-t15 padding-b10 pointer-events-none">
+                  <ul id="content-vposts" class="display-flex" role="region" arial-label="{$word->video_carousel}">
                      {$main_recommended_videos}
-                  </div>
+                  </ul>
                   <div id="content-vhload" class="display-flex hidden">
                      <div class="content-vhload margin-l15 padding-l15 border-left border-grely">
                        <div class="animate-content-load w-100 h-100"></div>
@@ -172,28 +172,16 @@
 
 
 <?php } ?>
-<?php if(!empty($TEMP['#last_news_one']) || !empty($TEMP['#last_news_two'])){ ?>
-<div class="content-more-news">
+<?php if(!empty($TEMP['#last_posts_one']) || !empty($TEMP['#last_posts_two'])){ ?>
+<div class="content-more-posts">
    <section class="items-recommended">
       <div class="recommended-title">
          <span class="color-black font-postoni-bodo font-mediumly font-bold">Más noticias</span>
       </div>
-      <div id="content-mnews" class="content-mnews">
-         {$more_news}
+      <div id="content-mposts" class="content-mposts">
+         {$more_posts}
       </div>
       <div id="content-lhload" class="container-lhload display-flex vertical-slots padding-t15 border-top border-grely hidden">
-         <div class="content-lhload item-recommended display-block position-relative margin-b15">
-            <div class="content-lhload-image figure-recommended animate-content-load margin-b10"></div>
-            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
-            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
-            <div class="content-lhload-title w-50 animate-content-load margin-b5"></div>
-         </div>
-         <div class="content-lhload item-recommended display-block position-relative margin-b15">
-            <div class="content-lhload-image figure-recommended animate-content-load margin-b10"></div>
-            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
-            <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
-            <div class="content-lhload-title w-50 animate-content-load margin-b5"></div>
-         </div>
          <div class="content-lhload item-recommended display-block position-relative margin-b15">
             <div class="content-lhload-image figure-recommended animate-content-load margin-b10"></div>
             <div class="content-lhload-title w-100 animate-content-load margin-b5"></div>
@@ -247,13 +235,13 @@
 </div>
 <?php } ?>
 <?php if($TEMP['#show_alert'] == true){ ?>
-<div id="alert-delete" class="content-adelete content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-dtitle" aria-describedby="alert-dcontent">
+{%%<div id="alert-delete" class="content-adelete content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-dtitle" aria-describedby="alert-dcontent">
    <div class="item-adelete background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
-      <span class="alert-dtitle display-block font-medium font-bold">{$word->removed}</span>
-      <p class="alert-dcontent font-mediumly color-black margin-t15">{$word->your_post_been_successfully_deleted}</p>
+      <span id="alert-dtitle" class="display-block font-medium font-bold">{$word->removed}</span>
+      <p id="alert-dcontent" class="font-mediumly color-black margin-t15">{$word->your_post_been_successfully_deleted}</p>
       <button id="btn-close" class="button-access btn-noway w-100px h-36 background-red color-white margin-t15 font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->close}</button>
    </div>
-</div>
+</div>%%}
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.modal.css}}" />
 {%%<script type="text/javascript">
    $(document).ready(function(){
@@ -270,7 +258,7 @@
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.main.css}}" />
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.video.css}}" />
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.recommended.css}}" />
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.last-news-two.css}}" />
+<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.last-posts-two.css}}" />
 {%%<script type="text/javascript">
    paper_h = {
       token: '{#token_session}',
@@ -283,97 +271,10 @@
          load_videos: '{$url->{req/home/load_videos}}',
          load_main_left: '{$url->{req/home/load_main_left}}'
       }
-   }, $('#content-video-news').click(function(){
+   }, $('#content-video-posts').click(function(){
       $(this).html('{$frame}')
    }), $('#btn-cbreaking').click(function(){
       $('#content-bnews').remove(), document.cookie = 'breaking_news='+paper_h.breaking_id+';max-age=604800;path=/';
    });
-
-
-   (function(){
-      var n = $(window);
-
-      (function(){
-         var z = $('#content-mlload'),
-             c = $('#content-left-news'),
-             b = $('#content-slider'),
-             a = c.parent(),
-             f = !0;
-
-         a.scroll(function(){
-            var t = a.scrollTop();
-            if(f && (t + a.height()) >= (c.height() - 100)){
-               f = !1, z.removeClass('hidden'), $.post(paper_h.url.load_main_left+"?token="+paper_h.token, {post_ids: JSON.stringify(paper_h.post_ids)}, function(e){
-                  if(e.S == 200){
-                     c.append(e.HT), paper_h.post_ids = e.IDS, z.addClass('hidden'), f = !0;
-                  } else {
-                     z.addClass('hidden')
-                  }
-               })
-            }
-         })
-
-      })();
-
-      (function(){
-         var k = !0,
-             b = !0,
-             g = $('#global-content'),
-             x = $('#content-mnews'),
-             u = $('#content-vnews'),
-             d = u.parent(),
-             v = u.children(),
-             f = $('#content-lhload'),
-             h = $('#content-vhload'),
-             a = $('.btn_bvideo[data-type="prev"]'),
-             j = function(e, i){
-               e.attr('disabled', i)
-             }, t = function(){
-               v.each(function(e, i){
-                 var y = $(i).width();
-                  if(s < (d.width() - (y + 31))){
-                     s += y + 31;
-                  }
-               })
-               return s;
-             },
-             s = 0,
-             q = 0,
-             w = 0,
-             o = !0,
-             l = !0;
-
-         $(document).scroll(function(){
-            (n.scrollTop() + n.height()) > g.height() && k && (k = !1, f.removeClass('hidden'), $.post(paper_h.url.load_more+"?token="+paper_h.token, {'post_ids': JSON.stringify(paper_h.post_ids)}, function(e) {
-               e.S == 200 ? (x.append(e.HT), paper_h.post_ids = e.IDS, k = !0, f.addClass('hidden'))
-               :
-               f.removeClass('hidden');
-            }));
-         }), d.scroll(function(){
-            (d.scrollLeft() + n.width()) > u.width() && b && (b = !1, h.removeClass('hidden'), $.post(paper_h.url.load_videos+"?token="+paper_h.token, {'post_ids': JSON.stringify(paper_h.post_ids)}, function(e) {
-               e.S == 200 ? (u.append(e.HT), paper_h.post_ids = e.IDS, b = !0, h.addClass('hidden')) : h.removeClass('hidden');
-            }));
-         }), n.resize(function(){
-            l && (o = l = !1, d.animate({scrollLeft: 0}, 750, function(){
-               s = q = w = 0, o = l = !0, j(a, !0)
-            }))
-         }), $('.btn_bvideo').click(function(){
-            if(o){
-               var p = $('.btn_bvideo[data-type="next"]'),
-                   r = ((d.width() - ($(v[0]).width() + 31)) <= 0),
-                   y = $(v[0]).width() + 31;
-
-               if($(this).attr('data-type') == 'next'){
-                  j(a, !1), o = !1, r ? (w < v.length ? w += 1 : v.length, q += y) : q += t(), d.animate({scrollLeft: q}, 750, function(){
-                     o = !0, (d.scrollLeft() + d.width()) == u.width() && j(p, !0)
-                  })
-               } else {
-                  j(p, !1), (q-s) >= 0 && (o = !1, r ? (w > 0 ? w -= 1 : 0, q -= y) : q -= t(), d.animate({scrollLeft: q}, 750, function(){
-                     o = !0
-                  }), q == 0 && j(a, !0))
-               }
-            }
-         })
-      })();
-   })(paper_h);
 </script>%%}
+{%%<script src="{$theme->{assets/js/home/jquery.home.min.js}}"></script>%%}

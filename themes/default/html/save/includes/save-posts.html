@@ -1,0 +1,38 @@
+<article class="item_sapost display-block position-relative margin-b15" data-id="{!id}">
+   <a class="<?php echo($TEMP['!type'] == 'video') ? 'content-video-animate ' : '';?>hover-all" href="{!url}" target="_self" title="{!title}">
+      <figure class="figure-sapost content-gradient position-relative margin-none no-hover">
+         <?php if($TEMP['!type'] == 'video'){ ?>
+         <div class="content-vanimate display-flex direction-row align-center position-absolute no-hover">
+            <svg class="icon-video no-hover" viewBox="0 0 40 40">
+               <path class="no-hover" d="M3 40V0l34 20z" fill="#F7F7F7" fill-rule="evenodd"></path>
+               <circle class="no-hover" cx="20" cy="20" r="19" stroke="#F7F7F7" fill="transparent" stroke-width="2px"></circle>
+            </svg>
+         </div>
+         <?php } ?>
+         <picture class="no-hover">
+            <img src="{!thumbnail}" alt="{!title}" role="presentation">
+         </picture>
+         <figcaption class="content-hpublished position-absolute no-hover">
+            <time class="color-white font-lowly ellipsis-horizontal no-hover" datetime="{!published_date}">{!published_at}</time>
+         </figcaption>
+      </figure>
+      <section class="margin-t10">
+         <h3 class="sapost-title font-postoni-bodo font-bigly ellipsis-vertical ellipsis-v3 color-black animation-ease3s">{!title}</h3>
+      </section>
+   </a>
+   <div class="container-category position-absolute">
+     <div class="content-category display-inline-block border-rlow">
+         <a class="btn-noway background-black color-white font-low text-uppercase border-rlow hover-button animation-ease3s" href="{!category_slug}" target="_self">{!category}</a>
+      </div>
+   </div>
+   <button class="btn_dsave btn-noway position-absolute padding-5 border-rall boxshadow-grey animation-ease3s animate-tab-button" data-id="{!id}">
+      <span class="display-flex direction-colum align-center color-white">
+         <svg class="icon-x vertical-sub" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 24" xml:space="preserve">
+            <path fill="currentColor" d="M14.494 12.008l5.494 -5.491c0.69 -0.69 0.69 -1.803 0 -2.492s-1.803 -0.69 -2.492 0l-5.494 5.491L6.509 4.023c-0.69 -0.69 -1.803 -0.69 -2.492 0s-0.69 1.803 0 2.492l5.494 5.491l-5.494 5.491c-0.69 0.69 -0.69 1.803 0 2.492c0.691 0.69 1.808 0.69 2.492 0l5.494 -5.491l5.494 5.491c0.69 0.69 1.803 0.69 2.492 0c0.684 -0.69 0.684 -1.803 -0.007 -2.494L14.494 12.008z"/>
+         </svg>
+      </span>
+      <div class="content-spinner-circle position-absolute">
+         <div class="spinner-circle"></div>
+      </div>
+   </button>
+</article>

@@ -5,6 +5,9 @@
 .content-drawer::-webkit-scrollbar {
     width: 8px;
 }
+.content-drawer::-webkit-scrollbar-track {
+    background: #cdcdcd;
+}
 .content-drawer::-webkit-scrollbar-thumb {
     background-color: #909090;
     border-radius: 2px;

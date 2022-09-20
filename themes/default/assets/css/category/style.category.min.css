@@ -1,0 +1,33 @@
+.content-sresults .item-sauthor a {
+	max-width: 100px;
+}
+.item-ppoint:before {
+    content: "";
+    width: 4px;
+	height: 4px;
+    margin: 0 8px;
+    display: inline-block;
+    vertical-align: middle;
+	background-color: #666;
+    border-radius: 50%;
+}
+@media(min-width: 381px) and (max-width: 590px) {
+	.content-sresults a.item-stitle {
+		-webkit-line-clamp: 1;
+	}
+}
+@media(max-width: 420px) {
+	.content-sresults .item-ppoint {
+		display: none;
+	}
+}
+@media(min-width: 421px) {
+	.content-hpublished {
+		display: none;
+	}
+}
+@media(max-width: 767px) {
+	.content-sresults .item-description {
+		-webkit-line-clamp: 2;
+	}
+}

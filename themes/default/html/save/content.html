@@ -1,0 +1,83 @@
+<main class="container-psave">
+    <nav class="display-block margin-b15 padding-b15 border-bottom border-grely">
+        <div class="content-tsave padding-t25">
+            <h1 class="font-postoni-bodo font-supraly">{$word->saved_posts}</h1>
+        </div>
+        <div class="font-franklin font-mediumly color-blackly">
+            <span>{$save_time}</span>
+            <span class="margin-l5 margin-r5">•</span>
+            <span>{$word->good_morning}, {$me->username}</span>
+        </div>
+    </nav>
+    <div id="container-saposts" class="content-sa-posts margin-b15 padding-b15">
+        <header class="content-hsave margin-b15">
+            <span class="font-mega font-bold margin-r15">{$word->reading_list}</span>
+            <span class="font-franklin font-medium font-italic color-blackly">{$word->stories_save_added_reading_list}</span>
+        </header>
+        <section id="content-saposts" class="display-flex vertical-slots margin-t15">
+            {$save_posts}
+        </section>
+        <div id="content-lsaload" class="container-lsaload display-flex vertical-slots hidden">
+            <div class="content-lsaload item_sapost display-block position-relative margin-b15">
+                <div class="content-lsaload-image figure-sapost animate-content-load margin-b10"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-50 animate-content-load margin-b5"></div>
+            </div>
+            <div class="content-lsaload item_sapost display-block position-relative margin-b15">
+                <div class="content-lsaload-image figure-sapost animate-content-load margin-b10"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-50 animate-content-load margin-b5"></div>
+            </div>
+            <div class="content-lsaload item_sapost display-block position-relative margin-b15">
+                <div class="content-lsaload-image figure-sapost animate-content-load margin-b10"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-50 animate-content-load margin-b5"></div>
+            </div>
+            <div class="content-lsaload item_sapost display-block position-relative margin-b15">
+                <div class="content-lsaload-image figure-sapost animate-content-load margin-b10"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-50 animate-content-load margin-b5"></div>
+            </div>
+            <div class="content-lsaload item_sapost display-block position-relative margin-b15">
+                <div class="content-lsaload-image figure-sapost animate-content-load margin-b10"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-50 animate-content-load margin-b5"></div>
+            </div>
+            <div class="content-lsaload item_sapost display-block position-relative margin-b15">
+                <div class="content-lsaload-image figure-sapost animate-content-load margin-b10"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-50 animate-content-load margin-b5"></div>
+            </div>
+            <div class="content-lsaload item_sapost display-block position-relative margin-b15">
+                <div class="content-lsaload-image figure-sapost animate-content-load margin-b10"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-50 animate-content-load margin-b5"></div>
+            </div>
+            <div class="content-lsaload item_sapost display-block position-relative margin-b15">
+                <div class="content-lsaload-image figure-sapost animate-content-load margin-b10"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-100 animate-content-load margin-b5"></div>
+                <div class="content-lsaload-title w-50 animate-content-load margin-b5"></div>
+            </div>
+        </div>
+    </div>
+</main>
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/save/style.save.min.css}}" />%%}
+{%%<script type="text/javascript">
+   paper_us = {
+      token: '{#token_session}',
+      url: {
+         load_posts: '{$url->{req/load/save}}',
+         delete_saved: '{$url->{req/delete-saved}}'
+      },
+      save_ids: [{$save_ids}]
+   }
+</script>%%}
+{%%<script src="{$theme->{assets/js/save/jquery.save.min.js}}"></script>%%}

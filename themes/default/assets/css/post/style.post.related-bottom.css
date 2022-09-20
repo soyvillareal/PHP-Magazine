@@ -1,4 +1,4 @@
-.content-related .related-news {
+.content-related .related-posts {
     width: 100%;
     overflow-y: hidden;
     overflow-x: auto;
@@ -13,66 +13,12 @@
     padding-right: 15px;
     border-right: 1px solid #cdcdcd;
 }
-
-.related-news::-webkit-scrollbar {
+.related-posts::-webkit-scrollbar {
     height: 5px;
 }
-.related-news::-webkit-scrollbar-track {
+.related-posts::-webkit-scrollbar-track {
     background: #f1f1f1;
 }
-.related-news::-webkit-scrollbar-thumb {
+.related-posts::-webkit-scrollbar-thumb {
     background: #909090;
-}
-
-
-@media (min-width: 1170px) {
-    .content-more-news .item-related {
-        width: calc(20% - 24px);
-        height: 100%;
-    }
-    .content-more-news .item-related:not(:nth-child(5n)) {
-        margin-right: 15px;
-        padding-right: 15px;
-        border-right: 0;
-    }
-}
-@media (min-width: 992px) and (max-width: 1169px) {
-    .content-more-news .item-related {
-        width: calc(25% - 24px);
-        height: 100%;
-    }
-    .content-more-news .item-related:not(:nth-child(4n)) {
-        margin-right: 15px;
-        padding-right: 15px;
-        border-right: 0;
-    }
-}
-@media (min-width: 768px) and (max-width: 991px) {
-    .content-more-news .item-related {
-        width: calc(33% - 18px);
-        height: 100%;
-    }
-    .content-more-news .item-related:not(:nth-child(3n)) {
-        margin-right: 15px;
-        padding-right: 15px;
-        border-right: 0;
-    }
-}
-@media (min-width: 420px) and (max-width: 767px) {
-    .content-more-news .item-related {
-        width: calc(50% - 15px);
-        height: 100%;
-    }
-    .content-more-news .item-related:not(:nth-child(2n)) {
-        margin-right: 15px;
-        padding-right: 15px;
-        border-right: 0;
-    }
-}
-@media (max-width: 419px) {
-    .content-more-news .item-related:not(:last-child) {
-        margin-bottom: 15px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #cdcdcd;
-    }
 }

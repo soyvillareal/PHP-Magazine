@@ -128,132 +128,27 @@
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.general.min.css}}" />
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.register.min.css}}" />
 {%%<script type="text/javascript">
-   $(document).ready(function(){
-      var a = $('#supported-symbols'),
-          q = $('#container-signup'),
-          K = $('#fields-one'),
-          u = $('#fields-two'),
-          x = $('#btn-register'),
-          w = $('#text-validate'),
-          D = $('#username'),
-          s = $('#email'),
-          v = $('#password'),
-          O = $('#re-password'),
-          L = $('.item_input'),
-          m = s.siblings('.text-error'),
-          R = O.siblings('.text-error'),
-          F = D.siblings('.text-error'),
-          y = function(e){
-            $('#accept-checkbox:checked').val() == 'on' && x.attr('disabled', e)
-          },
-          W = function(e){
-            e.addClass('border-red'), e.addClass('boxshadow-red');
-          },
-          P = function(e){
-            e.removeClass('border-red'), e.removeClass('boxshadow-red');
-          },
-          H = function(e){
-            e.siblings('.text-error').text('*{$word->this_field_is_empty}'), W(e);
-          },
-          C = function(e){
-            e.removeClass('spinner-is-loading'), e.removeAttr('disabled');
-          },
-          J = function(i, e){
-            var G = i.parent();
-            G.addClass('spinner-is-loading'), $.post("{$url->{req/to-access/validate}}?token={#token_session}", e, function(e){
-               e.S == 200 ? (C(G), i.siblings('.text-error').text('*'+e.E), W(i)) : C(G);
-            })
-          },
-          r = !0,
-          A = !1;
-      $('#accept-checkbox').change(function(){
-         var z = $(this).prop('checked');
-         r && (x.prop('disabled', !z), y(!z));
-      }), $('#show-symbols').click(function(){
-         var b = $(this),
-             c = JSON.parse(b.attr('aria-expanded'));
-          !c ? a.css('height', a.children().first().height()) : a.removeAttr('style'), b.attr('aria-expanded', !c);
-      }), x.click(function(){
-         var Y = D.val(),
-             Q = s.val(),
-             T = v.val();
-         if(Y.length == 0){
-            H(D);
-         } else if(r){
-            (new RegExp(/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/)).test(Q) ? 
-               (Q.length == 0 ? 
-                  (m.text('*{$word->this_field_is_empty}'), W(s)) 
-               : 
-               (q.addClass('has-back-button'), x.find('span').text('{$word->create_account}'), K.addClass('hidden'), u.removeClass('hidden'), y(!0), v.focus(), r = !1))
-            : 
-            (m.text('*{$word->enter_a_valid_email}'), W(s));
-         } else if(T.length == 0){
-            H(v);
-         } else {
-            x.addClass('spinner-is-loading'), x.attr('disabled', !0);
-            A && $.post("{$url->{req/to-access/register}}?token={#token_session}", {'username': Y, 'email': Q, 'password': T, 're-password': O.val(), 'return_url': '{#return_url}', 'return_param': '{#return_param}'}, function(e){
-               (e.S == 200) ? window.location = e.UR : (R.text('*'+e.E), W(L), C(x));
-            })
-         }
-      }), $('#btn-back-email').click(function(){
-         q.removeClass('has-back-button'), x.find('span').text('{$word->next}'), u.addClass('hidden'), K.removeClass('hidden'), y(!1), s.focus(), r = !0;
-      }), L.on('input', function(){
-         var U = $(this),
-             I = U.prop('id'),
-             Y = D.val(),
-             S = O.val(),
-             g = U.val(),
-             d = $('#valid-password').children(),
-             l = function(){
-               $(d.splice(0, 2)).addClass('border-orange'), w.text('{$word->password_security}: {$word->half}');
-             },
-             j = function(e, t){
-               if(e){
-                  t.removeClass('color-grey'), t.addClass('color-green')
-               } else {
-                  t.removeClass('color-green'), t.addClass('color-grey')
-               }
-             },
-             n = function(){
-               d.removeClass('border-red'), d.removeClass('border-orange'), d.removeClass('border-green')
-             },
-             k = g.length >= 8;
-         if(I == '{#username#}'){
-            F.text(''), P(D);
-            if((new RegExp("^[a-zA-Z0-9]+$")).test(Y)){
-               J(D, {'username': Y}), y(!1);
-            } else if(Y.length > 0){
-               F.text('*{$word->write_only_numbers_letters}'), W(D), y(!0)
-            }
-            if(g.length > 16) {
-               U.val(g.slice(0, 16))
-            }
-         } else if(I == '{#email#}'){
-            m.text(''), P(s), J(s, {'email': s.val()});
-         } else if(I == '{#password#}'){
-            if(!r){
-               R.text(''), y(!0), P(O), O.val(''), O.removeClass('active'), n();
-               if ((new RegExp("^(?=.{12,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[¡!\"#$%&'()*+,-./:;<=>¿?@\]\[^_`{|}~]).*$", "g")).test(g)) {
-                  d.addClass('border-green'), w.text('{$word->password_security}: {$word->strong}')
-               } else if((new RegExp("^(?=.{8,})(?=.*[a-z])(?=.*[0-9])(?=.*[¡!\"#$%&'()*+,-./:;<=>¿?@\]\[^_`{|}~]).*$", "g")).test(g)){
-                  $(d.splice(0, 3)).addClass('border-green'), w.text('{$word->password_security}: {$word->good}');
-               } else if((new RegExp("^(?=.{8,})(?=.*[¡!\"#$%&'()*+,-./:;<=>¿?@\]\[^_`{|}~]).*$", "g")).test(g)){
-                  l()
-               } else if ((new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g")).test(g)) {
-                  l()
-               } else {
-                  $(d[0]).addClass('border-red'), w.text('{$word->password_security}: {$word->weak}');
-               }
-               j(k, $('#icon-five')), j(/[¡!"#$%&'()*+,-./:;<=>¿?@[\]^_`{|}~]/.test(g), $('#icon-supported')), g.length == 0 && (n(), w.text('{$word->write_a_password}'));
-            }
-         } else if(I == '{#re-password#}'){
-            if(S.length > 0 && v.val() != S){
-               R.text('*{$word->passwords_not_match}'), W(O), y(!0), A = !1;
-            } else {
-               R.text(''), P(O), S.length > 0 ? y(!1) : y(!0), A = !0;
-            }
-         }
-         g.length > 0 ? U.addClass('active') : U.removeClass('active');
-      }), s.focus();
-   });
+   paper_are = {
+      token: '{#token_session}',
+      return_url: '{#return_url}',
+      return_param: '{#return_param}',
+      url: {
+         validate: '{$url->{req/to-access/validate}}',
+         register: '{$url->{req/to-access/register}}'
+      },
+      word: {
+         this_field_is_empty: '{$word->this_field_is_empty}',
+         create_account: '{$word->create_account}',
+         enter_a_valid_email: '{$word->enter_a_valid_email}',
+         next: '{$word->next}',
+         password_security_half: '{$word->password_security}: {$word->half}',
+         password_security_strong: '{$word->password_security}: {$word->strong}',
+         password_security_good: '{$word->password_security}: {$word->good}',
+         password_security_weak: '{$word->password_security}: {$word->weak}',
+         write_only_numbers_letters: '{$word->write_only_numbers_letters}',
+         write_a_password: '{$word->write_a_password}',
+         passwords_not_match: '{$word->passwords_not_match}'
+      }
+   };
 </script>%%}
+{%%<script src="{$theme->{assets/js/auth/jquery.register.min.js}}"></script>%%}

@@ -2,7 +2,7 @@
 if ($TEMP['#loggedin'] == true) {
 	$deliver = array(
 		'S' => 400,
-		'E' => $TEMP['#word']['already_logged_in']
+		'E' => "*{$TEMP['#word']['already_logged_in']}"
 	);
     echo json_encode($deliver);
     exit();
@@ -22,14 +22,14 @@ if($one == 'login'){
 	        if ($user['status'] == 'pending') {
 	           	$deliver = array(
 	           		'S' => 401,
-	           		'E' => "{$TEMP['#word']['account_pending_verification']} <button id='btn-rcode' class='btn-noway color-blue' type='button'>{$TEMP['#word']['resend_email']}</button>",
+	           		'E' => "*{$TEMP['#word']['account_pending_verification']} <button id='btn-rcode' class='btn-noway color-blue' type='button'>{$TEMP['#word']['resend_email']}</button>",
 	           		'EE' => 'pending',
 	           		'TK' => $dba->query('SELECT verify_email FROM '.T_TOKEN.' WHERE user_id = ?', $user['id'])->fetchArray(true)
 	            );
 	        } else if ($user['status'] == 'deactivated') {
 	           	$deliver = array(
 	           		'S' => 401,
-	           		'E' => "{$TEMP['#word']['account_was_deactivated_if_need_help']} <a class='color-blue' href='".Specific::Url($TEMP['#r_contact'])."' target='_blank'>{$TEMP['#word']['contact_us']}</a>",
+	           		'E' => "*{$TEMP['#word']['account_was_deactivated_if_need_help']} <a class='color-blue' href='".Specific::Url($TEMP['#r_contact'])."' target='_blank'>{$TEMP['#word']['contact_us']}</a>",
 	           		'EE' => 'deactivated'
 	            );
 	        } else {
@@ -70,7 +70,7 @@ if($one == 'login'){
 						} else {
 							$deliver = array(
 							    'S' => 400,
-						   		'E' => $TEMP['#word']['error_sending_email_again_later']
+						   		'E' => "*{$TEMP['#word']['error_sending_email_again_later']}"
 							);
 						}
 					}
@@ -93,7 +93,7 @@ if($one == 'login'){
       	} else {
 	        $deliver = array(
 		        'S' => 401,
-	       		'E' => $TEMP['#word']['incorrect_user_password']
+	       		'E' => "*{$TEMP['#word']['incorrect_user_password']}"
 		    );
 	    }
 	}
@@ -156,7 +156,7 @@ if($one == 'login'){
 			               	} else {
 								$deliver = array(
 								    'S' => 400,
-								    'E' => $TEMP['#word']['error_sending_email_again_later']
+								    'E' => "*{$TEMP['#word']['error_sending_email_again_later']}"
 								);
 							}
 			            } else {
@@ -185,14 +185,14 @@ if($one == 'login'){
 	    	if ($user['status'] == 'pending') {
 	           	$deliver = array(
 	           		'S' => 401,
-	           		'E' => "{$TEMP['#word']['account_pending_verification']} <button id='btn-rcode' class='btn-noway color-blue' type='button'>{$TEMP['#word']['resend_email']}</button>",
+	           		'E' => "*{$TEMP['#word']['account_pending_verification']} <button id='btn-rcode' class='btn-noway color-blue' type='button'>{$TEMP['#word']['resend_email']}</button>",
 	           		'EE' => 'pending',
 	           		'TK' => $dba->query('SELECT verify_email FROM '.T_TOKEN.' WHERE user_id = ?', $user['id'])->fetchArray(true)
 	            );
 	        } else if ($user['status'] == 'deactivated') {
 		        $deliver = array(
 		         	'S' => 401,
-	           		'E' => "{$TEMP['#word']['account_was_deactivated_if_need_help']} <a class='color-blue' href='".Specific::Url($TEMP['#r_contact'])."' target='_blank'>{$TEMP['#word']['contact_us']}</a>",
+	           		'E' => "*{$TEMP['#word']['account_was_deactivated_if_need_help']} <a class='color-blue' href='".Specific::Url($TEMP['#r_contact'])."' target='_blank'>{$TEMP['#word']['contact_us']}</a>",
 	           		'EE' => 'deactivated'
 		        );
 		    } else { 	
@@ -221,7 +221,7 @@ if($one == 'login'){
 		            } else {
 		            	$deliver = array(
 						    'S' => 400,
-						    'E' => $TEMP['#word']['error_sending_email_again_later']
+						    'E' => "*{$TEMP['#word']['error_sending_email_again_later']}"
 						);
 		            }
 		        }
@@ -229,7 +229,7 @@ if($one == 'login'){
 	    } else {
 	    	$deliver = array(
 	    		'S' => 400,
-	    		'E' => $TEMP['#word']['email_not_exist']
+	    		'E' => "*{$TEMP['#word']['email_not_exist']}"
 	    	);
 	    }
     }
@@ -241,12 +241,11 @@ if($one == 'login'){
 		$user_id = $dba->query('SELECT user_id FROM '.T_TOKEN.' WHERE reset_password = ?', $tokenu)->fetchArray();
 		if(!empty($user_id)){
 			if(!empty($password) && !empty($re_password) && $password == $re_password){
-			    $reset_password = Specific::UserToken('reset_password', $user_id);
-			    $token = $reset_password['token'];
-
-		        if($reset_password['return'] == true){
-		       		$password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
-				    if ($dba->query('UPDATE '.T_USER.' SET password = ? WHERE id = ?', $password, $user_id)->returnStatus()) {
+				$reset_password = Specific::UserToken('reset_password', $user_id);
+				$token = $reset_password['token'];
+			    if($reset_password['return'] == true){
+			       	$password = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+					if ($dba->query('UPDATE '.T_USER.' SET password = ? WHERE id = ?', $password, $user_id)->returnStatus()) {
 						$deliver['S'] = 200;
 					}
 				}
@@ -310,7 +309,7 @@ if($one == 'login'){
 				} else {
 					$deliver = array(
 					    'S' => 400,
-				   		'E' => $TEMP['#word']['error_sending_email_again_later']
+				   		'E' => "*{$TEMP['#word']['error_sending_email_again_later']}"
 					);
 				}
 			}
@@ -343,13 +342,13 @@ if($one == 'login'){
 			} else {
 				$deliver = array(
 				    'S' => 400,
-				    'E' => $TEMP['#word']['wrong_confirm_code']
+				    'E' => "*{$TEMP['#word']['wrong_confirm_code']}"
 				);
 			}
 		} else {
 			$deliver = array(
 				'S' => 400,
-				'E' => $TEMP['#word']['confirm_code']
+				'E' => "*{$TEMP['#word']['confirm_code']}"
 			);
 		}
 	}
@@ -370,14 +369,14 @@ if($one == 'login'){
 		if($dba->query('SELECT COUNT(*) FROM '.T_USER.' WHERE username = ?', $username)->fetchArray(true) > 0){
 			$deliver = array(
 				'S' => 200,
-				'E' => $TEMP['#word']['username_already_exists']
+				'E' => "*{$TEMP['#word']['username_already_exists']}"
 			);
 		}
 	} else if(!empty($email)){
 		if($dba->query('SELECT COUNT(*) FROM '.T_USER.' WHERE email = ?', $email)->fetchArray(true) > 0){
 			$deliver = array(
 				'S' => 200,
-				'E' => $TEMP['#word']['email_already_registered']
+				'E' => "*{$TEMP['#word']['email_already_registered']}"
 			);
 		}
 	}

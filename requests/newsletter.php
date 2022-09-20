@@ -7,17 +7,22 @@ if($one == 'subscribe'){
 	$type = Specific::Filter($_POST['type']);
 	$frequency = Specific::Filter($_POST['frequency']);
 	$popular = Specific::Filter($_POST['popular']);
-	$category = Specific::Filter($_POST['category']);
-	$category = html_entity_decode($category);
-	$category = json_decode($category, true);
+	$popular = json_decode($popular);
+	$cats = Specific::Filter($_POST['cats']);
+	$cats = html_entity_decode($cats);
+	$cats = json_decode($cats, true);
+	$populars = array(
+		false => 'off',
+		true => 'on'
+	);
 	
-	if(!empty($type) && !empty($frequency)){
+	if(!empty($type) && !empty($frequency) && in_array($popular, array_keys($populars))){
 		if(!empty($email)){
-			if(empty($popular)){
-				$popular = 'off';
-			}
-			if(!empty($category)){
-				foreach ($category as $cat) {
+
+			$popular = $populars[$popular];
+			
+			if(!empty($cats)){
+				foreach ($cats as $cat) {
 					if(!in_array($cat, $categories)){
 						$catrues[] = false;
 					}
@@ -40,7 +45,11 @@ if($one == 'subscribe'){
 									);
 								}
 							} else {
-								if($dba->query('INSERT INTO '.T_NEWSLETTER.' (slug, email, frequency, popular, categories, created_at) VALUES (?, ?, ?, ?, ?, ?)', $slug, $email, $frequency, $popular, implode(',', $category), time())->returnStatus()){
+								$newsletter_id = $dba->query('INSERT INTO '.T_NEWSLETTER.' (slug, email, frequency, popular, created_at) VALUES (?, ?, ?, ?, ?)', $slug, $email, $frequency, $popular, time())->insertId();
+								if($newsletter_id){
+									foreach ($cats as $cat) {
+										$dba->query('INSERT INTO '.T_NEWSCATE.' (newsletter_id, category_id, created_at) VALUES (?, ?, ?)', $newsletter_id, $cat, time());
+									}
 									$deliver = array(
 										'S' => 200,
 										'M' => $TEMP['#word']['you_have_successfully_subscribed']
@@ -72,33 +81,59 @@ if($one == 'subscribe'){
 } else if($one == 'update'){
 	$catrues = array();
 	$categories = $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false);
+	
+	$slug = Specific::Filter($_POST['slug']);
 	$type = Specific::Filter($_POST['type']);
 	$frequency = Specific::Filter($_POST['frequency']);
 	$popular = Specific::Filter($_POST['popular']);
 	$popular = json_decode($popular);
-	$category = Specific::Filter($_POST['category']);
-	$category = html_entity_decode($category);
-	$category = json_decode($category, true);
-	$populars = array(false => 'off', true => 'on');
+	$cats = Specific::Filter($_POST['cats']);
+	$cats = html_entity_decode($cats);
+	$cats = json_decode($cats, true);
+	$populars = array(
+		false => 'off',
+		true => 'on'
+	);
 	
 	if(!empty($type) && !empty($frequency) && in_array($popular, array_keys($populars))){
-		if(!empty($category)){
-			foreach ($category as $cat) {
+		if(!empty($cats)){
+			foreach ($cats as $cat) {
 				if(!in_array($cat, $categories)){
 					$catrues[] = false;
 				}
 			}
 		}
-		if($dba->query('SELECT COUNT(*) FROM '.T_NEWSLETTER.' WHERE email = ?', $TEMP['#user']['email'])->fetchArray(true) > 0){
+		$newsletter = $dba->query('SELECT id, COUNT(*) as count FROM '.T_NEWSLETTER.' WHERE slug = ?', $slug)->fetchArray();
+
+		if($newsletter['count'] > 0){
 			if(in_array($type, array('all', 'personalized')) && in_array($frequency, array('now', 'daily', 'weekly')) && !in_array(false, $catrues)){
-						$categories = !empty($category) ? implode(',', $category) : NULL;
+				
 				$popular = $populars[$popular];
+
 				if($type == 'all'){
 					$frequency = $type;
 					$popular = 'off';
-					$categories = NULL;
+				} else {
+					$newscate_ids = $dba->query('SELECT category_id FROM '.T_NEWSCATE.' WHERE newsletter_id = ?', $newsletter['id'])->fetchAll(false);
+
+					$add_cats = array_diff($cats, $newscate_ids);
+					$del_cats = array_diff($newscate_ids, $cats);
+
+					if(!empty($add_cats)){
+						foreach ($add_cats as $addcat) {
+							if($dba->query('SELECT COUNT(*) FROM '.T_CATEGORY.' WHERE id = ? AND status = "enabled"', $addcat)->fetchArray(true) > 0){
+								$dba->query('INSERT INTO '.T_NEWSCATE.' (newsletter_id, category_id, created_at) VALUES (?, ?, ?)', $newsletter['id'], $addcat, time());
+							}
+						}
+					}
+
+					if(!empty($del_cats)){
+						foreach ($del_cats as $delcat) {
+							$dba->query('DELETE FROM '.T_NEWSCATE.' WHERE newsletter_id = ? AND category_id = ?', $newsletter['id'], $delcat);
+						}
+					}
 				}
-				if($dba->query('UPDATE '.T_NEWSLETTER.' SET frequency = ?, popular = ?, categories = ?, updated_at = ? WHERE email = ?', $frequency, $popular, $categories, time(), $TEMP['#user']['email'])->returnStatus()){
+				if($dba->query('UPDATE '.T_NEWSLETTER.' SET frequency = ?, popular = ?, updated_at = ? WHERE id = ?', $frequency, $popular, time(), $newsletter['id'])->returnStatus()){
 					$deliver = array(
 						'S' => 200,
 						'M' => $TEMP['#word']['newsletter_updated_success']

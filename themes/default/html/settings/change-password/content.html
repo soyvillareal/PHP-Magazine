@@ -85,76 +85,20 @@
 </div>
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/settings/style.settings.change-password.css}}" />
 {%%<script type="text/javascript">
-   $(document).ready(function(){
-      var a = $('#supported-symbols'),
-          x = $('#btn-register'),
-          w = $('#text-validate'),
-          u = $('#current-password'),
-          v = $('#password'),
-          O = $('#re-password'),
-          R = O.siblings('.text-error'),
-          o = u.siblings('.text-error'),
-          y = function(e){
-            x.attr('disabled', e)
-          },
-          W = function(e){
-            e.addClass('border-red'), e.addClass('boxshadow-red');
-          },
-          P = function(e){
-            e.removeClass('border-red'), e.removeClass('boxshadow-red');
-          },
-          C = function(e){
-            e.removeClass('spinner-is-loading'), e.removeAttr('disabled');
-          };
-      $('#show-symbols').click(function(){
-         var b = $(this),
-             c = JSON.parse(b.attr('aria-expanded'));
-          !c ? a.css('height', a.children().first().height()) : a.removeAttr('style'), b.attr('aria-expanded', !c);
-      }), x.click(function(){
-         x.addClass('spinner-is-loading'), x.attr('disabled', !0), $.post("{$url->{req/settings/change-password}}?token={#token_session}", {'current-password': u.val(), 'password': v.val(), 're-password': O.val()}, function(e){
-            (e.S == 200) ? window.location.href = "{$url->{{#r_login}}}" : ((e.EX == 1 ? (o.text(e.E), W(u)) : (R.text(e.E), W(v), W(O))), x.removeClass('spinner-is-loading'), x.removeAttr('disabled'));
-         })
-      }), $('.item_input').on('input', function(){
-         var U = $(this),
-             I = U.prop('id'),
-             S = O.val(),
-             g = U.val(),
-             d = $('#valid-password').children(),
-             l = function(){
-               $(d.splice(0, 2)).addClass('border-orange'), w.text('{$word->password_security}: {$word->half}');
-             },
-             j = function(e, t){
-               if(e){
-                  t.removeClass('color-grey'), t.addClass('color-green')
-               } else {
-                  t.removeClass('color-green'), t.addClass('color-grey')
-               }
-             },
-             n = function(){
-               d.removeClass('border-red'), d.removeClass('border-orange'), d.removeClass('border-green')
-             },
-             q = g.length,
-             k = q >= 8;
-         if(I == '{#current-password#}'){
-            o.text(''), P(u)
-         } else if(I == '{#password#}'){
-               R.text(''), y(!0), P(O), O.val(''), O.removeClass('active'), n();
-               if ((new RegExp("^(?=.{12,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[¡!\"#$%&'()*+,-./:;<=>¿?@\]\[^_`{|}~]).*$", "g")).test(g)) {
-                  d.addClass('border-green'), w.text('{$word->password_security}: {$word->strong}')
-               } else if((new RegExp("^(?=.{8,})(?=.*[a-z])(?=.*[0-9])(?=.*[¡!\"#$%&'()*+,-./:;<=>¿?@\]\[^_`{|}~]).*$", "g")).test(g)){
-                  $(d.splice(0, 3)).addClass('border-green'), w.text('{$word->password_security}: {$word->good}');
-               } else if((new RegExp("^(?=.{8,})(?=.*[¡!\"#$%&'()*+,-./:;<=>¿?@\]\[^_`{|}~]).*$", "g")).test(g)){
-                  l()
-               } else if ((new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g")).test(g)) {
-                  l()
-               } else {
-                  $(d[0]).addClass('border-red'), w.text('{$word->password_security}: {$word->weak}');
-               }
-               j(k, $('#icon-five')), j(/[¡!"#$%&'()*+,-./:;<=>¿?@[\]^_`{|}~]/.test(g), $('#icon-supported')), g.length == 0 && (n(), w.text('{$word->write_a_password}'));
-         } else if(I == '{#re-password#}'){
-            P(v), (S.length > 0 && v.val() != S) ? (R.text('*{$word->passwords_not_match}'), W(O), y(!0)) : (R.text(''), P(O), S.length > 0 ? y(!1) : y(!0));
-         }
-         q > 0 ? U.addClass('active') : U.removeClass('active');
-      }), u.focus();
-   });
+   paper_sc = {
+      token: '{#token_session}',
+      url: {
+         change_password: '{$url->{req/settings/change-password}}',
+         r_login: '{$url->{{#r_login}}}'
+      },
+      word: {
+         password_security_half: '{$word->password_security}: {$word->half}',
+         password_security_strong: '{$word->password_security}: {$word->strong}',
+         password_security_good: '{$word->password_security}: {$word->good}',
+         password_security_weak: '{$word->password_security}: {$word->weak}',
+         write_a_password: '{$word->write_a_password}',
+         passwords_not_match: '{$word->passwords_not_match}'
+      }
+   };
 </script>%%}
+{%%<script src="{$theme->{assets/js/settings/jquery.change-password.min.js}}"></script>%%}

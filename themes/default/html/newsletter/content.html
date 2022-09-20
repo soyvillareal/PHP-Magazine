@@ -13,9 +13,7 @@
         <div class="margin-auto">
             <span class="title-newsletter color-black font-big font-bold text-uppercase">{$title}</span>
             <p class="subtitle-newsletter color-black font-bigly margin-t15 margin-b15">{$subtitle}</p>
-            <?php if($TEMP['#newsletter_exists'] == true){ ?>
             <div id="content-error" class="text-error border-all border-red color-red border-rlow padding-5 margin-b10 animation-ease3s"></div>
-            <?php } ?>
             <div class="items-newsletter margin-b15">
                 <div class="all-newsletter display-flex">
                     <div class="item-newsletter position-relative w-50 margin-r15 margin-b10">
@@ -41,7 +39,7 @@
                                 <div class="display-flex direction-row align-center margin-left-auto">
                                     <label class="newsletter-checkbox display-inline-block position-relative margin-r5">
                                         <input id="newsletter-popular" class="checkbox-popular item_place hidden" type="checkbox"<?php echo($TEMP['#popular'] == 'on') ? ' checked' : '';?>>
-                                        <span class="slider-popular position-absolute background-grely"></span>
+                                        <span class="slider-popular position-absolute background-grely cursor-pointer animation-ease3s"></span>
                                     </label>
                                     <span class="color-black">{$word->more_popular}</span>
                                 </div>
@@ -71,7 +69,7 @@
                     </div>
                 </div>
             </div>
-            <button id="btn-newsletter" class="button-access btn-noway w-100 h-36 background-blue color-white font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-label="{$aria_button}" aria-expanded="false" disabled>
+            <button id="btn-newsletter" class="button-access btn-noway w-100 h-36 background-blue color-white font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-label="{$aria_button}" disabled>
                 <span class="color-white">{$button}</span>
                 <div class="content-spinner-circle position-absolute">
                     <div class="spinner-circle"></div>
@@ -79,11 +77,11 @@
             </button>
             <?php if($TEMP['#newsletter_exists'] == true){ ?>
             <div class="position-relative">
-                <button id="btn-popup" class="button-access btn-noway w-100 h-36 background-red color-white font-medium font-bold padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-label="{$word->unsubscribe_the_newsletter}">{$word->unsubscribe}</button>
+                <button id="btn-popup" class="button-access btn-noway w-100 h-36 background-red color-white font-medium font-bold padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-label="{$word->unsubscribe_the_newsletter}" aria-expanded="false">{$word->unsubscribe}</button>
                 <div id="unsubscribe-popup" class="content-unsubscribe-popup position-absolute background-white margin-b10 padding-t20 padding-b20 padding-l20 padding-r20 text-center hidden">
                     <span class="display-block font-medium font-bold">{$word->regret_decides_go}</span>
                     <p class="font-mediumly color-black margin-t5">{$word->help_us_understand_why}.</p>
-                    <select id="reason" class="item_place background-white color-black margin-t10 padding-l10 w-100 h-36 border-focus-blue border-rlow border-all border-black caret-down" aria-label="{$word->newsletter_frequency}">
+                    <select id="reason" class="item_place background-white color-black margin-t10 padding-l10 w-100 h-36 border-focus-blue border-rlow border-all border-black caret-down" aria-label="{$word->reason_why_want_unsubscribe}">
                         <option value="no_anymore">{$word->no_anymore}</option>
                         <option value="much_content">{$word->much_content}</option>
                         <option value="no_content">{$word->no_content}</option>
@@ -91,13 +89,13 @@
                         <option value="other">{$word->other}</option>
                     </select>
                     <div class="display-block position-relative w-100 margin-t10 hidden">
-                        <textarea id="other" class="item_place item-input background-white color-black w-100 padding-t25 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="text" aria-label="{$word->another_reason_unsubscribe}" maxlength="500" autocomplete="other" autocapitalize="off"></textarea>
+                        <textarea id="other" class="item-nother item_place item-input background-white color-black w-100 padding-t25 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="text" aria-label="{$word->another_reason_unsubscribe}" maxlength="500" autocomplete="other" autocapitalize="off"></textarea>
                         <label class="item-label background-white w-100 first-capitalize position-absolute pointer-events-none ellipsis-horizontal text-left">{$word->why_do_you_want_leave}</label>
                     </div>
                     <div class="display-flex">
                         <div class="color-red text-left text-error font-low margin-t5"></div>
                         <div class="margin-left-auto color-green hidden">
-                            <span id="text-reason-count">0</span>/500
+                            <span id="text-rcount">0</span>/500
                         </div>
                     </div>
                     <div class="display-flex direction-row align-center justify-center margin-t15" role="dialog" aria-label="{$word->unsubscribe_the_newsletter}">
@@ -117,87 +115,20 @@
 </div>
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/newsletter/style.newsletter.css}}" />
 {%%<script type="text/javascript">
-    var m = $('#btn-newsletter'),
-        a = $('#newsletter-email'),
-        b = a.siblings('.text-error'),
-        c = $('#newsletter-type'),
-        d = $('#newsletter-category'),
-        f = $('#personalize-newsletter'),
-        y = $('#content-error'),
-        g = $('.text_all'),
-        h = $('.text_none'),
-        j = $('.item_place'),
-        C = $('#unsubscribe-popup'),
-        D = $('#btn-unsubscribe'),
-        v = $('#btn-popup'),
-        G = $('#reason'),
-        X = $('#text-reason-count'),
-        V = X.parent(),
-        H = $('#other'),
-        K = C.find('.text-error'),
-        k = d.children(),
-        B = function(e, x, i){
-            e.removeClass('spinner-is-loading'), l(x, i)
+    paper_sn = {
+        token: '{#token_session}',
+        loggedin: {#loggedin},
+        url: {
+            subscribe: '{$url->{req/newsletter/subscribe}}',
+            unsubscribe: '{$url->{req/newsletter/unsubscribe}}',
+            update: '{$url->{req/newsletter/update}}',
+            settings: '{$url->{{#r_settings}}}',
+            newsletter: '{$url->{{#r_newsletter}}}'
         },
-        L = function(e){
-            e.addClass('spinner-is-loading'), l(e, !0)
-        },
-        l = function(e, i){
-            e.attr('disabled', i)
-        },
-        n = function(){
-            f.css('height', f.children().first().height())
-        },
-        t = function(e){
-            e.removeClass('border-green'), e.removeClass('color-green'), e.addClass('border-red'), e.addClass('color-red');
-        },
-        s = <?php echo(count($TEMP['#cats']) < count($TEMP['#categories'])) ? '!0' : '!1';?>,
-        q,
-        r,
-        F,
-        J;
-    <?php if($TEMP['#newsletter_exists'] == true){ ?>v.click(function(){
-        C.removeClass('hidden'), l(v, !0), l(j.slice(0, -4), !0), v.attr('aria-expanded', !0), v.blur();
-    }), $('#btn-cancel').click(function(e){
-        C.addClass('hidden'), l(v, !1), l(j.slice(0, -4), !1), v.attr('aria-expanded', !1);
-    }), D.click(function(){
-        J = G.val() == 'other' ? H.val() : G.val(), L(D), $.post("{$url->{req/newsletter/unsubscribe}}?token={#token_session}", {'slug': '{$slug}', 'reason': J}, function(e){
-            e.S == 200 ? (B(D, j, !0), y.removeClass('border-red'), y.removeClass('color-red'), y.addClass('border-green'), y.addClass('color-green'), setTimeout(function(){
-                y.text(e.M)
-            }, 300), setTimeout(function(){
-                window.location = <?php echo($TEMP['#loggedin'] == true) ? '"{$url->{{#r_settings}}}"' : '"{$url->{{#r_newsletter}}}"';?>
-            }, 3300)) : (K.text(e.E), B(D, D, !0));
-        })
-    }), <?php } ?>$('.select_all').click(function(){
-        k.prop('selected', s), s = !s, g.toggleClass('hidden'), h.toggleClass('hidden'), l(m, !1), $(this).blur();
-    }), j.on('input', function(){
-        var z = $(this),
-            u = z.attr('id'),
-            o = z.val(),
-            Z = o.length;
-        <?php if($TEMP['#newsletter_exists'] == false){ ?>if(u == '{#newsletter-email#}'){
-            Z > 0 ? (z.addClass('active'), b.text(''), l(m, !1), z.removeClass('border-red'), z.removeClass('boxshadow-red')) : z.removeClass('active')
-        } else <?php } else { ?>if(u == '{#other#}'){
-            Z > 0 ? (z.addClass('active'), K.text(''), l(D, !1), z.removeClass('border-red'), z.removeClass('boxshadow-red')) : z.removeClass('active'), (Z > 400) ? (V.addClass('color-red'), V.removeClass('color-green'), V.removeClass('color-orange')) : ((Z > 250) ? (V.addClass('color-orange'), V.removeClass('color-red'), V.removeClass('color-green')) : (V.addClass('color-green'), V.removeClass('color-red'), V.removeClass('color-orange'))), X.text(Z), z.val(o.slice(0, 500))
-        } else if(u == '{#reason#}'){
-            F = H.parent(), o == 'other' ? (F.removeClass('hidden'), V.removeClass('hidden')) : (F.addClass('hidden'), V.addClass('hidden'))
-        } else <?php } ?>if(u == '{#newsletter-type#}'){
-            o == 'personalized' ? n() : f.removeAttr('style');
-        } else if(u == '{#newsletter-category#}'){
-            k.length == Z ? (g.addClass('hidden'), h.removeClass('hidden'), s = !1) : (g.removeClass('hidden'), h.addClass('hidden'), s = !0);
-        }
-        (Z > 0 || u == '{#newsletter-category#}') &&<?php echo($TEMP['#newsletter_exists'] == false) ? " a.val() != '' &&" : " u != '{#reason#}' && u != '{#other#}' &&";?> l(m, !1)
-    }), m.click(function(){
-        q = c.val(), r = $('#newsletter-popular'), L(m), <?php if($TEMP['#newsletter_exists'] == true){ ?>$.post("{$url->{req/newsletter/update}}?token={#token_session}", {'type': q, 'frequency': $('#newsletter-frequency').val(), 'popular': r.is(':checked'), 'category': JSON.stringify(d.val())}, function(e) {
-            e.S == 200 ? (B(m, j, !0), y.removeClass('border-red'), y.removeClass('color-red'), y.addClass('border-green'), y.addClass('color-green'), setTimeout(function(){
-                y.text(e.M)
-            }, 300), setTimeout(function(){
-                y.text(''), t(y), q == 'all' && (f.removeAttr('style'), $('#content-newsletter').trigger("reset"), c.val('all'), r.prop('checked', !1)), l(j, !1), l(m, !1)
-            }, 3300)) : (t(y), y.text(e.E), m.removeClass('spinner-is-loading'));
-        });<?php } else { ?>$.post("{$url->{req/newsletter/subscribe}}?token={#token_session}", {'email': a.val(), 'type': q, 'frequency': $('#newsletter-frequency').val(), 'popular': $('#newsletter-popular:checked').val(), 'category': JSON.stringify(d.val())}, function(e) {
-            e.S == 200 ? (B(m, j, !0), b.addClass('color-green'), b.removeClass('color-red'), b.text(e.M), setTimeout(function(){
-                b.text(''), a.removeClass('active'), b.addClass('color-red'), b.removeClass('color-green'), f.removeAttr('style'), $('#content-newsletter').trigger("reset"), l(j, !1), l(m, !1)
-            }, 3000)) : (b.text(e.E), a.addClass('border-red'), a.addClass('boxshadow-red'), m.removeClass('spinner-is-loading'));
-        });<?php } ?>
-    })<?php if($TEMP['#frequency'] != 'all'){ ?>, setTimeout(n, 500)<?php } ?>
+        count_exists: {#count_exists},
+        newsletter_exists: {#newsletter_exists},
+        frequency: '{#frequency}',
+        slug: '{$slug}'
+    }
 </script>%%}
+{%%<script src="{$theme->{assets/js/settings/jquery.newsletter.min.js}}"></script>%%}

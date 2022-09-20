@@ -1,0 +1,204 @@
+<main class="container-profile">
+    <div class="display-flex direction-colum padding-t25">
+        <div class="content-pinfo display-flex direction-row padding-t25 padding-b25">
+            <div class="item-pimage margin-l15 padding-r20">
+                <figure class="overflow-hidden border-rall">
+                    <img src="{$avatar_b}" alt="{$username}"/>
+                </figure>
+            </div>
+            <div class="item-pinfo display-flex direction-colum justify-center margin-r15">
+                <h1 class="font-bold font-supraly font-postoni-gara">{$username}</h1>
+                <!--<h2 class="font-md font-bold font--headline center left-ns undefined" data-qa="author-location">Country</h2>-->
+                <?php if($TEMP['#followers'] > 0 && ($TEMP['#profile']['shows']['followers'] == 'on' || Specific::IsOwner($TEMP['#user_id']))) { ?>
+                <span class="font-medium font-postoni-gara<?php echo($TEMP['#profile']['shows']['followers'] == 'off' && Specific::IsOwner($TEMP['#user_id'])) ? ' color-grey ' : ' color-blackly ';?>margin-b10">{$followers}</span>
+                <?php } ?>
+                <?php if($TEMP['#profile']['shows']['birthday'] == 'on' || $TEMP['#profile']['shows']['gender'] == 'on') { ?>
+                <div class="margin-b10">
+                    <?php if($TEMP['#profile']['shows']['birthday'] == 'on') { ?>
+                    <h2 class="font-medium font-bold first-capitalize">{$word->date_of_birth}: {$birthday_format}</h2>
+                    <?php } ?>
+                    <?php if($TEMP['#profile']['shows']['gender'] == 'on') { ?>
+                    <h2 class="font-medium font-bold first-capitalize">{$word->gender}: <span class="text-lowercase">{$gender_txt}</span></h2>
+                    <?php } ?>
+                </div>
+                <?php } ?>
+                <?php if(!empty($TEMP['#about'])){ ?>
+                <p class="font-medium">{#about}</p>
+                <?php } ?>
+            </div>
+            <?php if(!Specific::IsOwner($TEMP['#user_id'])){ ?>
+            <div class="display-flex direction-row align-center margin-l15 margin-r15">
+                <?php if($TEMP['#loggedin'] == true){ ?>
+                <button id="btn-follow" class="btn-follow display-flex direction-colum align-center justify-center btn-noway background-white color-black font-bold no-select padding-t5 padding-b5 padding-l20 padding-r20 border-r25px border-all border-grely animate-tab-button animation-ease3s" type="{#type}" aria-label="{$btn_ftext}">
+                    <span class="font-medium">
+                        <span id="text-following">{$word->following}</span>
+                        <span id="text-follow">{$word->follow}</span>
+                        <span id="text-unfollow">{$word->unfollow}</span>
+                    </span>
+                    <div class="content-spinner-circle position-absolute">
+                        <div class="spinner-circle"></div>
+                    </div>
+                </button>
+                <?php } else { ?>
+                <a class="btn-follow display-flex direction-colum align-center justify-center btn-noway background-white color-black font-bold no-select padding-t5 padding-b5 padding-l20 padding-r20 border-r25px border-all border-grely animate-tab-button animation-ease3s" href="{$url->{{#r_login}}}" type="follow" aria-label="{$word->follow}">{$word->follow}</a>
+                <?php } ?>
+            </div>
+            <?php } ?>
+        </div>
+        <div class="content-plinks display-flex w-100 margin-t15 margin-b15 padding-t15 padding-b15 border-top border-bottom border-grely">
+            <nav class="display-flex direction-row align-center margin-right-auto" aria-label="{$word->social_media}">
+                <?php if(!empty($TEMP['#contact_email']) && $TEMP['#profile']['shows']['contact_email'] == 'on'){ ?>
+                <a class="color-black margin-l15 margin-r15 padding-r10 hover-button animate-tab-button animation-ease3s" href="mailto:{#contact_email}" target="_blank" aria-label="{$word->contact_email}">
+                    <svg class="icon-z vertical-sub" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 24" xml:space="preserve" aria-hidden="true" focusable="false" role="img">
+                        <title>{$word->contact_email}</title>
+                        <path points="395,320.089 395,74.911 258.806,197.5" d="M24 19.448L24 4.552L15.725 12Z"/>
+                        <path points="197.5,252.682 158.616,217.682 22.421,340.271 372.579,340.271 236.384,217.682" d="M12 15.353L9.637 13.226L1.362 20.675L22.638 20.675L14.363 13.226Z"/>
+                        <path points="372.579,54.729 22.421,54.729 197.5,212.318" d="M22.638 3.325L1.362 3.325L12 12.9Z"/>
+                        <path points="0,74.911 0,320.089 136.194,197.5" d="M0 4.552L0 19.448L8.275 12Z"/>
+                    </svg>
+                </a>
+                <?php } ?>
+                <?php if(!empty($TEMP['#twitter'])){ ?>
+                <a class="color-black margin-r15 padding-r10 hover-button animate-tab-button animation-ease3s" href="https://twitter.com/{#twitter}" target="_blank" aria-label="{$word->twitter}">
+                    <svg class="icon-z vertical-sub" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="img">
+                        <title>{$word->twitter}</title>
+                        <path fill="currentColor" d="M22.5 6L20.25 6.375L21.75 4.5L19.125 5.25C15.75 1.5 10.5 5.625 12 9C6 9 3 4.5 3 4.5C3 4.5 0.75 7.875 4.5 10.5L2.25 9.75C2.25 12 3.75 13.5 6.375 14.25L3.75 14.25C5.25 17.25 7.875 17.25 7.875 17.25C7.875 17.25 5.625 19.125 1.5 19.125C13.875 25.125 21.375 13.875 20.25 7.875Z"/>
+                    </svg>
+                </a>
+                <?php } ?>
+                <?php if(!empty($TEMP['#instagram'])){ ?>
+                <a class="color-black margin-r15 padding-r10 hover-button animate-tab-button animation-ease3s" href="https://instagram.com/{#instagram}" target="_blank" aria-label="{$word->instagram}">
+                    <svg class="icon-z vertical-sub" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="img">
+                        <title>{$word->instagram}</title>
+                        <path fill="currentColor" d="M23.928 7.053a8.808 8.808 0 0 0 -0.557 -2.913 5.883 5.883 0 0 0 -1.385 -2.125A5.883 5.883 0 0 0 19.86 0.629a8.808 8.808 0 0 0 -2.912 -0.557C15.667 0.013 15.259 0 12 0S8.333 0.013 7.053 0.072a8.808 8.808 0 0 0 -2.913 0.557A5.883 5.883 0 0 0 2.013 2.015 5.883 5.883 0 0 0 0.629 4.14a8.808 8.808 0 0 0 -0.557 2.912C0.013 8.333 0 8.741 0 12s0.013 3.667 0.072 4.947a8.808 8.808 0 0 0 0.557 2.913 5.883 5.883 0 0 0 1.385 2.125 5.881 5.881 0 0 0 2.125 1.385 8.808 8.808 0 0 0 2.912 0.557C8.333 23.987 8.741 24 12 24s3.667 -0.013 4.947 -0.072a8.808 8.808 0 0 0 2.913 -0.557 6.136 6.136 0 0 0 3.511 -3.511 8.808 8.808 0 0 0 0.557 -2.912C23.987 15.667 24 15.259 24 12s-0.013 -3.667 -0.072 -4.947zm-2.16 9.796a6.637 6.637 0 0 1 -0.413 2.227 3.973 3.973 0 0 1 -2.277 2.279 6.639 6.639 0 0 1 -2.228 0.413c-1.267 0.057 -1.645 0.069 -4.849 0.069s-3.584 -0.012 -4.849 -0.069a6.639 6.639 0 0 1 -2.227 -0.413 3.717 3.717 0 0 1 -1.381 -0.897 3.717 3.717 0 0 1 -0.897 -1.38 6.637 6.637 0 0 1 -0.413 -2.228c-0.057 -1.267 -0.069 -1.645 -0.069 -4.849s0.012 -3.584 0.069 -4.849a6.639 6.639 0 0 1 0.413 -2.227 3.717 3.717 0 0 1 0.897 -1.381 3.717 3.717 0 0 1 1.38 -0.897 6.639 6.639 0 0 1 2.228 -0.413c1.267 -0.057 1.645 -0.069 4.849 -0.069s3.584 0.012 4.849 0.069a6.639 6.639 0 0 1 2.227 0.413 3.717 3.717 0 0 1 1.381 0.897 3.717 3.717 0 0 1 0.897 1.38 6.639 6.639 0 0 1 0.413 2.228c0.057 1.267 0.069 1.645 0.069 4.849s-0.012 3.584 -0.069 4.849zM12 5.837A6.163 6.163 0 1 0 18.163 12 6.163 6.163 0 0 0 12 5.837zM12 16a4 4 0 1 1 4 -4 4 4 0 0 1 -4 4zm7.845 -10.405a1.44 1.44 0 1 1 -1.44 -1.44 1.44 1.44 0 0 1 1.44 1.44z"></path>
+                    </svg>
+                </a>
+                <?php } ?>
+                <?php if(!empty($TEMP['#facebook'])){ ?>
+                <a class="color-black margin-r15 padding-r10 hover-button animate-tab-button animation-ease3s" href="https://facebook.com/{#facebook}" target="_blank" aria-label="facebook">
+                    <svg class="icon-z vertical-sub" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="img">
+                        <title>{$word->facebook}</title>
+                        <path fill="currentColor" d="M20.4 1.2H3.6c-1.32 0 -2.4 1.08 -2.4 2.4v16.8c0 1.321 1.08 2.4 2.4 2.4h8.4v-8.4H9.6V11.43h2.4v-2.46c0 -2.597 1.454 -4.421 4.519 -4.421l2.164 0.002v3.126h-1.436c-1.193 0 -1.646 0.895 -1.646 1.726v2.028h3.082L18 14.4h-2.4v8.4h4.8c1.32 0 2.4 -1.079 2.4 -2.4V3.6c0 -1.32 -1.08 -2.4 -2.4 -2.4z"/>
+                    </svg>
+                </a>
+                <?php } ?>
+                <a class="color-black hover-button animate-tab-button animation-ease3s" href="{$url->{{#r_rss}/{#r_user}/{$user}}}" target="_blank" aria-label="RSS">
+                    <svg class="icon-z vertical-sub" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="img">
+                        <title>RSS</title>
+                        <path fill-rule="nonzero" d="M2.88 2.88v2.84c8.503 0 15.396 6.895 15.396 15.398h2.843C21.119 11.046 12.953 2.88 2.88 2.88zm0 5.684v2.843a9.712 9.712 0 0 1 9.712 9.713h2.842c0 -6.934 -5.621 -12.556 -12.553 -12.556zm2.723 7.106a2.725 2.725 0 0 0 0 5.449c1.505 0 2.723 -1.219 2.723 -2.724s-1.218 -2.725 -2.723 -2.725z"></path>
+                    </svg>
+                </a>
+            </nav>
+            <?php if($TEMP['#profile']['shows']['messages'] == 'on'){ ?>
+            <?php if(!Specific::IsOwner($TEMP['#user_id'])){ ?>
+            <a class="display-inline-block padding-t10 padding-b10 padding-l10 padding-r10 color-black border-all border-grely hover-button animation-ease3s" href="{$url->{{#r_chat}/{$user}}}"  target="_self">
+                <span class="color-black">{$word->send_message_author}</span>
+                <svg class="icon-y vertical-sub" viewBox="-1.5 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="img">
+                    <title>{$word->send_message_author}</title>
+                    <path fill="currentColor" d="M8.93 3.136l1.041 -1.041c0.441 -0.441 1.153 -0.441 1.589 0L20.672 11.203c0.441 0.441 0.441 1.153 0 1.589L11.559 21.905c-0.441 0.441 -1.153 0.441 -1.589 0l-1.041 -1.041c-0.445 -0.445 -0.436 -1.172 0.019 -1.608L14.597 13.875H1.125c-0.623 0 -1.125 -0.502 -1.125 -1.125v-1.5c0 -0.623 0.502 -1.125 1.125 -1.125h13.472L8.948 4.744c-0.459 -0.436 -0.469 -1.163 -0.019 -1.608z"></path>
+                </svg>
+            </a>
+            <?php } else { ?>
+            <button class="display-inline-block padding-t10 padding-b10 padding-l10 padding-r10 color-black border-all border-grely hover-button animation-ease3s" disabled>
+                <span class="color-black">{$word->send_message_author}</span>
+                <svg class="icon-y vertical-sub" viewBox="-1.5 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="img">
+                    <title>{$word->send_message_author}</title>
+                    <path fill="currentColor" d="M8.93 3.136l1.041 -1.041c0.441 -0.441 1.153 -0.441 1.589 0L20.672 11.203c0.441 0.441 0.441 1.153 0 1.589L11.559 21.905c-0.441 0.441 -1.153 0.441 -1.589 0l-1.041 -1.041c-0.445 -0.445 -0.436 -1.172 0.019 -1.608L14.597 13.875H1.125c-0.623 0 -1.125 -0.502 -1.125 -1.125v-1.5c0 -0.623 0.502 -1.125 1.125 -1.125h13.472L8.948 4.744c-0.459 -0.436 -0.469 -1.163 -0.019 -1.608z"></path>
+                </svg>
+            </button>
+            <?php } ?>
+            <?php } ?>
+        </div>
+    </div>
+    <div id="container-sposts" class="container-sposts display-flex">
+        <div class="content-sposts display-flex direction-colum">
+            <h2 class="font-bigly font-bold">{$word->latest_from} {$username}</h2>
+            <section id="content-sresults" class="content-sresults">
+                {$posts_result}
+            </section>
+            <div id="content-load-sc" class="content-load-sc hidden">
+               <div class="padding-b15">
+                  <div class="display-flex direction-colum margin-t15 padding-t15 border-top border-grely">
+                     <div class="display-flex">
+                        <div class="display-flex direction-colum w-100 padding-r10">
+                           <div class="category-sload animate-content-load w-50px margin-b5 hidden"></div>
+                           <div class="title-sload animate-content-load w-100 color-black margin-b5"></div>
+                           <div class="title-sload animate-content-load w-100 margin-b5"></div>
+                           <div class="title-sload animate-content-load w-50"></div>
+                        </div>
+                        <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                     </div>
+                  </div>
+               </div>
+               <div class="padding-t15 padding-b15 border-top border-grely">
+                  <div class="display-flex direction-colum">
+                     <div class="display-flex">
+                        <div class="display-flex direction-colum w-100 padding-r10">
+                           <div class="category-sload animate-content-load w-50px margin-b5 hidden"></div>
+                           <div class="title-sload animate-content-load w-100 color-black margin-b5"></div>
+                           <div class="title-sload animate-content-load w-100 margin-b5"></div>
+                           <div class="title-sload animate-content-load w-50"></div>
+                        </div>
+                        <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                     </div>
+                  </div>
+               </div>
+               <div class="padding-t15 padding-b15 border-top border-grely">
+                  <div class="display-flex direction-colum">
+                     <div class="display-flex">
+                        <div class="display-flex direction-colum w-100 padding-r10">
+                           <div class="category-sload item-scategory animate-content-load w-50px margin-b5 hidden"></div>
+                           <div class="title-sload animate-content-load w-100 color-black margin-b5"></div>
+                           <div class="title-sload animate-content-load w-100 margin-b5"></div>
+                           <div class="title-sload animate-content-load w-50"></div>
+                        </div>
+                        <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                     </div>
+                  </div>
+               </div>
+               <div class="padding-t15 padding-b15 border-top border-grely">
+                  <div class="display-flex direction-colum">
+                     <div class="display-flex">
+                        <div class="display-flex direction-colum w-100 padding-r10">
+                           <div class="category-sload animate-content-load w-50px margin-b5 hidden"></div>
+                           <div class="title-sload animate-content-load w-100 color-black margin-b5"></div>
+                           <div class="title-sload animate-content-load w-100 margin-b5"></div>
+                           <div class="title-sload animate-content-load w-50"></div>
+                        </div>
+                        <div class="image-sload animate-content-load display-flex direction-colum align-center"></div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+        </div>
+
+        <div id="profile-right" class="profile-right display-none-mob">
+            <div class="theiaStickySidebar">
+               <aside class="content-saside direction-colum h-100 margin-b15 padding-l20">
+                  <div class="content-related-aside display-block position-relative">
+                     <h2 class="color-black font-mediumly font-bold text-uppercase">{$word->recommended_posts}</h2>
+                     <ul>
+                        {$related_aside}   
+                     </ul>
+                  </div>
+                  {$newsletter}
+               </aside>
+            </div>
+         </div>
+    </div>
+</main>
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/user/style.user.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/search-profile-category-tag/style.search.related-aside.min.css}}" />%%}
+{%%<script src="{$theme->{assets/js/theia-sticky-sidebar.min.js}}"></script>%%}
+{%%<script type="text/javascript">
+   paper_u = {
+      token: '{#token_session}',
+      url: {
+         load_posts: '{$url->{req/profile/load-posts}}',
+         follow: '{$url->{req/profile/follow}}'
+      },
+      user_id: {#user_id},
+      profile_ids: [{$profile_ids}]
+   }, $('#profile-right').theiaStickySidebar();
+</script>%%}
+{%%<script src="{$theme->{assets/js/user/jquery.user.min.js}}"></script>%%}

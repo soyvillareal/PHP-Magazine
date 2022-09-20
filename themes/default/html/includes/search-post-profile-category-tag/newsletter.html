@@ -1,0 +1,17 @@
+{$form_newsletter}
+<?php if(empty($_COOKIE['dismiss_newsletter'])){ ?>
+{%%<div class="newsletter-fixed display-flex display-none-desk position-fixed">
+   <div class="item-newsletter-fixed w-100">
+      {$form_newsletter}
+   </div>
+   <button id="close-newsletter" class="close-newsletter display-flex position-absolute border-rall border-none" type="button" aria-label="{$word->close_newsletter}"></button>
+</div>%%}
+<?php } ?>
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/plugins/style.newsletter.min.css}}" />%%}
+{%%<script src="{$theme->{assets/js/plugins/jquery.newsletter.min.js}}"></script>%%}
+{%%<script type="text/javascript">
+   $.createNewsletter({
+      token: '{#token_session}',
+      url: '{$url->{req/newsletter/subscribe}}'
+   })
+</script>%%}

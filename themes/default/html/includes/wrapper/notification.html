@@ -1,0 +1,25 @@
+<li data-id="{!id}">
+   <a class="display-flex direction-row align-center padding-t10 padding-l10 padding-r10" href="{!url}" target="_self">
+      <div class="item-npoint border-rall margin-r10<?php echo($TEMP['!seen'] == 0) ? ' background-red' : '';?>"></div>
+      <figure class="display-flex direction-row align-center w-100 padding-b10 border-bottom border-grely">
+         <?php if($TEMP['!type'] == 'n_post'){ ?>
+         <picture class="position-relative margin-r10">
+            <div class="content-gradient">
+               <img class="item-nimage" src="{!thumbnail}" alt="{!title}">
+            </div>
+         </picture>
+         <?php } else { ?>
+         <picture class="item-nuimage margin-r10">
+            <img class="margin-auto border-rall" src="{!image}" alt="{!title}">
+         </picture>
+         <?php } ?>
+         <figcaption class="w-100 margin-r10">
+            <h3 class="item-ntitle font-georgia font-mediumly ellipsis-vertical ellipsis-v2 margin-b5 color-black">{!username}</h3>
+            <p class="item-ncontent font-georgia font-mediumly ellipsis-vertical ellipsis-v2 color-black">{!title}</p>
+            <time datetime="{!created_date}">
+               <span class="item-ntime color-grey font-low">{!created_at}</span>
+            </time>
+         </figcaption>
+      </figure>
+   </a>
+</li>

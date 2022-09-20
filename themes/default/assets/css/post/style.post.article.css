@@ -1,41 +1,22 @@
-@keyframes rotate {
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
+@-webkit-keyframes palp {
+  0%, 100%{
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50%{
+    transform: translate(-50%, -50%) scale(1.0);
+    opacity: 0;
+  }
 }
-@-webkit-keyframes rotate {
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
-}
-@keyframes dash {
-    0% {
-        stroke-dasharray: 1, 150;
-        stroke-dashoffset: 0;
-    }
-    50% {
-        stroke-dasharray: 90, 150;
-        stroke-dashoffset: -35;
-    }
-    100% {
-        stroke-dasharray: 90, 150;
-        stroke-dashoffset: -124;
-    }
-}
-@-webkit-keyframes dash {
-    0% {
-        stroke-dasharray: 1, 150;
-        stroke-dashoffset: 0;
-    }
-    50% {
-        stroke-dasharray: 90, 150;
-        stroke-dashoffset: -35;
-    }
-    100% {
-        stroke-dasharray: 90, 150;
-        stroke-dashoffset: -124;
-    }
+@keyframes palp {
+  0%, 100%{
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50%{
+    transform: translate(-50%, -50%) scale(1.0);
+    opacity: 0;
+  }
 }
 @keyframes saved-image {
     from {
@@ -173,26 +154,40 @@
 .saved-animation-button {
     animation:saved-button .1s ease-in 1 normal;
 }
-.content-spinner {
+
+
+
+.content-wspinner {
     z-index: 98;
     -webkit-user-select: none;
 }
-.spinner-container {
-    top: 0;
+.item-wspinner {
+    width: 4rem;
+    height: 4rem;
+}
+.item-wspinner::before,
+.item-wspinner::after {
+    content: "";
+    position: absolute;
+    top: 50%;
     left: 50%;
-    z-index: 124;
-    margin-left: -22px;
-    -webkit-animation: rotate 2s linear infinite;
-    animation: rotate 2s linear infinite;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
 }
-.spinner-container circle {
-    stroke-dasharray: 1,150;
-    stroke-dashoffset: 0;
-    stroke: #326891;
-    stroke-linecap: round;
-    -webkit-animation: dash 1.5s ease-in-out infinite;
-    animation: dash 1.5s ease-in-out infinite;
+.item-wspinner::before {
+    background: #326891;
+    -webkit-animation: palp 2s ease-in-out infinite;
+    animation: palp 2s ease-in-out infinite;
 }
+.item-wspinner::after {
+    background: #326891;
+    -webkit-animation: palp 2s 1s ease-in-out infinite;
+    animation: palp 2s 1s ease-in-out infinite;
+}
+
+
 .item-rb-one {
     width: 150px;
 }
@@ -280,6 +275,7 @@
 .fb-post iframe {
     width: 100% !important;
 }
+.tiktok-embed,
 .instagram-media {
     min-width: auto !important;
 }
@@ -315,18 +311,6 @@
     padding-top: 2px;
     padding-bottom: 2px;
 }
-.content-post .post-thumbnail:before {
-    content: "";
-    position: absolute;
-    z-index: 1;
-    height: 100%;
-    width: 100%;
-    left: 0;
-    bottom: 0;
-    background: transparent;
-    background: -webkit-gradient(linear,left top,left bottom,color-stop(13%,transparent),color-stop(56%,rgba(0,0,0,.15)),color-stop(91%,rgba(0,0,0,.65)));
-    background: linear-gradient(180deg,transparent 13%,rgba(0,0,0,.15) 56%,rgba(0,0,0,.65) 91%);
-}
 .content-post .post-thumbnail figcaption {
     bottom: 0;
     z-index: 2;
@@ -334,14 +318,86 @@
 .content-category {
     z-index: 2;
 }
-.content-category a {
-    padding: 4px 8px;
+.content-cpost {
+    margin: 0 20px;
+}
+.content-cpost figure {
+    border: 7px solid;
+}
+.container-apost,
+
+.content-pbcarousel {
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+.container-apost::-webkit-scrollbar {
+    height: 8px;
+}
+.container-apost::-webkit-scrollbar-track {
+    background: #cdcdcd;
+}
+.container-apost::-webkit-scrollbar-thumb {
+    background: #909090;
+}
+.entry-carousel .content-ecbuttons {
+    top: 15px;
+    right: 15px;
+    z-index: 2;
+}
+.entry-carousel .content-carrusel {
+    max-width: 520px;
+}
+.content-carrusel .item-pbcarousel {
+    border: 2px solid;
+}
+.content-carrusel .item-pbcimage {
+    background-size: cover;
+}
+.content-carrusel .item-pbcarousel.selected {
+    border-color: #326891 !important;
+    opacity: 1;
+}
+.item-pbcarousel:not(:last-child) {
+    margin-right: 10px;
+}
+.content-carrusel .item-entry-figcaption {
+    bottom: 15px;
+    z-index: 1;
+}
+.content-likedis .spinner-circle {
+    height: 17px;
+    width: 17px;
+    border-width: 1px;
+    border-top-color: rgb(0, 0, 0, .3);
+    border-bottom-color: rgb(0, 0, 0, .3);
+    border-right-color: rgb(0, 0, 0, .3);
+    border-left-color: #fff;
+}
+.content-lnotify {
+    left: -100%;
+    bottom: 20px;
+    margin-right: 20px;
+    z-index: 999;
 }
 @media (max-width: 380px) { 
     .entry .fb-post,
     .entry .fb-post span,
-    .entry .fb-post iframe {
+    .entry .fb-post iframe,
+    .twitter-tweet.twitter-tweet-rendered iframe {
         width: 100% !important;
+    }
+    .entry-carousel .content-ecbuttons {
+        top: 10px;
+        right: 10px;
+    }
+    .content-ecbuttons .btn-caction {
+        width: 30px;
+        height: 30px;
+    }
+}
+@media (max-width: 420px) {
+    .item-pmodified {
+        display: none !important;
     }
 }
 @media (max-width: 480px) {
@@ -349,7 +405,22 @@
         max-height: 200px;
     }
 }
-@media (max-width: 599px) {
+@media (min-width: 591px) {
+    .content-cpfigure {
+        margin-right: 20px; 
+    }
+    .entry_cimage {
+        width: 350px;
+        height: 350px;
+    }
+}
+@media (min-width: 280px) and (max-width: 590px) {
+    .entry_cimage {
+        width: 280px;
+        height: 280px;
+    }
+}
+@media (max-width: 590px) {
     .entry.yt-video iframe {
         max-height: 250px;
     }
@@ -362,12 +433,32 @@
     .related-body .related-btitle {
         font-size: 14px;
     }
-    .related-body .related-bnews {
+    .related-body .related-bposts {
         font-size: 16px;
     }
     .content-post .post-thumbnail {
         margin-left: -15px;
         margin-right: -15px;
+    }
+    .container-apost .content-cpost {
+        display: block !important;
+        margin: 0 10px;
+    }
+    .content-cpost figure {
+        width: 50px;
+        height: 50px;
+        margin-top: 5px;
+        border: 4px solid;
+    }
+    .content-cpost h3 {
+        font-size: 15px;
+    }
+    .content-smedia .item-smtitle {
+        font-size: 12px;
+    }
+    .content-cpinfo .item-cpname,
+    .content-cpinfo .item-cpsmedia {
+        text-align: center;
     }
 }
 @media (min-width: 768px) {

@@ -50,30 +50,30 @@ textarea.item-input:focus ~ .item-label {
     background-repeat: no-repeat;
     margin: auto;
 }
-.checkbox-popular:checked + .slider-popular{
-    background-color: #326891;
-}
 .item-category::-webkit-scrollbar {
     width: 8px;
+}
+.item-category::-webkit-scrollbar-track {
+    background: #cdcdcd;
 }
 .item-category::-webkit-scrollbar-thumb {
   background-color: #909090;
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
 }
+.checkbox-popular:checked + .slider-popular{
+    background-color: #326891;
+}
 .newsletter-checkbox {
   width: 35px;
   height: 18px;
 }
 .slider-popular {
-  cursor: pointer;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   border-radius: 34px;
-  -webkit-transition: .3s;
-  transition: .3s;
 }
 .slider-popular:before {
   content: "";
@@ -86,9 +86,6 @@ textarea.item-input:focus ~ .item-label {
   background-color: white;
   -webkit-transition: .3s;
   transition: .3s;
-}
-.checkbox-popular:focus + .slider {
-  box-shadow: 0 0 1px #326891;
 }
 .checkbox-popular:checked + .slider-popular:before {
   -webkit-transform: translateX(17px);
@@ -111,6 +108,15 @@ textarea.item-input:focus ~ .item-label {
     border-right: 10px solid transparent;
     border-left: 10px solid transparent;
     border-top: 10px solid #fff;
+}
+.item-nother::-webkit-scrollbar {
+    width: 8px;
+}
+.item-nother::-webkit-scrollbar-track {
+    background: #cdcdcd;
+}
+.item-nother::-webkit-scrollbar-thumb {
+    background: #909090;
 }
 @media (max-width: 480px) {
     .content-newsletter .item-newsletter {

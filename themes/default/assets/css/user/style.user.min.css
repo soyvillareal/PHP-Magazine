@@ -1,0 +1,95 @@
+.item-pimage figure {
+    width: 180px;
+    height: 180px;
+}
+.btn-follow[type=follow] {
+    width: 140px;
+}
+.btn-follow[type=following] {
+    width: 165px;
+}
+.btn-follow[type=following] #text-follow,
+.btn-follow[type=following] #text-unfollow,
+.btn-follow[type=follow] #text-following,
+.btn-follow[type=follow] #text-unfollow {
+    display: none;
+}
+.btn-follow[type=following] {
+    background-color: #000;
+    color: #fff;
+}
+.btn-follow[type=following]:active,
+.btn-follow[type=following]:focus {
+    background-color: rgb(200, 60, 60, .1);
+    color: #cb423b;
+    border-color: #cb423b !important;
+}
+.btn-follow[type=following]:active #text-following,
+.btn-follow[type=following]:focus #text-following {
+    display: none;
+}
+.btn-follow[type=follow]:active,
+.btn-follow[type=follow]:focus {
+    background-color: #000;
+    color: #fff;
+}
+.btn-follow[type=following]:active #text-unfollow,
+.btn-follow[type=following]:focus #text-unfollow {
+    display: block;
+}
+@media (max-width: 590px){
+    .container-profile .content-pinfo,
+    .container-profile .content-plinks {
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        -webkit-align-items: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+    .content-plinks nav {
+        margin-left: auto;
+        margin-bottom: 15px;
+    }
+    .content-pinfo .item-pinfo {
+        text-align: center;
+        margin-top: 15px;
+    }
+    .content-pinfo .item-pimage {
+        margin: 0;
+        padding: 0;
+    }
+    .item-pimage figure {
+        width: 120px;
+        height: 120px;
+    }
+    .item-pinfo h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+    .item-pinfo p {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+    .content-sposts h2 {
+        font-size: 17px;
+    }
+}
+@media(pointer: fine) {
+    .btn-follow[type=following]:hover {
+        background-color: rgb(200, 60, 60, .1);
+        color: #cb423b;
+        border-color: #cb423b !important;
+    }
+    .btn-follow[type=following]:hover #text-following {
+        display: none;
+    }
+    .btn-follow[type=follow]:hover {
+        background-color: #000;
+        color: #fff;
+    }
+    .btn-follow[type=following]:hover #text-unfollow {
+        display: block;
+    }
+}

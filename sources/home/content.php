@@ -1,7 +1,7 @@
 <?php
 $home_ids = array();
 
-$TEMP['#breaking_news'] = $dba->query('SELECT * FROM '.T_POST.' p WHERE (SELECT post_id FROM '.T_BREAKING.' WHERE post_id = p.id AND ? < expiration_at) = id', time())->fetchArray();
+$TEMP['#breaking_news'] = $dba->query('SELECT * FROM '.T_POST.' p WHERE (SELECT post_id FROM '.T_BREAKING.' WHERE post_id = p.id AND ? < expiration_at) = id AND status = "approved"', time())->fetchArray();
 
 $TEMP['#show_breaking'] = false;
 if(!empty($TEMP['#breaking_news']) && $TEMP['#breaking_news']['id'] != $_COOKIE['breaking_news']){
@@ -15,7 +15,7 @@ if(!empty($TEMP['#breaking_news']) && $TEMP['#breaking_news']['id'] != $_COOKIE[
 	$home_ids[] = $TEMP['#breaking_news']['id'];
 }
 
-$TEMP['#main'] = Specific::MainNews();
+$TEMP['#main'] = Specific::MainPosts();
 
 if(!empty($TEMP['#main'])){
 	foreach ($TEMP['#main'] as $key => $post) {
@@ -55,7 +55,7 @@ if(!empty($TEMP['#main'])){
 	Specific::DestroyMaket();
 }
 
-$TEMP['#recommended'] = $dba->query('SELECT * FROM '.T_POST.' WHERE id NOT IN ('.implode(',', $home_ids).') ORDER BY published_at ASC LIMIT 5')->fetchAll();
+$TEMP['#recommended'] = $dba->query('SELECT * FROM '.T_POST.' WHERE id NOT IN ('.implode(',', $home_ids).') AND status = "approved" ORDER BY published_at ASC LIMIT 5')->fetchAll();
 
 if(!empty($TEMP['#recommended'])){
 	foreach ($TEMP['#recommended'] as $post) {
@@ -71,13 +71,14 @@ if(!empty($TEMP['#recommended'])){
 		$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
 		$TEMP['!published_date'] = date('c', $post['published_at']);
 		$TEMP['!published_at'] = Specific::DateString($post['published_at']);
-		$TEMP['recommended_news'] .= Specific::Maket('home/includes/recommended-news');
+		$TEMP['recommended_posts'] .= Specific::Maket('home/includes/recommended-posts');
 		$home_ids[] = $post['id'];
 	}
 	Specific::DestroyMaket();
 }
 
-$entry = $dba->query('SELECT frame, post_id FROM '.T_POST.' INNER JOIN '.T_ENTRY.' ON '.T_POST.'.id = '.T_ENTRY.'.post_id AND '.T_ENTRY.'.type = "video" AND '.T_POST.'.id NOT IN ('.implode(',', $home_ids).') ORDER BY '.T_POST.'.views ASC, '.T_ENTRY.'.eorder DESC')->fetchArray();
+$entry = $dba->query('SELECT c.frame, c.post_id FROM '.T_POST.' a INNER JOIN '.T_ENTRY.' c ON a.id = c.post_id WHERE c.type = "video" AND a.id NOT IN ('.implode(',', $home_ids).') AND a.status = "approved" ORDER BY a.views ASC, c.eorder DESC')->fetchArray();
+
 $TEMP['#video'] = $dba->query('SELECT * FROM '.T_POST.' WHERE id = ?', $entry['post_id'])->fetchArray();
 
 $category = $dba->query('SELECT id, name, slug FROM '.T_CATEGORY.' WHERE id = ?', $TEMP['#video']['category_id'])->fetchArray();
@@ -102,17 +103,17 @@ $TEMP['#main_recommended_videos'] = $main_recommended_videos['main_recommended_v
 $TEMP['main_recommended_videos'] = $main_recommended_videos['main_recommended_videos_html'];
 
 
-$last_news = Load::LastNews($home_ids);
+$last_posts = Load::LastPosts($home_ids);
 
-$TEMP['#last_news_one'] = $last_news['last_news_one'];
-$TEMP['#last_news_two'] = $last_news['last_news_two'];
-$TEMP['last_news_one'] = $last_news['last_news_one_html'];
-$TEMP['last_news_two'] = $last_news['last_news_two_html'];
-$TEMP['more_news'] = Specific::Maket('home/includes/more-news');
+$TEMP['#last_posts_one'] = $last_posts['last_posts_one'];
+$TEMP['#last_posts_two'] = $last_posts['last_posts_two'];
+$TEMP['last_posts_one'] = $last_posts['last_posts_one_html'];
+$TEMP['last_posts_two'] = $last_posts['last_posts_two_html'];
+$TEMP['more_posts'] = Specific::Maket('home/includes/more-posts');
 
-$TEMP['home_ids'] = implode(',', $last_news['home_ids']);
+$TEMP['home_ids'] = implode(',', $last_posts['home_ids']);
 
-$show_alert = Specific::Filter($_GET[$TEMP['#show_alert']]);
+$show_alert = Specific::Filter($_GET[$TEMP['#p_show_alert']]);
 $TEMP['#show_alert'] = false;
 if($show_alert == 'deleted_post'){
 	if(isset($_SESSION['post_deleted'])){
