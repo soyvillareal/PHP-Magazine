@@ -173,16 +173,7 @@
    }
    </script>
    <?php } ?>
-   <div class="display-block margin-t15 padding-t15 padding-b15 background-grely border-bottom border-grely">
-      <div class="margin-b10 font-lowly color-grey text-center text-uppercase">
-         <p>Advertisement</p>
-      </div>
-      <div class="display-block h-100 text-center">
-         <div class="place-ad">
-            
-         </div>
-      </div>
-   </div>
+   {$advertisement_ptad}
    <div id="container-post" class="content-post position-relative padding-t15">
       <div id="posts" class="display-block">
          {$main}
@@ -193,13 +184,16 @@
    </div>
    <div id="post-right" class="post-right display-none-mob">
       <div class="theiaStickySidebar">
-         <aside class="post-aside direction-colum h-100 margin-b15 padding-t25 padding-l20">
+         <aside class="post-aside direction-colum h-100 margin-b15 padding-t25 padding-l20<?php echo(empty($TEMP['#related_cat'])) ? ' has-margin-top' : ' ';?>">
+            <?php if(!empty($TEMP['#related_cat'])){ ?>
             <div class="content-related-aside display-block position-relative">
                <h2 class="color-black font-medium font-bold text-uppercase">{$word->most_viewed} - {$category}</h2>
                <ul>
                   {$related_aside}   
                </ul>
             </div>
+            <?php } ?>
+            {$content_aad}
             {$newsletter}
          </aside>
       </div>
@@ -209,8 +203,8 @@
    <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
       <span id="alert-dptitle" class="display-block font-medium font-bold">{$word->are_you_sure}</span>
       <p id="alert-dpcontent" class="font-mediumly color-black margin-t15 margin-b15">{$word->do_really_want_delete_post}</p>
-      <button id="btn-pcancel" class="button-access btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
-      <button id="btn-pdelete" class="button-access btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+      <button id="btn-pcancel" class="btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
+      <button id="btn-pdelete" class="btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
          <span class="color-white">{$word->yes}</span>
          <div class="content-spinner-circle position-absolute">
             <div class="spinner-circle"></div>
@@ -218,14 +212,12 @@
       </button>
    </div>
 </div>%%}
-
-
 {%%<div id="alert-cdelete" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-dctitle" aria-describedby="alert-dccontent">
    <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
       <span id="alert-dctitle" class="display-block font-medium font-bold">{$word->are_you_sure}</span>
       <p id="alert-dccontent" class="font-mediumly color-black margin-t15 margin-b15">{$word->do_really_want_delete_comment}</p>
-      <button id="btn-ccancel" class="button-access btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
-      <button id="btn-cdelete" class="button-access btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+      <button id="btn-ccancel" class="btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
+      <button id="btn-cdelete" class="btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
          <span class="color-white">{$word->yes}</span>
          <div class="content-spinner-circle position-absolute">
             <div class="spinner-circle"></div>
@@ -236,12 +228,13 @@
 
 
 {%%<div id="content-lnotify" class="content-lnotify display-flex direction-row align-center position-fixed border-rlow padding-t10 padding-b10 padding-l10 padding-r10 animation-ease3s">
-  <p class="color-white margin-r10"></p>
-  <button id="btn-dnotify" class="btn-noway color-white">
-    <svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path fill="currentColor" d="M 12 13.17 L 5.17 20 L 4 18.832 L 10.83 12 L 4 5.17 L 5.17 4 L 12 10.83 L 18.832 4 L 20 5.17 L 13.17 12 L 20 18.832 L 18.832 20 Z"></path>
-    </svg>
-  </button>
+   <p class="color-white margin-r10"></p>
+   <button id="btn-dnotify" class="btn-noway color-white">
+      <svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+         <title>{$word->close}</title>
+         <path fill="currentColor" d="M 12 13.17 L 5.17 20 L 4 18.832 L 10.83 12 L 4 5.17 L 5.17 4 L 12 10.83 L 18.832 4 L 20 5.17 L 13.17 12 L 20 18.832 L 18.832 20 Z"></path>
+      </svg>
+   </button>
 </div>%%}
 
 <?php if($TEMP['#loggedin'] == true){ ?>
@@ -314,8 +307,8 @@
       <div id="item-abuttons" class="display-block border-top border-grely">
          <div class="display-flex">
             <div class="margin-auto padding-t15 padding-b15 padding-l20 padding-r20">
-               <button id="btn-rcancel" class="button-access btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
-               <button id="btn-rsend" class="button-access btn-noway w-100px h-36 background-green color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button" disabled>
+               <button id="btn-rcancel" class="btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+               <button id="btn-rsend" class="btn-noway w-100px h-36 background-green color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button" disabled>
                   <span class="color-white">{$word->send}</span>
                   <div class="content-spinner-circle position-absolute">
                      <div class="spinner-circle"></div>
@@ -331,15 +324,17 @@
    <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
       <span id="alert-sptitle" class="display-block font-medium font-bold">{$word->report_sent}</span>
       <p id="alert-spcontent" class="font-mediumly color-black margin-t15">{$word->report_sent_successfully_reviewed}</p>
-      <button id="btn-spclose" class="button-access btn-noway w-100px h-36 background-red color-white margin-t15 font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->close}</button>
+      <button id="btn-spclose" class="btn-noway w-100px h-36 background-red color-white margin-t15 font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->close}</button>
    </div>
 </div>%%}
 <?php } ?>
 {%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.comments.css}}" />%%}
 {%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.article.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/sitemap-post/style.wspinner.min.css}}" />%%}
 {%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.related-aside.css}}" />%%}
 {%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.related-bottom.css}}" />%%}
-{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.post.modal.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home-post-messages-profile/style.modal.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post-profile/style.report.min.css}}" />%%}
 {%%<script src="{$theme->{assets/js/theia-sticky-sidebar.min.js}}"></script>%%}
 {%%<script type="text/javascript">
    paper_p = {
@@ -349,7 +344,7 @@
          save: '{$url->{req/post/save}}',
          load: '{$url->{req/post/load}}',
          delete: '{$url->{req/post/delete}}',
-         report: '{$url->{req/post/report}}',
+         report: '{$url->{req/report}}',
          post_reaction: '{$url->{req/reaction/post-reaction}}',
          comment_reaction: '{$url->{req/reaction/comment-reaction}}',
          comment: '{$url->{req/comment/comment}}',

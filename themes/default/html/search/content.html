@@ -31,31 +31,31 @@
                      </button>
                      <div class="content-dfilter item_dfilter display-flex direction-colum position-fixed background-white margin-t5 boxshadow-grey hidden" role="dialog" aria-label="{$word->filters_by_date}" aria-modal="true">
                         <div class="padding-t15 padding-b15 padding-l10 padding-r10">
-                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway color-grey<?php echo($TEMP['#type_date'] == $TEMP['#p_all']) ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="{#p_all}">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway color-grey<?php echo($TEMP['#type_date'] == $RUTE['#p_all']) ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="{#p_all}">
                               <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                  <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
                               </svg>
                               <span class="color-black animation-ease3s">{$word->all_}</span>
                            </button>
-                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_date'] == $TEMP['#p_today']) ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_most_current}" data-type="{#p_today}">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_date'] == $RUTE['#p_today']) ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_most_current}" data-type="{#p_today}">
                               <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                  <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
                               </svg>
                               <span class="color-black animation-ease3s">{$word->today}</span>
                            </button>
-                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_date'] == $TEMP['#p_this_week']) ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_week}" data-type="{#p_this_week}">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_date'] == $RUTE['#p_this_week']) ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_week}" data-type="{#p_this_week}">
                               <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                  <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
                               </svg>
                               <span class="color-black animation-ease3s">{$word->this_week}</span>
                            </button>
-                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_date'] == $TEMP['#p_this_month']) ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_month}" data-type="{#p_this_month}">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_date'] == $RUTE['#p_this_month']) ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_month}" data-type="{#p_this_month}">
                               <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                  <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
                               </svg>
                               <span class="color-black animation-ease3s">{$word->this_month}</span>
                            </button>
-                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_date'] == $TEMP['#p_this_year']) ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_year}" data-type="{#p_this_year}">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_date'] == $RUTE['#p_this_year']) ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_year}" data-type="{#p_this_year}">
                               <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                  <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
                               </svg>
@@ -75,18 +75,18 @@
                      </button>
                      <div class="content-dfilter item_dfilter display-flex direction-colum position-fixed background-white margin-t5 boxshadow-grey hidden" role="dialog" aria-label="{$word->filters_by_category}" aria-modal="true">
                         <div class="padding-t15 padding-b15 padding-l10 padding-r10">
-                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway color-grey<?php echo($TEMP['#type_category'] == $TEMP['#p_all']) ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="{#p_all}">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway color-grey<?php echo($TEMP['#type_category'] == $RUTE['#p_all']) ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="{#p_all}">
                               <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                  <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
                               </svg>
                               <span class="color-black animation-ease3s">{$word->all_}</span>
                            </button>
                            <?php foreach($TEMP['#categories'] as $cat){ ?>
-                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_category'] == $cat['id']) ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_category_} <?php echo $cat['name'];?>" data-type="<?php echo $cat['id'];?>">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_category'] == $cat['id']) ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_category_} <?php echo $TEMP['#word']["category_{$cat['name']}"];?>" data-type="<?php echo $cat['id'];?>">
                               <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                  <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
                               </svg>
-                              <span class="color-black animation-ease3s"><?php echo $cat['name'];?></span>
+                              <span class="color-black animation-ease3s"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></span>
                            </button>
                            <?php } ?>
                         </div>
@@ -103,7 +103,7 @@
                      </button>
                      <div class="content-dfilter item_dfilter display-flex direction-colum position-fixed background-white margin-t5 boxshadow-grey hidden" role="dialog" aria-label="{$word->filters_by_author}" aria-modal="true">
                         <div class="padding-t15 padding-b15 padding-l10 padding-r10">
-                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway color-grey<?php echo($TEMP['#type_author'] == $TEMP['#p_all']) ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="{#p_all}">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway color-grey<?php echo($TEMP['#type_author'] == $RUTE['#p_all']) ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="{#p_all}">
                               <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                  <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
                               </svg>
@@ -131,19 +131,19 @@
                      </button>
                      <div class="content-dfilter item_dfilter display-flex direction-colum position-fixed background-white margin-t5 boxshadow-grey hidden" role="dialog" aria-label="{$word->filters_by_order}" aria-modal="true">
                         <div class="padding-t15 padding-b15 padding-l10 padding-r10">
-                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway color-grey<?php echo($TEMP['#type_sort'] == $TEMP['#p_newest']) ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="{#p_newest}">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway color-grey<?php echo($TEMP['#type_sort'] == $RUTE['#p_newest']) ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="{#p_newest}">
                               <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                  <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
                               </svg>
                               <span class="color-black animation-ease3s">{$word->newest}</span>
                            </button>
-                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_sort'] == $TEMP['#p_oldest']) ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="{#p_oldest}">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_sort'] == $RUTE['#p_oldest']) ? ' selected' : '';?>" type="button" aria-label="{$word->show_everything}" data-type="{#p_oldest}">
                               <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                  <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
                               </svg>
                               <span class="color-black animation-ease3s">{$word->oldest}</span>
                            </button>
-                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_sort'] == $TEMP['#p_views']) ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_most_current}" data-type="{#p_views}">
+                           <button class="btn-dfilter btn_dfilter display-flex direction-row align-center btn-noway margin-t10 color-grey<?php echo($TEMP['#type_sort'] == $RUTE['#p_views']) ? ' selected' : '';?>" type="button" aria-label="{$word->filter_by_most_current}" data-type="{#p_views}">
                               <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                  <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
                               </svg>
@@ -223,19 +223,23 @@
          <div id="search-right" class="search-right display-none-mob">
             <div class="theiaStickySidebar">
                <aside class="content-saside direction-colum h-100 margin-b15 padding-t25 padding-l20">
+                  <?php if(!empty($TEMP['#related_cat'])){ ?>
                   <div class="content-related-aside display-block position-relative">
                      <h2 class="color-black font-mediumly font-bold text-uppercase">{$word->recommended_posts}</h2>
                      <ul>
                         {$related_aside}   
                      </ul>
                   </div>
+                  <?php } ?>
+                  {$content_aad}
                   {$newsletter}
                </aside>
             </div>
          </div>
       </div>
 </div>
-{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/search-profile-category-tag/style.search.related-aside.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/search-profile-category-tag/style.posts.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/search-profile-category-tag/style.related-aside.min.css}}" />%%}
 {%%<script src="{$theme->{assets/js/theia-sticky-sidebar.min.js}}"></script>%%}
 {%%<script type="text/javascript">
    paper_s = {

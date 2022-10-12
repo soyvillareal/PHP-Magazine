@@ -3,7 +3,7 @@
       <div class="display-flex">
          <div class="display-flex direction-colum padding-r10">
             <?php if($TEMP['#page'] != 'category'){ ?>
-            <a class="item-scategory font-low font-bold color-black margin-b5 hover-button animation-ease3s hidden" href="{$url->{{#r_category}/{!category_slug}}}" target="_self">{!category}</a>
+            <a class="item-scategory font-low font-bold color-black margin-b5 hover-button animation-ease3s hidden" href="{!category_slug}" target="_self">{!category}</a>
             <?php } ?>
             <a class="item-stitle font-bigly font-bold font-postoni-gara break-all color-black ellipsis-vertical ellipsis-v3 hover-underline" href="{!url}" target="_self">{!title}</a>
             <p class="item-description color-blackly margin-t5 ellipsis-vertical ellipsis-v3">{!description}</p>
@@ -33,7 +33,7 @@
             <?php if($TEMP['#page'] != 'category'){ ?>
             <div class="container-category position-absolute">
                <div class="content-category display-inline-block border-rlow">
-                  <a class="btn-noway background-black color-white font-low text-uppercase border-rlow hover-button animation-ease3s" href="{$url->{{#r_category}/{!category_slug}}}" target="_self">{!category}</a>
+                  <a class="btn-noway background-black color-white font-low text-uppercase border-rlow hover-button animation-ease3s" href="{!category_slug}" target="_self">{!category}</a>
                </div>
             </div>
             <?php } ?>

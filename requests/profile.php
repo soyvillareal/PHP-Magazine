@@ -2,26 +2,28 @@
 if($one == 'follow'){
 	$user_id = Specific::Filter($_POST['user_id']);
 
-	if(!empty($user_id) && is_numeric($user_id)){
-		if($TEMP['#user']['id'] != $user_id && $dba->query('SELECT COUNT(*) FROM '.T_USER.' WHERE id = ?', $user_id)->fetchArray(true) > 0){
+	if(!empty($user_id) && is_numeric($user_id) && !in_array($user_id, Specific::BlockedUsers(false))){
+		if($TEMP['#user']['id'] != $user_id && $dba->query('SELECT COUNT(*) FROM '.T_USER.' WHERE id = ? AND status = "active"', $user_id)->fetchArray(true) > 0){
+			$updated = false;
 			if($dba->query('SELECT COUNT(*) FROM '.T_FOLLOWER.' WHERE user_id = ? AND profile_id = ?', $TEMP['#user']['id'], $user_id)->fetchArray(true) > 0){
 				if($dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE (SELECT id FROM '.T_FOLLOWER.' WHERE user_id = ? AND profile_id = ?) = notified_id', $TEMP['#user']['id'], $user_id)->returnStatus()){
 					if($dba->query('DELETE FROM '.T_FOLLOWER.' WHERE user_id = ? AND profile_id = ?', $TEMP['#user']['id'], $user_id)->returnStatus()){
-						$deliver = array(
-							'S' => 200,
-							'T' => 'follow',
-							'L' => $TEMP['#word']['follow']
-						);
+						$updated = true;
+
+						$deliver['S'] = 200;
+						$deliver['T'] = 'follow';
+						$deliver['L'] = $TEMP['#word']['follow'];
 					}
 				}
 			} else {
 				$insert_id = $dba->query('INSERT INTO '.T_FOLLOWER.' (user_id, profile_id, created_at) VALUES (?, ?, ?)', $TEMP['#user']['id'], $user_id, time())->insertId();
 				if($insert_id){
-					$deliver = array(
-						'S' => 200,
-						'T' => 'following',
-						'L' => $TEMP['#word']['following']
-					);
+					$updated = true;
+
+					$deliver['S'] = 200;
+					$deliver['T'] = 'following';
+					$deliver['L'] = $TEMP['#word']['following'];
+
 					Specific::SetNotify(array(
 						'user_id' => $user_id,
 						'notified_id' => $insert_id,
@@ -29,6 +31,19 @@ if($one == 'follow'){
 					));
 				}
 			}
+
+			if($updated){
+				$user = Specific::Data($user_id);
+
+				if($user['shows']['followers'] == 'on'){
+					$followers = Specific::Followers($user_id);
+					
+					if($followers['number'] > 0){
+						$deliver['TX'] = $followers['text'];
+					}
+				}
+			}
+
 		}
 	}
 } else if($one == 'load-posts'){
@@ -41,11 +56,34 @@ if($one == 'follow'){
 		$profile_load = Load::Profile($user_id, $profile_ids);
 
 		if($profile_load['return']){
+			$widget = Specific::GetWidget('horizposts');
+			if($widget['return']){
+				$profile_load['html'] .= $widget['html'];
+			}
 			$deliver = array(
 				'S' => 200,
 				'HT' => $profile_load['html'],
 				'IDS' => $profile_load['profile_ids']
 			);
+		}
+	}
+} else if($one == 'block'){
+	$profile_id = Specific::Filter($_POST['profile_id']);
+
+	if(!empty($profile_id) && is_numeric($profile_id) && $TEMP['#settings']['blocked_users'] == 'on'){
+		$role = $dba->query('SELECT role FROM '.T_USER.' WHERE id = ?', $profile_id)->fetchArray(true);
+		if(!Specific::IsOwner($profile_id) && in_array($role, array('publisher', 'viewer'))){
+			if($dba->query('SELECT COUNT(*) FROM '.T_USER.' WHERE id = ? AND status = "active"', $profile_id)->fetchArray(true) > 0){
+				if($dba->query('SELECT COUNT(*) FROM '.T_BLOCK.' WHERE user_id = ? AND profile_id = ?', $TEMP['#user']['id'], $profile_id)->fetchArray(true) == 0){
+					if($dba->query('INSERT INTO '.T_BLOCK.' (user_id, profile_id, created_at) VALUES (?, ?, ?)', $TEMP['#user']['id'], $profile_id, time())->returnStatus()){
+						$deliver['S'] = 200;
+					}
+				} else {
+					if($dba->query('DELETE FROM '.T_BLOCK.' WHERE user_id = ? AND profile_id = ?', $TEMP['#user']['id'], $profile_id)->returnStatus()){
+						$deliver['S'] = 200;
+					}
+				}
+			}
 		}
 	}
 }

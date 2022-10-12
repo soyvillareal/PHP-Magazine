@@ -1,7 +1,12 @@
 <?php
 
 if ($TEMP['#loggedin'] == false) {
-    header("Location: ".Specific::Url($TEMP['#r_login']));
+    header("Location: ".Specific::Url($RUTE['#r_login']));
+    exit();
+}
+
+if ($TEMP['#publisher'] == false) {
+    header("Location: ".Specific::Url('404'));
     exit();
 }
 
@@ -14,7 +19,7 @@ if (empty($post_id)){
 
 $post = $dba->query('SELECT * FROM '.T_POST.' WHERE id = ?', $post_id)->fetchArray();
 
-if (empty($post) && !Specific::IsOwner($post['user_id'])){
+if (empty($post) || !Specific::IsOwner($post['user_id'])){
     header("Location: ".Specific::Url('404'));
     exit();
 }
@@ -115,8 +120,8 @@ if(!empty($TEMP['#recobo'])){
         $TEMP['!id'] = $re['recommended_id'];
 
         $TEMP['!title'] = $re['title'];
-        $TEMP['!category'] = $category['name'];
-        $TEMP['!category_slug'] = $category['slug'];
+        $TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
+        $TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
         $TEMP['!url'] = Specific::Url($re['slug']);
         $TEMP['!thumbnail'] = Specific::GetFile($re['thumbnail'], 1, 's');
         $TEMP['!published_date'] = date('c', $re['published_at']);

@@ -12,7 +12,7 @@
         <div class="content-field w-100 position-relative">
           <select id="category" class="item-input item_change disable_before w-100 h-45 color-black margin-b15 padding-l10 border-focus-blue border-rlow border-all border-grely caret-down background-grely animation-ease3s">
             <?php foreach($TEMP['#categories'] as $cat){ ?>
-            <option value="<?php echo $cat['id'];?>"><?php echo $cat['name'];?></option>
+            <option value="<?php echo $cat['id'];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></option>
             <?php } ?>
           </select>
           <div class="color-red text-left text-error font-low margin-t5"></div>
@@ -289,8 +289,8 @@
                   <label class="item-label position-absolute first-capitalize font-mediumly pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->link}</label>
                 </div>
                 <div class="display-flex direction-row align-center justify-center margin-t15" role="dialog" aria-label="{$word->download_image_from_website}">
-                  <button class="button-access btn_gicancel btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
-                  <button class="button-access btn_gimage btn-noway w-100px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+                  <button class="btn_gicancel btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+                  <button class="btn_gimage btn-noway w-100px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
                     <span class="color-white">{$word->download}</span>
                     <div class="content-spinner-circle position-absolute">
                       <div class="spinner-circle"></div>
@@ -371,26 +371,28 @@
     </div>
   </div>
 </form>
-<div id="alert-delete" class="content-adelete content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-dtitle" aria-describedby="alert-dcontent">
-  <div class="item-adelete background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
+{%%<div id="alert-delete" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-dtitle" aria-describedby="alert-dcontent">
+  <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
     <span id="alert-dtitle" class="display-block font-medium font-bold">{$word->are_you_sure}</span>
     <p id="alert-dcontent" class="font-mediumly color-black margin-t5">{$word->action_can_not_undone}</p>
     <div class="display-flex direction-row align-center justify-center margin-t10">
-      <button id="btn-acancel" class="button-access btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
-      <button id="btn-delete" class="button-access btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->yes}</button>
+      <button id="btn-acancel" class="btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
+      <button id="btn-delete" class="btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->yes}</button>
     </div>
   </div>
-</div>
+</div>%%}
 {%%<div id="content-lnotify" class="content-lnotify display-flex direction-row align-center position-fixed background-red border-rlow padding-t10 padding-b10 padding-l10 padding-r10 animation-ease3s">
   <p class="color-white margin-r10"></p>
   <button id="btn-dnotify" class="btn-noway color-white">
     <svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <title>{$word->close}</title>
       <path fill="currentColor" d="M 12 13.17 L 5.17 20 L 4 18.832 L 10.83 12 L 4 5.17 L 5.17 4 L 12 10.83 L 18.832 4 L 20 5.17 L 13.17 12 L 20 18.832 L 18.832 20 Z"></path>
     </svg>
   </button>
 </div>%%}
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.create-edit.css}}" />
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/plugins/simditor.min.css}}" />
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.create-edit.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/create-edit-settings/style.modal.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/plugins/simditor.min.css}}" />%%}
 
 {%%<script src="{$theme->{assets/js/plugins/module.min.js}}"></script>%%}
 {%%<script src="{$theme->{assets/js/plugins/hotkeys.min.js}}"></script>%%}

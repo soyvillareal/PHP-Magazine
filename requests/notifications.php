@@ -1,12 +1,14 @@
 <?php
 if($TEMP['#loggedin'] == true){
 	if($one == 'get-count'){
-		$notifications = $dba->query('SELECT COUNT(*) FROM '.T_NOTIFICATION.' WHERE user_id = ? AND seen = 0', $TEMP['#user']['id'])->fetchArray(true);
+		$notifies = Specific::Notifies();
 
-		if($notifications > 0){
+		if($notifies['return']){
 			$deliver = array(
 				'S' => 200,
-				'CT' => $notifications <= 9 ? $notifications : "9+"
+				'CT' => $notifies['count_text'],
+				'CN' => $notifies['count_notifications'],
+				'CM' => $notifies['count_messages'],
 			);
 		}
 	} else if($one == 'get-content'){
@@ -27,83 +29,106 @@ if($TEMP['#loggedin'] == true){
 				$TEMP['!type'] = $notify['type'];
 				$TEMP['!seen'] = $notify['seen'];
 			    if($notify['type'] == 'n_post'){
-			        $post = $dba->query('SELECT * FROM '.T_POST.' WHERE id = ? AND status = "approved"', $notify['notified_id'])->fetchArray();
-			        $TEMP['!title'] = $post['title'];
-			        $TEMP['!username'] = Specific::Data($post['user_id'], array('username'));
+			        $post = $dba->query('SELECT * FROM '.T_POST.' WHERE id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"', $notify['notified_id'])->fetchArray();
+			        
+			        if(!empty($post)){
+			        	$has_notification = true;
+				        $TEMP['!title'] = $post['title'];
+				        $TEMP['!username'] = Specific::Data($post['user_id'], array('username'));
 
-			        $TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
+				        $TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
+				    }
 			    } else if(in_array($notify['type'], array('n_collab', 'n_preact', 'n_creact', 'n_rreact'))){
 			    	if($notify['type'] == 'n_collab'){
-			        	$post = $dba->query('SELECT * FROM '.T_POST.' WHERE id = ? AND status = "approved"', $notify['notified_id'])->fetchArray();
-				    	$user = Specific::Data($post['user_id']);
-
-				        $TEMP['!title'] = $TEMP['#word']['added_collaborator_one_posts'];
-
+			        	$post = $dba->query('SELECT * FROM '.T_POST.' p WHERE (SELECT post_id FROM '.T_COLLABORATOR.' WHERE id = ? AND post_id = p.id) = id AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"', $notify['notified_id'])->fetchArray();
+				    	
+				    	if(!empty($post)){
+			        		$has_notification = true;
+					    	$user = Specific::Data($post['user_id']);
+					       	$TEMP['!username'] = $user['username'];
+					       	$TEMP['!image'] = $user['avatar_s'];
+					        $TEMP['!title'] = $TEMP['#word']['added_collaborator_one_posts'];
+					    }
 				    } else if(in_array($notify['type'], array('n_preact', 'n_creact', 'n_rreact'))){
-				    	$reaction = $dba->query('SELECT * FROM '.T_REACTION.' WHERE id = ?', $notify['notified_id'])->fetchArray();
+				    	$reaction = $dba->query('SELECT * FROM '.T_REACTION.' WHERE id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].')', $notify['notified_id'])->fetchArray();
 
-				    	$user = Specific::Data($reaction['user_id']);
-				    	$post_id = $reaction['reacted_id'];
-				    	if(in_array($notify['type'], array('n_creact', 'n_rreact'))){
-				    		$t_query = 'SELECT post_id FROM '.T_COMMENTS.' WHERE id = ?';
-				    		if($notify['type'] == 'n_rreact'){
-				    			$t_query = 'SELECT post_id FROM '.T_COMMENTS.' c WHERE (SELECT comment_id FROM '.T_REPLY.' WHERE id = ? AND comment_id = c.id) = id';
-				    		}
-				    		$post_id = $dba->query($t_query, $reaction['reacted_id'])->fetchArray(true);
-				    	}
+				    	if(!empty($reaction)){
+			        		$has_notification = true;
+					    	$user = Specific::Data($reaction['user_id']);
+					    	$post_id = $reaction['reacted_id'];
+					    	if(in_array($notify['type'], array('n_creact', 'n_rreact'))){
+					    		$t_query = 'SELECT post_id FROM '.T_COMMENTS.' WHERE id = ?';
+					    		if($notify['type'] == 'n_rreact'){
+					    			$t_query = 'SELECT post_id FROM '.T_COMMENTS.' c WHERE (SELECT comment_id FROM '.T_REPLY.' WHERE id = ? AND comment_id = c.id) = id';
+					    		}
+					    		$post_id = $dba->query($t_query, $reaction['reacted_id'])->fetchArray(true);
+					    	}
 
-				    	$post = $dba->query('SELECT slug FROM '.T_POST.' WHERE id = ? AND status = "approved"', $post_id)->fetchArray();
+					    	$post = $dba->query('SELECT slug FROM '.T_POST.' WHERE id = ? AND status = "approved"', $post_id)->fetchArray();
 
-				    	$type = $TEMP['#word']['liked_it'];
-				    	if($reaction['type'] == 'dislike'){
-				    		$type = $TEMP['#word']['dont_like_him'];
-				    	}
-				    	$place = $TEMP['#word']['one_of_your_posts'];
-				    	if($reaction['place'] == 'comment'){
-				    		$place = $TEMP['#word']['one_of_your_comments'];
-				    	} else if($reaction['place'] == 'reply'){
-				    		$place = $TEMP['#word']['one_of_your_answers'];
-				    	}
-				        $TEMP['!title'] = "{$type} {$place}";
-
+					    	$type = $TEMP['#word']['liked_it'];
+					    	if($reaction['type'] == 'dislike'){
+					    		$type = $TEMP['#word']['dont_like_him'];
+					    	}
+					    	$place = $TEMP['#word']['one_of_your_posts'];
+					    	if($reaction['place'] == 'comment'){
+					    		$place = $TEMP['#word']['one_of_your_comments'];
+					    	} else if($reaction['place'] == 'reply'){
+					    		$place = $TEMP['#word']['one_of_your_answers'];
+					    	}
+			       			$TEMP['!username'] = $user['username'];
+			       			$TEMP['!image'] = $user['avatar_s'];
+					        $TEMP['!title'] = "{$type} {$place}";
+					    }
 				    }
-			       	$TEMP['!username'] = $user['username'];
-			       	$TEMP['!image'] = $user['avatar_s'];
-			    } else if($notify['type'] == 'n_comment'){
-			    	$params = "?{$TEMP['#p_comment_id']}={$notify['notified_id']}";
-				    $comment = $dba->query('SELECT * FROM '.T_COMMENTS.' WHERE id = ?', $notify['notified_id'])->fetchArray();
-				    $user = Specific::Data($comment['user_id']);
-				    $post = $dba->query('SELECT slug FROM '.T_POST.' WHERE id = ? AND status = "approved"', $comment['post_id'])->fetchArray();
+			    } else if(in_array($notify['type'], array('n_pcomment', 'n_ucomment'))){
+				    $comment = $dba->query('SELECT * FROM '.T_COMMENTS.' WHERE id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].')', $notify['notified_id'])->fetchArray();
+				    
+				    if(!empty($comment)){
+			        	$has_notification = true;
+				    	$params = "?{$RUTE['#p_comment_id']}={$notify['notified_id']}";
+					    $user = Specific::Data($comment['user_id']);
+					    $post = $dba->query('SELECT slug FROM '.T_POST.' WHERE id = ? AND status = "approved"', $comment['post_id'])->fetchArray();
 
-				    $TEMP['!title'] = "Ha comentado una de tus publicaciones";
-			       	$TEMP['!username'] = $user['username'];
-			       	$TEMP['!image'] = $user['avatar_s'];
+					    $TEMP['!title'] = $TEMP['#word']['commented_one_your_posts'];
+					    if($notify['type'] == 'n_ucomment'){
+					    	$TEMP['!title'] = $TEMP['#word']['he_mentioned_comment'];
+					    }
+				       	$TEMP['!username'] = $user['username'];
+				       	$TEMP['!image'] = $user['avatar_s'];
+				    }
 			    } else if(in_array($notify['type'], array('n_preply', 'n_ureply'))){
-			    	$params = "?{$TEMP['#p_reply_id']}={$notify['notified_id']}";
-			    	$user_id = $dba->query('SELECT user_id FROM '.T_REPLY.' WHERE id = ?', $notify['notified_id'])->fetchArray(true);
-			    	$post_id = $dba->query('SELECT post_id FROM '.T_COMMENTS.' WHERE (SELECT comment_id FROM '.T_REPLY.' WHERE id = ?) = id', $notify['notified_id'])->fetchArray();
+			    	$user_id = $dba->query('SELECT user_id FROM '.T_REPLY.' WHERE id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].')', $notify['notified_id'])->fetchArray(true);
+			    	if(!empty($user_id)){
+			        	$has_notification = true;
+			    		$params = "?{$RUTE['#p_reply_id']}={$notify['notified_id']}";
+				    	$post_id = $dba->query('SELECT post_id FROM '.T_COMMENTS.' WHERE (SELECT comment_id FROM '.T_REPLY.' WHERE id = ?) = id', $notify['notified_id'])->fetchArray();
 
-				    $user = Specific::Data($user_id);
-				    $post = $dba->query('SELECT slug FROM '.T_POST.' WHERE id = ? AND status = "approved"', $post_id)->fetchArray();
+					    $user = Specific::Data($user_id);
+					    $post = $dba->query('SELECT slug FROM '.T_POST.' WHERE id = ? AND status = "approved"', $post_id)->fetchArray();
 
-				    $TEMP['!title'] = $TEMP['#word']['has_replied_comment'];
-				    if($notify['type'] == 'n_ureply'){
-				    	$TEMP['!title'] = $TEMP['#word']['he_mentioned_comment'];
+					    $TEMP['!title'] = $TEMP['#word']['has_replied_comment'];
+					    if($notify['type'] == 'n_ureply'){
+					    	$TEMP['!title'] = $TEMP['#word']['he_mentioned_comment'];
+					    }
+				       	$TEMP['!username'] = $user['username'];
+				       	$TEMP['!image'] = $user['avatar_s'];
 				    }
-			       	$TEMP['!username'] = $user['username'];
-			       	$TEMP['!image'] = $user['avatar_s'];
 			    } else if($notify['type'] == 'n_followers'){
-			    	$user_id = $dba->query('SELECT user_id FROM '.T_FOLLOWER.' WHERE id = ?', $notify['notified_id'])->fetchArray(true);
+			    	$user_id = $dba->query('SELECT user_id FROM '.T_FOLLOWER.' WHERE id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].')', $notify['notified_id'])->fetchArray(true);
 
-				    $user = Specific::Data($user_id);
+			    	if(!empty($user_id)){
+			        	$has_notification = true;
+					    $user = Specific::Data($user_id);
 
-				    $TEMP['!title'] = $TEMP['#word']['has_started_following'];
-			       	$TEMP['!username'] = $user['username'];
-			       	$TEMP['!image'] = $user['avatar_s'];
+					    $TEMP['!title'] = $TEMP['#word']['has_started_following'];
+				       	$TEMP['!username'] = $user['username'];
+				       	$TEMP['!image'] = $user['avatar_s'];
 
-				    $slug = "{$TEMP['#r_user']}/{$user['username']}";
+					    $slug = "{$RUTE['#r_user']}/{$user['username']}";
+					}
 			    }
-			    if(!empty($post) || $notify['type'] == 'n_followers'){
+			    if($has_notification && (!empty($post) || $notify['type'] == 'n_followers')){
 			    	if(!empty($post)){
 			    		$slug = "{$post['slug']}{$params}";
 			    	}
@@ -128,7 +153,8 @@ if($TEMP['#loggedin'] == true){
 		$values = json_decode($values, true);
 
 		if(!empty($values)){
-			$insettings = array('followers', 'followed', 'collab', 'react', 'comment', 'preply', 'ureply');
+			$insettings = array('followers', 'followed', 'collab', 'react', 'pcomment', 'preply', 'mention');
+
 			$categories = $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false);
 			$insettings = array_merge($insettings, $categories);
 
@@ -141,11 +167,16 @@ if($TEMP['#loggedin'] == true){
 						$val = $category[1];
 					}
 					if(in_array($val, $insettings)){
-						$settings[] = $val;
+						if($val != 'mention'){
+							$settings[] = $val;
+						} else {
+							$settings[] = 'ucomment';
+							$settings[] = 'ureply';
+						}
 					}
 				}
 			}
-			if($dba->query('UPDATE '.T_USER.' SET notifications = ? WHERE id = ?', json_encode($settings), $TEMP['#user']['id'])->returnStatus()){
+			if($dba->query('UPDATE '.T_USER.' SET notifications = ? WHERE id = ? AND status = "active"', json_encode($settings), $TEMP['#user']['id'])->returnStatus()){
 				$deliver['S'] = 200;
 			}
 		}

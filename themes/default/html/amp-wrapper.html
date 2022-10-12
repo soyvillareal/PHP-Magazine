@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html amp lang="{$settings->language}">
+<html amp lang="{#language}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,initial-scale=1">
@@ -98,7 +98,7 @@
 
 
 </head>
-<body class="body">
+<body class="body" dir="{$dir}">
     <amp-sidebar id="sidebar" class="container-drawer w-100" layout="nodisplay">
         <div class="content-drawer background-white h-100">
              <div class="container-sposts padding-t25 padding-b25 padding-l20 padding-r20">
@@ -107,17 +107,17 @@
                       <input id="key-hsearch" class="color-grey w-100 h-100" type="text" name="{#p_keyword}" placeholder="Buscar...">
                       <button id="key-hreset" class="btn-noway hover-button" type="reset">{$word->clean_up}</button>
                    </div>
-                   <button id="btn-hsearch" class="button-general display-inline-block vertical-middle h-36 background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase inhover-button animation-ease3s" type="submit">{$word->to_go}</button>
+                   <button id="btn-hsearch" class="button-general display-inline-block vertical-middle h-36 background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase inhover-button" type="submit">{$word->to_go}</button>
                 </form>
 
                 <nav id="content-nav" class="padding-t15">
                    <section>
                       <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->national}</span>
-                      <ul class="padding-b15 colums-auto-2">
+                      <ul class="display-flex vertical-slots padding-b15">
                          <?php foreach($TEMP['#categories'] as $cat){ ?>
                          <?php if($cat['footer'] == 'national'){ ?>
-                         <li class="display-flex direction-row align-center h-36">
-                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                         <li class="display-flex direction-row align-center w-50 h-36">
+                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
                          </li>
                          <?php } ?>
                          <?php } ?>
@@ -125,11 +125,11 @@
                    </section>
                    <section>
                       <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->social}</span>
-                      <ul class="padding-b15 colums-auto-2">
+                      <ul class="display-flex vertical-slots padding-b15">
                          <?php foreach($TEMP['#categories'] as $cat){ ?>
                          <?php if($cat['footer'] == 'social'){ ?>
-                         <li class="display-flex direction-row align-center h-36">
-                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                         <li class="display-flex direction-row align-center w-50 h-36">
+                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
                          </li>
                          <?php } ?>
                          <?php } ?>
@@ -137,11 +137,11 @@
                    </section>
                    <section>
                       <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->more}</span>
-                      <ul class="padding-b15 colums-auto-2">
+                      <ul class="display-flex vertical-slots padding-b15">
                          <?php foreach($TEMP['#categories'] as $cat){ ?>
                          <?php if($cat['footer'] == 'more'){ ?>
-                         <li class="display-flex direction-row align-center h-36">
-                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                         <li class="display-flex direction-row align-center w-50 h-36">
+                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
                          </li>
                          <?php } ?>
                          <?php } ?>
@@ -149,12 +149,15 @@
                    </section>
                    <section>
                       <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->about_us}</span>
-                      <ul class="colums-auto-2">
-                         {$aside_pages}
+                      <ul class="display-flex vertical-slots">
                          <?php foreach($TEMP['#pages'] as $page){ ?>
                          <?php if($page['status'] == 'enabled'){ ?>
-                         <li class="display-flex direction-row align-center h-36">
-                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url($page['slug']);?>" target="_self" title="<?php echo $page['name'];?>"><?php echo $page['name'];?></a>
+                         <li class="display-flex direction-row align-center w-50 h-36">
+                            <?php if(!empty($page['text'])){ ?>
+                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$RUTE['#r_page']}/{$RUTE["#r_{$page['slug']}"]}");?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
+                            <?php } else { ?>
+                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url($RUTE["#r_{$page['slug']}"]);?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
+                            <?php } ?>
                          </li>
                          <?php } ?>
                          <?php } ?>
@@ -224,21 +227,26 @@
                                     </button>
                                     <div id="container-menu" class="dropdown-account w-auto background-white border-rlow border-all border-grely" role="dialog" aria-modal="false" aria-label="{$word->account_menu}">
                                        <div class="dropdown-account-item padding-t10 padding-b10 padding-l10 padding-r10 border-bottom border-grely">
-                                          <a class="display-flex direction-row align-center hover-button animation-ease3s" href="{$me->slug}" target="_self" title="{$me->username}">
+                                          <a class="display-flex direction-row align-center hover-button" href="{$me->slug}" target="_self" title="{$me->username}">
                                              <div class="dropdown-account-image margin-r5">
                                                 <amp-img class="border-rall" src="{$me->avatar_s}" alt="{$me->username}" width="40" height="40"></amp-img>
                                              </div>
                                              <span class="color-blackly font-medium text-capitalize">{$me->username}</span>
                                           </a>
                                        </div>
+                                       <?php if($TEMP['#publisher'] == true) { ?>
                                        <div class="dropdown-account-item display-flex border-bottom border-grely">
                                           <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button" href="{$url->{{#r_create_post}}}" target="_self" title="{$word->create_post}">{$word->create_post}</a>
                                        </div>
+                                       <?php } ?>
                                        <div class="dropdown-account-item display-flex border-bottom border-grely">
                                           <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button" href="{$url->{{#r_settings}}}" target="_self" title="{$word->settings}">{$word->settings}</a>
                                        </div>
                                        <div class="dropdown-account-item display-flex border-bottom border-grely">
                                           <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button" href="{$url->{{#r_saved}}}" target="_self" title="{$word->saved}">{$word->saved}</a>
+                                       </div>
+                                       <div class="dropdown-account-item display-flex border-bottom border-grely">
+                                          <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button" href="{$url->{{#r_messages}}}" target="_self" title="{$word->messages}">{$word->messages}</a>
                                        </div>
                                        <div class="dropdown-account-item display-flex">
                                           <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button" href="{$url->{{#r_logout}}}" target="_self" title="{$word->logout}">{$word->logout}</a>
@@ -300,7 +308,11 @@
                        <?php foreach($TEMP['#pages'] as $page){ ?>
                        <?php if($page['status'] == 'enabled'){ ?>
                        <li class="margin-b5">
-                          <a class="color-black font-low inhover-button" href="<?php echo Specific::Url($page['slug']);?>" target="_self" title="<?php echo $page['name'];?>"><?php echo $page['name'];?></a>
+                          <?php if(!empty($page['text'])){ ?>
+                          <a class="color-black font-low inhover-button" href="<?php echo Specific::Url("{$RUTE['#r_page']}/{$RUTE["#r_{$page['slug']}"]}");?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
+                          <?php } else { ?>
+                          <a class="color-black font-low inhover-button" href="<?php echo Specific::Url($RUTE["#r_{$page['slug']}"]);?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
+                          <?php } ?>
                        </li>
                        <?php } ?>
                        <?php } ?>
@@ -357,10 +369,10 @@
                     </div>
                     <div class="">
                         <a class="inhover-button margin-r10" href="{$url->{{#r_register}}}" target="_self" title="{$word->register}" role="button">
-                            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase animation-ease3s">{$word->register}</span>
+                            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase">{$word->register}</span>
                         </a>
                         <a class="inhover-button" href="{$url->{{#r_login}}}" target="_self" title="{$word->login}" role="button">
-                            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase animation-ease3s">{$word->login}</span>
+                            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase">{$word->login}</span>
                         </a>
                     </div>
                     <div class="text-center margin-t15 margin-b5">

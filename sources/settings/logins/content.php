@@ -3,8 +3,16 @@ if ($TEMP['#loggedin'] === false) {
     header("Location: ".Specific::ReturnUrl());
     exit();
 }
+$TEMP['#user_id'] = $TEMP['#user']['id'];
+if($TEMP['#moderator'] == true){
+    $user_id = Specific::Filter($_GET[$RUTE['#p_user_id']]);
+    if(!empty($user_id)){
+        $TEMP['#user_id'] = $user_id;
+        $TEMP['#param'] = "?{$RUTE['#p_user_id']}={$user_id}";
+    }
+}
 
-$user_sessions = $dba->query('SELECT * FROM session WHERE user_id = '.$TEMP['#user']['id'].' ORDER BY id DESC LIMIT ? OFFSET ?', 10, 1)->fetchAll();
+$user_sessions = $dba->query("SELECT * FROM ".T_SESSION." WHERE user_id = {$TEMP['#user_id']} ORDER BY id DESC LIMIT ? OFFSET ?", 10, 1)->fetchAll();
 $TEMP['#total_pages'] = $dba->totalPages;
 
 if (!empty($user_sessions)) {
@@ -20,7 +28,7 @@ if (!empty($user_sessions)) {
     }
     Specific::DestroyMaket();
 } else {
-    $TEMP['sessions'] = Specific::Maket("not-found/sessions");
+    $TEMP['sessions'] = Specific::Maket("not-found/no-result");
 }
 
 $TEMP['#page']        = 'logins';

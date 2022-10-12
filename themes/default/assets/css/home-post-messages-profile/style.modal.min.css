@@ -1,0 +1,36 @@
+@keyframes Alert {
+  0% {
+    transform: scale(1);
+  }
+  1% {
+    transform: scale(0.5);
+  }
+
+  45% {
+    transform: scale(1.05);
+  }
+
+  80% {
+    transform: scale(0.95);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+.content-alert {
+    width: 270px;
+    top: 40%;
+    left: calc(50% - 135px);
+}
+.item-alert {
+    -webkit-animation: Alert .3s;
+    animation: Alert .3s;
+    will-change: transform;
+}
+@media(max-width: 300px){
+  .content-alert {
+      width: 220px;
+      left: calc(50% - 110px);
+  }
+}

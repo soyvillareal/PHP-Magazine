@@ -1,7 +1,12 @@
 <?php
 
-if ($TEMP['#loggedin'] == false) {
-    header("Location: ".Specific::Url($TEMP['#r_login']));
+if($TEMP['#loggedin'] == false) {
+    header("Location: ".Specific::Url($RUTE['#r_login']));
+    exit();
+}
+
+if ($TEMP['#publisher'] == false) {
+    header("Location: ".Specific::Url('404'));
     exit();
 }
 

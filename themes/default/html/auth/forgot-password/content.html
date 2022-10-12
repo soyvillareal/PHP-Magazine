@@ -29,8 +29,11 @@
       </div>
    </div>
 </main>
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.general.min.css}}" />
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.forgot.min.css}}" />
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.general.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.forgot.min.css}}" />%%}
+<?php if ($TEMP['#settings']['recaptcha'] == 'on') { ?>
+{%%<script src="https://www.google.com/recaptcha/api.js?render={$settings->recaptcha_public_key}" async defer></script>%%}
+<?php } ?>
 {%%<script type="text/javascript">
    paper_af = {
       token: '{#token_session}',
@@ -42,7 +45,9 @@
          this_field_is_empty: '{$word->this_field_is_empty}',
          please_wait: '{$word->please_wait}',
          enter_a_valid_email: '{$word->enter_a_valid_email}'
-      }
+      },
+      recaptcha: '{$settings->recaptcha}',
+      reCAPTCHA_site_key: '{$settings->recaptcha_public_key}'
    };
 </script>%%}
 {%%<script src="{$theme->{assets/js/auth/jquery.forgot-password.min.js}}"></script>%%}

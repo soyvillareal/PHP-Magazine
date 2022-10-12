@@ -13,11 +13,12 @@
    </div>
 </section>
 <?php } ?>
-<?php if(!empty($TEMP['#main'])){ ?>
+<?php if(count($TEMP['#main']) >= $TEMP['#limit_main']){ ?>
 <div class="content-main padding-t25">
    <div class="items-main display-flex vertical-slots">
       <div class="main-one">
          <div class="content-posts-left display-flex vertical-slots">
+            <?php if($TEMP['#has_main_left'] == true){ ?>
             <div class="left-posts-left">
                <div id="content-left-posts" class="content-left-posts">
                   {$main_left_one}
@@ -45,6 +46,8 @@
                   </div>
                </div>
             </div>
+            <?php } ?>
+            <?php if($TEMP['#has_main_right'] == true){ ?>
             <div class="right-posts-left">
                <section class="main-posts-wrapper position-relative" data-id="{$main_right_id}">
                   <a class="<?php echo($TEMP['#main_right_type'] == 'video') ? 'content-video-animate ' : '';?>hover-all" href="{$main_right_url}">
@@ -78,14 +81,18 @@
                   </div>
                </section>
             </div>
+            <?php } ?>
+
          </div>
       </div>
+      <?php if($TEMP['#has_main_two'] == true){ ?>
       <div id="content-slider" class="main-two">
          {$main_two}
       </div>
+      <?php } ?>
    </div>
 </div>
-<?php } ?>
+{$advertisement_htad}
 <?php if(!empty($TEMP['#recommended'])){ ?>
 <div class="content-recommended">
    <section class="items-recommended">
@@ -169,14 +176,12 @@
       <?php } ?>
    </div>
 </div>
-
-
 <?php } ?>
 <?php if(!empty($TEMP['#last_posts_one']) || !empty($TEMP['#last_posts_two'])){ ?>
 <div class="content-more-posts">
    <section class="items-recommended">
       <div class="recommended-title">
-         <span class="color-black font-postoni-bodo font-mediumly font-bold">Más noticias</span>
+         <span class="color-black font-postoni-bodo font-mediumly font-bold">{$word->more_news}</span>
       </div>
       <div id="content-mposts" class="content-mposts">
          {$more_posts}
@@ -234,15 +239,38 @@
    </section>
 </div>
 <?php } ?>
+<?php } else { ?>
+<?php if(!empty($TEMP['#main'])){ ?>
+<div class="content-more-posts">
+   {$advertisement_htad}
+   <section class="items-recommended">
+      <div class="recommended-title margin-t15">
+         <span class="color-black font-postoni-bodo font-mediumly font-bold">{$word->all_the_news}</span>
+      </div>
+      <div id="content-mposts" class="content-mposts">
+         <div class="recommended-posts display-flex vertical-slots margin-t15">
+            {$last_posts}
+         </div>
+      </div>
+   </section>
+</div>
+<?php } else { ?>
+<div class="content-hnotfound display-flex w-100">
+   <p class="w-100 margin-auto color-black text-center">
+      {$word->no_posts_found_moment}
+   </p>
+</div>
+<?php } ?>
+<?php } ?>
 <?php if($TEMP['#show_alert'] == true){ ?>
-{%%<div id="alert-delete" class="content-adelete content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-dtitle" aria-describedby="alert-dcontent">
-   <div class="item-adelete background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
+{%%<div id="alert-delete" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-dtitle" aria-describedby="alert-dcontent">
+   <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
       <span id="alert-dtitle" class="display-block font-medium font-bold">{$word->removed}</span>
       <p id="alert-dcontent" class="font-mediumly color-black margin-t15">{$word->your_post_been_successfully_deleted}</p>
-      <button id="btn-close" class="button-access btn-noway w-100px h-36 background-red color-white margin-t15 font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->close}</button>
+      <button id="btn-close" class="btn-noway w-100px h-36 background-red color-white margin-t15 font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->close}</button>
    </div>
 </div>%%}
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.modal.css}}" />
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home-post-messages-profile/style.modal.min.css}}" />%%}
 {%%<script type="text/javascript">
    $(document).ready(function(){
       var w = $('#alert-delete');

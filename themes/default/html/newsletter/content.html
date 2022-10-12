@@ -61,7 +61,7 @@
                             </div>
                             <select id="newsletter-category" class="item-category item_place background-white color-black padding-t5 padding-b5 padding-l10 w-100 border-focus-blue border-rlow border-all border-black" aria-label="{$word->newsletter_categories}" multiple>
                                 <?php foreach($TEMP['#categories'] as $cat){ ?>
-                                <option value="<?php echo $cat['id'];?>"<?php echo(in_array($cat['id'], $TEMP['#cats'])) ? ' selected' : ''?>><?php echo $cat['name'];?></option>
+                                <option value="<?php echo $cat['id'];?>"<?php echo(in_array($cat['id'], $TEMP['#cats'])) ? ' selected' : ''?>><?php echo $TEMP['#word']["category_{$cat['name']}"];?></option>
                                 <?php } ?>
                             </select>
                             <div class="color-red text-left text-error font-low margin-t5"></div>
@@ -69,7 +69,7 @@
                     </div>
                 </div>
             </div>
-            <button id="btn-newsletter" class="button-access btn-noway w-100 h-36 background-blue color-white font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-label="{$aria_button}" disabled>
+            <button id="btn-newsletter" class="btn-noway w-100 h-36 background-blue color-white font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-label="{$aria_button}" disabled>
                 <span class="color-white">{$button}</span>
                 <div class="content-spinner-circle position-absolute">
                     <div class="spinner-circle"></div>
@@ -77,7 +77,7 @@
             </button>
             <?php if($TEMP['#newsletter_exists'] == true){ ?>
             <div class="position-relative">
-                <button id="btn-popup" class="button-access btn-noway w-100 h-36 background-red color-white font-medium font-bold padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-label="{$word->unsubscribe_the_newsletter}" aria-expanded="false">{$word->unsubscribe}</button>
+                <button id="btn-popup" class="btn-noway w-100 h-36 background-red color-white font-medium font-bold padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-label="{$word->unsubscribe_the_newsletter}" aria-expanded="false">{$word->unsubscribe}</button>
                 <div id="unsubscribe-popup" class="content-unsubscribe-popup position-absolute background-white margin-b10 padding-t20 padding-b20 padding-l20 padding-r20 text-center hidden">
                     <span class="display-block font-medium font-bold">{$word->regret_decides_go}</span>
                     <p class="font-mediumly color-black margin-t5">{$word->help_us_understand_why}.</p>
@@ -99,8 +99,8 @@
                         </div>
                     </div>
                     <div class="display-flex direction-row align-center justify-center margin-t15" role="dialog" aria-label="{$word->unsubscribe_the_newsletter}">
-                        <button id="btn-cancel" class="button-access item_place btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
-                        <button id="btn-unsubscribe" class="button-access item_place btn-noway w-100px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+                        <button id="btn-cancel" class="item_place btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+                        <button id="btn-unsubscribe" class="item_place btn-noway w-100px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
                             <span class="color-white">{$word->send}</span>
                             <div class="content-spinner-circle position-absolute">
                                 <div class="spinner-circle"></div>

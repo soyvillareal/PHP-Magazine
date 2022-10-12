@@ -1,0 +1,10 @@
+<li class="dropdown-language-item w-100<?php echo($TEMP['#language'] == $TEMP['!lang']) ? ' selected' : '';?>">
+   <a class="display-flex direction-row align-center w-100 color-black font-medium padding-t10 padding-b10 padding-l10 padding-r10 background-hover sizing-box" href="{!lang_url}" target="_self" title="{!lang_name}">
+      <?php if($TEMP['#language'] == $TEMP['!lang']){ ?>
+      <svg class="icon-z icon-selected" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+         <path fill="currentColor" d="M 3.2 13.055 L 8.825 18.7 L 20.8 6.585 L 19.53 5.3 L 8.825 16.131 L 4.47 11.724 Z"></path>
+      </svg>
+      <?php } ?>
+      <span class="padding-l10 font-medium ellipsis-horizontal">{!lang_name}</span>
+   </a>
+</li>

@@ -1,0 +1,28 @@
+<div class="item-random display-block position-relative margin-b15" data-id="{!id}">
+   <a class="<?php echo($TEMP['!type'] == 'video') ? 'content-video-animate ' : '';?>hover-all" href="{!url}" target="_self" title="{!title}">
+      <figure class="figure-random content-gradient position-relative margin-none no-hover">
+         <?php if($TEMP['!type'] == 'video'){ ?>
+         <div class="content-vanimate display-flex direction-row align-center position-absolute no-hover">
+            <svg class="icon-video no-hover" viewBox="0 0 40 40">
+               <path class="no-hover" d="M3 40V0l34 20z" fill="#F7F7F7" fill-rule="evenodd"></path>
+               <circle class="no-hover" cx="20" cy="20" r="19" stroke="#F7F7F7" fill="transparent" stroke-width="2px"></circle>
+            </svg>
+         </div>
+         <?php } ?>
+         <picture class="no-hover">
+            <img src="{!thumbnail}" alt="{!title}" role="presentation">
+         </picture>
+         <figcaption class="content-hpublished position-absolute no-hover">
+            <time class="color-white font-lowly ellipsis-horizontal no-hover" datetime="{!published_date}">{!published_at}</time>
+         </figcaption>
+      </figure>
+      <section class="margin-t10">
+         <h3 class="random-title font-postoni-bodo font-bigly ellipsis-vertical ellipsis-v3 color-black animation-ease3s">{!title}</h3>
+      </section>
+   </a>
+   <div class="container-category position-absolute">
+     <div class="content-category display-inline-block border-rlow">
+         <a class="btn-noway background-black color-white font-low text-uppercase border-rlow hover-button animation-ease3s" href="{!category_slug}" target="_self">{!category}</a>
+      </div>
+   </div>
+</div>

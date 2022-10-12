@@ -1,10 +1,10 @@
 <?php
 require_once('./includes/libraries/hybridauth/autoload.php');
-$provider = Specific::Filter($_GET[$TEMP['#p_provider']]);
-if (!empty($provider) && in_array($provider, array('facebook', 'twitter', 'google')) && !isset($_GET['denied'])) {
+$provider = Specific::Filter($_GET[$RUTE['#p_provider']]);
+if ( $TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, array('facebook', 'twitter', 'google')) && !isset($_GET['denied'])) {
     try {
         $hybridauth = new Hybridauth\Hybridauth(array(
-            "callback" => Specific::Url("{$TEMP['#r_social_login']}?{$TEMP['#p_provider']}=$provider"),
+            "callback" => Specific::Url("{$RUTE['#r_social_login']}?{$RUTE['#p_provider']}=$provider"),
             "providers" => array(
                 // openid providers
                 "Facebook" => array(
@@ -147,14 +147,14 @@ if (!empty($provider) && in_array($provider, array('facebook', 'twitter', 'googl
         $json = $authProvider->getHttpClient()->getResponseBody();
         if(json_decode($json, true)['errors'][0]['code'] == 89){
             $authProvider->disconnect();
-            header("Location: " . Specific::Url("{$TEMP['#r_social_login']}?{$TEMP['#p_provider']}=$provider"));
+            header("Location: " . Specific::Url("{$RUTE['#r_social_login']}?{$RUTE['#p_provider']}=$provider"));
             exit();
         }
     }*/
     catch (Exception $e) {
         if(isset($_SESSION['HYBRIDAUTH::STORAGE'])){
             unset($_SESSION['HYBRIDAUTH::STORAGE']);
-            header("Location: " . Specific::Url("{$TEMP['#r_social_login']}?{$TEMP['#p_provider']}=$provider"));
+            header("Location: " . Specific::Url("{$RUTE['#r_social_login']}?{$RUTE['#p_provider']}=$provider"));
             exit();
         }
         exit($e->getMessage());

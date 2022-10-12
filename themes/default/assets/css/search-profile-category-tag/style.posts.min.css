@@ -1,0 +1,30 @@
+.advertisement-horizontal-posts {
+	height: 156px;
+}
+.advertisement-horizontal-posts::before {
+	padding-top: 78px;
+}
+@media(max-width: 767px){
+	.advertisement-horizontal-posts {
+		height: 132px;
+	}
+	.advertisement-horizontal-posts::before {
+		padding-top: 66px;
+	}
+}
+@media(max-width: 590px){
+	.advertisement-horizontal-posts {
+		height: 111px;
+	}
+	.advertisement-horizontal-posts::before {
+		padding-top: 55.5px;
+	}
+}
+@media(max-width: 380px){
+	.advertisement-horizontal-posts {
+		height: 105px;
+	}
+	.advertisement-horizontal-posts::before {
+		padding-top: 52.5px;
+	}
+}

@@ -1,6 +1,7 @@
-<div class="container-table display-grid background-white padding-t25 padding-b25">
-    <div class="background-grely padding-t10 padding-b10 padding-l10 padding-r10 border-all border-grely">
-        <a class="display-flex direction-row align-center hover-button" href="{$url->{{#r_settings}}}" target="_self">
+<h1 class="font-mega text-center padding-t25">{$word->logins}</h1>
+<div class="container-table display-grid background-white margin-t15 margin-b15 border-all border-grely">
+    <div class="background-grely padding-t10 padding-b10 padding-l10 padding-r10 border-bottom border-grely">
+        <a class="display-flex direction-row align-center hover-button" href="{$url->{{#r_settings}{#param}}}" target="_self">
             <svg class="icon-z color-grey margin-r5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                <path fill="currentColor" d="M 20 11.343 L 20 12.657 C 20 13.02 19.882 13.33 19.647 13.587 C 19.411 13.843 19.105 13.972 18.728 13.972 L 11.076 13.972 L 14.261 16.991 C 14.536 17.237 14.674 17.546 14.674 17.915 C 14.674 18.285 14.536 18.593 14.261 18.84 L 13.446 19.62 C 13.178 19.873 12.851 20 12.467 20 C 12.091 20 11.761 19.873 11.478 19.62 L 4.402 12.924 C 4.134 12.671 4 12.363 4 12 C 4 11.644 4.134 11.332 4.402 11.065 L 11.478 4.39 C 11.754 4.13 12.083 4 12.467 4 C 12.844 4 13.17 4.13 13.446 4.39 L 14.261 5.15 C 14.536 5.41 14.674 5.722 14.674 6.085 C 14.674 6.448 14.536 6.759 14.261 7.019 L 11.076 10.028 L 18.728 10.028 C 19.105 10.028 19.411 10.157 19.647 10.413 C 19.882 10.67 20 10.98 20 11.343 Z"></path>
             </svg>
@@ -36,9 +37,9 @@
             </div>
         </div>
     </div>
-    <div class="display-flex direction-row align-center">
-        <?php if ($TEMP['#total_pages'] > 1) { ?>
-        <div class="display-flex direction-row align-center margin-left-auto padding-t25">
+    <?php if ($TEMP['#total_pages'] > 1) { ?>
+    <div class="display-flex direction-row align-center border-top border-grely">
+        <div class="display-flex direction-row align-center margin-left-auto padding-t15 padding-b15">
             <div class="font-mediumly padding-l20 padding-r20 margin-r10 margin-l10">
                 <span class="color-black" id="page-now">1</span> 
                 <span class="color-black">{$word->of}</span>
@@ -65,15 +66,15 @@
                 </svg>
             </button>
         </div>
-        <?php } ?>
     </div>
+    <?php } ?>
 </div>
-{%%<div id="alert-delete" class="content-adelete content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-dtitle" aria-describedby="alert-dcontent">
-    <div class="item-adelete background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
+{%%<div id="alert-delete" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-dtitle" aria-describedby="alert-dcontent">
+    <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
         <span id="alert-dtitle" class="display-block font-medium font-bold">{$word->are_you_sure}</span>
         <p id="alert-dcontent" class="font-mediumly color-black margin-t15 margin-b15">{$word->do_really_want_delete_close}</p>
-        <button id="btn-cancel" class="button-access btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
-        <button id="btn-logout" class="button-access btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+        <button id="btn-cancel" class="btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
+        <button id="btn-logout" class="btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
             <span class="color-white">{$word->yes}</span>
             <div class="content-spinner-circle position-absolute">
                 <div class="spinner-circle"></div>
@@ -81,16 +82,16 @@
         </button>
    </div>
 </div>%%}
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/settings/style.settings.logins.css}}" />
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/settings/style.settings.modal.css}}" />
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/settings/style.settings.blocked-users-logins.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/create-edit-settings/style.modal.min.css}}" />%%}
 {%%<script type="text/javascript">
    paper_sl = {
         token: '{#token_session}',
         url: {
             delete_session: '{$url->{req/settings/delete-session}}',
-            table_sessions: '{$url->{req/settings/table-sessions}}',
-            r_home: '{$url->{{#r_home}}}'
+            table_sessions: '{$url->{req/settings/table-sessions}}'
         },
+        user_id: {#user_id},
         total_pages: {#total_pages}
    };
 </script>%%}

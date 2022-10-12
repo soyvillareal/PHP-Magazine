@@ -1,0 +1,348 @@
+<div class="container-pmessage position-relative margin-t15 border-all border-grely">
+	<div id="container-pnmessage" class="container-pnmessage border-right border-grely<?php echo(!empty($TEMP['#username'])) ? ' hide-mobile' : '';?>">
+		<div class="display-flex direction-row align-center padding-t10 padding-b10 padding-l10 padding-r10">
+			<div class="w-36px h-36 overflow-hidden border-rall">
+				<img src="{$me->avatar_s}" alt="{$me->username}">
+			</div>
+			<span class="font-medium font-bold margin-auto">{$word->chats}</span>
+			<button id="btn-pmnew" class="w-36px h-36 btn-noway padding-5 background-hover border-rall animation-ease3s animate-tab-button">
+				<svg class="icon-y vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<title>{$word->search}</title>
+					<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+					<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+				</svg>
+			</button>
+		</div>
+		<div class="content-pnsearch item-pnbackground display-flex direction-row align-center margin-t10 margin-b10 margin-l10 margin-r10 padding-t10 padding-b10 padding-l15 padding-r15 border-r25px">
+			<span class="position-relative margin-r10 padding-l10 pointer-events-none">
+				<span class="color-black">
+					<svg class="icon-x vertical-sub" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+						<title>{$word->search}</title>
+					  	<path fill="none" stroke="currentColor" stroke-width="2" d="M15,15 L22,22 L15,15 Z M9.5,17 C13.6421356,17 17,13.6421356 17,9.5 C17,5.35786438 13.6421356,2 9.5,2 C5.35786438,2 2,5.35786438 2,9.5 C2,13.6421356 5.35786438,17 9.5,17 Z"/>
+					</svg>
+				</span>
+				<div class="content-spinner-circle position-absolute">
+				    <div class="spinner-circle"></div>
+				</div>
+			</span>
+			<input id="item-pnsearch" class="w-100 text-left background-trans" type="text" autocomplete="off" placeholder="Buscar un usuario..">
+		</div>
+		<div id="container-pnchats" class="container-pnchats overflow-autoy">
+			<div id="content-norefor" class="content-norefor hidden"></div>
+			<ul id="content-pnchats" class="content-pnchats w-100<?php echo($TEMP['#users_exists'] == false) ? ' h-100' : '';?>">
+				<li id="content-pnnew" class="position-relative margin-l5 margin-r5 padding-l5 padding-r5 hidden">
+					<div class="content-pnmessage background-hover display-flex direction-row align-center color-black padding-t10 padding-b10 padding-l10 padding-r10 active">
+						<div class="item-pnmessage overflow-hidden border-rall margin-r10">
+							<img src="{$theme->{images/users/default-holder-s.jpeg}}" alt="Nuevo mensaje">
+						</div>
+						<div class="display-flex direction-colum align-center">
+							{$word->new_message}
+						</div>
+					</div>
+					<div class="content_pnmoptions position-absolute margin-left-auto animation-ease3s">
+						<button id="btn-pnnclose" class="btn_pnmoptions btn-noway background-white color-blue w-36px h-36 btn-noway padding-5 background-hover opacity-0 boxshadow-grey border-rall animation-ease3s animate-tab-button" aria-label="{$word->close}">
+							<svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+								<title>{$word->close}</title>
+							 	<path fill="none" stroke="currentColor" stroke-width="2" d="M3,3 L21,21 M3,21 L21,3"/>
+							</svg>
+						</button>
+					</div>
+				</li>
+				{$chats}
+				<li id="content-pnuspinner" class="content-pnuspinner spinner-is-loading display-flex position-relative w-100 h-45 margin-auto hidden">
+		            <div class="content-spinner-circle position-absolute">
+		                <div class="spinner-circle"></div>
+		            </div>
+		        </li>
+			</ul>
+		</div>
+	</div>
+	<div class="container-pmmessage background-white w-100<?php echo(empty($TEMP['#username'])) ? ' hide-mobile' : '';?>">
+		<?php if(!empty($TEMP['#username'])){ ?>
+		<div id="container-pmhead-one" class="container-pmhead padding-5 border-bottom border-grely">
+			<div class="display-flex direction-row align-center">
+				<button class="btn_mback hide-desktop w-36px h-36 btn-noway padding-5 background-hover border-rall animation-ease3s animate-tab-button">
+					<svg class="icon-y vertical-middle" viewBox="0 0 24 24" id="magicoon-Filled" xmlns="http://www.w3.org/2000/svg">
+						<title>{$word->back}</title>
+						<path fill="currentColor" d="M3.481 13.169c-0.316 -0.311 -0.481 -0.745 -0.45 -1.187c-0.032 -0.427 0.134 -0.844 0.45 -1.133l7.317 -7.343c0.608 -0.608 1.594 -0.608 2.202 0s0.608 1.594 0 2.202L8.254 10.453h11.164c0.854 -0.005 1.551 0.683 1.555 1.537c0 0.003 0 0.005 0 0.009c-0.005 0.857 -0.698 1.551 -1.555 1.555H8.254l4.746 4.737c0.608 0.608 0.608 1.594 0 2.202s-1.594 0.608 -2.202 0l0 0L3.481 13.169z"/>
+					</svg>
+				</button>
+				<a class="display-flex direction-row align-center padding-t5 padding-b5 padding-l10 padding-r10 color-black background-hover" href="{$slug}" title="{$username}">
+					<div class="w-36px h-36 margin-r5 overflow-hidden border-rall">
+						<img src="{$avatar_s}" alt="{$username}">
+					</div>
+					<span class="font-medium">{$username}</span>
+				</a>
+				<div class="content_pnmoptions position-relative margin-left-auto">
+					<button class="btn_pnmoptions btn-noway color-blue w-36px h-36 btn-noway padding-5 background-hover border-rall animation-ease3s animate-tab-button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->options}">
+						<svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+							<title>{$word->options}</title>
+							<path fill="currentColor" d="M7 12c0 1.104-.896 2-2 2s-2-.896-2-2 .896-2 2-2 2 .896 2 2zm12-2c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-7 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2z"/>
+						</svg>
+					</button>
+					<div class="content_pmoptions position-absolute background-white z-index-1 boxshadow-grey hidden" role="dialog" aria-modal="true" aria-label="{$word->options}">
+						<?php if($TEMP['#settings']['blocked_users'] == 'on' && in_array($TEMP['#role'], array('publisher', 'viewer')) && $TEMP['#user_deleted'] == true){ ?>
+						<button class="btn_pcblock w-100 text-left btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover-button animate-tab-button animation-ease3s"<?php echo(!empty($TEMP['#profile_id'])) ? ' data-id="{#profile_id}"' : '';?>>{$word->block}</button>
+			            <?php } ?>
+			            <button class="btn_pcdelete w-100 text-left btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover-button animate-tab-button animation-ease3s"<?php echo(!empty($TEMP['#chat_id'])) ? ' data-id="{#chat_id}"' : '';?>>{$word->delete}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php } ?>
+		<div id="container-pmhead-two" class="padding-5 border-bottom border-grely hidden">
+			<div class="display-flex direction-row align-center position-relative">
+				<button class="btn_mback hide-desktop w-36px h-36 btn-noway padding-5 background-hover border-rall animation-ease3s animate-tab-button">
+					<svg class="icon-y vertical-middle" viewBox="0 0 24 24" id="magicoon-Filled" xmlns="http://www.w3.org/2000/svg">
+						<title>{$word->back}</title>
+						<path fill="currentColor" d="M3.481 13.169c-0.316 -0.311 -0.481 -0.745 -0.45 -1.187c-0.032 -0.427 0.134 -0.844 0.45 -1.133l7.317 -7.343c0.608 -0.608 1.594 -0.608 2.202 0s0.608 1.594 0 2.202L8.254 10.453h11.164c0.854 -0.005 1.551 0.683 1.555 1.537c0 0.003 0 0.005 0 0.009c-0.005 0.857 -0.698 1.551 -1.555 1.555H8.254l4.746 4.737c0.608 0.608 0.608 1.594 0 2.202s-1.594 0.608 -2.202 0l0 0L3.481 13.169z"/>
+					</svg>
+				</button>
+				<div class="display-flex w-100 padding-r10">
+					<div class="item-pmfor">{$word->for}:</div>
+					<input id="item-pmsearch" class="background-trans w-100" type="text" aria-expanded="false" aria-label="{$word->send_message_to}" role="combobox" autocomplete="off">
+				</div>
+				<div class="content-pmsearch position-absolute background-white z-index-1 padding-5 overflow-autoy">
+					<div id="content-pmsspinner" class="content-pmsspinner spinner-is-loading display-flex position-relative w-100 h-45 margin-auto hidden">
+	                    <div class="content-spinner-circle position-absolute">
+	                        <div class="spinner-circle"></div>
+	                    </div>
+	                </div>
+					<ul id="content-pmsearch" role="listbox"></ul>
+				</div>
+			</div>
+		</div>
+
+		<div id="container-messages" class="w-100">
+			<div class="position-relative overflow-hidden">
+				<div id="content-pmtext" class="content-pmtext<?php echo(!empty($TEMP['#username'])) ? ' has-pmhead' : '';?> w-100 overflow-autoy pointer-events-none">
+					<div id="content-pmntspinner" class="content-pmntspinner spinner-is-loading display-flex position-relative w-100 h-45 margin-auto hidden">
+	                    <div class="content-spinner-circle position-absolute">
+	                        <div class="spinner-circle"></div>
+	                    </div>
+	                </div>
+					<div id="content-messages" class="item-pmntspinner display-flex direction-colum w-100<?php echo($TEMP['#messages_exists'] == false || empty($TEMP['#username'])) ? ' h-100' : '';?>">
+						{$messages}
+					</div>
+				</div>
+				<button id="btn-mdown" class="btn-mdown position-absolute w-36px h-36 btn-noway background-white color-blue border-rall inhover-button animation-ease3s animate-tab-button" tabindex="-1">
+					<svg class="icon-z vertical-middle" viewBox="0 0 24 24" id="magicoon-Filled" xmlns="http://www.w3.org/2000/svg">
+						<title>{$word->go_down}</title>
+						<path fill="currentColor" d="M19.707,14.707l-7,7a1,1,0,0,1-1.414,0l-7-7a1,1,0,0,1,1.414-1.414L11,18.586V3a1,1,0,0,1,2,0V18.586l5.293-5.293a1,1,0,0,1,1.414,1.414Z"/>
+					</svg>
+				</button>
+			</div>
+			<form id="content-mform" class="content-pmsend" novalidate>
+				<div id="content-mfrefi" class="display-flex direction-colum font-mediumly padding-t10 padding-l15 padding-r15 border-top border-grely hidden">
+					<div id="content-mfreply" class="content-mfreply display-flex direction-row hidden">
+						<div class="display-flex direction-colum w-80">
+							<span class="color-grey break-all ellipsis-horizontal">{$word->answering_to} <b id="item-mfrouser" class="color-black"></b></span>
+							<span id="item-mfrtuser" class="color-grey break-all ellipsis-horizontal hidden">{$word->replying_own_message}</span>
+							<span id="item-mfrmessage" class="color-grey break-all ellipsis-horizontal"></span>
+						</div>
+						<button id="btn-mfrclose" class="disable_before btn-noway w-30px h-30 margin-auto background-hover color-black margin-top-auto margin-r5 padding-5 border-rall animation-ease3s animate-tab-button" type="button">
+							<svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<title>{$word->close}</title>
+								<path fill="none" stroke="currentColor" stroke-width="2" d="M3,3 L21,21 M3,21 L21,3"></path>
+							</svg>
+						</button>
+					</div>
+					<div id="content-mffiles" class="content-mffiles display-flex direction-row align-center padding-t10 padding-b10 overflow-autox hidden">
+						<div class="content_mfimage display-flex direction-row align-center position-relative margin-r15 hidden">
+							<div class="item_mfimage w-100 h-100 overflow-hidden">
+								<img src="" alt="">
+							</div>
+							<button class="btn_mffile disable_before icon-z btn-noway position-absolute background-white border-all border-grely border-rall background-hover animation-ease3s animate-tab-button" type="button">
+								<svg class="icon-c vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<title>{$word->close}</title>
+									<path fill="none" stroke="currentColor" stroke-width="2" d="M3,3 L21,21 M3,21 L21,3"></path>
+								</svg>
+							</button>
+						</div>
+						<div class="content_mffile display-flex direction-row align-center background-grely position-relative margin-r15 hidden">
+							<div class="display-flex w-30px h-30 background-white margin-l10 margin-r10 border-rall">
+								<svg class="icon-y vertical-middle margin-auto" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="95.52 95.52 24 24" enable-background="new 796 796 200 200" xml:space="preserve">
+									<title>{$word->file}</title>
+									<path d="M117.227 103.058l-7.118 -7.118c-0.268 -0.268 -0.633 -0.419 -1.012 -0.419h-10.271c-0.791 0 -1.431 0.641 -1.431 1.431v21.138c0 0.79 0.641 1.431 1.431 1.431h17.389c0.79 0 1.431 -0.641 1.431 -1.431V104.07C117.646 103.69 117.495 103.326 117.227 103.058zM112.26 115.69h-9.48c-0.398 0 -0.72 -0.322 -0.72 -0.72c0 -0.398 0.322 -0.72 0.72 -0.72h9.48c0.398 0 0.72 0.322 0.72 0.72C112.98 115.368 112.658 115.69 112.26 115.69zM112.26 112.11h-9.48c-0.398 0 -0.72 -0.322 -0.72 -0.72s0.322 -0.72 0.72 -0.72h9.48c0.398 0 0.72 0.322 0.72 0.72S112.658 112.11 112.26 112.11zM112.26 108.53h-9.48c-0.398 0 -0.72 -0.322 -0.72 -0.72c0 -0.398 0.322 -0.72 0.72 -0.72h9.48c0.398 0 0.72 0.322 0.72 0.72C112.98 108.208 112.658 108.53 112.26 108.53zM110.528 104.07c-0.79 0 -1.431 -0.641 -1.431 -1.431v-5.423l6.854 6.854L110.528 104.07L110.528 104.07z"/>
+								</svg>
+							</div>
+							<span class="w-50 font-bold color-black ellipsis-vertical ellipsis-v2"></span>
+							<button class="btn_mffile disable_before icon-z btn-noway position-absolute background-white border-all border-grely border-rall background-hover animation-ease3s animate-tab-button" type="button">
+								<svg class="icon-c vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<title>{$word->close}</title>
+									<path fill="none" stroke="currentColor" stroke-width="2" d="M3,3 L21,21 M3,21 L21,3"></path>
+								</svg>
+							</button>
+						</div>
+					</div>
+					<div id="content-mfinputs" class="content-mfinputs hidden"></div>
+				</div>
+				<div class="display-flex direction-row align-center padding-t10 padding-b10 margin-l10 margin-r10">
+					<div class="content-mffile position-relative margin-top-auto margin-r5">
+						<input id="item-mffile" class="item-mffile disable_before w-100 h-100 position-absolute z-index-1 opacity-0 cursor-pointer" type="file"<?php echo(empty($TEMP['#username'])) ? ' disabled' : '';?>>
+						<span class="display-flex color-blue padding-5 border-rall animation-ease3s">
+							<svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+								<polyline points="13 2 13 9 20 9"></polyline>
+							</svg>
+						</span>
+					    <div class="content-spinner-circle position-absolute">
+					        <div class="spinner-circle"></div>
+					    </div>
+					</div>
+					<div class="content-pmarea display-flex item-pnbackground w-100 border-r25px overflow-hidden">
+						<textarea id="text-message" class="disable_before w-100 background-trans padding-t5 padding-b5 padding-l10 padding-r10 resize-none border-none" rows="1" placeholder="{$word->write_your_message}"<?php echo(empty($TEMP['#username'])) ? ' disabled' : '';?>></textarea>
+					</div>
+					<button id="btn-pmsend" class="disable_before btn-noway background-hover margin-top-auto margin-l5 padding-5 border-rall animation-ease3s animate-tab-button" type="submit"<?php echo(empty($TEMP['#username'])) ? ' disabled' : '';?>>
+						<span class="color-blue">
+							<svg class="icon-z vertical-middle" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 24" xml:space="preserve">
+								<title>{$word->send_message}</title>
+								<path fill="currentColor" d="M1.78 2.514l20.44 9.485L1.78 21.483l5.002 -9.485L1.78 2.514z"/>
+							</svg>
+						</span>
+					    <div class="content-spinner-circle position-absolute">
+					        <div class="spinner-circle"></div>
+					    </div>
+					</button>
+				</form>
+			</form>
+		</div>
+	</div>
+</div>
+{%%<div id="alert-limit" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-ltitle" aria-describedby="alert-lcontent">
+   <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
+      <span id="alert-ltitle" class="display-block font-medium font-bold">{$word->error_uploading_files}</span>
+      <p id="alert-lcontent" class="font-mediumly color-black margin-t15">{$word->file_selected_too_large}</p>
+      <button id="btn-close" class="btn-noway w-100px h-36 background-red color-white margin-t15 font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->close}</button>
+   </div>
+</div>%%}
+<?php if($TEMP['#settings']['blocked_users'] == 'on'){ ?>
+{%%<div id="alert-cblock" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-cbtitle" aria-describedby="alert-cbcontent">
+  <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 border-rlow boxshadow-grey">
+    <span id="alert-cbtitle" class="display-block font-medium font-bold text-center">{$word->block_this_user}</span>
+    <div class="display-flex direction-row margin-t10">
+    	<div class="margin-bottom-auto">
+    		<svg class="icon-z" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    			<path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM4 12c0-1.846.634-3.542 1.688-4.897l11.209 11.209A7.946 7.946 0 0 1 12 20c-4.411 0-8-3.589-8-8zm14.312 4.897L7.103 5.688A7.948 7.948 0 0 1 12 4c4.411 0 8 3.589 8 8a7.954 7.954 0 0 1-1.688 4.897z"/>
+    		</svg>
+    	</div>
+    	<div class="display-flex direction-colum margin-l10">
+    		<p id="alert-cbcontent" class="font-mediumly font-bold color-black">{$word->blocking_user_takes_effect_access}</p>
+    		<ul class="margin-t10">
+    			<li>
+    				{$word->view_profile_information}
+    			</li>
+    			<li>
+    				{$word->send_receive_messages}
+    			</li>
+    			<li>
+    				{$word->see_publications}
+    			</li>
+    		</ul>
+    	</div>
+    </div>
+    <div class="display-flex direction-row align-center justify-center margin-t10">
+      <button id="btn-cbcancel" class="btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+      <button id="btn-cblock" class="btn-noway w-100px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+      		<span class="color-white">{$word->block}</span>
+			<div class="content-spinner-circle position-absolute">
+				<div class="spinner-circle"></div>
+			</div>
+      </button>
+    </div>
+  </div>
+</div>%%}
+<?php } ?>
+{%%<div id="alert-cdelete" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-cdtitle" aria-describedby="alert-cdcontent">
+  	<div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
+	    <span id="alert-cdtitle" class="display-block font-medium font-bold">{$word->are_you_sure}</span>
+	    <p id="alert-cdcontent" class="font-mediumly color-black margin-t5">{$word->delete_copy_conversation_wont_back}</p>
+	    <div class="display-flex direction-row align-center justify-center margin-t10">
+	      <button id="btn-cdcancel" class="btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
+	      <button id="btn-cdelete" class="btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+	      		<span class="color-white">{$word->yes}</span>
+				<div class="content-spinner-circle position-absolute">
+					<div class="spinner-circle"></div>
+				</div>
+	      	</button>
+	    </div>
+  	</div>
+</div>%%}
+{%%<div id="alert-mmdelete" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-mmdtitle" aria-describedby="alert-mmdcontent">
+  <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
+    <span id="alert-mmdtitle" class="display-block font-medium font-bold">{$word->are_you_sure}</span>
+    <p id="alert-mmdcontent" class="font-mediumly color-black margin-t5">{$word->will_able_retrieve_message}</p>
+    <div class="display-flex direction-row align-center justify-center margin-t10">
+      <button id="btn-mmcancel" class="btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
+      <button id="btn-mmdelete" class="btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+      		<span class="color-white">{$word->yes}</span>
+			<div class="content-spinner-circle position-absolute">
+				<div class="spinner-circle"></div>
+			</div>
+      </button>
+    </div>
+  </div>
+</div>%%}
+{%%<div id="alert-mdelete" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-mdtitle" aria-describedby="alert-mdcontent">
+  <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 border-rlow boxshadow-grey">
+    <span id="alert-mdtitle" class="display-block font-medium font-bold text-center">{$word->who_want_delete_message_for}</span>
+    <div id="alert-mdcontent" class="display-flex direction-colum margin-t10 margin-l10">
+    	<ul>
+    		<li>
+    			<input id="delete-all" class="item_dmtype radio-paper hidden" name="option" type="radio" value="all" checked>
+    			<label class="display-block position-relative color-black font-medium font-bold margin-t5 padding-l20 cursor-pointer no-select" for="delete-all">{$word->unsubmit_all}</label>
+    			<p class="font-mediumly margin-t5">{$word->message_will_unsent_everyone_chat}</p>
+    		</li>
+    		<li>
+    			<input id="delete-me" class="item_dmtype radio-paper hidden" name="option" type="radio" value="me">
+    			<label class="display-block position-relative color-black font-medium font-bold margin-t5 padding-l20 cursor-pointer no-select" for="delete-me">{$word->delete_for_me}</label>
+    			<p class="font-mediumly margin-t5">{$word->message_will_deleted_people}</p>
+    		</li>
+    	</ul>
+    </div>
+    <div class="display-flex direction-row align-center justify-center margin-t10">
+      <button id="btn-mcancel" class="btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+      <button id="btn-mdelete" class="btn-noway w-100px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+      		<span class="color-white">{$word->delete}</span>
+			<div class="content-spinner-circle position-absolute">
+				<div class="spinner-circle"></div>
+			</div>
+      </button>
+    </div>
+  </div>
+</div>%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/messages/style.general.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/messages/style.modal.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home-post-messages-profile/style.modal.min.css}}" />%%}
+{%%<script type="text/javascript">
+	paper_m = {
+        token: '{#token_session}',
+        url: {
+            send: '{$url->{req/messages/send}}',
+            fetch: '{$url->{req/messages/fetch}}',
+            search_users: '{$url->{req/messages/search-users}}',
+            search_chats: '{$url->{req/messages/search-chats}}',
+            new_message: '{$url->{req/messages/new-message}}',
+            block: '{$url->{req/profile/block}}',
+            delete_chat: '{$url->{req/messages/delete-chat}}',
+            delete_both_message: '{$url->{req/messages/delete-both-message}}',
+            delete_me_message: '{$url->{req/messages/delete-me-message}}'
+        },
+        word: {
+            attached_file: '{$word->attached_file}',
+            image: '{$word->image}',
+            more_files: '{$word->more_files}',
+            search: '{$word->search}',
+            close: '{$word->close}'
+
+        },
+        profile_id: {#profile_id},
+        last_cupdate: {$last_cupdate},
+        profiles_ids: [{$profiles_ids}],
+        messages_ids: [{$messages_ids}],
+        file_size_limit: {$settings->file_size_limit},
+        enable_msg: <?php echo(!empty($TEMP['#username'])) ? '!0' : '!1';?>
+
+    };
+</script>%%}
+{%%<script src="{$theme->{assets/js/messages/jquery.messages.min.js}}"></script>%%}

@@ -1,12 +1,24 @@
 <?php
+$TEMP = array();
 $TEMP['#site_domain'] = $domain;
 $TEMP['#site_url'] = $site_url;
 $TEMP['#settings'] = Specific::Settings();
 $TEMP['#loggedin'] = Specific::Logged();
-$TEMP['#word'] = Specific::Words();
+
+
+
+
+$TEMP['#languages'] = Specific::Languages();
+$TEMP['#language'] = Specific::Language();
+
+$TEMP['#word'] = Specific::Words($TEMP['#language']);
+
 if ($TEMP['#loggedin'] == true) {
     $TEMP['#user'] = Specific::Data(null, 4);
 }
+
+
+$TEMP['#blocked_users'] = Specific::BlockedUsers();
 $TEMP['#token_session'] = Specific::TokenSession();
 if (isset($_SESSION['_LOGIN_TOKEN'])) {
     if (empty($_COOKIE['_LOGIN_TOKEN'])) {

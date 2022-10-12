@@ -18,24 +18,31 @@
     background-color: #000;
     color: #fff;
 }
-.btn-follow[type=following]:active,
-.btn-follow[type=following]:focus {
+.btn-follow[type=following]:not([disabled]):active,
+.btn-follow[type=following]:not([disabled]):focus {
     background-color: rgb(200, 60, 60, .1);
     color: #cb423b;
     border-color: #cb423b !important;
 }
-.btn-follow[type=following]:active #text-following,
-.btn-follow[type=following]:focus #text-following {
+.btn-follow[type=following]:not([disabled]):active #text-following,
+.btn-follow[type=following]:not([disabled]):focus #text-following {
     display: none;
 }
-.btn-follow[type=follow]:active,
-.btn-follow[type=follow]:focus {
+.btn-follow[type=follow]:not([disabled]):active,
+.btn-follow[type=follow]:not([disabled]):focus {
     background-color: #000;
     color: #fff;
 }
-.btn-follow[type=following]:active #text-unfollow,
-.btn-follow[type=following]:focus #text-unfollow {
+.btn-follow[type=following]:not([disabled]):active #text-unfollow,
+.btn-follow[type=following]:not([disabled]):focus #text-unfollow {
     display: block;
+}
+#btn-poptions[aria-expanded=true] ~ #content-poptions {
+    display: block !important;
+}
+.content-alert#alert-pblock ul {
+    list-style: disc;
+    margin-left: 18px;
 }
 @media (max-width: 590px){
     .container-profile .content-pinfo,
@@ -55,6 +62,7 @@
     .content-pinfo .item-pinfo {
         text-align: center;
         margin-top: 15px;
+        margin-right: 0;
     }
     .content-pinfo .item-pimage {
         margin: 0;
@@ -64,9 +72,12 @@
         width: 120px;
         height: 120px;
     }
+    .item-pinfo .item-piname {
+        margin: 0px auto 10px auto;
+        padding-left: 31px;
+    }
     .item-pinfo h1 {
         font-size: 28px;
-        margin-bottom: 10px;
     }
     .item-pinfo p {
         font-size: 14px;
@@ -76,20 +87,37 @@
         font-size: 17px;
     }
 }
+@media(max-width: 420px) {
+    .content-alert#alert-pblock {
+        top: calc(50% - 136px);
+    }
+}
+@media(min-width: 419px) {
+    .content-alert#alert-pblock {
+        width: 400px;
+        top: calc(50% - 117px);
+        left: calc(50% - 200px);
+    }
+}
+@media(max-width: 300px){
+    .content-alert#alert-pblock {
+        top: calc(50% - 191px);
+    }
+}
 @media(pointer: fine) {
-    .btn-follow[type=following]:hover {
+    .btn-follow[type=following]:not([disabled]):hover {
         background-color: rgb(200, 60, 60, .1);
         color: #cb423b;
         border-color: #cb423b !important;
     }
-    .btn-follow[type=following]:hover #text-following {
+    .btn-follow[type=following]:not([disabled]):hover #text-following {
         display: none;
     }
-    .btn-follow[type=follow]:hover {
+    .btn-follow[type=follow]:not([disabled]):hover {
         background-color: #000;
         color: #fff;
     }
-    .btn-follow[type=following]:hover #text-unfollow {
+    .btn-follow[type=following]:not([disabled]):hover #text-unfollow {
         display: block;
     }
 }

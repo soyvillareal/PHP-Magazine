@@ -5,7 +5,7 @@ if($one == 'load_more'){
 	$post_ids = json_decode($post_ids);
 
 	if(!empty($post_ids) && is_array($post_ids)){
-		$last_posts = Load::LastPosts($post_ids);
+		$last_posts = Load::LastPosts(8, $post_ids);
 		$TEMP['#last_posts_one'] = $last_posts['last_posts_one'];
 		$TEMP['#last_posts_two'] = $last_posts['last_posts_two'];
 		
@@ -56,8 +56,8 @@ if($one == 'load_more'){
 				$TEMP['!type'] = $post['type'];
 
 				$TEMP['!title'] = $post['title'];
-				$TEMP['!category'] = $category['name'];
-				$TEMP['!category_slug'] = $category['slug'];
+				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
+				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
 				$TEMP['!published_date'] = date('c', $post['published_at']);
 				$TEMP['!url'] = Specific::Url($post['slug']);
 

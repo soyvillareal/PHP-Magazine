@@ -63,12 +63,15 @@
         <div id="profile-right" class="profile-right display-none-mob">
             <div class="theiaStickySidebar">
                <aside class="content-saside direction-colum h-100 margin-b15 padding-l20">
+                  <?php if(!empty($TEMP['#related_cat'])){ ?>
                   <div class="content-related-aside display-block position-relative">
                      <h2 class="color-black font-mediumly font-bold text-uppercase">{$word->recommended_posts}</h2>
                      <ul>
                         {$related_aside}   
                      </ul>
                   </div>
+                  <?php } ?>
+                  {$content_aad}
                   {$newsletter}
                </aside>
             </div>
@@ -77,7 +80,8 @@
 </main>
 {%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/category/style.category.min.css}}" />%%}
 {%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/category-tag/style.category-tag.min.css}}" />%%}
-{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/search-profile-category-tag/style.search.related-aside.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/search-profile-category-tag/style.posts.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/search-profile-category-tag/style.related-aside.min.css}}" />%%}
 {%%<script src="{$theme->{assets/js/theia-sticky-sidebar.min.js}}"></script>%%}
 {%%<script type="text/javascript">
    paper_c = {

@@ -6,7 +6,7 @@ if($one == 'load'){
 	$category_id = Specific::Filter($_POST['category_id']);
 
 	if(!empty($category_id) && is_numeric($category_id) && !empty($post_ids) && is_array($post_ids)){
-		$post = $dba->query('SELECT * FROM '.T_POST.' WHERE category_id = ? AND id NOT IN ('.implode(',', $post_ids).') AND status = "approved" ORDER BY RAND()', $category_id)->fetchArray();
+		$post = $dba->query('SELECT * FROM '.T_POST.' WHERE category_id = ? AND id NOT IN ('.implode(',', $post_ids).') AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved" ORDER BY RAND()', $category_id)->fetchArray();
 		if(!empty($post)){
 			$post_load = Load::Post($post, true);
 			$html = $post_load['html'];
@@ -39,64 +39,7 @@ if($one == 'load'){
 				$_SESSION['post_deleted'] = $post_id;
 				$deliver = array(
 					'S' => 200,
-					'LK' => Specific::Url("?{$TEMP['#p_show_alert']}=deleted_post")
-				);
-			}
-		}
-	}
-} else if($one == 'report'){
-	$error = false;
-	$reported_id = Specific::Filter($_POST['reported_id']);
-	$type = Specific::Filter($_POST['type']);
-	$place = Specific::Filter($_POST['place']);
-	$description = Specific::Filter($_POST['description']);
-
-	if(!empty($reported_id) && is_numeric($reported_id) && in_array($place, array('post', 'comment', 'reply'))){
-		if(strlen($description) > 500){
-			$error = true;
-		}
-		if($place == 'post'){
-			if(!in_array($type, array('r_spam', 'r_none', 'rp_writing', 'rp_thumbnail', 'rp_copyright'))){
-				$error = true;
-			}
-			$post = $dba->query('SELECT *, COUNT(*) as count FROM '.T_POST.' WHERE id = ? AND status = "approved"', $reported_id)->fetchArray();
-			if($post['count'] == 0){
-				$error = true;
-			}
-
-			if(Specific::IsOwner($post['user_id'])){
-				$error = true;
-			}
-		} else if(in_array($place, array('comment', 'reply'))){
-			if(!in_array($type, array('r_spam', 'r_none', 'rc_offensive', 'rc_abusive', 'rc_disagree', 'rc_marketing'))){
-				$error = true;
-			}
-			$t_query = T_COMMENTS;
-			if($place == 'reply'){
-				$t_query = T_REPLY;
-			}
-			$comment = $dba->query('SELECT *, COUNT(*) as count FROM '.$t_query.' WHERE id = ?', $reported_id)->fetchArray();
-			if($comment['count'] == 0){
-				$error = true;
-			}
-
-			if(Specific::IsOwner($comment['user_id'])){
-				$error = true;
-			}
-		}
-
-		if($error == false){
-			if($dba->query('SELECT COUNT(*) FROM '.T_REPORT.' WHERE user_id = ? AND reported_id = ? AND place = ?', $TEMP['#user']['id'], $reported_id, $place)->fetchArray(true) == 0){
-				if(empty($description)){
-					$description = NULL;
-				}
-				if($dba->query('INSERT INTO '.T_REPORT.' (user_id, reported_id, type, place, description, created_at) VALUES (?, ?, ?, ?, ?, ?)', $TEMP['#user']['id'], $reported_id, $type, $place, $description, time())){
-					$deliver['S'] = 200;
-				}
-			} else {
-				$deliver = array(
-					'S' => 400,
-					'E' => "*{$TEMP['#word']['have_already_reported_post']}"
+					'LK' => Specific::Url("?{$RUTE['#p_show_alert']}=deleted_post")
 				);
 			}
 		}

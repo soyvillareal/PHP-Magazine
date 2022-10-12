@@ -4,20 +4,6 @@ use PHPMailer\PHPMailer\SMTP;
 
 class Specific {
 
-	public static function GetPages() {
-	    global $dba;
-	    $data  = array();
-	    $pages = $dba->query('SELECT * FROM page')->fetchAll();
-	    foreach ($pages as $value) {
-	        $data['page'][$value['type']] = array('html' => htmlspecialchars_decode($value['text']),
-	    										  'decor' => self::GetFile($value['decor'], 2),
-	    										  'hexco' => $value['hexco'],
-	    										  'defoot' => $value['defoot']);
-	        $data['active'][$value['type']] = $value['active'];
-	    }
-	    return $data;
-	}
-
 	public static function GetFile($file, $type = 1, $size = 's'){
 	    global $TEMP;
 	    if (empty($file)) {
@@ -175,11 +161,13 @@ class Specific {
 	}
 
 	public static function UploadImage($data = array()){
+		global $TEMP;
+		
 	    $dir_image = self::CreateDirImage($data['folder']);
 	    if (empty($data)) {
 	        return false;
 	    }
-	    if (!in_array(pathinfo($data['name'], PATHINFO_EXTENSION), array('jpeg','jpg','png')) || !in_array($data['type'], array('image/jpeg', 'image/png'))) {
+	    if (!in_array(pathinfo($data['name'], PATHINFO_EXTENSION), array('jpeg','jpg','png')) || !in_array($data['type'], array('image/jpeg', 'image/png')) || $data['size'] > $TEMP['#settings']['file_size_limit']) {
 	        return array(
 	        	'return' => false
 	        );
@@ -215,6 +203,90 @@ class Specific {
 		    }
 	    }
 	    return array('return' => false);
+	}
+
+	public static function SizeFormat($bytes, $precision = 2) {
+	    $unit = ["B", "KB", "MB", "GB"];
+	    $exp = floor(log($bytes, 1024)) | 0;
+	    return round($bytes / (pow(1024, $exp)), $precision)." {$unit[$exp]}";
+	}
+
+	public static function Notifies(){
+		global $dba, $TEMP;
+
+		$data = array(
+			'return' => false
+		);
+
+		$notifications = $dba->query('SELECT COUNT(*) FROM '.T_NOTIFICATION.' WHERE user_id = ? AND seen = 0', $TEMP['#user']['id'])->fetchArray(true);
+
+		$messages = $dba->query('SELECT COUNT(*) FROM '.T_MESSAGE.' WHERE profile_id = ? AND seen = 0', $TEMP['#user']['id'])->fetchArray(true);
+
+		$notifies = $notifications+$messages;
+
+		if($notifies > 0){
+			$data = array(
+				'return' => true,
+				'count_text' => $notifies <= 9 ? $notifies : "9+",
+				'count_notifications' => $notifications,
+				'count_messages' => $messages
+			);
+		}
+
+		return $data;
+	}
+
+	public static function BlockedUsers($implode = true) {
+	    global $dba, $TEMP;
+
+	    $data = array(0);
+	    if($implode){
+	    	$data = 0;
+	    }
+	    if ($TEMP['#loggedin'] === true && $TEMP['#settings']['blocked_users'] == 'on') {
+		    $blocked_me = $dba->query('SELECT user_id FROM '.T_BLOCK.' WHERE user_id <> ? AND profile_id = ?', $TEMP['#user']['id'], $TEMP['#user']['id'])->fetchAll(FALSE);
+
+		    $blocked_to = $dba->query('SELECT profile_id FROM '.T_BLOCK.' WHERE user_id = ? AND profile_id <> ?', $TEMP['#user']['id'], $TEMP['#user']['id'])->fetchAll(FALSE);
+
+		    if (!empty($blocked_to) || !empty($blocked_me)) {
+		        $data = array_merge($blocked_to, $blocked_me);
+		        if($implode) {
+		        	$data = implode(',', $data);
+		        }
+		    }
+		}
+	    return $data;
+	}
+
+	public static function UploadMessagefi($data = array()){
+		global $TEMP;
+
+		$dir_file = self::CreateDirImage('messages');
+	    if (empty($data)) {
+	        return false;
+	    }
+	    
+	    // !in_array($ext, array('jpeg','jpg','png', 'csv', 'xls', 'xlsx', 'pdf', 'doc', 'docx', 'ppt', 'pttx', 'txt', 'xls', 'xlsx')) || !in_array($data['type'], array('image/jpeg', 'image/png', 'application/pdf', 'application/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/msword', 'application/vnd.ms-powerpoint', 'application/vnd.ms-exce')) || 
+
+	    if ($data['size'] > $TEMP['#settings']['file_size_limit']) {
+	        return array(
+	        	'return' => false
+	        );
+	    }
+
+	    $ext = pathinfo($data['name'], PATHINFO_EXTENSION);
+	    if(!empty($ext)){
+	    	$ext = '.'.$ext;
+	    }
+
+	   	$filename = "{$data['message_id']}-".md5(time().self::RandomKey()).$ext;
+		if (move_uploaded_file($data['tmp_name'], "{$dir_file['full']}/{$filename}")) {
+			return array(
+			    'return' => true,
+			    'file' => "{$dir_file['dates']}/{$filename}"
+			);
+		}
+
 	}
 
 	public static function UploadAvatar($data = array()){
@@ -348,9 +420,8 @@ class Specific {
 		        $user = $dba->query('SELECT * FROM user WHERE id = ?', $data)->fetchArray();
 		    }
 
-		   	if(!empty($user['username'])){
-		   		$user['slug'] = self::ProfileUrl($user['username']);
-		   	}
+		    $user['user'] = $user['username'];
+		   	$user['slug'] = self::ProfileUrl($user['username']);
 			if(!empty($user['notifications'])){
 				$user['notifications'] = json_decode($user['notifications'], true);
 			} else {
@@ -359,8 +430,9 @@ class Specific {
 					'followed',
 					'collab',
 					'react',
-					'comment',
+					'pcomment',
 					'preply',
+					'ucomment',
 					'ureply'
 				);
 			}
@@ -387,7 +459,7 @@ class Specific {
 	   	} else if(!empty($user['username'])){
 	    	$user['username'] = $user['username'];
 	   	}
-	    if(isset($user['birthday'])){
+	    if(isset($user['birthday']) && $user['birthday'] != 0){
 		    $birthday = explode("-", date('d-n-Y', $user['birthday']));
 
 		    $user['birth_day'] = $birthday[0];
@@ -432,7 +504,7 @@ class Specific {
 		*/
 
 
-		if($data['user_id'] != $TEMP['#user']['id']){
+		if(!self::IsOwner($data['user_id'])){
 			$user = self::Data($data['user_id']);
 			if(in_array($typet, $user['notifications'])){
 				$type = "n_{$data['type']}";
@@ -446,43 +518,49 @@ class Specific {
 		return false;
 	}
 
-	public static function CommentFilter($text, $data = array()){
+	public static function TextFilter($text, $links = true){
+		global $TEMP;
+
+		if(!empty($text)){
+			if(!empty($TEMP['#settings']['censored_words'])){
+		        $censored_words = explode(',', $TEMP['#settings']['censored_words']);
+		        foreach ($censored_words as $word) {
+		            $word = trim($word);
+		            $search[] = "/{$word}/";
+		            $replace[] = preg_replace('/(.+?)/i', '*', $word);
+		        }
+		        $text = preg_replace($search, $replace, $text);
+		    }
+		    
+		    if(!empty($TEMP['#settings']['hidden_domains'])){
+		        $hidden_domains = explode(',', $TEMP['#settings']['hidden_domains']);
+		        foreach ($hidden_domains as $domain) {
+		            $domain = trim($domain);
+		            $search[] = "/(?:(?:[\S]*)({$domain})(?:[\S])*)/i";
+		        }
+		        $text = preg_replace($search, "[{$TEMP['#word']['hidden_link']}]", $text);
+		    }
+
+		    if($links){
+			    $text = preg_replace($TEMP['#url_regex'], '<a class="color-blue hover-button animation-ease3s" href="//$3$4" target="_blank">$3$4</a>', $text);
+		    }
+		}
+
+	    return $text;
+	}
+
+	public static function CommentFilter($text, $mention_uid){
 		global $dba, $TEMP;
 
+		$text = self::TextFilter($text);
 
-		if(!empty($TEMP['#settings']['censored_words'])){
-	        $censored_words = explode(',', $TEMP['#settings']['censored_words']);
-	        foreach ($censored_words as $word) {
-	            $word = trim($word);
-	            $search[] = "/{$word}/";
-	            $replace[] = preg_replace('/(.+?)/i', '*', $word);
-	        }
-	        $text = preg_replace($search, $replace, $text);
-	    }
-
-	    
-	    if(!empty($TEMP['#settings']['hidden_domains'])){
-	        $hidden_domains = explode(',', $TEMP['#settings']['hidden_domains']);
-	        foreach ($hidden_domains as $domain) {
-	            $domain = trim($domain);
-	            $search[] = "/(?:(?:[\S]*)({$domain})(?:[\S])*)/i";
-	        }
-	        $text = preg_replace($search, "[{$TEMP['#word']['hidden_link']}]", $text);
-	    }
-
-	    $text = preg_replace($TEMP['#url_regex'], '<a class="color-blue" href="//$3$4" target="_blank">$3$4</a>', $text);
-
-		if($data['type'] == 'reply'){
-			$username_exists = preg_match_all('/@([a-zA-Z0-9]+)/i', $text, $username);
-			if($username_exists > 0){
-				for ($i=0; $i < $username_exists; $i++) {
-					$user = $dba->query('SELECT id, username, COUNT(*) as count FROM '.T_USER.' WHERE username = ? AND status = "active"', $username[1][$i])->fetchArray();
-					if($user['count'] > 0){
-						if($user['id'] != $data['reply_uid']){
-							if($dba->query('SELECT COUNT(*) FROM '.T_REPLY.' WHERE user_id = ? AND comment_id = ?', $user['id'], $data['comment_id'])->fetchArray(true) > 0 || $user['id'] == $dba->query('SELECT user_id FROM '.T_COMMENTS.' WHERE id = ?', $data['comment_id'])->fetchArray(true)){
-								return preg_replace("/@({$username[1][$i]}+)/i", '<a class="color-blue hover-button" href="'.self::ProfileUrl($user['username']).'" target="_blank">@'.$user['username'].'</a>', $text);
-							}
-						}
+		$username_exists = preg_match_all('/@([a-zA-Z0-9]+)/i', $text, $username);
+		if($username_exists > 0){
+			for ($i=0; $i < $username_exists; $i++) {
+				$user = $dba->query('SELECT id, username, COUNT(*) as count FROM '.T_USER.' WHERE username = ? AND status = "active"', $username[1][$i])->fetchArray();
+				if($user['count'] > 0){
+					if($user['id'] != $mention_uid){
+						return preg_replace("/@({$username[1][$i]}+)/i", '<a class="color-blue hover-button" href="'.self::ProfileUrl($user['username']).'" target="_blank">@'.$user['username'].'</a>', $text);
 					}
 				}
 			}
@@ -492,7 +570,6 @@ class Specific {
 
 	public static function FeaturedComment($data_id, $type = 'comment'){
 		global $dba;
-
 
 		if($type == 'comment'){
 			$comment = $dba->query('SELECT * FROM '.T_COMMENTS.' WHERE id = ?', $data_id)->fetchArray();
@@ -566,7 +643,7 @@ class Specific {
 	}
 
 	public static function CommentMaket($comment = array(), $order = 'recent', $type = 'normal'){
-		global $dba, $TEMP;
+		global $dba, $TEMP, $RUTE;
 
 		if(!empty($comment)){
 
@@ -578,10 +655,10 @@ class Specific {
 			}
 			
 			$post = $dba->query('SELECT user_id, slug FROM '.T_POST.' WHERE id = ?', $comment['post_id'])->fetchArray();
-			$TEMP['!url_comment'] = self::Url("{$post['slug']}?{$TEMP['#p_comment_id']}={$comment['id']}");
+			$TEMP['!url_comment'] = self::Url("{$post['slug']}?{$RUTE['#p_comment_id']}={$comment['id']}");
 			$TEMP['!comment_id'] = $comment['id'];
 			$TEMP['!comment_owner'] = self::IsOwner($comment['user_id']);
-			$TEMP['!comment_powner'] = $post['user_id'] == $TEMP['#user']['id'];
+			$TEMP['!comment_powner'] = self::IsOwner($post['user_id']);
 
 			$reply_ids = array();
 			$TEMP['!comment_type'] = $type;
@@ -606,9 +683,7 @@ class Specific {
 			$user = self::Data($comment['user_id'], array('username', 'avatar'));
 
 			$TEMP['!post_id'] = $comment['post_id'];
-			$TEMP['!text'] = self::CommentFilter($comment['text'], array(
-				'type' => 'comment'
-			));
+			$TEMP['!text'] = self::CommentFilter($comment['text'], $comment['user_id']);
 
 			$TEMP['!author_name'] = $user['username'];
 			$TEMP['!author_url'] = self::ProfileUrl($TEMP['!author_name']);
@@ -642,14 +717,14 @@ class Specific {
 	}
 
 	public static function ReplyMaket($reply = array(), $comment_id, $type = 'normal'){
-		global $dba, $TEMP;
+		global $dba, $TEMP, $RUTE;
 
 		if(!empty($reply)){
 			$TEMP['!reply_type'] = $type;
 			$user = self::Data($reply['user_id'], array('username', 'avatar'));
 
 			$post = $dba->query('SELECT user_id, slug FROM '.T_POST.' WHERE (SELECT post_id FROM '.T_COMMENTS.' WHERE id = ?) = id', $reply['comment_id'])->fetchArray();
-			$TEMP['!url_reply'] = self::Url("{$post['slug']}?{$TEMP['#p_reply_id']}={$reply['id']}");
+			$TEMP['!url_reply'] = self::Url("{$post['slug']}?{$RUTE['#p_reply_id']}={$reply['id']}");
 			$TEMP['!reply_id'] = $reply['id'];
 			$TEMP['!reply_owner'] = self::IsOwner($reply['user_id']);
 
@@ -660,13 +735,9 @@ class Specific {
 				$TEMP['avatar_cs'] = $TEMP['#user']['avatar_s'];
 			}
 
-			$TEMP['!reply_powner'] = $post['user_id'] == $TEMP['#user']['id'];
+			$TEMP['!reply_powner'] = self::IsOwner($post['user_id']);
 							
-			$TEMP['!text'] = self::CommentFilter($reply['text'], array(
-				'type' => 'reply',
-				'reply_uid' => $reply['user_id'],
-				'comment_id' => $comment_id
-			));
+			$TEMP['!text'] = self::CommentFilter($reply['text'], $reply['user_id']);
 			$TEMP['!author_name'] = $user['username'];
 			$TEMP['!author_url'] = self::ProfileUrl($TEMP['!author_name']);
 			$TEMP['!author_avatar'] = $user['avatar_s'];
@@ -728,13 +799,129 @@ class Specific {
 		);
 	}
 
+	public static function ToMention($data = array(), $type = 'comment'){
+		global $dba;
+
+		$username_exists = preg_match_all('/@([a-zA-Z0-9]+)/i', $data['text'], $username);
+		if($username_exists > 0){
+			for ($i=0; $i < $username_exists; $i++) {
+				$user = $dba->query('SELECT id, COUNT(*) as count FROM '.T_USER.' WHERE username = ? AND status = "active"', $username[1][$i])->fetchArray();
+				if($user['count'] > 0){
+					if($user['id'] != $data['user_id']){
+						return self::SetNotify(array(
+							'user_id' => $user['id'],
+							'notified_id' => $data['insert_id'],
+							'type' => "u{$type}",
+						));
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public static function DeleteUser($user_id, $permanent = false){
+		global $dba;
+
+
+		$deleted_at = time();
+
+		$post_ids = $dba->query('SELECT id FROM '.T_POST.' WHERE user_id = ?', $user_id)->fetchAll(false);
+
+		if(!empty($post_ids)){
+			$post_ids = implode(',', $post_ids);
+			$dba->query('DELETE FROM '.T_REACTION.' WHERE reacted_id IN ('.$post_ids.') AND place = "post"');
+			$dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id IN ('.$post_ids.') AND type = "n_preact"');
+		    $dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id IN ('.$post_ids.') AND type = "n_post"');
+		}
+
+		$comment_ids = $dba->query('SELECT id FROM '.T_COMMENTS.' WHERE user_id = ?', $user_id)->fetchAll(false);
+		if(!empty($comment_ids)){
+		    $comment_ids = implode(',', $comment_ids);
+
+		    $dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id IN ('.$comment_ids.') AND (type = "n_pcomment" OR type = "n_ucomment")');
+			$dba->query('DELETE FROM '.T_REACTION.' WHERE reacted_id IN ('.$comment_ids.') AND place = "comment"');
+			$dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id IN ('.$comment_ids.') AND type = "n_creact"');
+		    $dba->query('DELETE FROM '.T_REPORT.' WHERE reported_id IN ('.$comment_ids.') AND place = "comment"');
+		}
+
+		$reply_ids = $dba->query('SELECT id FROM '.T_REPLY.' WHERE user_id = ?', $user_id)->fetchAll(false);
+		if(!empty($reply_ids)){
+		    $reply_ids = implode(',', $reply_ids);
+
+		    $dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id IN ('.$reply_ids.') AND (type = "n_preply" OR type = "n_ureply")');
+			$dba->query('DELETE FROM '.T_REACTION.' WHERE reacted_id IN ('.$reply_ids.') AND place = "reply"');
+			$dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id IN ('.$reply_ids.') AND type = "n_rreact"');
+		    $dba->query('DELETE FROM '.T_REPORT.' WHERE reported_id IN ('.$reply_ids.') AND place = "reply"');
+		}
+
+		$dba->query('DELETE FROM '.T_VIEW.' WHERE user_id = ?', $user_id);
+		$dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id IN (SELECT id FROM '.T_COLLABORATOR.' WHERE user_id = ?) AND type = "n_collab"', $user_id);
+		$dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id IN (SELECT id FROM '.T_FOLLOWER.' WHERE user_id = ? OR profile_id = ?) AND type = "n_followers"', $user_id, $user_id);
+
+		$message_ids = $dba->query('SELECT id FROM '.T_MESSAGE.' WHERE user_id = ?', $user_id)->fetchAll(false);
+
+		if($permanent){
+			if($dba->query('DELETE FROM '.T_USER.' WHERE id = ?', $user_id)->returnStatus()){
+				$dba->query('DELETE FROM '.T_REPORT.' WHERE user_id = ?', $user_id);
+		    	$dba->query('DELETE FROM '.T_REPORT.' WHERE reported_id = ? AND place = "user"', $user_id);
+		    	if(!empty($post_ids)){
+		    		$post_ids = implode(',', $post_ids);
+		    		$dba->query('DELETE FROM '.T_REPORT.' WHERE reported_id IN ('.$post_ids.') AND place = "post"');
+		    	}
+
+		    	if(!empty($message_ids)){
+		    		$message_ids = implode(',', $message_ids);
+		    		$dba->query('DELETE FROM '.T_MESSAAN.' WHERE answered_id IN ('.$message_ids.') AND type = "text"');
+
+			    	$messafi_ids = $dba->query('SELECT id FROM '.T_MESSAFI.' WHERE message_id IN ('.$message_ids.')')->fetchAll(false);
+
+			    	if(!empty($messafi_ids)){
+			    		$dba->query('DELETE FROM '.T_MESSAAN.' WHERE answered_id IN ('.implode(',', $messafi_ids).') AND (type = "file" OR type = "image")');
+			    	}
+			    }
+				return true;
+			}
+		} else {
+			if($dba->query('UPDATE '.T_USER.' SET status = "deleted" WHERE id = ?', $user_id)->returnStatus()){
+				$dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE user_id = ?', $user_id);
+				$dba->query('DELETE FROM '.T_SAVED.' WHERE user_id = ?', $user_id);
+				$dba->query('DELETE FROM '.T_SESSION.' WHERE user_id = ?', $user_id);
+				$dba->query('DELETE FROM '.T_COLLABORATOR.' WHERE user_id = ?', $user_id);
+				$dba->query('DELETE FROM '.T_TYPING.' WHERE user_id = ? OR profile_id = ?', $user_id, $user_id);
+
+				if(!empty($post_ids)){
+					$dba->query('UPDATE '.T_POST.' SET status = "deleted", deleted_at = ? WHERE id IN ('.implode(',', $post_ids).')', $deleted_at);
+				}
+
+				$dba->query('DELETE FROM '.T_FOLLOWER.' WHERE user_id = ? OR profile_id = ?', $user_id, $user_id);
+				$dba->query('DELETE FROM '.T_COLLABORATOR.' WHERE user_id = ?', $user_id);
+				$dba->query('DELETE FROM '.T_COMMENTS.' WHERE user_id = ?', $user_id);
+				$dba->query('DELETE FROM '.T_REPLY.' WHERE user_id = ?', $user_id);
+				$dba->query('DELETE FROM '.T_REACTION.' WHERE user_id = ?', $user_id);
+
+				if(!empty($message_ids)){
+		    		$message_ids = implode(',', $message_ids);
+					if($dba->query('UPDATE '.T_MESSAGE.' SET deleted_at = ? WHERE id IN ('.$message_ids.')', $deleted_at)->returnStatus()){
+						$dba->query('UPDATE '.T_MESSAFI.' SET deleted_at = ? WHERE message_id IN ('.$message_ids.')', $deleted_at);
+					}
+				}
+				return true;
+			}
+		}
+
+
+		return false;
+	}
+
 	public static function SavePost($post_id, $is_amp = false){
 		global $dba, $TEMP;
 
 		$post_id = self::Filter($post_id);
 	
 		if(!empty($post_id) && is_numeric($post_id)){
-			if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE id = ? AND status = "approved"', $post_id)->fetchArray(true) > 0){
+			if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"', $post_id)->fetchArray(true) > 0){
 				if($dba->query('SELECT COUNT(*) FROM '.T_SAVED.' WHERE user_id = ? AND post_id = ?', $TEMP['#user']['id'], $post_id)->fetchArray(true) > 0){
 					if($dba->query('DELETE FROM '.T_SAVED.' WHERE user_id = ? AND post_id = ?', $TEMP['#user']['id'], $post_id)->returnStatus()){
 						return array(
@@ -767,8 +954,8 @@ class Specific {
 	public static function Shows($input, $show){
 		global $dba, $TEMP;
 
-		$input = Specific::Filter($input);
-		$show = Specific::Filter($show);
+		$input = self::Filter($input);
+		$show = self::Filter($show);
 
 		if(!empty($show) && !empty($input) && in_array($input, array('birthday', 'gender', 'contact_email', 'followers', 'messages'))){
 			$show = json_decode($show);
@@ -801,6 +988,125 @@ class Specific {
 		}
 		return array(
 			'return' => false
+		);
+	}
+
+	public static function LastMessage($profile_id, $is_new = false){
+		global $dba, $TEMP;
+
+		$data = array(
+			'return' => false
+		);
+
+		$last_message = $dba->query('SELECT * FROM '.T_MESSAGE.' m WHERE user_id NOT IN ('.$TEMP['#blocked_users'].') AND profile_id NOT IN ('.$TEMP['#blocked_users'].') AND ((user_id = ? AND deleted_fuser = 0) OR (profile_id = ? AND deleted_fprofile = 0)) AND (SELECT id FROM '.T_CHAT.' WHERE ((user_id = ? AND profile_id = ?) OR (user_id = ? AND profile_id = ?) AND id = m.chat_id)) = chat_id ORDER BY id DESC LIMIT 1', $TEMP['#user']['id'], $TEMP['#user']['id'], $TEMP['#user']['id'], $profile_id, $profile_id, $TEMP['#user']['id'])->fetchArray();
+
+		if(!empty($last_message)){
+			$TEMP['#last_unseen'] = $unseen = false;
+			if($last_message['seen'] == 0 && self::IsOwner($last_message['profile_id'])){
+				$TEMP['#last_unseen'] = $unseen = true;
+			}
+			if($last_message['text'] == NULL){
+				$file = $dba->query('SELECT * FROM '.T_MESSAFI.' WHERE message_id = ? ORDER BY id DESC LIMIT 1', $last_message['id'])->fetchArray();
+				if($file['deleted_at'] == 0){
+					$last_text = $TEMP['#word']['attached_file'];
+					if(self::IsOwner($last_message['user_id'])){
+						$unseen = false;
+						$last_text = "{$TEMP['#word']['you']}: {$TEMP['#word']['attached_file']}";
+					}
+				} else {
+					$last_text = $TEMP['#word']['deputy_file_deleted'];
+					if(self::IsOwner($last_message['user_id'])){
+						$unseen = false;
+						$last_text = "{$TEMP['#word']['you']}: {$last_text}";
+					}
+				}
+			} else {
+				if($last_message['deleted_at'] == 0){
+					$last_text = self::TextFilter($last_message['text'], false);
+					if(self::IsOwner($last_message['user_id'])){
+						$unseen = false;
+						$last_text = "{$TEMP['#word']['you']}: {$last_text}";
+					}
+				} else {
+					$last_text = $TEMP['#word']['message_was_deleted'];
+					if(self::IsOwner($last_message['user_id'])){
+						$unseen = false;
+						$last_text = "{$TEMP['#word']['you']}: {$last_text}";
+					}
+				}
+			}
+
+			$data = array(
+				'return' => true,
+				'unseen' => $unseen,
+				'text' => $last_text,
+				'chat_id' => $last_message['chat_id'],
+				'created_at' => self::DateString($last_message['created_at'])
+			);
+		}
+
+		return $data;
+	}
+
+	public static function Chat($chat, $is_new = false){
+		global $dba, $TEMP;
+
+		$data = array();
+		
+		$user_id = $chat['user_id'];
+		if(self::IsOwner($chat['user_id'])){
+			$user_id = $chat['profile_id'];
+		}
+		
+		$last_message = self::LastMessage($user_id, $is_new);
+
+		if($last_message['return']){
+			$chat_id = $last_message['chat_id'];
+
+			$TEMP['!id'] = $chat_id;
+			$TEMP['!last_text'] = $last_message['text'];
+			$TEMP['!last_created_at'] = $last_message['created_at'];
+
+			$data['chat_id'] = $chat_id;
+		}
+
+		$user = self::Data($user_id);
+
+		$TEMP['!user'] = $user['user'];
+		$TEMP['!role'] = $user['role'];
+		$TEMP['!user_id'] = $user['id'];
+
+		$TEMP['!user_deleted'] = true;
+		if($user['status'] == 'deleted'){
+			$TEMP['!user_deleted'] = false;
+			$TEMP['!username'] = $TEMP['#word']['user'];
+			$TEMP['!avatar_s'] = self::Url('/themes/default/images/users/default-holder-s.jpeg');
+		} else {
+			$TEMP['!username'] = $user['username'];
+			$TEMP['!avatar_s'] = $user['avatar_s'];
+		}
+
+		
+
+		$data['html'] = self::Maket("messages/includes/user");
+
+		return $data;
+	}
+
+	public static function Followers($user_id){
+		global $dba, $TEMP;
+
+		$number = $dba->query('SELECT COUNT(*) FROM '.T_FOLLOWER.' WHERE profile_id = ?', $user_id)->fetchArray(true);
+
+		$followers = self::NumberShorten($number);
+		$text = "{$followers} {$TEMP['#word']['follower']}";
+		if($number > 1){
+			$text = "{$followers} {$TEMP['#word']['followers']}";
+		}
+
+		return array(
+			'number' => $number,
+			'text' => $text
 		);
 	}
 
@@ -914,38 +1220,215 @@ class Specific {
 	}
 
 	public static function ReturnUrl() {
-		global $site_url;
+		global $TEMP, $RUTE, $site_url;
 		$params = "";
 		if(!empty($_SERVER["REQUEST_URI"])){
 			$url = (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on' ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'] . $_SERVER["REQUEST_URI"];
 			if(self::Url() != $url){
-				$params = "home?return=".urlencode($url);
+				$params = "home?{$RUTE['#p_return']}=".urlencode($url);
 			}
 		}
 		return self::Url($params);
 	}
 
-	public static function UserToken($token, $user_id = 0){
-		global $dba;
+	public static function SendChangeEmailToken($user = array(), $new_email = ''){
+		global $TEMP, $RUTE;
+
+		$data = array(
+			'return' => false,
+			'status' => 400,
+			'error' => "*{$TEMP['#word']['oops_error_has_occurred']}"
+		);
+
+		if(empty($user['new_email'])){
+			$user['new_email'] = $new_email;
+		}
+
+		if(!empty($user['new_email'])){
+			$change_email = Specific::UserToken('change_email', $user['id'], true);
+			$code = $change_email['code'];
+
+			$TEMP['code'] = $code;
+			$TEMP['username'] = $user['username'];
+			$TEMP['url'] = Specific::Url("{$RUTE['#r_change_email']}/{$change_email['token']}?{$RUTE['#p_insert']}=$code");
+			$TEMP['text'] = "{$TEMP['#word']['check_your_email']} {$user['new_email']}";
+			$TEMP['footer'] = $TEMP['#word']['have_been_one_who_has_carried_out'];
+			$TEMP['button'] = $TEMP['#word']['check_your_email'];
+
+			if($change_email['return']){
+				$send = Specific::SendEmail(array(
+					'from_email' => $TEMP['#settings']['smtp_username'],
+				    'from_name' => $TEMP['#settings']['title'],
+					'to_email' => $user['new_email'],
+					'to_name' => $user['username'],
+					'subject' => $TEMP['#word']['check_your_email'],
+					'charSet' => 'UTF-8',
+			        'text_body' => Specific::Maket('emails/includes/send-code'),
+					'is_html' => true
+				));
+				if($send){
+					$data = array(
+						'return' => true,
+					    'status' => 200,
+						'message' => $TEMP['#word']['mail_sent_successfully'],
+					    'token' => $change_email['token']
+					);
+				} else {
+					$data = array(
+						'return' => false,
+						'status' => 400,
+				   		'error' => "*{$TEMP['#word']['error_sending_email_again_later']}"
+					);
+				}
+			} else {
+				$data = array(
+					'return' => false,
+					'status' => 400,
+					'error' => "*{$TEMP['#word']['made_too_many_attempts_try']}"
+				);
+			}
+		}
+
+		return $data;
+	}
+
+	public static function ValidateToken($expires, $type){
+		$pass = false;
+		if(!empty($expires)){
+			$expires = json_decode($expires, true);
+			$expires = $expires[$type];
+			if(time() > strtotime("+1 hour", $expires['updated_at'])){
+				$pass = true;
+			}
+		}
+
+		return $pass;
+	}
+
+	public static function UserToken($token, $user_id = 0, $affected = false){
+		global $dba, $TEMP;
 		for ($i=0; $i < 1; $i++) {
 			$code = rand(111111, 999999);
 	    	$tokenu = md5($code);
-			if($dba->query("SELECT COUNT(*) FROM ".T_TOKEN." WHERE $token = ?", $tokenu)->fetchArray(true) > 0){
+			if($dba->query("SELECT COUNT(*) FROM ".T_TOKEN." WHERE {$token} = ?", $tokenu)->fetchArray(true) > 0){
 				$i--;
 			}
 		}
-		$data = array('code' => $code, 'token' => $tokenu, 'return' => false);
+		$data = array(
+			'return' => false,
+			'code' => $code,
+			'token' => $tokenu
+		);
 		if(!empty($user_id)){
-			if($dba->query("UPDATE ".T_TOKEN." SET $token = ? WHERE user_id = ?", $tokenu, $user_id)->returnStatus()){
-				$data['return'] = true;
+			$query = '';
+			$pass = true;
+			if($affected){
+				$pass = false;
+				$time = time();
+				$expires = $dba->query('SELECT expires FROM '.T_TOKEN.' WHERE user_id = ?', $user_id)->fetchArray(true);
+				$ex_empty = array(
+					'repeat' => 1,
+					'updated_at' => $time
+				);
+				if(empty($expires)){
+					$pass = true;
+					$expires = array(
+						$token => $ex_empty
+					);
+				} else {
+					$expires = json_decode($expires, true);
+					$expire = $expires[$token];
+
+					if(in_array($token, array_keys($expires))){
+						if($time < strtotime("+{$TEMP['#settings']['token_expiration_hours']} hour", $expire['updated_at'])){
+							if($expire['repeat'] <= $TEMP['#settings']['token_expiration_attempts']){
+								$pass = true;
+								$expire['repeat'] = $expire['repeat']+1;
+							}
+						} else {
+							$pass = true;
+							$expire = $ex_empty;
+						}
+						$expires[$token] = $expire;
+					} else {
+						$pass = true;
+						$expires[$token] = $ex_empty;
+					}
+				}
+				$expires = json_encode($expires);
+				$query = ", expires = '{$expires}'";
+			}
+			
+			if($pass){
+				if($dba->query("UPDATE ".T_TOKEN." SET {$token} = ?{$query} WHERE user_id = ?", $tokenu, $user_id)->returnStatus()){
+					$data['return'] = true;
+				}
 			}
 		}
 		return $data;
 	}
 
+	public static function GetWidget($type, $root = 'post', $html = true){
+		global $dba, $TEMP;
+
+
+		$widget = $dba->query('SELECT * FROM '.T_WIDGET.' WHERE type = ?', $type)->fetchArray();
+
+		$data = array(
+			'return' => false
+		);
+
+		if(!empty($widget)){
+			if($widget['status'] == 'enabled'){
+				$data['return'] = true;
+				
+				if($html){
+					if(!empty($widget['content'])){
+						$TEMP['content_widget'] = $widget['content'];
+						
+						if($widget['type'] == 'htop'){
+							$maket = 'home/includes/advertisement-home-top';
+						} else if($widget['type'] == 'hload'){
+							$maket = 'home/includes/advertisement-home-load';
+						} else if($widget['type'] == 'horizposts'){
+							$maket = 'includes/search-profile-category-tag/advertisement-horizontal-posts';
+						} else if($widget['type'] == 'aside'){
+							$maket = 'includes/search-post-profile-category-tag/advertisement-aside';
+						} else if(in_array($widget['type'], array('pbody', 'ptop'))){
+							$client_exists = preg_match('/data-ad-client=[\'|"]([^\"]+)[\'|"]/is', $widget['content'], $ad_client);
+							$advertisement = 'advertisement-post-top';
+							if($widget['type'] == 'pbody'){
+								$advertisement = 'advertisement-body';
+							}
+							$maket = "post/includes/{$advertisement}";
+							if($client_exists > 0){
+								if($root == 'amp'){
+									preg_match('/data-ad-slot=[\'|"]([^\"]+)[\'|"]/is', $widget['content'], $ad_slot);
+									$TEMP['ad_client'] = $ad_client[1];
+									$TEMP['ad_slot'] = $ad_slot[1];
+								}
+								$maket = "{$root}/includes/{$advertisement}";
+							}
+						}
+						$data['html'] = self::Maket($maket);
+					} else {
+						$data['return'] = false;
+					}
+				}
+
+				$data['name'] = $TEMP['#word']["widget_{$widget['name']}"];
+				$data['content'] = $widget['content'];
+				$data['updated_at'] = $widget['updated_at'];
+				$data['created_at'] = $widget['created_at'];
+			}
+		}
+
+		return $data;
+	}
+
 	public static function ProfileUrl($username){
-		global $TEMP;
-		return self::Url("{$TEMP['#r_user']}/{$username}");
+		global $TEMP, $RUTE;
+		return self::Url("{$RUTE['#r_user']}/{$username}");
 	}
 
 	public static function IdentifyFrame($frame, $autoplay = false, $is_amp = false){
@@ -1083,7 +1566,7 @@ class Specific {
 		if(self::ValidateUrl($url)){
 			$url = preg_replace('/([h|H][t|T]{2}[p|P][s|S]?|[r|R][t|T][s|S][p|P]):\/\//', '//', $url);
 		}
-		// (self::ValidateUrl($url) && !filter_var($url, FILTER_VALIDATE_URL) ? '//' : '').$url
+		
 		$html = '<iframe src="'.$url.'"'.$attributes.'></iframe>';
 		if($is_amp){
 			$html = '<amp-iframe src="'.$url.'"'.$attributes.'></amp-iframe>';
@@ -1148,38 +1631,89 @@ class Specific {
 	    }
 	}
 
-	public static function DateFormat($ptime, $complete = false) {
+	public static function DateFormat($ptime, $type = 'normal') {
 	    global $TEMP; 
+
 	    $date = date("j-m-Y", $ptime); 
 	    $day = strtolower(strftime("%A", strtotime($date)));
 	    $month = strtolower(strftime("%B", strtotime($date))); 
 	    $day = $TEMP['#word'][$day];
 	    $month = $TEMP['#word'][$month];
 	    $B = mb_substr($month, 0, 3, 'UTF-8');
+
 	    $dateFinaly = strftime("%e " . $B . ". %Y", strtotime($date));
-	    if($complete == true){
+	    if($type == 'day'){
+	    	$dateFinaly = strftime("%e", strtotime($date));
+	    }
+	    if($type == 'month'){
+	    	$dateFinaly = $month;
+	    }
+	    if($type == 'complete'){
 	    	$dateFinaly = strftime("$day, %e {$TEMP['#word']['of']} $month, %Y", strtotime($date));
 	    }
 	    return $dateFinaly;
 	}
 
-	public static function Words($paginate = false, $page = 1, $keyword = ''){
-	    global $TEMP, $dba;
-	    $data   = array();
+	public static function Words($language = 'en', $paginate = false, $page = 1, $keyword = ''){
+	    global $dba, $TEMP;
+	    $data = array();
 	    if($paginate == true){
 	    	$query = '';
 		    if(!empty($keyword)){
-		        $query = " WHERE wkey LIKE '%$keyword%'";
+		        $query = " WHERE word LIKE '%{$keyword}%' OR `{$language}` LIKE '%{$keyword}%'";
 		    }
-	        $data['sql'] = $dba->query('SELECT * FROM word'.$query.' LIMIT ? OFFSET ?', $TEMP['#settings']['data_load_limit'], $page)->fetchAll();
+	        $data['sql'] = $dba->query("SELECT * FROM word{$query} LIMIT ? OFFSET ?", 10, $page)->fetchAll();
 	        $data['total_pages'] = $dba->totalPages;
 	    } else {
-	        $words = $dba->query('SELECT * FROM word')->fetchAll();
-	        foreach ($words as $value) {
-	            $data[$value['wkey']] = $value['word'];
+	        $sql = $dba->query("SELECT word, {$language} FROM word")->fetchAll();
+	        foreach ($sql as $value) {
+	            $data[$value['word']] = $value[$language];
 	        }
 	    }
 	    return $data;
+	}
+
+	public static function Languages($query = 'type') {
+	    global $dba;
+	    $data = array();
+	    $langs = $dba->query("DESCRIBE word")->fetchAll();
+	    foreach ($langs as $lang) {
+	        $data[] = $lang['Field'];
+	    }
+	    unset($data[0]);
+	    return $data;
+	}
+
+	public static function Language(){
+		global $dba, $TEMP, $RUTE;
+
+		$lang = Specific::Filter($_GET[$RUTE['#p_language']]);
+
+		$language = $TEMP['#settings']['language'];
+
+		if ($TEMP['#loggedin'] == true) {
+			$user = Specific::Data(null, 4);
+			if(empty($lang)){
+			    if (in_array($user['language'], $TEMP['#languages'])) {
+			        $language = $user['language'];
+				}
+			} else {
+			    if(in_array($lang, $TEMP['#languages'])){
+			        if($dba->query('UPDATE '.T_USER.' SET language = ? WHERE id = ?', $lang, $user['id'])->returnStatus()){
+			        	$language = $lang;
+			        }
+			    }
+			}
+		} else {
+			if(!empty($lang)){
+				$language = $lang;
+			} else if(!empty($_COOKIE['language'])){
+				$language = Specific::Filter($_COOKIE['language']);	
+			}
+			setcookie("language", $language, time() + 315360000, "/");
+		}
+
+		return $language;
 	}
 
 	public static function GetClientIp() {
@@ -1307,7 +1841,7 @@ class Specific {
 			$query = ' AND id NOT IN ('.implode(',', $post_ids).')';
 		}
 
-		$main = $dba->query('SELECT * FROM '.T_POST.' WHERE published_at >= ?'.$query.' AND status = "approved" ORDER BY published_at ASC LIMIT 15', (time()-(60*60*24*7)))->fetchAll();
+		$main = $dba->query('SELECT * FROM '.T_POST.' WHERE published_at >= ?'.$query.' AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved" ORDER BY published_at ASC LIMIT 15', (time()-(60*60*24*7)))->fetchAll();
 
 		if(count($main) < 15){
 			if(!empty($main)){
@@ -1316,7 +1850,7 @@ class Specific {
 				foreach ($main as $post) {
 					$main_ids[] = $post['id'];
 				}
-				$new_main = $dba->query('SELECT * FROM '.T_POST.' WHERE id NOT IN ('.implode(',', $main_ids).') AND status = "approved" ORDER BY published_at ASC LIMIT '.$count)->fetchAll();
+				$new_main = $dba->query('SELECT * FROM '.T_POST.' WHERE id NOT IN ('.implode(',', $main_ids).') AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved" ORDER BY published_at ASC LIMIT '.$count)->fetchAll();
 				foreach ($new_main as $key => $post) {
 					$main[] = $post;
 				}
@@ -1324,7 +1858,7 @@ class Specific {
 				if(!empty($post_ids)){
 					$query = ' AND id NOT IN ('.implode(',', $post_ids).')';
 				}
-				$main = $dba->query('SELECT * FROM '.T_POST.' WHERE status = "approved"'.$query.' ORDER BY published_at ASC LIMIT 15')->fetchAll();
+				$main = $dba->query('SELECT * FROM '.T_POST.' WHERE user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"'.$query.' ORDER BY published_at ASC LIMIT 15')->fetchAll();
 			}
 		}
 
@@ -1337,7 +1871,10 @@ class Specific {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL,"https://www.google.com/recaptcha/api/siteverify");
 		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array('secret' => $TEMP['#settings']['recaptcha_private_key'], 'response' => self::Filter($token))));
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array(
+			'secret' => $TEMP['#settings']['recaptcha_private_key'],
+			'response' => self::Filter($token)
+		)));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$response = curl_exec($ch);
 		curl_close($ch);
@@ -1361,7 +1898,7 @@ class Specific {
 	}
 
 	public static function Maket($page){
-	    global $TEMP, $site_url;
+	    global $TEMP, $RUTE, $site_url;
 	    $file = "./themes/".$TEMP['#settings']['theme']."/html/$page.html";
 	    if(!file_exists($file)){
 	    	exit("No found: $file");
@@ -1386,17 +1923,18 @@ class Specific {
 	    $page = preg_replace_callback('/{\$data->(.+?)}/i', function($matches) use ($TEMP) {
 	        return (isset($TEMP['data'][$matches[1]])?$TEMP['data'][$matches[1]]:"");
 	    }, $page);
-	    $page = preg_replace_callback('/{(\#[a-zA-Z0-9_]+)}/i', function($matches) use ($TEMP) {
-	        $match = $TEMP[$matches[1]];
-	        $return = self::Filter($_GET[$TEMP['#p_return']]);
+	    $page = preg_replace_callback('/{(\#[a-zA-Z0-9_]+)}/i', function($matches) use ($TEMP, $RUTE) {
+	        $tmp_match = $TEMP[$matches[1]];
+	        $rte_match = $RUTE[$matches[1]];
+	        $return = self::Filter($_GET[$RUTE['#p_return']]);
 	    	if(in_array($matches[1], array('#r_login', '#r_register', '#r_logout', '#r_2check'))){
 		    	preg_match("/(?:[\w]+)\/([\w\-]+)(?:\/([\w\-]+)|)/", $_SERVER['REQUEST_URI'], $current_url);
 		    	if(isset($TEMP['#current_url'])){
 		    		$current_url[1] = $TEMP['#current_url'];
 		    	}
-				$no_returns = array($TEMP['#r_home'], $TEMP['#r_login'], $TEMP['#r_register'], $TEMP['#r_forgot_password'], $TEMP['#r_reset_password'], $TEMP['#r_2check'], $TEMP['#r_verify_email']);
+				$no_returns = array($RUTE['#r_home'], $RUTE['#r_login'], $RUTE['#r_register'], $RUTE['#r_forgot_password'], $RUTE['#r_reset_password'], $RUTE['#r_2check'], $RUTE['#r_verify_email']);
 				if(!in_array($current_url[1], $no_returns) || (!empty($return) && !in_array($return, $no_returns))){
-					if(!isset($current_url[2])){
+					if($current_url[1] == $current_url[2] || !isset($current_url[2])){
 						$current_url = urlencode($current_url[1]);
 					} else {
 				    	$current_url = urlencode("{$current_url[1]}/{$current_url[2]}");
@@ -1404,13 +1942,13 @@ class Specific {
 				    if(!empty($return)){
 				        $current_url = urlencode($return);
 				    }
-				    return (!empty($current_url)?"{$match}?{$TEMP['#p_return']}={$current_url}":$match);
+				    return (!empty($current_url)?"{$rte_match}?{$RUTE['#p_return']}={$current_url}":$rte_match);
 				}
 			}
-	        if(is_bool($match)){
-	        	$match = json_encode($match);
+	        if(is_bool($tmp_match)){
+	        	$tmp_match = json_encode($tmp_match);
 	        }
-	        return (isset($match)?$match:"");
+	        return (isset($tmp_match)?$tmp_match:(isset($rte_match)?$rte_match:""));
 	    }, $page);
 	    $page = preg_replace_callback('/{\$([a-zA-Z0-9_]+)}/i', function($matches) use ($TEMP) {
 	    	$match = $TEMP[$matches[1]];

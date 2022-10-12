@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{$settings->language}" dir="ltr">
+<html lang="{#language}">
 <head>
    <meta charset="UTF-8" />
    <title>{$global_title}</title>
@@ -11,12 +11,8 @@
    <meta name="format-detection" content="telephone=no">
    <link rel="shortcut icon" type="image/png" href="{$theme->{images/favicon.ico}}" />
    {%%<script src="{$theme->{assets/js/jquery-3.6.0.min.js}}"></script>%%}
-   <?php if ($TEMP['#settings']['recaptcha'] == 'on') { ?>
-   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-   <?php } ?>
-
 </head>
-<body class="position-relative w-100 mw-1170 h-100 background-white color-black margin-auto">
+<body class="position-relative w-100 mw-1170 h-100 background-white color-black margin-auto" dir="{$dir}">
    <noscript>
       <div class="display-flex w-100 h-100vh">
          <div class="w-450px background-grely border-rlow margin-auto padding-t15 padding-b15 padding-l15 padding-r15 text-center">
@@ -71,26 +67,54 @@
                      <span class="color-blackly font-medium text-capitalize">{$me->username}</span>
                   </a>
                </div>
+               <?php if($TEMP['#publisher'] == true) { ?>
                <div class="dropdown-account-item display-flex border-bottom border-grely">
-                  <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button" href="{$url->{{#r_create_post}}}" target="_self" title="{$word->create_post}">{$word->create_post}</a>
+                  <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 animation-ease3s hover-button" href="{$url->{{#r_create_post}}}" target="_self" title="{$word->create_post}">{$word->create_post}</a>
+               </div>
+               <?php } ?>
+               <div class="dropdown-account-item display-flex border-bottom border-grely">
+                  <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 animation-ease3s hover-button" href="{$url->{{#r_settings}}}" target="_self" title="{$word->settings}">{$word->settings}</a>
                </div>
                <div class="dropdown-account-item display-flex border-bottom border-grely">
-                  <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button" href="{$url->{{#r_settings}}}" target="_self" title="{$word->settings}">{$word->settings}</a>
+                  <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 animation-ease3s hover-button" href="{$url->{{#r_saved}}}" target="_self" title="{$word->saved}">{$word->saved}</a>
                </div>
                <div class="dropdown-account-item display-flex border-bottom border-grely">
-                  <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button" href="{$url->{{#r_saved}}}" target="_self" title="{$word->saved}">{$word->saved}</a>
+                  <a id="btn-messages" class="w-100<?php echo($TEMP['#wpmessages'] > 0) ? ' font-bold color-red ' : ' color-grey ';?>font-medium padding-t10 padding-b10 padding-l10 padding-r10 animation-ease3s hover-button" href="{$url->{{#r_messages}}}" target="_self" title="{$word->messages}">{$word->messages}</a>
                </div>
                <div class="dropdown-account-item display-flex border-bottom border-grely">
-                  <button id="btn-notifications" class="display-flex direction-row align-center btn-noway w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button">
+                  <button id="btn-notifications" class="display-flex direction-row align-center btn-noway w-100<?php echo($TEMP['#wpnotifications'] > 0) ? ' font-bold color-red ' : ' color-grey ';?>font-medium padding-t10 padding-b10 padding-l10 padding-r10 animation-ease3s hover-button">
                      <span class="margin-right-auto">{$word->notifications}</span>
                      <svg class="icon-y" viewBox="-1.5 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path fill="currentColor" d="M8.93 3.136l1.041 -1.041c0.441 -0.441 1.153 -0.441 1.589 0L20.672 11.203c0.441 0.441 0.441 1.153 0 1.589L11.559 21.905c-0.441 0.441 -1.153 0.441 -1.589 0l-1.041 -1.041c-0.445 -0.445 -0.436 -1.172 0.019 -1.608L14.597 13.875H1.125c-0.623 0 -1.125 -0.502 -1.125 -1.125v-1.5c0 -0.623 0.502 -1.125 1.125 -1.125h13.472L8.948 4.744c-0.459 -0.436 -0.469 -1.163 -0.019 -1.608z"/>
                      </svg>
                   </button>
                </div>
-               <div class="dropdown-account-item display-flex">
-                  <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button" href="{$url->{{#r_logout}}}" target="_self" title="{$word->logout}">{$word->logout}</a>
+               <div class="dropdown-account-item display-flex border-bottom border-grely">
+                  <button id="btn-languages" class="display-flex direction-row align-center btn-noway w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 animation-ease3s hover-button">
+                     <span class="margin-right-auto">{$word->language} ({#language})</span>
+                     <svg class="icon-y" viewBox="-1.5 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="currentColor" d="M8.93 3.136l1.041 -1.041c0.441 -0.441 1.153 -0.441 1.589 0L20.672 11.203c0.441 0.441 0.441 1.153 0 1.589L11.559 21.905c-0.441 0.441 -1.153 0.441 -1.589 0l-1.041 -1.041c-0.445 -0.445 -0.436 -1.172 0.019 -1.608L14.597 13.875H1.125c-0.623 0 -1.125 -0.502 -1.125 -1.125v-1.5c0 -0.623 0.502 -1.125 1.125 -1.125h13.472L8.948 4.744c-0.459 -0.436 -0.469 -1.163 -0.019 -1.608z"/>
+                     </svg>
+                  </button>
                </div>
+               <div class="dropdown-account-item display-flex">
+                  <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 animation-ease3s hover-button" href="{$url->{{#r_logout}}}" target="_self" title="{$word->logout}">{$word->logout}</a>
+               </div>
+            </div>
+
+            <div id="container-languages" class="dropdown-account position-absolute background-white border-rlow border-all border-grely hidden" role="dialog" aria-label="{$word->languages}" aria-modal="true">
+               <div class="display-flex direction-row align-center w-100 border-bottom border-grely">
+                  <button id="btn-blmenu" class="btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover hover-button animation-ease3s">
+                     <svg class="icon-y vertical-sub" viewBox="-1.5 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.07 20.864l-1.041 1.041c-0.441 0.441 -1.153 0.441 -1.589 0L0.328 12.797c-0.441 -0.441 -0.441 -1.153 0 -1.589L9.441 2.095c0.441 -0.441 1.153 -0.441 1.589 0l1.041 1.041c0.445 0.445 0.436 1.172 -0.019 1.608L6.403 10.125H19.875c0.623 0 1.125 0.502 1.125 1.125v1.5c0 0.623 -0.502 1.125 -1.125 1.125H6.403l5.648 5.381c0.459 0.436 0.469 1.163 0.019 1.608z"/>
+                     </svg>
+                     <span class="font-medium font-bold color-black margin-l5">{$word->account_menu}</span>
+                  </button>
+               </div>
+
+               <ul class="padding-t10 padding-b10">
+                  {$languages}
+               </ul>
             </div>
 
             <div id="container-notifications" class="dropdown-notifications position-absolute background-white overflow-hidden border-rlow border-all border-grely hidden" role="dialog" aria-label="{$word->notifications}" aria-modal="true">
@@ -109,7 +133,7 @@
                   </button>
                </div>
                <div class="display-flex direction-row align-center w-100 border-bottom border-grely">
-                  <button id="btn-bmenu" class="btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover hover-button animation-ease3s">
+                  <button id="btn-bnmenu" class="btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover hover-button animation-ease3s">
                      <svg class="icon-y vertical-sub" viewBox="-1.5 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12.07 20.864l-1.041 1.041c-0.441 0.441 -1.153 0.441 -1.589 0L0.328 12.797c-0.441 -0.441 -0.441 -1.153 0 -1.589L9.441 2.095c0.441 -0.441 1.153 -0.441 1.589 0l1.041 1.041c0.445 0.445 0.436 1.172 -0.019 1.608L6.403 10.125H19.875c0.623 0 1.125 0.502 1.125 1.125v1.5c0 0.623 -0.502 1.125 -1.125 1.125H6.403l5.648 5.381c0.459 0.436 0.469 1.163 0.019 1.608z"/>
                      </svg>
@@ -198,7 +222,7 @@
                            <div class="display-flex direction-row align-center w-100 padding-b5">
                               <span class="color-black font-bold margin-right-auto">{$word->comments}</span>
                               <label class="content-nscheckbox display-inline-block position-relative margin-r5">
-                                 <input class="input_nsettings item_place hidden" name="comment" type="checkbox"<?php echo(in_array('comment', $TEMP['#user']['notifications'])) ? ' checked' : '';?>>
+                                 <input class="input_nsettings item_place hidden" name="pcomment" type="checkbox"<?php echo(in_array('pcomment', $TEMP['#user']['notifications'])) ? ' checked' : '';?>>
                                  <span class="slider-nsettings position-absolute background-grely"></span>
                               </label>
                            </div>
@@ -219,7 +243,7 @@
                            <div class="display-flex direction-row align-center w-100 padding-b5">
                               <span class="color-black font-bold margin-right-auto">{$word->mentions}</span>
                               <label class="content-nscheckbox display-inline-block position-relative margin-r5">
-                                 <input class="input_nsettings item_place hidden" name="ureply" type="checkbox"<?php echo(in_array('ureply', $TEMP['#user']['notifications'])) ? ' checked' : '';?>>
+                                 <input class="input_nsettings item_place hidden" name="mention" type="checkbox"<?php echo(in_array('ureply', $TEMP['#user']['notifications']) && in_array('ucomment', $TEMP['#user']['notifications'])) ? ' checked' : '';?>>
                                  <span class="slider-nsettings position-absolute background-grely"></span>
                               </label>
                            </div>
@@ -228,7 +252,7 @@
                         <?php foreach($TEMP['#categories'] as $cat){ ?>
                         <li class="display-flex direction-colum margin-b15 padding-b15 border-bottom border-grely">
                            <div class="display-flex direction-row align-center w-100 padding-b5">
-                              <span class="color-black font-bold margin-right-auto"><?php echo $cat['name'];?></span>
+                              <span class="color-black font-bold margin-right-auto"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></span>
                               <label class="content-nscheckbox display-inline-block position-relative margin-r5">
                                  <input class="input_nsettings item_place hidden" name="category_<?php echo $cat['id'];?>" type="checkbox"<?php echo(in_array($cat['id'], $TEMP['#user']['notifications'])) ? ' checked' : '';?>>
                                  <span class="slider-nsettings position-absolute background-grely"></span>
@@ -300,7 +324,7 @@
       <ul class="item-categories display-flex align-center">
          <?php foreach($TEMP['#categories'] as $cat){ ?>
          <li class="item-category animation-ease3s display-inline-block">
-            <a class="color-black hover-underline" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+            <a class="color-black hover-underline" href="<?php echo Specific::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
          </li>
          <?php } ?>
       </ul>
@@ -395,11 +419,11 @@
                                  <span class="color-black animation-ease3s">{$word->all_}</span>
                               </button>
                               <?php foreach($TEMP['#categories'] as $cat){ ?>
-                              <button class="btn-dfilter btn_hdfilter display-flex direction-row align-center btn-noway margin-t10 color-grey" type="button" aria-label="{$word->filter_by_category_} <?php echo $cat['name'];?>" data-type="<?php echo $cat['id'];?>">
+                              <button class="btn-dfilter btn_hdfilter display-flex direction-row align-center btn-noway margin-t10 color-grey" type="button" aria-label="{$word->filter_by_category_} <?php echo $TEMP['#word']["category_{$cat['name']}"];?>" data-type="<?php echo $cat['id'];?>">
                                  <svg class="icon-z margin-r5 animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                     <polygon fill="currentColor" points="6 10 4 12 10 18 20 8 18 6 10 14"></polygon>
                                  </svg>
-                                 <span class="color-black animation-ease3s"><?php echo $cat['name'];?></span>
+                                 <span class="color-black animation-ease3s"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></span>
                               </button>
                               <?php } ?>
                            </div>
@@ -532,11 +556,11 @@
             <nav id="content-nav" class="display-none-desk padding-t15">
                <section>
                   <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->national}</span>
-                  <ul class="padding-b15 colums-auto-2">
+                  <ul class="display-flex vertical-slots padding-b15">
                      <?php foreach($TEMP['#categories'] as $cat){ ?>
                      <?php if($cat['footer'] == 'national'){ ?>
-                     <li class="display-flex direction-row align-center h-36">
-                        <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                     <li class="display-flex direction-row align-center w-50 h-36">
+                        <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
                      </li>
                      <?php } ?>
                      <?php } ?>
@@ -544,11 +568,11 @@
                </section>
                <section>
                   <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->social}</span>
-                  <ul class="padding-b15 colums-auto-2">
+                  <ul class="display-flex vertical-slots padding-b15">
                      <?php foreach($TEMP['#categories'] as $cat){ ?>
                      <?php if($cat['footer'] == 'social'){ ?>
-                     <li class="display-flex direction-row align-center h-36">
-                        <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                     <li class="display-flex direction-row align-center w-50 h-36">
+                        <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
                      </li>
                      <?php } ?>
                      <?php } ?>
@@ -556,11 +580,11 @@
                </section>
                <section>
                   <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->more}</span>
-                  <ul class="padding-b15 colums-auto-2">
+                  <ul class="display-flex vertical-slots padding-b15">
                      <?php foreach($TEMP['#categories'] as $cat){ ?>
                      <?php if($cat['footer'] == 'more'){ ?>
-                     <li class="display-flex direction-row align-center h-36">
-                        <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                     <li class="display-flex direction-row align-center w-50 h-36">
+                        <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
                      </li>
                      <?php } ?>
                      <?php } ?>
@@ -568,12 +592,15 @@
                </section>
                <section>
                   <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->about_us}</span>
-                  <ul class="colums-auto-2">
-                     {$aside_pages}
+                  <ul class="display-flex vertical-slots">
                      <?php foreach($TEMP['#pages'] as $page){ ?>
                      <?php if($page['status'] == 'enabled'){ ?>
-                     <li class="display-flex direction-row align-center h-36">
-                        <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url($page['slug']);?>" target="_self" title="<?php echo $page['name'];?>"><?php echo $page['name'];?></a>
+                     <li class="display-flex direction-row align-center w-50 h-36">
+                        <?php if(!empty($page['text'])){ ?>
+                        <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$RUTE['#r_page']}/{$RUTE["#r_{$page['slug']}"]}");?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
+                        <?php } else { ?>
+                        <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url($RUTE["#r_{$page['slug']}"]);?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
+                        <?php } ?>
                      </li>
                      <?php } ?>
                      <?php } ?>
@@ -609,7 +636,11 @@
                <?php foreach($TEMP['#pages'] as $page){ ?>
                <?php if($page['status'] == 'enabled'){ ?>
                <li class="margin-b5">
-                  <a class="color-black font-low inhover-button" href="<?php echo Specific::Url($page['slug']);?>" target="_self" title="<?php echo $page['name'];?>"><?php echo $page['name'];?></a>
+                  <?php if(!empty($page['text'])){ ?>
+                  <a class="color-black font-low inhover-button" href="<?php echo Specific::Url("{$RUTE['#r_page']}/{$RUTE["#r_{$page['slug']}"]}");?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
+                  <?php } else { ?>
+                  <a class="color-black font-low inhover-button" href="<?php echo Specific::Url($RUTE["#r_{$page['slug']}"]);?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
+                  <?php } ?>
                </li>
                <?php } ?>
                <?php } ?>
@@ -623,7 +654,7 @@
                <?php foreach($TEMP['#categories'] as $cat){ ?>
                <?php if($cat['footer'] == 'national'){ ?>
                <li class="margin-b5">
-                  <a class="color-black font-low inhover-button" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                  <a class="color-black font-low inhover-button" href="<?php echo Specific::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
                </li>
                <?php } ?>
                <?php } ?>
@@ -637,7 +668,7 @@
                <?php foreach($TEMP['#categories'] as $cat){ ?>
                <?php if($cat['footer'] == 'social'){ ?>
                <li class="margin-b5">
-                  <a class="color-black font-low inhover-button" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                  <a class="color-black font-low inhover-button" href="<?php echo Specific::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
                </li>
                <?php } ?>
                <?php } ?>
@@ -651,7 +682,7 @@
                <?php foreach($TEMP['#categories'] as $cat){ ?>
                <?php if($cat['footer'] == 'more'){ ?>
                <li class="margin-b5">
-                  <a class="color-black font-low inhover-button" href="<?php echo Specific::Url("{$TEMP['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $cat['name'];?>"><?php echo $cat['name'];?></a>
+                  <a class="color-black font-low inhover-button" href="<?php echo Specific::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
                </li>
                <?php } ?>
                <?php } ?>

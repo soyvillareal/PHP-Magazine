@@ -11,11 +11,43 @@ if (isset($one)) {
     }
 }
 
-$return = Specific::Filter($_GET[$TEMP['#p_return']]);
+
+
+foreach($TEMP['#languages'] as $lang){
+    $language = $dba->query('SELECT * FROM '.T_LANGUAGE.' WHERE lang = ?', $lang)->fetchArray();
+
+    if($TEMP['#language'] == $lang){
+        $TEMP['dir'] = $language['dir'];
+    }
+
+    $TEMP['!lang'] = $lang;
+    $TEMP['!lang_name'] = $TEMP['#word']["lang_{$language['name']}"];
+
+    $lang_url = "{$RUTE['#p_language']}={$lang}";
+    if(strpos($_SERVER['REQUEST_URI'], '?') !== false){
+        $lang_regex = "/{$RUTE['#p_language']}=(.+?)[^*]/";
+        if(preg_match($lang_regex, $_SERVER['REQUEST_URI']) > 0){
+            $lang_url = preg_replace($lang_regex, "{$RUTE['#p_language']}={$lang}", $_SERVER['REQUEST_URI']);
+        }
+    } else {
+        $http = 'https://';
+        if(!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on'){
+            $http = 'http://';
+        }
+        $lang_url = "{$http}{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?{$lang_url}";
+    }
+
+    $TEMP['!lang_url'] = $lang_url;
+
+    $TEMP['languages'] .= Specific::Maket('includes/wrapper/languages');
+}
+
+
 $TEMP['#return_url'] = $TEMP['#site_url'];
+$return = Specific::Filter($_GET[$RUTE['#p_return']]);
 if(!empty($return)){
-    $TEMP['#return_url'] = Specific::Url($return);
-    $TEMP['#return_param'] = "?{$TEMP['#p_return']}=$return";
+    $TEMP['#return_url'] = $return;
+    $TEMP['#return_param'] = "?{$RUTE['#p_return']}=$return";
 }
 
 if (isset($_COOKIE['_SAVE_SESSION'])) {
@@ -27,6 +59,9 @@ if($TEMP['#loggedin'] === true){
     if ($TEMP['#user']['status'] != 'active') {
         if (isset($_COOKIE['_LOGIN_TOKEN'])) {
             setcookie('_LOGIN_TOKEN', null, -1,'/');
+            if (isset($_COOKIE['_SAVE_SESSION'])) {
+                setcookie('_SAVE_SESSION', null, -1, '/');
+            }
         }
         session_destroy();
     }
@@ -49,8 +84,8 @@ if($one != 'amp'){
     }
 }
 
-if (file_exists("./sources/$page")) {
-    require_once("./sources/$page");
+if (file_exists("./sources/{$page}")) {
+    require_once("./sources/{$page}");
 } else {
     if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE slug = ?', $one)->fetchArray(true) > 0){
         require_once("./sources/post/content.php");
@@ -58,12 +93,13 @@ if (file_exists("./sources/$page")) {
         require_once("./sources/404/content.php");
     }
 }
+    
 
 $TEMP['global_title'] = $TEMP['#title'];
 $TEMP['global_description'] = $TEMP['#description'];
 $TEMP['global_keywords'] = $TEMP['#keyword'];
 $TEMP['year_now'] = date('Y');
-$TEMP['time'] = Specific::DateFormat(time(), true);
+$TEMP['time'] = Specific::DateFormat(time(), 'complete');
 $TEMP['content'] = $TEMP['#content'];
 
 $maket = 'wrapper';
@@ -76,12 +112,13 @@ if($one == 'amp'){
     $TEMP['style_apostb'] = Specific::Maket('amp/styles/style.post.related-bottom');
     $TEMP['style_apostc'] = Specific::Maket('amp/styles/style.post.comments');
 } else {
-    $notifications = $dba->query('SELECT COUNT(*) FROM '.T_NOTIFICATION.' WHERE user_id = ? AND seen = 0', $TEMP['#user']['id'])->fetchArray(true);
-    if($notifications > 0){
-        $TEMP['notifications'] = '9+';
-        if($notifications <= 9){
-            $TEMP['notifications'] = $notifications;
-        }
+    $notifies = Specific::Notifies();
+
+    $TEMP['#wpnotifications'] = $notifies['count_notifications'];
+    $TEMP['#wpmessages'] = $notifies['count_messages'];
+
+    if($notifies['return']){
+        $TEMP['notifications'] = $notifies['count_text'];
     }
 }
 $content = Specific::Maket($maket);
@@ -89,4 +126,5 @@ $HTMLFormatter = Specific::HTMLFormatter($content);
 echo $HTMLFormatter['content'];
 $dba->close();
 unset($TEMP);
+unset($RUTE);
 ?>

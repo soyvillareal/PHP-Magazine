@@ -7,7 +7,7 @@ if(empty($username)){
 	exit();
 }
 
-$user = $dba->query('SELECT * FROM '.T_USER.' WHERE username = ?', $username)->fetchArray();
+$user = $dba->query('SELECT * FROM '.T_USER.' WHERE username = ? AND status = "active"', $username)->fetchArray();
 
 if(empty($user)){
 	header("Location: " . Specific::Url('404'));
@@ -20,22 +20,32 @@ $profile_load = Load::Profile($user['id']);
 
 $TEMP['posts_result'] = $profile_load['html'];
 
+$widget = Specific::GetWidget('horizposts');
+if($widget['return']){
+	$TEMP['posts_result'] .= $widget['html'];
+}
+
+$widget = Specific::GetWidget('aside');
+if($widget['return']){
+	$TEMP['content_aad'] = $widget['html'];
+}
+
 $query = '';
 if(!empty($profile_load['profile_ids'])){
 	$query = ' AND id NOT IN ('.implode(',', $profile_load['profile_ids']).')';
 }
 
-$related_cat = $dba->query('SELECT * FROM '.T_POST.' WHERE status = "approved"'.$query.' ORDER BY RAND() DESC LIMIT 5')->fetchAll();
+$TEMP['#related_cat'] = $dba->query('SELECT * FROM '.T_POST.' WHERE user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"'.$query.' ORDER BY RAND() DESC LIMIT 5')->fetchAll();
 
-if(!empty($related_cat)){
-	foreach ($related_cat as $rlc) {
+if(!empty($TEMP['#related_cat'])){
+	foreach ($TEMP['#related_cat'] as $rlc) {
 		$category = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $rlc['category_id'])->fetchArray();
 		$TEMP['!type'] = $rlc['type'];
 
 		$TEMP['!key'] += 1;
 		$TEMP['!title'] = $rlc['title'];
-		$TEMP['!category'] = $category['name'];
-		$TEMP['!category_slug'] = $category['slug'];
+		$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
+		$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
 		$TEMP['!url'] = Specific::Url($rlc['slug']);
 		$TEMP['!thumbnail'] = Specific::GetFile($rlc['thumbnail'], 1, 's');
 		$TEMP['!published_date'] = date('c', $rlc['published_at']);
@@ -47,24 +57,23 @@ if(!empty($related_cat)){
 
 $TEMP['user'] = $username;
 $TEMP['username'] = $user['username'];
-$TEMP['birthday_format'] = $user['birthday_format'];
 $TEMP['gender_txt'] = $user['gender_txt'];
 $TEMP['avatar_b'] = $user['avatar_b'];
 $TEMP['profile_ids'] = implode(',', $profile_load['profile_ids']);
 
 $TEMP['#user_id'] = $user['id'];
+$TEMP['#birthday_format'] = $user['birthday_format'];
 $TEMP['#contact_email'] = $user['contact_email'];
 $TEMP['#twitter'] = $user['twitter'];
 $TEMP['#instagram'] = $user['instagram'];
 $TEMP['#facebook'] = $user['facebook'];
 $TEMP['#about'] = $user['about'];
-$TEMP['#followers'] = $dba->query('SELECT COUNT(*) FROM '.T_FOLLOWER.' WHERE profile_id = ?', $user['id'])->fetchArray(true);
+$TEMP['#profile_blocked'] = in_array($user['id'], Specific::BlockedUsers(false));
 
-$followers = Specific::NumberShorten($TEMP['#followers']);
-$TEMP['followers'] = "{$followers} {$TEMP['#word']['follower']}";
-if($TEMP['#followers'] > 1){
-	$TEMP['followers'] = "{$followers} {$TEMP['#word']['followers']}";
-}
+$followers = Specific::Followers($user['id']);
+
+$TEMP['#followers'] = $followers['number'];
+$TEMP['followers'] = $followers['text'];
 
 $TEMP['#type'] = 'follow';
 $TEMP['btn_ftext'] = $TEMP['#word']['follow'];

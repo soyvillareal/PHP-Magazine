@@ -30,10 +30,10 @@
 .accept-icon {
     display: none;
 }
-.accept-checkbox:checked {
+.staylogged-checkbox:checked {
     background-color: #000;
 }
-.accept-checkbox:checked ~ .accept-icon {
+.staylogged-checkbox:checked ~ .accept-icon {
     display: block;
 }
 .accept-icon {

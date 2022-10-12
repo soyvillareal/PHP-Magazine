@@ -46,7 +46,7 @@
                   </div>
                   <select class="newsletter_category item_place background-white color-black padding-t5 padding-b5 padding-l10 w-100 border-rlow border-focus-blue border-none" aria-label="{$word->newsletter_categories}" multiple>
                      <?php foreach($TEMP['#categories'] as $cat){ ?>
-                     <option value="<?php echo $cat['id'];?>"><?php echo $cat['name'];?></option>
+                     <option value="<?php echo $cat['id'];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></option>
                      <?php } ?>
                   </select>
                   <div class="color-red text-left text-error font-low margin-t5"></div>

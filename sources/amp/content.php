@@ -7,13 +7,23 @@ if(empty($post)){
 	exit();
 }
 
-$post_load = Load::Post($post, false, true);
-$TEMP['main'] = $post_load['html'];
+if(!in_array($post['user_id'], Specific::BlockedUsers(false)) || Specific::IsOwner($post['user_id'])){
+	$post_load = Load::Post($post, false, true);
+	$TEMP['main'] = $post_load['html'];
+
+	$widget = Specific::GetWidget('ptop', 'amp');
+	if($widget['return']){
+		$TEMP['advertisement_ptad'] = $widget['html'];
+	}
+
+	$TEMP['#keyword']      = implode(',', $post_load['keywords']);
+	$TEMP['#content']      = Specific::Maket('amp/content');
+} else {
+	$TEMP['#content']      = Specific::Maket('includes/post-amp/locked');
+}
 
 
 $TEMP['#page']         = 'amp-post';
 $TEMP['#title']        = $post['title'];
 $TEMP['#description']  = $post['description'];
-$TEMP['#keyword']      = implode(',', $post_load['keywords']);
-$TEMP['#content']      = Specific::Maket('amp/content');
 ?>

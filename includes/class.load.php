@@ -1,7 +1,7 @@
 <?php
 class Load {
-	public static function LastPosts($home_ids = array()){
-		global $dba, $TEMP;
+	public static function LastPosts($limit, $home_ids = array()){
+		global $dba, $TEMP, $RUTE;
 
 		$data = array(
 			'last_posts_one' => false,
@@ -11,7 +11,17 @@ class Load {
 			'home_ids' => $home_ids
 		);
 
-		$last_posts_one_sql = $dba->query('SELECT * FROM '.T_POST.' WHERE id NOT IN ('.implode(',', $home_ids).') AND status = "approved" ORDER BY published_at ASC LIMIT 8')->fetchAll();
+		$query = '';
+		if(!empty($home_ids)){
+			$query = ' AND id NOT IN ('.implode(',', $home_ids).')';
+		}
+		
+		$widget = Specific::GetWidget('hload');
+		if($widget['return']){
+			$TEMP['advertisement_hlad'] = $widget['html'];
+		}
+
+		$last_posts_one_sql = $dba->query('SELECT * FROM '.T_POST.' WHERE user_id NOT IN ('.$TEMP['#blocked_users'].')'.$query.' AND status = "approved" ORDER BY published_at ASC LIMIT '.$limit)->fetchAll();
 
 		if(!empty($last_posts_one_sql)){
 			$data['last_posts_one'] = true;
@@ -21,8 +31,8 @@ class Load {
 				$TEMP['!type'] = $post['type'];
 
 				$TEMP['!title'] = $post['title'];
-				$TEMP['!category'] = $category['name'];
-				$TEMP['!category_slug'] = $category['slug'];
+				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
+				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
 				$TEMP['!url'] = Specific::Url($post['slug']);
 				$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
@@ -33,61 +43,63 @@ class Load {
 			Specific::DestroyMaket();
 		}
 
-		$last_posts_two_sql = $dba->query('SELECT * FROM '.T_POST.' WHERE id NOT IN ('.implode(',', $home_ids).') AND status = "approved" ORDER BY RAND() ASC LIMIT 5')->fetchAll();
+		if(count($last_posts_one_sql) >= 8){
+			$last_posts_two_sql = $dba->query('SELECT * FROM '.T_POST.' WHERE user_id NOT IN ('.$TEMP['#blocked_users'].')'.$query.' AND status = "approved" ORDER BY RAND() ASC LIMIT 5')->fetchAll();
 
-		if(!empty($last_posts_two_sql)){
-			$data['last_posts_two'] = true;
-			$category_left = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $last_posts_two_sql[0]['category_id'])->fetchArray();
-			$TEMP['#type_left'] = $last_posts_two_sql[0]['type'];
+			if(!empty($last_posts_two_sql)){
+				$data['last_posts_two'] = true;
+				$category_left = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $last_posts_two_sql[0]['category_id'])->fetchArray();
+				$TEMP['#type_left'] = $last_posts_two_sql[0]['type'];
 
-			$TEMP['id_left'] = $last_posts_two_sql[0]['id'];
-			$TEMP['title_left'] = $last_posts_two_sql[0]['title'];
-			$TEMP['description_left'] = $last_posts_two_sql[0]['description'];
-			$TEMP['category_left'] = $category_left['name'];
-			$TEMP['category_slug_left'] = $category_left['slug'];
-			$TEMP['url_left'] = Specific::Url($last_posts_two_sql[0]['slug']);
-			$TEMP['thumbnail_left'] = Specific::GetFile($last_posts_two_sql[0]['thumbnail'], 1, 's');
-			$TEMP['published_date_left'] = date('c', $last_posts_two_sql[0]['published_at']);
-			$TEMP['published_at_left'] = Specific::DateString($last_posts_two_sql[0]['published_at']);
-			$home_ids[] = $last_posts_two_sql[0]['id'];
+				$TEMP['id_left'] = $last_posts_two_sql[0]['id'];
+				$TEMP['title_left'] = $last_posts_two_sql[0]['title'];
+				$TEMP['description_left'] = $last_posts_two_sql[0]['description'];
+				$TEMP['category_left'] = $TEMP['#word']["category_{$category_left['name']}"];
+				$TEMP['category_slug_left'] = Specific::Url("{$RUTE['#r_category']}/{$category_left['slug']}");
+				$TEMP['url_left'] = Specific::Url($last_posts_two_sql[0]['slug']);
+				$TEMP['thumbnail_left'] = Specific::GetFile($last_posts_two_sql[0]['thumbnail'], 1, 's');
+				$TEMP['published_date_left'] = date('c', $last_posts_two_sql[0]['published_at']);
+				$TEMP['published_at_left'] = Specific::DateString($last_posts_two_sql[0]['published_at']);
+				$home_ids[] = $last_posts_two_sql[0]['id'];
 
-			$category_right = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $last_posts_two_sql[1]['category_id'])->fetchArray();
-			$TEMP['#type_right'] = $last_posts_two_sql[1]['type'];
+				$category_right = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $last_posts_two_sql[1]['category_id'])->fetchArray();
+				$TEMP['#type_right'] = $last_posts_two_sql[1]['type'];
 
-			$TEMP['id_right'] = $last_posts_two_sql[1]['id'];
-			$TEMP['title_right'] = $last_posts_two_sql[1]['title'];
-			$TEMP['description_right'] = $last_posts_two_sql[1]['description'];
-			$TEMP['category_right'] = $category_right['name'];
-			$TEMP['category_slug_right'] = $category_right['slug'];
-			$TEMP['url_right'] = Specific::Url($last_posts_two_sql[1]['slug']);
-			$TEMP['thumbnail_right'] = Specific::GetFile($last_posts_two_sql[1]['thumbnail'], 1, 's');
-			$TEMP['published_date_right'] = date('c', $last_posts_two_sql[1]['published_at']);
-			$TEMP['published_at_right'] = Specific::DateString($last_posts_two_sql[1]['published_at']);
-			$home_ids[] = $last_posts_two_sql[1]['id'];
+				$TEMP['id_right'] = $last_posts_two_sql[1]['id'];
+				$TEMP['title_right'] = $last_posts_two_sql[1]['title'];
+				$TEMP['description_right'] = $last_posts_two_sql[1]['description'];
+				$TEMP['category_right'] = $TEMP['#word']["category_{$category_right['name']}"];
+				$TEMP['category_slug_right'] = Specific::Url("{$RUTE['#r_category']}/{$category_right['slug']}");
+				$TEMP['url_right'] = Specific::Url($last_posts_two_sql[1]['slug']);
+				$TEMP['thumbnail_right'] = Specific::GetFile($last_posts_two_sql[1]['thumbnail'], 1, 's');
+				$TEMP['published_date_right'] = date('c', $last_posts_two_sql[1]['published_at']);
+				$TEMP['published_at_right'] = Specific::DateString($last_posts_two_sql[1]['published_at']);
+				$home_ids[] = $last_posts_two_sql[1]['id'];
 
-			unset($last_posts_two_sql[0]);
-			unset($last_posts_two_sql[1]);
-			$last_posts_two_sql = array_values($last_posts_two_sql);
+				unset($last_posts_two_sql[0]);
+				unset($last_posts_two_sql[1]);
+				$last_posts_two_sql = array_values($last_posts_two_sql);
 
-			foreach ($last_posts_two_sql as $post) {
-				$category_middle = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $post['category_id'])->fetchArray();
-				$TEMP['!id_middle'] = $post['id'];
-				$TEMP['!type_middle'] = $post['type'];
+				foreach ($last_posts_two_sql as $post) {
+					$category_middle = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $post['category_id'])->fetchArray();
+					$TEMP['!id_middle'] = $post['id'];
+					$TEMP['!type_middle'] = $post['type'];
 
-				$TEMP['!title_middle'] = $post['title'];
-				$TEMP['!description_middle'] = $post['description'];
-				$TEMP['!category_middle'] = $category_middle['name'];
-				$TEMP['!category_slug_middle'] = $category_middle['slug'];
-				$TEMP['!url_middle'] = Specific::Url($post['slug']);
-				$TEMP['!thumbnail_middle'] = Specific::GetFile($post['thumbnail'], 1, 's');
-				$TEMP['!published_date_middle'] = date('c', $post['published_at']);
-				$TEMP['!published_at_middle'] = Specific::DateString($post['published_at']);
+					$TEMP['!title_middle'] = $post['title'];
+					$TEMP['!description_middle'] = $post['description'];
+					$TEMP['!category_middle'] = $TEMP['#word']["category_{$category_middle['name']}"];
+					$TEMP['!category_slug_middle'] = Specific::Url("{$RUTE['#r_category']}/{$category_middle['slug']}");
+					$TEMP['!url_middle'] = Specific::Url($post['slug']);
+					$TEMP['!thumbnail_middle'] = Specific::GetFile($post['thumbnail'], 1, 's');
+					$TEMP['!published_date_middle'] = date('c', $post['published_at']);
+					$TEMP['!published_at_middle'] = Specific::DateString($post['published_at']);
 
-				$TEMP['last_posts_three'] .= Specific::Maket('home/includes/last-posts-middle');
-				$home_ids[] = $post['id'];
+					$TEMP['last_posts_three'] .= Specific::Maket('home/includes/last-posts-middle');
+					$home_ids[] = $post['id'];
+				}
+				Specific::DestroyMaket();
+				$data['last_posts_two_html'] .= Specific::Maket('home/includes/last-posts-two');
 			}
-			Specific::DestroyMaket();
-			$data['last_posts_two_html'] .= Specific::Maket('home/includes/last-posts-two');
 			$data['home_ids'] = $home_ids;
 		}
 
@@ -96,7 +108,7 @@ class Load {
 
 
 	public static function RecommendedVideos($home_ids = array()){
-		global $dba, $TEMP;
+		global $dba, $TEMP, $RUTE;
 
 		$data = array(
 			'main_recommended_videos' => false,
@@ -104,7 +116,7 @@ class Load {
 			'home_ids' => $home_ids
 		);
 
-		$main_recommended_videos_sql = $dba->query('SELECT * FROM '.T_POST.' WHERE id NOT IN ('.implode(',', $home_ids).') AND type = "video" AND status = "approved" ORDER BY RAND() ASC LIMIT 18')->fetchAll();
+		$main_recommended_videos_sql = $dba->query('SELECT * FROM '.T_POST.' WHERE id NOT IN ('.implode(',', $home_ids).') AND type = "video" AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved" ORDER BY RAND() ASC LIMIT 18')->fetchAll();
 
 		if(!empty($main_recommended_videos_sql)){
 			$data['main_recommended_videos'] = true;
@@ -113,8 +125,8 @@ class Load {
 				$TEMP['!id'] = $post['id'];
 
 				$TEMP['!title'] = $post['title'];
-				$TEMP['!category'] = $category_middle['name'];
-				$TEMP['!category_slug'] = $category_middle['slug'];
+				$TEMP['!category'] = $TEMP['#word']["category_{$category_middle['name']}"];
+				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category_middle['slug']}");
 				$TEMP['!url'] = Specific::Url($post['slug']);
 				$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
@@ -131,14 +143,14 @@ class Load {
 	}
 
 	public static function Post($post = array(), $is_loaded = false, $is_amp = false){
-		global $dba, $TEMP;
+		global $dba, $TEMP, $RUTE;
 
 		if(!empty($post)){
 			$post_ids = array();
 			$root = 'post';
 			$TEMP['#is_amp'] = $is_amp;
 			if($is_amp){
-                $nt_posts = $dba->query('SELECT * FROM '.T_POST.' WHERE id <> ? AND status = "approved" LIMIT 12', $post['id'])->fetchAll();
+                $nt_posts = $dba->query('SELECT * FROM '.T_POST.' WHERE id <> ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved" LIMIT 12', $post['id'])->fetchAll();
 				if(!empty($nt_posts)){
 					$next_page = array();
 					foreach ($nt_posts as $nt_post) {
@@ -180,8 +192,8 @@ class Load {
 
 
 			$TEMP['title'] = $title;
-			$TEMP['category'] = $category['name'];
-			$TEMP['category_slug'] = $category['slug'];
+			$TEMP['category'] = $TEMP['#word']["category_{$category['name']}"];
+			$TEMP['category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
 			$TEMP['views'] = Specific::NumberShorten($post_views);
 			$TEMP['likes'] = Specific::NumberShorten($post['likes']);
 			$TEMP['dislikes'] = Specific::NumberShorten($post['dislikes']);
@@ -258,7 +270,7 @@ class Load {
 				$keywords[] = $tag['name'];
 
 				$TEMP['!name'] = $tag['name'];
-				$TEMP['!url'] = Specific::Url("{$TEMP['#r_tag']}/{$tag['slug']}");
+				$TEMP['!url'] = Specific::Url("{$RUTE['#r_tag']}/{$tag['slug']}");
 				$TEMP['tags'] .= Specific::Maket('includes/post-amp/tags');
 			}
 			Specific::DestroyMaket();
@@ -282,7 +294,7 @@ class Load {
 								}
 								$recobo = $dba->query('SELECT * FROM '.T_RECOBO.' WHERE post_id = ?'.$query.' ORDER BY rorder DESC', $post['id'])->fetchArray();
 
-								$recommended_bo = $dba->query('SELECT * FROM '.T_POST.' WHERE id = ?', $recobo['recommended_id'])->fetchArray();
+								$recommended_bo = $dba->query('SELECT * FROM '.T_POST.' WHERE id = ? AND status = "approved"', $recobo['recommended_id'])->fetchArray();
 							} else {
 								$recommended_bo = $dba->query('SELECT * FROM '.T_POST.' WHERE id != ? AND category_id = ? AND status = "approved" ORDER BY RAND()', $post['id'], $post['category_id'])->fetchArray();
 							}
@@ -291,8 +303,8 @@ class Load {
 								$category = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $recommended_bo['category_id'])->fetchArray();
 
 		                		$TEMP['!title'] = $recommended_bo['title'];
-								$TEMP['!category'] = $category['name'];
-								$TEMP['!category_slug'] = $category['slug'];
+								$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
+								$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
 		                		$TEMP['!url'] = Specific::Url($recommended_bo['slug']);
 								$TEMP['!thumbnail'] = Specific::GetFile($recommended_bo['thumbnail'], 1, 's');
 								$TEMP['!published_date'] = date('c', $recommended_bo['published_at']);
@@ -302,7 +314,10 @@ class Load {
 		                	}
 			            } else if($i == 2 || $i == ($j+4)){
 			                $j = $i;
-			                $entry['body'] .= Specific::Maket("{$root}/includes/advertisement-body");
+			                $widget = Specific::GetWidget('pbody', $root);
+			                if($widget['return']){
+			                	$entry['body'] .= $widget['html'];
+			                }
 			            }
 			            $entry['body'] .= $paragraph[$i];
 			        }
@@ -377,7 +392,7 @@ class Load {
 			}
 			Specific::DestroyMaket();
 
-			$TEMP['#collaborators'] = $dba->query('SELECT user_id FROM '.T_COLLABORATOR.' WHERE post_id = ? ORDER BY aorder ASC', $post['id'])->fetchAll();
+			$TEMP['#collaborators'] = $dba->query('SELECT user_id FROM '.T_COLLABORATOR.' WHERE post_id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') ORDER BY aorder ASC', $post['id'])->fetchAll();
 
 			foreach ($TEMP['#collaborators'] as $au) {
 				$user = Specific::Data($au['user_id'], array('username', 'avatar', 'about', 'facebook', 'twitter', 'instagram', 'main_sonet'));
@@ -408,8 +423,8 @@ class Load {
 					$category = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $rl['category_id'])->fetchArray();
 
 					$TEMP['!title'] = $rl['title'];
-					$TEMP['!category'] = $category['name'];
-					$TEMP['!category_slug'] = $category['slug'];
+					$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
+					$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
 					$TEMP['!url'] = Specific::Url($rl['slug']);
 					$TEMP['!thumbnail'] = Specific::GetFile($rl['thumbnail'], 1, 's');
 					$TEMP['!published_date'] = date('c', $rl['published_at']);
@@ -429,7 +444,7 @@ class Load {
 			$comment_ids = array();
 
 			$TEMP['#has_cfeatured'] = false;
-			$TEMP['#featured_cid'] = Specific::Filter($_GET[$TEMP['#p_comment_id']]);
+			$TEMP['#featured_cid'] = Specific::Filter($_GET[$RUTE['#p_comment_id']]);
 			$featured_comment = Specific::FeaturedComment($TEMP['#featured_cid']);
 			if($featured_comment['return']){
 				$TEMP['comments'] .= $featured_comment['html'];
@@ -438,7 +453,7 @@ class Load {
 			}
 
 			$TEMP['#has_rfeatured'] = false;
-			$TEMP['#featured_rid'] = Specific::Filter($_GET[$TEMP['#p_reply_id']]);
+			$TEMP['#featured_rid'] = Specific::Filter($_GET[$RUTE['#p_reply_id']]);
 			$featured_reply = Specific::FeaturedComment($TEMP['#featured_rid'], 'reply');
 			if($featured_reply['return']){
 				$TEMP['comments'] .= $featured_reply['html'];
@@ -471,7 +486,7 @@ class Load {
 	}
 
 	public static function Search($data = array(), $search_ids = array()){
-		global $dba, $TEMP;
+		global $dba, $TEMP, $RUTE;
 
 		$keyword = $data['keyword'];
 		$date = $data['date'];
@@ -488,7 +503,6 @@ class Load {
 			'search_ids' => $search_ids
 		);
 
-
 		if(!empty($search_ids)){
 			$query = ' AND id NOT IN ('.implode(',', $search_ids).')';
 		}
@@ -497,41 +511,41 @@ class Load {
 			$query .= ' AND (title LIKE "%'.$keyword.'%" OR description LIKE "%'.$keyword.'%")';
 		}
 
-		if(in_array($date, array($TEMP['#p_all'], $TEMP['#p_today'], $TEMP['#p_this_week'], $TEMP['#p_this_month'], $TEMP['#p_this_year']))){
-			if ($date == $TEMP['#p_today']) {
-				$time = time()-(60*60*24);
+		if(in_array($date, array($RUTE['#p_all'], $RUTE['#p_today'], $RUTE['#p_this_week'], $RUTE['#p_this_month'], $RUTE['#p_this_year']))){
+			if ($date == $RUTE['#p_today']) {
+				$time = strtotime("00:00:00 today");
 				$query .= " AND created_at >= ".$time;
-			} else if ($date == $TEMP['#p_this_week']) {
-				$time = time()-(60*60*24*7);
+			} else if ($date == $RUTE['#p_this_week']) {
+				$time = strtotime("-7 days");
 				$query .= " AND created_at >= ".$time;
-			} else if ($date == $TEMP['#p_this_month']) {
-				$time = time()-(60*60*24*30);
+			} else if ($date == $RUTE['#p_this_month']) {
+				$time = strtotime("00:00:00 first day of this month");
 				$query .= " AND created_at >= ".$time;
-			} else if ($date == $TEMP['#p_this_year']) {
-				$time = time()-(60*60*24*365);
+			} else if ($date == $RUTE['#p_this_year']) {
+				$time = strtotime("00:00:00 first day of January");
 				$query .= " AND created_at >= ".$time;
 			}
 		}
 				
-		if(in_array($category, $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false)) && $category != $TEMP['#p_all']){
+		if(in_array($category, $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false)) && $category != $RUTE['#p_all']){
 			$query .= " AND category_id = {$category}";
 		}
 
-		if(in_array($author, $dba->query('SELECT id FROM '.T_USER.' WHERE role = "publisher" OR role = "moderator" OR role = "admin"')->fetchAll(false)) && $author != $TEMP['#p_all']){
+		if(in_array($author, $dba->query('SELECT id FROM '.T_USER.' WHERE role = "publisher" OR role = "moderator" OR role = "admin"')->fetchAll(false)) && $author != $RUTE['#p_all']){
 			$query .= " AND user_id = {$author}";
 		}
 					
-		if(in_array($sort, array($TEMP['#p_newest'], $TEMP['#p_oldest'], $TEMP['#p_views']))){
-			if($sort == $TEMP['#p_newest']){
+		if(in_array($sort, array($RUTE['#p_newest'], $RUTE['#p_oldest'], $RUTE['#p_views']))){
+			if($sort == $RUTE['#p_newest']){
 				$query .= " ORDER BY published_at DESC";
-			} else if($sort == $TEMP['#p_oldest']){
+			} else if($sort == $RUTE['#p_oldest']){
 				$query .= " ORDER BY published_at ASC";
-			} else if($sort == $TEMP['#p_views']){
+			} else if($sort == $RUTE['#p_views']){
 				$query .= " ORDER BY views DESC";
 			}
 		}
 
-		$search_result = $dba->query('SELECT * FROM '.T_POST.' WHERE status = "approved"'.$query.' LIMIT 10')->fetchAll();
+		$search_result = $dba->query('SELECT * FROM '.T_POST.' WHERE user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"'.$query.' LIMIT 10')->fetchAll();
 
 		if(!empty($search_result)){
 			$search_count = $dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE status = "approved"'.$query)->fetchArray(true);
@@ -542,8 +556,8 @@ class Load {
 
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
-				$TEMP['!category'] = $category['name'];
-				$TEMP['!category_slug'] = $category['slug'];
+				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
+				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
 				$TEMP['!url'] = Specific::Url($post['slug']);
 				$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
@@ -574,7 +588,7 @@ class Load {
 	}
 
 	public static function Profile($user_id, $profile_ids = array()){
-		global $dba, $TEMP;
+		global $dba, $TEMP, $RUTE;
 
 		$html = '';
 		$query = '';
@@ -590,7 +604,7 @@ class Load {
 			$query = ' AND id NOT IN ('.implode(',', $profile_ids).')';
 		}
 
-		$posts = $dba->query('SELECT * FROM '.T_POST.' WHERE user_id = ? AND status = "approved"'.$query.' ORDER BY created_at DESC LIMIT 10', $user_id)->fetchAll();
+		$posts = $dba->query('SELECT * FROM '.T_POST.' p WHERE user_id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND (SELECT status FROM '.T_USER.' WHERE id = p.user_id) = "active" AND status = "approved"'.$query.' ORDER BY created_at DESC LIMIT 10', $user_id)->fetchAll();
 
 		if(!empty($posts)){
 			foreach ($posts as $post) {
@@ -600,8 +614,8 @@ class Load {
 
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
-				$TEMP['!category'] = $category['name'];
-				$TEMP['!category_slug'] = $category['slug'];
+				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
+				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
 				$TEMP['!url'] = Specific::Url($post['slug']);
 				$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
@@ -627,7 +641,7 @@ class Load {
 	}
 
 	public static function Category($category_id, $category_ids = array()){
-		global $dba, $TEMP;
+		global $dba, $TEMP, $RUTE;
 
 		$html = '';
 		$query = '';
@@ -643,7 +657,7 @@ class Load {
 			$query = ' AND id NOT IN ('.implode(',', $category_ids).')';
 		}
 
-		$posts = $dba->query('SELECT * FROM '.T_POST.' WHERE category_id = ? AND status = "approved"'.$query.' ORDER BY created_at DESC LIMIT 10', $category_id)->fetchAll();
+		$posts = $dba->query('SELECT * FROM '.T_POST.' WHERE category_id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"'.$query.' ORDER BY created_at DESC LIMIT 10', $category_id)->fetchAll();
 
 		if(!empty($posts)){
 			foreach ($posts as $post) {
@@ -653,8 +667,8 @@ class Load {
 
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
-				$TEMP['!category'] = $category['name'];
-				$TEMP['!category_slug'] = $category['slug'];
+				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
+				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
 				$TEMP['!author_name'] = Specific::Data($post['user_id'], array('username'));
 				$TEMP['!author_url'] = Specific::ProfileUrl($TEMP['!author_name']);
 				$TEMP['!url'] = Specific::Url($post['slug']);
@@ -682,7 +696,7 @@ class Load {
 	}
 
 	public static function Tag($label_id, $label_ids = array()){
-		global $dba, $TEMP;
+		global $dba, $TEMP, $RUTE;
 
 		$html = '';
 		$query = '';
@@ -698,7 +712,7 @@ class Load {
 			$query = ' AND id NOT IN ('.implode(',', $label_ids).')';
 		}
 
-		$posts = $dba->query('SELECT * FROM '.T_POST.' p WHERE (SELECT post_id FROM '.T_TAG.' WHERE label_id = ? AND post_id = p.id) = id AND status = "approved"'.$query.' ORDER BY created_at DESC LIMIT 10', $label_id)->fetchAll();
+		$posts = $dba->query('SELECT * FROM '.T_POST.' p WHERE (SELECT post_id FROM '.T_TAG.' WHERE label_id = ? AND post_id = p.id) = id AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"'.$query.' ORDER BY created_at DESC LIMIT 10', $label_id)->fetchAll();
 
 		if(!empty($posts)){
 			foreach ($posts as $post) {
@@ -708,8 +722,8 @@ class Load {
 
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
-				$TEMP['!category'] = $category['name'];
-				$TEMP['!category_slug'] = $category['slug'];
+				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
+				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
 				$TEMP['!url'] = Specific::Url($post['slug']);
 				$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
@@ -735,7 +749,7 @@ class Load {
 	}
 
 	public static function Save($save_ids = array()){
-		global $dba, $TEMP;
+		global $dba, $TEMP, $RUTE;
 
 		$html = '';
 		$query = '';
@@ -751,7 +765,7 @@ class Load {
 			$query = ' AND id NOT IN ('.implode(',', $save_ids).')';
 		}
 
-		$save_posts = $dba->query('SELECT * FROM '.T_POST.' p WHERE (SELECT post_id FROM '.T_SAVED.' WHERE user_id = ? AND post_id = p.id AND status = "approved") = id'.$query.' ORDER BY created_at DESC LIMIT 8', $TEMP['#user']['id'])->fetchAll();
+		$save_posts = $dba->query('SELECT * FROM '.T_POST.' p WHERE user_id NOT IN ('.$TEMP['#blocked_users'].') AND (SELECT post_id FROM '.T_SAVED.' WHERE user_id = ? AND post_id = p.id AND status = "approved") = id'.$query.' ORDER BY created_at DESC LIMIT 8', $TEMP['#user']['id'])->fetchAll();
 
 		if(!empty($save_posts)){
 			foreach ($save_posts as $post) {
@@ -761,8 +775,8 @@ class Load {
 
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
-				$TEMP['!category'] = $category['name'];
-				$TEMP['!category_slug'] = $category['slug'];
+				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
+				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
 
 
 				$TEMP['!author_name'] = Specific::Data($post['user_id'], array('username'));
@@ -793,5 +807,326 @@ class Load {
 		return $data;
 	}
 
+	public static function Chats($profiles_ids = array(), $type = 'first', $keyword = '', $last_cupdate = 0){
+		global $dba, $TEMP;
+
+		$html = '';
+		$query = '';
+
+		$data = array(
+			'return' => false,
+			'html' => $html,
+			'profiles_ids' => $profiles_ids,
+			'last_cupdate' => $last_cupdate
+		);
+
+		if(!empty($keyword)){
+			$query = ' AND ((SELECT id FROM '.T_USER.' WHERE (name LIKE "%'.$keyword.'%" OR surname LIKE "%'.$keyword.'%" OR username LIKE "%'.$keyword.'%") AND id <> '.$TEMP['#user']['id'].' AND id = c.profile_id) = c.profile_id OR ((SELECT id FROM '.T_USER.' WHERE (name LIKE "%'.$keyword.'%" OR surname LIKE "%'.$keyword.'%" OR username LIKE "%'.$keyword.'%") AND id <> '.$TEMP['#user']['id'].' AND id = c.user_id) = c.user_id))';
+		}
+
+		if(!empty($profiles_ids)){
+			$profiles_str = implode(',', $profiles_ids);
+			if($type == 'last'){
+				$query .= ' AND updated_at > '.$last_cupdate;
+			}
+			$query .= ' AND profile_id NOT IN ('.$profiles_str.') AND user_id NOT IN ('.$profiles_str.')';
+		}
+
+		$chats = $dba->query('SELECT id, user_id, profile_id, updated_at FROM '.T_CHAT.' c WHERE (user_id = ? OR profile_id = ?) AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND profile_id NOT IN ('.$TEMP['#blocked_users'].') AND (SELECT MAX(chat_id) FROM '.T_MESSAGE.' WHERE ((user_id = ? AND deleted_fuser = 0) OR (profile_id = ? AND deleted_fprofile = 0)) AND chat_id = c.id) = id'.$query.' ORDER BY updated_at DESC LIMIT 10', $TEMP['#user']['id'], $TEMP['#user']['id'], $TEMP['#user']['id'], $TEMP['#user']['id'])->fetchAll();
+
+		if(!empty($chats)){
+			foreach ($chats as $key => $chat) {
+				$chats_html = Specific::Chat($chat);
+				$html .= $chats_html['html'];
+				$user_id = $chat['user_id'];
+				if(Specific::IsOwner($chat['user_id'])){
+					$user_id = $chat['profile_id'];
+				}
+				if($key == count($chats)-1){
+					$last_cupdate = $chat['updated_at'];
+				}
+				$profiles_ids[] = $user_id;
+			}
+			Specific::DestroyMaket();
+
+
+			$data = array(
+				'return' => true,
+				'html' => $html,
+				'profiles_ids' => $profiles_ids,
+				'last_cupdate' => $last_cupdate
+			);
+		}
+		return $data;
+	}
+
+	public static function Messages($user, $messages_ids = array(), $type = 'last'){
+		global $dba, $TEMP;
+
+
+		$html = '';
+		$query = '';
+
+		$data = array(
+			'return' => false,
+			'html' => $html,
+			'messages_ids' => $messages_ids
+		);
+
+		if(!empty($messages_ids)){
+			$query = ' AND id NOT IN ('.implode(',', $messages_ids).')';
+		}
+
+		if(!is_array($user)){
+			$user = Specific::Data($user);
+			if(!empty($messages_ids)){
+				if($type == 'first'){
+					$query .= ' AND id < '.$messages_ids[0];
+				} else {
+					$query .= ' AND id > '.end($messages_ids);
+				}
+			}
+		}
+
+		$messages = $dba->query('SELECT * FROM '.T_MESSAGE." m WHERE user_id NOT IN ({$TEMP['#blocked_users']}) AND profile_id NOT IN ({$TEMP['#blocked_users']}) AND ((user_id = {$TEMP['#user']['id']} AND deleted_fuser = 0) OR (profile_id = {$TEMP['#user']['id']} AND deleted_fprofile = 0)) AND (SELECT id FROM ".T_CHAT." WHERE ((user_id = {$TEMP['#user']['id']} AND profile_id = {$user['id']}) OR (user_id = {$user['id']} AND profile_id = {$TEMP['#user']['id']}) AND id = m.chat_id)) = chat_id".$query." ORDER BY id ASC LIMIT ? OFFSET ?", 20, 'reverse')->fetchAll();
+
+		if(!empty($messages)){
+			$update_ids = array();
+			foreach ($messages as $message) {
+				$TEMP['files'] = '';
+				$TEMP['images'] = '';
+				$TEMP['#messafi'] = false;
+				$TEMP['#has_image'] = false;
+				$TEMP['#has_file'] = false;
+				$TEMP['#msg_out'] = true;
+				if($message['user_id'] == $user['id']){
+					$TEMP['#msg_out'] = false;
+				}
+				$TEMP['!created_at'] = Specific::DateString($message['created_at']);
+
+				$messafis = $dba->query('SELECT f.* FROM '.T_MESSAFI.' f INNER JOIN '.T_MESSAGE.' m WHERE f.message_id = ? AND m.id = f.message_id AND ((m.user_id = ? AND f.deleted_fuser = 0) OR (m.profile_id = ? AND f.deleted_fprofile = 0))', $message['id'], $TEMP['#user']['id'], $TEMP['#user']['id'])->fetchAll();
+				if(!empty($messafis)){
+					$TEMP['#messafi'] = true;
+					foreach ($messafis as $messafi) {
+						if($messafi['deleted_at'] == 0){
+							$TEMP['!fi_id'] = $messafi['id'];
+							$TEMP['!fi_name'] = $messafi['name'];
+							$TEMP['!fi_url'] = Specific::Url("uploads/messages/{$messafi['file']}");
+							$TEMP['!fi_size'] = Specific::SizeFormat($messafi['size']);
+
+							if(in_array(pathinfo($messafi['name'], PATHINFO_EXTENSION), array('jpeg', 'jpg', 'png', 'gif'))){
+								$TEMP['#has_image'] = true;
+								$img_maket = 'outimage';
+								if($message['user_id'] == $user['id']){
+									$img_maket = 'inimage';
+								}
+								$TEMP['images'] .= Specific::Maket("messages/includes/{$img_maket}");
+							} else {
+								$TEMP['#has_file'] = true;
+								$fi_maket = 'outfile';
+								if($message['user_id'] == $user['id']){
+									$fi_maket = 'infile';
+								}
+								$TEMP['files'] .= Specific::Maket("messages/includes/{$fi_maket}");
+							}
+						} else {
+							$TEMP['!fi_id'] = $messafi['id'];
+							$deleted_maket = 'deleted-outfile';
+							if($message['user_id'] == $user['id']){
+								$deleted_maket = 'deleted-infile';
+							}
+							if(in_array(pathinfo($messafi['name'], PATHINFO_EXTENSION), array('jpeg', 'jpg', 'png', 'gif'))){
+								$TEMP['#has_image'] = true;
+								$TEMP['!fi_type'] = 'image';
+								$TEMP['images'] .= Specific::Maket("messages/includes/{$deleted_maket}");
+							} else {
+								$TEMP['#has_file'] = true;
+								$TEMP['!fi_type'] = 'file';
+								$TEMP['files'] .= Specific::Maket("messages/includes/{$deleted_maket}");
+							}
+						}
+					}
+				}
+
+				$TEMP['!id'] = $message['id'];
+				$TEMP['!text'] = Specific::TextFilter($message['text']);
+				$TEMP['!type'] = 'normal';
+
+				$messaan = $dba->query('SELECT answered_id, type, COUNT(*) as count FROM '.T_MESSAAN.' a WHERE message_id = ?', $message['id'])->fetchArray();
+
+				if($messaan['count'] > 0){
+					$has_answer = false;
+					$TEMP['!ans_deleted'] = false;
+					if($messaan['type'] == 'text'){
+						$answered = $dba->query('SELECT * FROM '.T_MESSAGE.' WHERE id = ? AND ((user_id = ? AND deleted_fuser = 0) OR (profile_id = ? AND deleted_fprofile = 0))', $messaan['answered_id'], $TEMP['#user']['id'], $TEMP['#user']['id'])->fetchArray();
+						if(!empty($answered)){
+							$has_answer = true;
+							$ans_pid = $answered['profile_id'];
+							$user_id = $ans_uid = $answered['user_id'];
+							if(Specific::IsOwner($answered['user_id'])){
+								$user_id = $answered['profile_id'];
+							}
+
+							if($answered['deleted_at'] == 0){
+								$TEMP['!ans_id'] = $answered['id'];
+								$TEMP['!ans_text'] = Specific::TextFilter($answered['text'], false);
+							} else {
+								$TEMP['!ans_deleted'] = true;
+								$TEMP['!ans_deleted_word'] = $TEMP['#word']['message_was_deleted'];
+							}
+						}
+					} else {
+						$amessafi = $dba->query('SELECT f.*, m.user_id, m.profile_id FROM '.T_MESSAFI.' f INNER JOIN '.T_MESSAGE.' m WHERE f.id = ? AND m.id = f.message_id AND ((m.user_id = ? AND f.deleted_fuser = 0) OR (m.profile_id = ? AND f.deleted_fprofile = 0))', $messaan['answered_id'], $TEMP['#user']['id'], $TEMP['#user']['id'])->fetchArray();
+
+						if(!empty($amessafi)){
+							$has_answer = true;
+							$ans_pid = $amessafi['profile_id'];
+							$user_id = $ans_uid = $amessafi['user_id'];
+							if(Specific::IsOwner($amessafi['user_id'])){
+								$user_id = $amessafi['profile_id'];
+							}
+
+							if($amessafi['deleted_at'] == 0){
+
+								$TEMP['!fi_aid'] = $amessafi['id'];
+								$TEMP['!fi_aname'] = $amessafi['name'];
+								$TEMP['!fi_asize'] = Specific::SizeFormat($amessafi['size']);
+								if($messaan['type'] == 'image'){
+									$TEMP['!fi_aurl'] = Specific::Url("uploads/messages/{$amessafi['file']}");
+								}
+							} else {
+								$TEMP['!ans_deleted'] = true;
+								$TEMP['!ans_deleted_word'] = $TEMP['#word']['deputy_file_deleted'];
+							}
+						}
+					}
+
+					if($has_answer){
+						$ans_user = Specific::Data($user_id, array('username', 'name', 'surname', 'status'));
+						$TEMP['!type'] = 'answered';
+						$TEMP['!ans_type'] = $messaan['type'];
+						$TEMP['!answered_id'] = $messaan['answered_id'];
+
+						$you_responded_to = "{$TEMP['#word']['you_responded_to']} {$ans_user['username']}";
+						if($ans_user['status'] == 'deleted'){
+							$you_responded_to = "{$TEMP['#word']['you_responded_to']} {$TEMP['#word']['user']}";
+						}
+						$TEMP['!ans_title'] = $you_responded_to;
+
+						if($ans_pid == $message['profile_id']){
+							if(Specific::IsOwner($ans_uid)){
+								$TEMP['!ans_title'] = $TEMP['#word']['you_replied_own_message'];
+							} else {
+								$TEMP['!ans_title'] = $TEMP['#word']['replied_his_own_message'];
+							}
+						} else if($message['user_id'] == $user['id']){
+							$TEMP['!ans_title'] = "{$ans_user['username']} {$TEMP['#word']['answered_you']}";
+						}
+					}
+				}
+
+				if($message['deleted_at'] == 0){
+					$maket = 'outgoing';
+					if($message['user_id'] == $user['id']){
+						$TEMP['!avatar_s'] = $user['avatar_s'];
+						$TEMP['!username'] = $user['username'];
+						$maket = 'incoming';
+					}
+					if(Specific::IsOwner($message['profile_id'])){
+						$update_ids[] = $message['id'];
+					}
+				} else {
+					$maket = 'deleted-outgoing';
+					if($message['user_id'] == $user['id']){
+						$maket = 'deleted-incoming';
+					}
+				}
+				$html .= Specific::Maket("messages/includes/{$maket}");
+				$messages_ids[] = $message['id'];
+			}
+			Specific::DestroyMaket();
+			if(!empty($update_ids)){
+				$dba->query('UPDATE '.T_MESSAGE.' SET seen = 1 WHERE id IN ('.implode(',', $update_ids).') AND seen = 0');
+			}
+			$data = array(
+				'return' => true,
+				'html' => $html,
+				'messages_ids' => $messages_ids
+			);
+		}
+		return $data;
+	}
+
+
+	public static function Sitemap($params = array(), $sitemap_ids = array()){
+		global $dba, $TEMP, $RUTE;
+
+
+		$html = '';
+		$query = '';
+
+		$data = array(
+			'return' => false,
+			'html' => $html,
+			'sitemap_ids' => $sitemap_ids
+		);
+
+		if(!empty($sitemap_ids)){
+			$query = ' AND id NOT IN ('.implode(',', $sitemap_ids).')';
+		}
+
+		if(in_array($params['date'], array($RUTE['#p_today'], $RUTE['#p_yesterday'], $RUTE['#p_this_week'], $RUTE['#p_last_week']))){
+
+			$today = strtotime("00:00:00 today");
+
+			$yesterday_start = $today;
+			$yesterday_end = strtotime("-1 days");
+
+			$this_week = strtotime("-7 days");
+
+			$last_week_start = strtotime("last sunday", strtotime("-1 week"));
+			$last_week_end = strtotime("this sunday", strtotime("-1 week"));
+
+			if($params['date'] == $RUTE['#p_yesterday']){
+				$query .= " AND created_at >= {$yesterday_start} AND created_at <= {$yesterday_end}";
+			} else if($params['date'] == $RUTE['#p_this_week']){
+				$query .= ' AND created_at >= '.$this_week;
+			} else if($params['date'] == $RUTE['#p_last_week']){
+				$last_week_start = $last_week_start;
+				$last_week_end = $last_week_end;
+
+				$query .= " AND created_at >= {$last_week_start} AND created_at <= {$last_week_end}";
+			} else {
+				$query .= ' AND created_at >= '.$today;
+			}
+		} else {
+			$month = date('F', mktime(0, 0, 0, $params['month'], 10));
+			$first_hour = strtotime("00:00:00 {$params['day']} {$month} {$params['year']}");
+			$last_hour = strtotime("23:59:59 {$params['day']} {$month} {$params['year']}");
+
+			$query .= "AND created_at >= {$first_hour} AND created_at <= {$last_hour}";
+		}
+
+
+		$posts = $dba->query('SELECT id, title, slug FROM '.T_POST.' WHERE status = "approved"'.$query.' ORDER BY created_at DESC LIMIT 50')->fetchAll();
+
+
+		if(!empty($posts)){
+			foreach ($posts as $post) {
+				$TEMP['!title'] = $post['title'];
+				$TEMP['!url'] = Specific::Url($post['slug']);
+
+				$html .= Specific::Maket('sitemap/includes/post');
+				$sitemap_ids[] = $post['id'];
+			}
+			$data = array(
+				'return' => true,
+				'html' => $html,
+				'sitemap_ids' => $sitemap_ids
+			);
+		}
+
+		return $data;
+	}
 }
 ?>

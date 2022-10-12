@@ -3,19 +3,46 @@
         <div class="content-pinfo display-flex direction-row padding-t25 padding-b25">
             <div class="item-pimage margin-l15 padding-r20">
                 <figure class="overflow-hidden border-rall">
+                    <?php if($TEMP['#profile_blocked'] == false){ ?>
                     <img src="{$avatar_b}" alt="{$username}"/>
+                    <?php } else{ ?>
+                    <img src="{$theme->{images/users/default-holder-b.jpeg}}" alt="{$word->user}"/>
+                    <?php } ?>
                 </figure>
             </div>
-            <div class="item-pinfo display-flex direction-colum justify-center margin-r15">
-                <h1 class="font-bold font-supraly font-postoni-gara">{$username}</h1>
-                <!--<h2 class="font-md font-bold font--headline center left-ns undefined" data-qa="author-location">Country</h2>-->
+            <div class="item-pinfo display-flex direction-colum justify-center margin-right-auto">
+                <?php if($TEMP['#profile_blocked'] == false){ ?>
+                <div class="item-piname display-flex direction-row align-center position-relative">
+                    <h1 class="font-bold font-supraly font-postoni-gara">{$username}</h1>
+                    <div id="container-poptions" class="margin-l15">
+                        <button id="btn-poptions" class="btn-noway color-blackly btn-noway animation-ease3s animate-tab-button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->options}">
+                            <svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <title>{$word->options}</title>
+                                <path cx="256" cy="256" r="48" d="M14.25 12A2.25 2.25 0 0 1 12 14.25A2.25 2.25 0 0 1 9.75 12A2.25 2.25 0 0 1 14.25 12z"></path>
+                                <path cx="256" cy="416" r="48" d="M14.25 19.5A2.25 2.25 0 0 1 12 21.75A2.25 2.25 0 0 1 9.75 19.5A2.25 2.25 0 0 1 14.25 19.5z"></path>
+                                <path cx="256" cy="96" r="48" d="M14.25 4.5A2.25 2.25 0 0 1 12 6.75A2.25 2.25 0 0 1 9.75 4.5A2.25 2.25 0 0 1 14.25 4.5z"></path>
+                            </svg>
+                        </button>
+                        <div id="content-poptions" class="position-absolute background-white z-index-1 boxshadow-grey hidden" role="dialog" aria-modal="true" aria-label="{$word->options}">
+                            <?php if($TEMP['#loggedin'] == true){ ?>
+                            <?php if($TEMP['#settings']['blocked_users'] == 'on' && in_array($TEMP['#profile']['role'], array('publisher', 'viewer'))){ ?>
+                            <button id="btn-pbalert" class="w-100 text-left btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover-button animate-tab-button animation-ease3s">{$word->block}</button>
+                            <?php } ?>
+                            <button id="btn-preport" class="w-100 text-left btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover-button animate-tab-button animation-ease3s">{$word->report}</button>
+                            <?php } else { ?>
+                            <a class="display-block w-100 color-black text-left padding-t10 padding-b10 padding-l10 padding-r10 hover-button animate-tab-button animation-ease3s" href="{$url->{{#r_login}}}" target="_self">{$word->block}</a>
+                            <a class="display-block w-100 color-black text-left padding-t10 padding-b10 padding-l10 padding-r10 hover-button animate-tab-button animation-ease3s" href="{$url->{{#r_login}}}" target="_self">{$word->report}</a>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
                 <?php if($TEMP['#followers'] > 0 && ($TEMP['#profile']['shows']['followers'] == 'on' || Specific::IsOwner($TEMP['#user_id']))) { ?>
-                <span class="font-medium font-postoni-gara<?php echo($TEMP['#profile']['shows']['followers'] == 'off' && Specific::IsOwner($TEMP['#user_id'])) ? ' color-grey ' : ' color-blackly ';?>margin-b10">{$followers}</span>
+                <span id="item-followers" class="font-medium font-postoni-gara<?php echo($TEMP['#profile']['shows']['followers'] == 'off' && Specific::IsOwner($TEMP['#user_id'])) ? ' color-grey ' : ' color-blackly ';?>margin-b10">{$followers}</span>
                 <?php } ?>
                 <?php if($TEMP['#profile']['shows']['birthday'] == 'on' || $TEMP['#profile']['shows']['gender'] == 'on') { ?>
                 <div class="margin-b10">
-                    <?php if($TEMP['#profile']['shows']['birthday'] == 'on') { ?>
-                    <h2 class="font-medium font-bold first-capitalize">{$word->date_of_birth}: {$birthday_format}</h2>
+                    <?php if(!empty($TEMP['#birthday_format']) && $TEMP['#profile']['shows']['birthday'] == 'on') { ?>
+                    <h2 class="font-medium font-bold first-capitalize">{$word->date_of_birth}: {#birthday_format}</h2>
                     <?php } ?>
                     <?php if($TEMP['#profile']['shows']['gender'] == 'on') { ?>
                     <h2 class="font-medium font-bold first-capitalize">{$word->gender}: <span class="text-lowercase">{$gender_txt}</span></h2>
@@ -25,10 +52,35 @@
                 <?php if(!empty($TEMP['#about'])){ ?>
                 <p class="font-medium">{#about}</p>
                 <?php } ?>
+                <?php } else { ?>
+                <div class="item-piname display-flex direction-row align-center position-relative">
+                    <h1 class="font-bold font-supraly font-postoni-gara">{$word->user}</h1>
+                    <div id="container-poptions" class="margin-l15">
+                        <button id="btn-poptions" class="btn-noway color-blackly btn-noway animation-ease3s animate-tab-button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->options}">
+                            <svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <title>{$word->options}</title>
+                                <path cx="256" cy="256" r="48" d="M14.25 12A2.25 2.25 0 0 1 12 14.25A2.25 2.25 0 0 1 9.75 12A2.25 2.25 0 0 1 14.25 12z"></path>
+                                <path cx="256" cy="416" r="48" d="M14.25 19.5A2.25 2.25 0 0 1 12 21.75A2.25 2.25 0 0 1 9.75 19.5A2.25 2.25 0 0 1 14.25 19.5z"></path>
+                                <path cx="256" cy="96" r="48" d="M14.25 4.5A2.25 2.25 0 0 1 12 6.75A2.25 2.25 0 0 1 9.75 4.5A2.25 2.25 0 0 1 14.25 4.5z"></path>
+                            </svg>
+                        </button>
+                        <div id="content-poptions" class="position-absolute background-white z-index-1 boxshadow-grey hidden" role="dialog" aria-modal="true" aria-label="{$word->options}">
+                            <button id="btn-punlock" class="w-100 text-left btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover-button animate-tab-button animation-ease3s">
+                                <span class="color-black">{$word->unlock}</span>
+                                <div class="content-spinner-circle position-absolute">
+                                    <div class="spinner-circle"></div>
+                                </div>
+                            </button>
+                            <button id="btn-preport" class="w-100 text-left btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover-button animate-tab-button animation-ease3s">{$word->report}</button>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
             </div>
             <?php if(!Specific::IsOwner($TEMP['#user_id'])){ ?>
             <div class="display-flex direction-row align-center margin-l15 margin-r15">
                 <?php if($TEMP['#loggedin'] == true){ ?>
+                <?php if($TEMP['#profile_blocked'] == false){ ?>
                 <button id="btn-follow" class="btn-follow display-flex direction-colum align-center justify-center btn-noway background-white color-black font-bold no-select padding-t5 padding-b5 padding-l20 padding-r20 border-r25px border-all border-grely animate-tab-button animation-ease3s" type="{#type}" aria-label="{$btn_ftext}">
                     <span class="font-medium">
                         <span id="text-following">{$word->following}</span>
@@ -40,12 +92,18 @@
                     </div>
                 </button>
                 <?php } else { ?>
+                <button class="btn-follow display-flex direction-colum align-center justify-center btn-noway background-white color-black font-medium font-bold no-select padding-t5 padding-b5 padding-l20 padding-r20 border-r25px border-all border-grely animate-tab-button animation-ease3s" type="follow" aria-label="{$word->follow}" disabled>
+                    <span id="text-follow">{$word->follow}</span>
+                </button>
+                <?php } ?>
+                <?php } else { ?>
                 <a class="btn-follow display-flex direction-colum align-center justify-center btn-noway background-white color-black font-bold no-select padding-t5 padding-b5 padding-l20 padding-r20 border-r25px border-all border-grely animate-tab-button animation-ease3s" href="{$url->{{#r_login}}}" type="follow" aria-label="{$word->follow}">{$word->follow}</a>
                 <?php } ?>
             </div>
             <?php } ?>
         </div>
         <div class="content-plinks display-flex w-100 margin-t15 margin-b15 padding-t15 padding-b15 border-top border-bottom border-grely">
+            <?php if($TEMP['#profile_blocked'] == false){ ?>
             <nav class="display-flex direction-row align-center margin-right-auto" aria-label="{$word->social_media}">
                 <?php if(!empty($TEMP['#contact_email']) && $TEMP['#profile']['shows']['contact_email'] == 'on'){ ?>
                 <a class="color-black margin-l15 margin-r15 padding-r10 hover-button animate-tab-button animation-ease3s" href="mailto:{#contact_email}" target="_blank" aria-label="{$word->contact_email}">
@@ -89,20 +147,21 @@
                     </svg>
                 </a>
             </nav>
+            <?php } ?>
             <?php if($TEMP['#profile']['shows']['messages'] == 'on'){ ?>
-            <?php if(!Specific::IsOwner($TEMP['#user_id'])){ ?>
-            <a class="display-inline-block padding-t10 padding-b10 padding-l10 padding-r10 color-black border-all border-grely hover-button animation-ease3s" href="{$url->{{#r_chat}/{$user}}}"  target="_self">
-                <span class="color-black">{$word->send_message_author}</span>
+            <?php if(!Specific::IsOwner($TEMP['#user_id']) && $TEMP['#profile_blocked'] == false){ ?>
+            <a class="display-inline-block padding-t10 padding-b10 padding-l10 padding-r10 color-black border-all border-grely hover-button animation-ease3s" href="{$url->{{#r_messages}/{$user}}}" target="_self">
+                <span class="color-black">{$word->send_message}</span>
                 <svg class="icon-y vertical-sub" viewBox="-1.5 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="img">
-                    <title>{$word->send_message_author}</title>
+                    <title>{$word->send_message}</title>
                     <path fill="currentColor" d="M8.93 3.136l1.041 -1.041c0.441 -0.441 1.153 -0.441 1.589 0L20.672 11.203c0.441 0.441 0.441 1.153 0 1.589L11.559 21.905c-0.441 0.441 -1.153 0.441 -1.589 0l-1.041 -1.041c-0.445 -0.445 -0.436 -1.172 0.019 -1.608L14.597 13.875H1.125c-0.623 0 -1.125 -0.502 -1.125 -1.125v-1.5c0 -0.623 0.502 -1.125 1.125 -1.125h13.472L8.948 4.744c-0.459 -0.436 -0.469 -1.163 -0.019 -1.608z"></path>
                 </svg>
             </a>
             <?php } else { ?>
-            <button class="display-inline-block padding-t10 padding-b10 padding-l10 padding-r10 color-black border-all border-grely hover-button animation-ease3s" disabled>
-                <span class="color-black">{$word->send_message_author}</span>
+            <button class="display-inline-block padding-t10 padding-b10 padding-l10 padding-r10 color-black border-all border-grely hover-button animation-ease3s<?php echo($TEMP['#profile_blocked'] == true) ? ' margin-left-auto' : '';?>" disabled>
+                <span class="color-black">{$word->send_message}</span>
                 <svg class="icon-y vertical-sub" viewBox="-1.5 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="img">
-                    <title>{$word->send_message_author}</title>
+                    <title>{$word->send_message}</title>
                     <path fill="currentColor" d="M8.93 3.136l1.041 -1.041c0.441 -0.441 1.153 -0.441 1.589 0L20.672 11.203c0.441 0.441 0.441 1.153 0 1.589L11.559 21.905c-0.441 0.441 -1.153 0.441 -1.589 0l-1.041 -1.041c-0.445 -0.445 -0.436 -1.172 0.019 -1.608L14.597 13.875H1.125c-0.623 0 -1.125 -0.502 -1.125 -1.125v-1.5c0 -0.623 0.502 -1.125 1.125 -1.125h13.472L8.948 4.744c-0.459 -0.436 -0.469 -1.163 -0.019 -1.608z"></path>
                 </svg>
             </button>
@@ -174,31 +233,143 @@
 
         <div id="profile-right" class="profile-right display-none-mob">
             <div class="theiaStickySidebar">
-               <aside class="content-saside direction-colum h-100 margin-b15 padding-l20">
-                  <div class="content-related-aside display-block position-relative">
-                     <h2 class="color-black font-mediumly font-bold text-uppercase">{$word->recommended_posts}</h2>
-                     <ul>
-                        {$related_aside}   
-                     </ul>
-                  </div>
-                  {$newsletter}
-               </aside>
+                <aside class="content-saside direction-colum h-100 margin-b15 padding-l20">
+                    <?php if(!empty($TEMP['#related_cat'])){ ?>
+                    <div class="content-related-aside display-block position-relative">
+                        <h2 class="color-black font-mediumly font-bold text-uppercase">{$word->recommended_posts}</h2>
+                        <ul>
+                            {$related_aside}   
+                        </ul>
+                    </div>
+                    <?php } ?>
+                    {$content_aad}
+                    {$newsletter}
+                </aside>
             </div>
          </div>
     </div>
 </main>
+<?php if($TEMP['#settings']['blocked_users'] == 'on' && in_array($TEMP['#profile']['role'], array('publisher', 'viewer')) && $TEMP['#profile_blocked'] == false){ ?>
+{%%<div id="alert-pblock" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-pbtitle" aria-describedby="alert-pbcontent">
+  <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 border-rlow boxshadow-grey">
+    <span id="alert-pbtitle" class="display-block font-medium font-bold text-center">{$word->block_this_user}</span>
+    <div class="display-flex direction-row margin-t10">
+        <div class="margin-bottom-auto">
+            <svg class="icon-z" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM4 12c0-1.846.634-3.542 1.688-4.897l11.209 11.209A7.946 7.946 0 0 1 12 20c-4.411 0-8-3.589-8-8zm14.312 4.897L7.103 5.688A7.948 7.948 0 0 1 12 4c4.411 0 8 3.589 8 8a7.954 7.954 0 0 1-1.688 4.897z"/>
+            </svg>
+        </div>
+        <div class="display-flex direction-colum margin-l10">
+            <p id="alert-pbcontent" class="font-mediumly font-bold color-black">{$word->blocking_user_takes_effect_access}</p>
+            <ul class="margin-t10">
+                <li>
+                    {$word->view_profile_information}
+                </li>
+                <li>
+                    {$word->send_receive_messages}
+                </li>
+                <li>
+                    {$word->see_publications}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="display-flex direction-row align-center justify-center margin-t10">
+      <button id="btn-pbcancel" class="btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+      <button id="btn-pblock" class="btn-noway w-100px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+            <span class="color-white">{$word->block}</span>
+            <div class="content-spinner-circle position-absolute">
+                <div class="spinner-circle"></div>
+            </div>
+      </button>
+    </div>
+  </div>
+</div>%%}
+<?php } ?>
+<?php if($TEMP['#loggedin'] == true){ ?>
+{%%<div id="alert-ureport" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-rtitle" aria-describedby="alert-rcontent">
+   <div id="item-ralert" class="item-alert background-white border-rlow boxshadow-grey">
+      <div id="alert-rtitle" class="display-block">
+         <span class="display-block font-medium font-bold padding-t15 padding-l20 padding-r20">{$word->report_user}</span>
+      </div>
+      <div id="item-acontent" class="item-acontent display-flex padding-l20 padding-r20 overflow-autoy">
+         <div class="display-block margin-auto">
+            <div class="display-flex direction-colum align-center padding-t5">
+               <ul>
+                  <li>
+                     <input id="report-1" class="item_rinput radio-paper hidden" name="option" type="radio" value="r_spam">
+                     <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-1">{$word->r_spam}</label>
+                  </li>
+                  <li>
+                     <input id="report-2" class="item_rinput radio-paper hidden" name="option" type="radio" value="ru_hate">
+                     <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-2">{$word->ru_hate}</label>
+                  </li>
+                  <li>
+                     <input id="report-3" class="item_rinput radio-paper hidden" name="option" type="radio" value="ru_picture">
+                     <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-3">{$word->ru_picture}</label>
+                  </li>
+                  <li>
+                     <input id="report-4" class="item_rinput radio-paper hidden" name="option" type="radio" value="ru_copyright">
+                     <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-4">{$word->ru_copyright}</label>
+                  </li>
+                  <li>
+                     <input id="report-5" class="item_rinput radio-paper hidden" name="option" type="radio" value="r_none">
+                     <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-5">{$word->r_none}</label>
+                     <div class="content_description position-relative margin-t5 hidden">
+                        <textarea class="item_rtextarea background-white color-black w-100 padding-t10 padding-b10 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s" type="text" maxlength="500" placeholder="{$word->describe_reason_report}" autocomplete="off" autocapitalize="off"></textarea>
+                        <div class="display-flex">
+                           <div class="margin-left-auto color-green">
+                              <span class="text_email_count">0</span>/500
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+            <p id="alert-dpcontent" class="font-mediumly color-black padding-t10 padding-b10">{$word->posts_reported_users_reviewed_staff}</p>
+         </div>
+      </div>
+      <div id="item-abuttons" class="display-block border-top border-grely">
+         <div class="display-flex">
+            <div class="margin-auto padding-t15 padding-b15 padding-l20 padding-r20">
+               <button id="btn-rcancel" class="btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+               <button id="btn-rsend" class="btn-noway w-100px h-36 background-green color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button" disabled>
+                  <span class="color-white">{$word->send}</span>
+                  <div class="content-spinner-circle position-absolute">
+                     <div class="spinner-circle"></div>
+                  </div>
+               </button>
+            </div>
+         </div>
+         <div class="color-red text-center text-error font-low padding-b5"></div>
+      </div>
+   </div>
+</div>%%}
+{%%<div id="alert-spalert" class="content-alert content-backdrop has-backdrop position-fixed hidden" role="dialog" aria-modal="true" aria-labelledby="alert-sutitle" aria-describedby="alert-sucontent">
+   <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
+      <span id="alert-sutitle" class="display-block font-medium font-bold">{$word->report_sent}</span>
+      <p id="alert-sucontent" class="font-mediumly color-black margin-t15">{$word->report_sent_successfully_reviewed}</p>
+      <button id="btn-suclose" class="btn-noway w-100px h-36 background-red color-white margin-t15 font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->close}</button>
+   </div>
+</div>%%}
+<?php } ?>
 {%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/user/style.user.min.css}}" />%%}
-{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/search-profile-category-tag/style.search.related-aside.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/search-profile-category-tag/style.posts.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/search-profile-category-tag/style.related-aside.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home-post-messages-profile/style.modal.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post-profile/style.report.min.css}}" />%%}
 {%%<script src="{$theme->{assets/js/theia-sticky-sidebar.min.js}}"></script>%%}
 {%%<script type="text/javascript">
-   paper_u = {
-      token: '{#token_session}',
-      url: {
-         load_posts: '{$url->{req/profile/load-posts}}',
-         follow: '{$url->{req/profile/follow}}'
-      },
-      user_id: {#user_id},
-      profile_ids: [{$profile_ids}]
-   }, $('#profile-right').theiaStickySidebar();
+    paper_u = {
+        token: '{#token_session}',
+        url: {
+            load_posts: '{$url->{req/profile/load-posts}}',
+            follow: '{$url->{req/profile/follow}}',
+            block: '{$url->{req/profile/block}}',
+            report: '{$url->{req/report}}'
+        },
+        user_id: {#user_id},
+        profile_ids: [{$profile_ids}]
+    }, $('#profile-right').theiaStickySidebar();
 </script>%%}
 {%%<script src="{$theme->{assets/js/user/jquery.user.min.js}}"></script>%%}

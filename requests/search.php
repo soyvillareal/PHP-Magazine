@@ -14,29 +14,29 @@ if($one == 'normal-search'){
 		'sort' => $sort
 	));
 
-	$url = Specific::Url("{$TEMP['#r_search']}");
+	$url = Specific::Url("{$RUTE['#r_search']}");
 	if(!empty($keyword)){
-		$url .= "?{$TEMP['#p_keyword']}={$keyword}";
+		$url .= "?{$RUTE['#p_keyword']}={$keyword}";
 	}
 
 	if(!empty($date)){
 		$param = !empty($keyword)? '&' : '?';
-		$url .= "{$param}{$TEMP['#p_date']}={$date}";
+		$url .= "{$param}{$RUTE['#p_date']}={$date}";
 	}
 
 	if(!empty($category)){
 		$param = !empty($keyword) || !empty($date)  ? '&' : '?';
-		$url .= "{$param}{$TEMP['#p_category']}={$category}";
+		$url .= "{$param}{$RUTE['#p_category']}={$category}";
 	}
 
 	if(!empty($author)){
 		$param = !empty($keyword) || !empty($date) || !empty($category)  ? '&' : '?';
-		$url .= "{$param}{$TEMP['#p_author']}={$author}";
+		$url .= "{$param}{$RUTE['#p_author']}={$author}";
 	}
 
 	if(!empty($sort)){
 		$param = !empty($keyword) || !empty($date) || !empty($category) || !empty($author)  ? '&' : '?';
-		$url .= "{$param}{$TEMP['#p_sort']}={$sort}";
+		$url .= "{$param}{$RUTE['#p_sort']}={$sort}";
 	}
 
 	$deliver['KW'] = $keyword;
@@ -73,6 +73,10 @@ if($one == 'normal-search'){
 	), $search_ids);
 
 	if($search_load['return']){
+		$widget = Specific::GetWidget('horizposts');
+		if($widget['return']){
+			$search_load['html'] .= $widget['html'];
+		}
 		$deliver = array(
 			'S' => 200,
 			'HT' => $search_load['html'],

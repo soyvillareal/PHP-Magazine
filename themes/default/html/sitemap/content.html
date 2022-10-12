@@ -1,0 +1,73 @@
+<main class="container-sitemap<?php echo($TEMP['#has_posts'] == false) ? ' h-70vh ' : ' ';?>margin-t15 margin-b15 padding-t25 padding-b25">
+	<?php if($TEMP['#has_link'] == false){ ?>
+	<h1 class="margin-b15 padding-b5 font-supraly border-black">
+		{$word->page_sitemap}
+	</h1>
+	<?php } else { ?>
+	<h1 class="margin-b15 padding-b5 font-supraly border-black">
+		<a class="color-black hover-blue hover-underline animation-ease3s" href="{$url->{{#r_sitemap}}}" target="_self">{$word->page_sitemap}</a>
+	</h1>
+	<h2 class="display-flex direction-row align-center">
+		<?php if(!empty($TEMP['#year'])){ ?>
+		<?php if(empty($TEMP['#month'])){ ?>
+		{#year}
+		<?php } else { ?>
+		<a class="color-black hover-blue hover-underline animation-ease3s" href="{$url->{{#r_sitemap}?{#p_year}={#year}}}" target="_self">{#year}</a>
+		<svg class="icon-z" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path fill-rule="evenodd" clip-rule="evenodd" d="M9.46967 5.46967C9.76256 5.17678 10.2374 5.17678 10.5303 5.46967L16.5303 11.4697C16.8232 11.7626 16.8232 12.2374 16.5303 12.5303L10.5303 18.5303C10.2374 18.8232 9.76256 18.8232 9.46967 18.5303C9.17678 18.2374 9.17678 17.7626 9.46967 17.4697L14.9393 12L9.46967 6.53033C9.17678 6.23744 9.17678 5.76256 9.46967 5.46967Z" fill="#030D45"/>
+		</svg>
+		<?php } ?>
+		<?php } ?>
+		<?php if(!empty($TEMP['#month'])){ ?>
+		<?php if(empty($TEMP['#day'])){ ?>
+		{#month}
+		<?php } else { ?>
+		<a class="color-black hover-blue hover-underline animation-ease3s" href="{$url->{{#r_sitemap}?{#p_year}={#year}&{#p_month}={#month}}}" target="_self">{#month}</a>
+		<svg class="icon-z" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path fill-rule="evenodd" clip-rule="evenodd" d="M9.46967 5.46967C9.76256 5.17678 10.2374 5.17678 10.5303 5.46967L16.5303 11.4697C16.8232 11.7626 16.8232 12.2374 16.5303 12.5303L10.5303 18.5303C10.2374 18.8232 9.76256 18.8232 9.46967 18.5303C9.17678 18.2374 9.17678 17.7626 9.46967 17.4697L14.9393 12L9.46967 6.53033C9.17678 6.23744 9.17678 5.76256 9.46967 5.46967Z" fill="#030D45"/>
+		</svg>
+		<?php } ?>
+		<?php } ?>
+		<?php if(!empty($TEMP['#day'])){ ?>
+		{#day}
+		<?php } ?>
+	</h2>
+	<?php } ?>
+	<?php if($TEMP['#has_dates'] == true){ ?>
+	<ul class="display-flex vertical-slots align-center w-100 h-45 margin-b15 padding-b15 border-bottom border-grely">
+		{$dates}
+	</ul>
+	<?php } ?>
+
+	<?php if($TEMP['#has_content'] == true){ ?>
+	<h2 class="font-big text-capitalize margin-b15">{$title}</h2>
+	<ol id="content-sposts" class="display-flex vertical-slots">
+		{$content}
+	</ol>
+    <div id="spinner-load" class="content-wspinner display-flex align-center justify-center position-relative w-100 h-45 margin-t15 margin-b15 padding-t15 padding-b15 hidden">
+        <div class="item-wspinner position-relative"></div>
+    </div>
+	<?php } else { ?>
+	<div class="display-flex h-70vh">
+		<p class="margin-auto padding-t25 padding-b25 padding-l20 padding-r20 color-black text-center">
+			{$word->sorry_seems_that_there_no_content}
+		</p>
+	</div>
+	<?php } ?>
+</main>
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/sitemap/style.general.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/sitemap-post/style.wspinner.min.css}}" />%%}
+{%%<script type="text/javascript">
+    paper_sm = {
+        token: '{#token_session}',
+        url: {
+            load_sitemap: '{$url->{req/load/sitemap}}'
+        },
+        date: '{#date}',
+        day: {#day},
+        month: {#month},
+        year: {#year},
+        sitemap_ids: [{$sitemap_ids}]
+    };
+</script>%%}
+{%%<script src="{$theme->{assets/js/sitemap/jquery.general.min.js}}"></script>%%}

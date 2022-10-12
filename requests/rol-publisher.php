@@ -120,6 +120,16 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 
 		if(in_array($action, array('post', 'eraser'))){
 			if(empty($empty)){
+				if(!empty($_FILES['thumbnail'])){
+					if($_FILES['thumbnail']['size'] > $TEMP['#settings']['file_size_limit']){
+						$error[] = array(
+							'EL' => '#post-right .item-placeholder',
+							'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}"),
+							'XD' => $_POST,
+							'XD2' => $_FILES
+						);
+					}
+				}
 				if(!in_array($category, $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false))){
 					$error[] = array(
 						'EL' => '#category',
@@ -148,7 +158,15 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 					}
 
 					if($entry[0] == 'image'){
-						if(empty($_FILES['thumbnail_'.$key])){
+						if(!empty($_FILES['thumbnail_'.$key])){
+							if($_FILES['thumbnail_'.$key]['size'] > $TEMP['#settings']['file_size_limit']){
+								$error[] = array(
+									'EL' => $key,
+									'CS' => '.item-placeholder',
+									'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
+								);
+							}
+						} else {
 							if(!empty($entry[2])){
 								$image_err = false;
 								$validate_url = Specific::ValidateUrl($entry[2], true);
@@ -179,6 +197,18 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 								'CS' => '.content-carrusel',
 								'TX' => "*{$TEMP['#word']['must_insert_more_one_image']}"
 							);
+						} else {
+							for ($i=0; $i < (int)$entry[2]; $i++) {
+								$carousel_id = 'carousel_'.$key.'_'.$i;
+								if($_FILES[$carousel_id]['size'] > $TEMP['#settings']['file_size_limit']){
+									$error[] = array(
+										'EL' => $key,
+										'CS' => '.content-carrusel',
+										'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['one_file_too_big_maximum_size']}")
+									);
+									break;
+								}
+							}
 						}
 					}
 
@@ -331,6 +361,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 						$thumbnail = Specific::UploadImage(array(
 							'name' => $_FILES['thumbnail']['name'],
 							'tmp_name' => $_FILES['thumbnail']['tmp_name'],
+							'size' => $_FILES['thumbnail']['size'],
 							'type' => $_FILES['thumbnail']['type'],
 							'folder' => 'posts',
 						));
@@ -396,6 +427,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 											$image = Specific::UploadImage(array(
 												'name' => $thumbnail['name'],
 												'tmp_name' => $thumbnail['tmp_name'],
+												'size' => $thumbnail['size'],
 												'type' => $thumbnail['type'],
 												'post_id' => $post_id,
 												'eorder' => $key,
@@ -424,6 +456,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 												$image = Specific::UploadImage(array(
 													'name' => $thumbnail['name'],
 													'tmp_name' => $thumbnail['tmp_name'],
+													'size' => $thumbnail['size'],
 													'type' => $thumbnail['type'],
 													'post_id' => $post_id,
 													'eorder' => $key,
@@ -539,12 +572,13 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 							if(!empty($collaborators)){
 								$cocount = 0;
 								foreach ($collaborators as $co) {
-									$user = $dba->query('SELECT about, facebook, twitter, instagram, main_sonet, COUNT(*) as count FROM '.T_USER.' WHERE id = ? AND status = "active"', $co)->fetchArray();
+									$user = $dba->query('SELECT about, facebook, twitter, instagram, main_sonet, COUNT(*) as count FROM '.T_USER.' WHERE id = ? AND id NOT IN ('.$TEMP['#blocked_users'].') AND status = "active"', $co)->fetchArray();
 									if($user['count'] > 0 && !empty($user['about']) && !empty($user[$user['main_sonet']]) && $co != $TEMP['#user']['id']){
-										if($dba->query('INSERT INTO '.T_COLLABORATOR.' (user_id, post_id, aorder, created_at) VALUES (?, ?, ?, ?)', $co, $post_id, $cocount, time())->returnStatus()){
+										$insert_id = $dba->query('INSERT INTO '.T_COLLABORATOR.' (user_id, post_id, aorder, created_at) VALUES (?, ?, ?, ?)', $co, $post_id, $cocount, time())->insertId();
+										if($insert_id){
 											Specific::SetNotify(array(
 												'user_id' => $co,
-												'notified_id' => $post_id,
+												'notified_id' => $insert_id,
 												'type' => 'collab',
 											));
 										}
@@ -707,6 +741,14 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 
 			if($post['count'] > 0){
 				if(empty($empty)){
+					if(!empty($_FILES['thumbnail'])){
+						if($_FILES['thumbnail']['size'] > $TEMP['#settings']['file_size_limit']){
+							$error[] = array(
+								'EL' => '#post-right .item-placeholder',
+								'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
+							);
+						}
+					}
 					if(!in_array($category, $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false))){
 						$error[] = array(
 							'EL' => '#category',
@@ -738,7 +780,15 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 							}
 
 							if($entry[0] == 'image'){
-								if(empty($_FILES['thumbnail_'.$key])){
+								if(!empty($_FILES['thumbnail_'.$key])){
+									if($_FILES['thumbnail_'.$key]['size'] > $TEMP['#settings']['file_size_limit']){
+										$error[] = array(
+											'EL' => $key,
+											'CS' => '.item-placeholder',
+											'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
+										);
+									}
+								} else {
 									if(!empty($entry[2])){
 										$image_err = false;
 										$validate_url = Specific::ValidateUrl($entry[2], true);
@@ -769,6 +819,18 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 										'CS' => '.content-carrusel',
 										'TX' => "*{$TEMP['#word']['must_insert_more_one_image']}"
 									);
+								} else {
+									for ($i=0; $i < (int)$entry[2]; $i++) {
+										$carousel_id = 'carousel_'.$key.'_'.$i;
+										if($_FILES[$carousel_id]['size'] > $TEMP['#settings']['file_size_limit']){
+											$error[] = array(
+												'EL' => $key,
+												'CS' => '.content-carrusel',
+												'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['one_file_too_big_maximum_size']}")
+											);
+											break;
+										}
+									}
 								}
 							}
 
@@ -923,6 +985,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 								$thumbnail = Specific::UploadImage(array(
 									'name' => $_FILES['thumbnail']['name'],
 									'tmp_name' => $_FILES['thumbnail']['tmp_name'],
+									'size' => $_FILES['thumbnail']['size'],
 									'type' => $_FILES['thumbnail']['type'],
 									'folder' => 'posts',
 								));
@@ -998,6 +1061,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 													$image = Specific::UploadImage(array(
 														'name' => $thumbnail['name'],
 														'tmp_name' => $thumbnail['tmp_name'],
+														'size' => $thumbnail['size'],
 														'type' => $thumbnail['type'],
 														'post_id' => $post_id,
 														'eorder' => $key,
@@ -1046,6 +1110,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 													$image = Specific::UploadImage(array(
 														'name' => $thumbnail['name'],
 														'tmp_name' => $thumbnail['tmp_name'],
+														'size' => $thumbnail['size'],
 														'type' => $thumbnail['type'],
 														'post_id' => $post_id,
 														'eorder' => $key,
@@ -1260,12 +1325,14 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 
 								if(!empty($add_collaborators)){
 									foreach ($add_collaborators as $addco) {
-										$user = $dba->query('SELECT about, facebook, twitter, instagram, main_sonet, COUNT(*) as count FROM '.T_USER.' WHERE id = ? AND status = "active"', $addco)->fetchArray();
+										$user = $dba->query('SELECT about, facebook, twitter, instagram, main_sonet, COUNT(*) as count FROM '.T_USER.' WHERE id = ? AND id NOT IN ('.$TEMP['#blocked_users'].') AND status = "active"', $addco)->fetchArray();
 										if($user['count'] > 0 && !empty($user['about']) && !empty($user[$user['main_sonet']])){
-											if($dba->query('INSERT INTO '.T_COLLABORATOR.' (user_id, post_id, created_at) VALUES (?, ?, ?)', $addco, $post_id, time())->returnStatus()){
+											$insert_id = $dba->query('INSERT INTO '.T_COLLABORATOR.' (user_id, post_id, created_at) VALUES (?, ?, ?)', $addco, $post_id, time())->insertId();
+
+											if($insert_id){
 												Specific::SetNotify(array(
 													'user_id' => $addco,
-													'notified_id' => $post_id,
+													'notified_id' => $insert_id,
 													'type' => 'collab',
 												));
 											}
@@ -1275,8 +1342,9 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 
 								if(!empty($del_collaborators)){
 									foreach ($del_collaborators as $delco) {
-										if($dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE user_id = ? AND notified_id = ? AND type = "n_collab"', $delco, $post_id)->returnStatus()){
-											$dba->query('DELETE FROM '.T_COLLABORATOR.' WHERE user_id = ? AND post_id = ?', $delco, $post_id);
+										$collab_id = $dba->query('SELECT id FROM '.T_COLLABORATOR.' WHERE user_id = ? AND post_id = ?', $delco, $post_id)->fetchArray(true);
+										if($dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id = ? AND type = "n_collab"', $collab_id)->returnStatus()){
+											$dba->query('DELETE FROM '.T_COLLABORATOR.' WHERE id = ?', $collab_id);
 										}
 									}
 								}
@@ -1583,8 +1651,8 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 						$TEMP['!id'] = $post['id'];
 
 						$TEMP['!title'] = $post['title'];
-						$TEMP['!category'] = $category['name'];
-						$TEMP['!category_slug'] = $category['slug'];
+						$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
+						$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
 						$TEMP['!url'] = Specific::Url($post['slug']);
 						$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
 						$TEMP['!published_date'] = date('c', $post['published_at']);
@@ -1621,7 +1689,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 			if(!empty($user_ids)){
 				$query = ' AND id NOT IN ('.implode(',', $user_ids).')';
 			}
-			$search_result = $dba->query('SELECT id FROM '.T_USER.' WHERE id != ? AND (username LIKE "%'.$keyword.'%" OR email LIKE "%'.$keyword.'%" OR name LIKE "%'.$keyword.'%" OR surname LIKE "%'.$keyword.'%") AND status = "active"'.$query.' LIMIT 5', $TEMP['#user']['id'])->fetchAll();
+			$search_result = $dba->query('SELECT id FROM '.T_USER.' WHERE id != ? AND id NOT IN ('.$TEMP['#blocked_users'].') AND (username LIKE "%'.$keyword.'%" OR email LIKE "%'.$keyword.'%" OR name LIKE "%'.$keyword.'%" OR surname LIKE "%'.$keyword.'%") AND status = "active"'.$query.' LIMIT 5', $TEMP['#user']['id'])->fetchAll();
 
 			if(!empty($search_result)){
 				foreach ($search_result as $user) {
@@ -1658,7 +1726,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 		$user_ids = json_decode($user_ids);
 
 		if(!empty($push_id) && is_numeric($push_id)){
-			$user = $dba->query('SELECT id, about, facebook, twitter, instagram, main_sonet, COUNT(*) as count FROM '.T_USER.' WHERE id = ? AND status = "active"', $push_id)->fetchArray();
+			$user = $dba->query('SELECT id, about, facebook, twitter, instagram, main_sonet, COUNT(*) as count FROM '.T_USER.' WHERE id = ? AND id NOT IN ('.$TEMP['#blocked_users'].') AND status = "active"', $push_id)->fetchArray();
 
 			$user_id = $user['id'];
 			if($user['count'] > 0){

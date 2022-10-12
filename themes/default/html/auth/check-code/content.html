@@ -16,12 +16,12 @@
                      <input class="input_key number w-100 h-45 font-franklin text-center margin-l15 border-focus-blue background-white color-black border-rlow border-all border-grely" type="text" id="six" maxlength="1" value="{$dessix}" required>
                   </div>
                   <div class="color-red text-left text-error font-low margin-t5"></div>
-                  <div class="margin-t10 text-left">
-                     <button class="btn-noway font-mediumly color-black underline-hover" id="btn-rcode">{$word->resend_code}</button>
+                  <div class="margin-t10">
+                     <button class="btn-noway font-mediumly text-left color-black underline-hover" type="button" id="btn-rcode">{$word->resend_code}</button>
                   </div>
                </div>
             </div>
-            <button id="btn-login" class="button-access btn-noway w-100 h-36 background-blue color-white font-franklin font-medium font-bold margin-t15 margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" disabled>
+            <button id="btn-check" class="button-access btn-noway w-100 h-36 background-blue color-white font-franklin font-medium font-bold margin-t15 margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="submit" disabled>
                <span class="color-white">{$word->login}</span>
                <div class="content-spinner-circle position-absolute">
                   <div class="spinner-circle"></div>
@@ -31,7 +31,7 @@
       </div>
    </div>
 </main>
-<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.general.min.css}}" />
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/auth/style.general.min.css}}" />%%}
 {%%<script type="text/javascript">
    paper_ac = {
       token: '{#token_session}',

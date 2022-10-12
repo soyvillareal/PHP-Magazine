@@ -18,26 +18,36 @@ $TEMP['#page'] = 'category';
 
 $category_load = Load::Category($category['id']);
 
-$TEMP['category'] = $category['name'];
+$TEMP['category'] = $TEMP['#word']["category_{$category['name']}"];
 $TEMP['catag_id'] = $category['id'];
 $TEMP['posts_result'] = $category_load['html'];
+
+$widget = Specific::GetWidget('horizposts');
+if($widget['return']){
+	$TEMP['posts_result'] .= $widget['html'];
+}
+
+$widget = Specific::GetWidget('aside');
+if($widget['return']){
+	$TEMP['content_aad'] = $widget['html'];
+}
 
 $query = '';
 if(!empty($category_load['catag_ids'])){
 	$query = ' AND id NOT IN ('.implode(',', $category_load['catag_ids']).')';
 }
 
-$related_cat = $dba->query('SELECT * FROM '.T_POST.' WHERE status = "approved"'.$query.' ORDER BY RAND() DESC LIMIT 5')->fetchAll();
+$TEMP['#related_cat'] = $dba->query('SELECT * FROM '.T_POST.' WHERE user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"'.$query.' ORDER BY RAND() DESC LIMIT 5')->fetchAll();
 
-if(!empty($related_cat)){
-	foreach ($related_cat as $rlc) {
+if(!empty($TEMP['#related_cat'])){
+	foreach ($TEMP['#related_cat'] as $rlc) {
 		$category = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $rlc['category_id'])->fetchArray();
 		$TEMP['!type'] = $rlc['type'];
 
 		$TEMP['!key'] += 1;
 		$TEMP['!title'] = $rlc['title'];
-		$TEMP['!category'] = $category['name'];
-		$TEMP['!category_slug'] = $category['slug'];
+		$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
+		$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
 		$TEMP['!url'] = Specific::Url($rlc['slug']);
 		$TEMP['!thumbnail'] = Specific::GetFile($rlc['thumbnail'], 1, 's');
 		$TEMP['!published_date'] = date('c', $rlc['published_at']);
