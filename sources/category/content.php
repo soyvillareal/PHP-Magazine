@@ -18,7 +18,10 @@ $TEMP['#page'] = 'category';
 
 $category_load = Load::Category($category['id']);
 
-$TEMP['category'] = $TEMP['#word']["category_{$category['name']}"];
+$category_name = $TEMP['#word']["category_{$category['name']}"];
+
+$TEMP['category_name'] = $category_name;
+$TEMP['category_slug'] = strtolower($category_name);
 $TEMP['catag_id'] = $category['id'];
 $TEMP['posts_result'] = $category_load['html'];
 
@@ -63,7 +66,7 @@ $TEMP['newsletter'] = Specific::Maket('includes/search-post-profile-category-tag
 
 
 
-$TEMP['#title']       = $TEMP['category'] . ' - ' . $TEMP['#settings']['title'];
+$TEMP['#title']       = $category_name . ' - ' . $TEMP['#settings']['title'];
 $TEMP['#description'] = $TEMP['#settings']['description'];
 $TEMP['#keyword']     = $TEMP['#settings']['keyword'];
 

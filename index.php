@@ -11,8 +11,6 @@ if (isset($one)) {
     }
 }
 
-
-
 foreach($TEMP['#languages'] as $lang){
     $language = $dba->query('SELECT * FROM '.T_LANGUAGE.' WHERE lang = ?', $lang)->fetchArray();
 

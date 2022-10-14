@@ -17,6 +17,7 @@ RewriteRule ^desvincular-correo/([^/.]+)?$ index.php?one=unlink-mail&tokenu=$1 [
 
 
 
+RewriteRule ^rss/([^/.]+)/([^/.]+)?$ rss.php?type=$1&get=$2 [NC,QSA]
 
 RewriteRule ^amp/([^/.]+)?$ index.php?one=amp&slug=$1 [NC,QSA]
 RewriteRule ^crear-publicacion$ index.php?one=create-post [NC,QSA]

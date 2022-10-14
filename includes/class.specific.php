@@ -1902,7 +1902,12 @@ class Specific {
 
 	public static function Maket($page){
 	    global $TEMP, $RUTE, $site_url;
-	    $file = "./themes/".$TEMP['#settings']['theme']."/html/$page.html";
+
+		if(empty(pathinfo($page, PATHINFO_EXTENSION))){
+			$page = "{$page}.html";
+		}
+
+	    $file = "./themes/{$TEMP['#settings']['theme']}/html/{$page}";
 	    if(!file_exists($file)){
 	    	exit("No found: $file");
 	    }

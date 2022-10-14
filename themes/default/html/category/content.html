@@ -1,10 +1,18 @@
 <main class="container-pcategory">
     <div class="content-pcategory display-flex direction-row align-center justify-center h-100px padding-t20 padding-b20 border-bottom border-grely">
-        <h1 class="font-postoni-bodo font-supraly font-bold text-uppercase ellipsis-horizontal">{$category}</h1>
+         <h1 class="font-postoni-bodo font-supraly font-bold text-uppercase ellipsis-horizontal">{$category_name}</h1>
     </div>
     <div id="container-sposts" class="container-sposts display-flex">
         <div class="content-sposts display-flex direction-colum">
-            <h2 class="font-bigly font-bold">{$word->latest_in} {$category}</h2>
+            <div class="display-flex direction-row align-center w-100">
+               <h2 class="font-bigly font-bold">{$word->latest_in} {$category_name}</h2>
+               <a class="color-black margin-left-auto hover-button animate-tab-button animation-ease3s" href="{$url->{{#r_rss}/{#r_category}/{$category_slug}}}" target="_blank" aria-label="{$word->rss}">
+                  <svg class="icon-z vertical-sub" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="img">
+                     <title>{$word->rss}</title>
+                     <path fill-rule="nonzero" d="M2.88 2.88v2.84c8.503 0 15.396 6.895 15.396 15.398h2.843C21.119 11.046 12.953 2.88 2.88 2.88zm0 5.684v2.843a9.712 9.712 0 0 1 9.712 9.713h2.842c0 -6.934 -5.621 -12.556 -12.553 -12.556zm2.723 7.106a2.725 2.725 0 0 0 0 5.449c1.505 0 2.723 -1.219 2.723 -2.724s-1.218 -2.725 -2.723 -2.725z"></path>
+                  </svg>
+               </a>
+            </div>
             <section id="content-sresults" class="content-sresults">
                 {$posts_result}
             </section>
