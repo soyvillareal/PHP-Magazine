@@ -1,6 +1,6 @@
 <?php
-if (!version_compare(PHP_VERSION, '5.5.0', '>=')) {
-    exit("Required PHP_VERSION >= 5.5.0 , Your PHP_VERSION is : " . PHP_VERSION . "\n");
+if (!version_compare(PHP_VERSION, '7.4.0', '>=')) {
+    exit("Required PHP_VERSION >= 7.4.0 , Your PHP_VERSION is : " . PHP_VERSION . "\n");
 }
 
 $conn = @new mysqli($mysql_hostname, $mysql_username, $mysql_password, $mysql_database);

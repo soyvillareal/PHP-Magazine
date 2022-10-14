@@ -1,6 +1,6 @@
 RewriteEngine On
 
-RewriteBase /las2rodillas
+RewriteBase /PHP-Magazine
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^$ index.php?one=home [NC,QSA]

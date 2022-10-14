@@ -116,7 +116,7 @@ if($TEMP['#loggedin'] == true){
 				    }
 			    } else if($notify['type'] == 'n_followers'){
 			    	$user_id = $dba->query('SELECT user_id FROM '.T_FOLLOWER.' WHERE id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].')', $notify['notified_id'])->fetchArray(true);
-
+					
 			    	if(!empty($user_id)){
 			        	$has_notification = true;
 					    $user = Specific::Data($user_id);
@@ -139,11 +139,13 @@ if($TEMP['#loggedin'] == true){
 				}
 			}
 			Specific::DestroyMaket();
-			if($dba->query('UPDATE '.T_NOTIFICATION.' SET seen = 1 WHERE user_id = ?', $TEMP['#user']['id'])->returnStatus()){
-				$deliver = array(
-					'S' => 200,
-					'HT' => $html
-				);
+			if(!empty($html)){
+				if($dba->query('UPDATE '.T_NOTIFICATION.' SET seen = 1 WHERE user_id = ?', $TEMP['#user']['id'])->returnStatus()){
+					$deliver = array(
+						'S' => 200,
+						'HT' => $html
+					);
+				}
 			}
 		}
 
@@ -153,7 +155,7 @@ if($TEMP['#loggedin'] == true){
 		$values = json_decode($values, true);
 
 		if(!empty($values)){
-			$insettings = array('followers', 'followed', 'collab', 'react', 'pcomment', 'preply', 'mention');
+			$insettings = array('post', 'followers', 'collab', 'react', 'pcomment', 'preply', 'mention');
 
 			$categories = $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false);
 			$insettings = array_merge($insettings, $categories);

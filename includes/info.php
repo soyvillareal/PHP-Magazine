@@ -1,10 +1,10 @@
 <?php
-$mysql_hostname = "localhost"; // Nombre del servidor
-$mysql_username = "root"; // Usuario de acceso a la base de datos
-$mysql_password = ""; // Contraseña de acceso a la base de datos
-$mysql_database = "las2rodillas"; // Nombre de la base de datos
+$mysql_hostname = "localhost"; // Server name
+$mysql_username = "root"; // Database user
+$mysql_password = ""; // Database password
+$mysql_database = "php-magazine"; // Database name
 
 
-$domain = '192.168.1.52'; // Dominio del sitio web, ej. (example.com)
-$site_url = "http://{$domain}/las2rodillas"; // Url y subcarpetas del sitio web, ej. (http://dominio.com/ o http//dominio.com/subcarpeta)
+$domain = '192.168.1.52'; // Web domain, eg. (example.com)
+$site_url = "http://{$domain}/PHP-Magazine"; // URL and subfolders of the website, eg. (http://domain.com/ o http//domain.com/subcarpeta)
 ?>

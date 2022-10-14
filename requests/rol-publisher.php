@@ -383,7 +383,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 					}
 
 					$status = 'approved';
-					if($TEMP['#settings']['approve_posts'] == 'on' && !Specific::Admin()){
+					if($TEMP['#settings']['approve_posts'] == 'on' && $TEMP['#admin'] == false){
 						$status = 'pending';
 					}
 
@@ -588,13 +588,17 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 							}
 
 							if(!in_array(false, $arr_trues)){
-								/*
-								Specific::SetNotify(array(
-									'user_id' => $dba->query('SELECT user_id FROM '.T_POST.' WHERE id = ?', $post_id)->fetchArray(),
-									'notified_id' => $insert_id,
-									'type' => 'comment',
-								));
-								*/
+								if($TEMP['#settings']['approve_posts'] == 'off' || $TEMP['#admin'] == true){
+									$followers = $dba->query('SELECT user_id FROM '.T_FOLLOWER.' WHERE profile_id = ?', $TEMP['#user']['id'])->fetchAll();
+									foreach($followers as $follow){
+										Specific::SetNotify(array(
+											'user_id' => $follow['user_id'],
+											'notified_id' => $post_id,
+											'type' => 'post',
+										));
+									}
+								}
+
 								$deliver = array(
 									'S' => 200,
 									'LK' => Specific::Url($slug)

@@ -122,8 +122,7 @@ if($one == 'amp'){
     }
 }
 $content = Specific::Maket($maket);
-$HTMLFormatter = Specific::HTMLFormatter($content);
-echo $HTMLFormatter['content'];
+echo Specific::HTMLFormatter($content);
 $dba->close();
 unset($TEMP);
 unset($RUTE);

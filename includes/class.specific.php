@@ -1677,10 +1677,13 @@ class Specific {
 	    global $dba;
 	    $data = array();
 	    $langs = $dba->query("DESCRIBE word")->fetchAll();
-	    foreach ($langs as $lang) {
-	        $data[] = $lang['Field'];
+	    foreach ($langs as $key => $lang) {
+			if($key != 0){
+				if($dba->query('SELECT COUNT(*) FROM '.T_LANGUAGE.' WHERE lang = ? AND status = "enabled"', $lang['Field'])->fetchArray(true) > 0){
+					$data[] = $lang['Field'];
+				}
+			}
 	    }
-	    unset($data[0]);
 	    return $data;
 	}
 
@@ -1978,255 +1981,10 @@ class Specific {
 	    return $page;
 	}
 
-	public static function HTMLFormatter($page, $async = false){
+	public static function HTMLFormatter($page){
 		global $TEMP;
 		$page = preg_replace('/<!--[^\[](.*)[^\]]-->/Uuis', '', $page);
 
-		if($TEMP['#settings']['minify_html'] == 'on'){
-			if($async == true){
-				if(isset($_SESSION['noscript'])){
-					$classes_normal = $_SESSION['noscript'];
-				    $ids_count = preg_match_all('/<[^>]*id=[\'|"](.+?)[\'|"][^>]*>/i', $page, $ids);
-				    for ($i=0; $i < $ids_count; $i++) {
-					   	preg_match("/[\-|\_][0-9][^\"|']*/", $ids[1][$i], $numbers);
-					   	$class_numeric = preg_replace('/[\-|\_]/', '', $numbers[0]);
-					   	$prefix = $ids[1][$i];
-					   	$suffix = "";
-					    if(is_numeric($class_numeric)){
-					   		$prefix = preg_replace('/[0-9]/', '', $ids[1][$i]);
-						    $suffix = $class_numeric;
-					   	}
-					    $rand = str_replace('#', '', $classes_normal["#{$prefix}"]);
-					    $rand = $rand.$suffix;
-					    if(substr($ids[1][$i], 0, 1) == '@'){
-					    	$rand = str_replace('@', '', $ids[1][$i]);
-					    }
-				    	$page = preg_replace(array(
-				    		"/id=['|\"]({$ids[1][$i]})['|\"]/",
-				    		"/for=['|\"]({$ids[1][$i]})['|\"]/"
-				    	), array(
-				    		'id="'.$rand.'"',
-				    		'for="'.$rand.'"'
-				    	), $page);
-					}
-
-				    preg_match_all('/<[^>]*class=[\'|"](.+?)[\'|"][^>]*>/i', $page, $classes);
-				    for ($i=0; $i < count($classes[1]); $i++) {
-					   	$classes_exp = explode(' ', $classes[1][$i]);
-					   	$class_complete = array();
-					    for ($j=0; $j < count($classes_exp); $j++) { 
-					    	if(substr($classes_exp[$j], 0, 1) != '@'){
-							    $rand = $classes_normal[".{$classes_exp[$j]}"];
-						    	$class_complete[] = preg_replace('/\.|#/', '', $rand);
-							} else {
-						    	$rand = str_replace('@', '', $classes_exp[$j]);
-						    	$outclass[] = ".{$rand}";
-						    }
-						    $class_complete[] = preg_replace('/\.|#/', '', $rand);
-					    }
-					    if($classes[1][$i] != 'twitter-tweet'){
-					    	$page = preg_replace("/class=['|\"]({$classes[1][$i]})['|\"]/i", 'class="'.implode(' ', $class_complete).'"', $page);
-					    }
-					}
-					// $page = preg_replace(array('/\>[^\S ]+/s', '/[^\S ]+\</s', '/(\s)+/s'), array('>', '<', '\\1'), $page);
-				} else {
-					return array('content' => preg_replace(array('/class=("|\')@(.+?)/', '/{#(.*?)#}/'), array('class=$1$2', '$1'), $page), 'status' => false);
-				}
-			} else {
-			    $stylesheets_count = preg_match_all('/<link rel=[\'|"]stylesheet[\'|"][^>]*href=[\'|"](.+?)[\'|"][^>]*>/is', $page, $stylesheet);
-			    $style_final = "";
-			    for ($i=0; $i < $stylesheets_count; $i++) { 
-			    	$style = str_replace($site_url, '.', $stylesheet[1][$i]);
-			    	$style_final .= file_get_contents($style);
-			    	if($i != ($stylesheets_count - 1)){
-			    		$page = str_replace($stylesheet[0][$i], '', $page);
-			    	}
-			    }
-			    $page = str_replace(end($stylesheet[0]), '<style type="text/css">'.$style_final.'</style>', $page);
-			    $ids_count = preg_match_all('/<[^>]*id=[\'|"](.+?)[\'|"][^>]*>/i', $page, $ids);
-				$classes_normal = array();
-				if(isset($_SESSION['noscript'])){
-					$classes_normal = $_SESSION['noscript'];
-				}
-				$outclass = array();
-			    for ($i=0; $i < $ids_count; $i++) {
-			    	$id = $ids[1][$i];
-			    	if(!isset($classes_normal["#{$id}"])){
-					   	$rand = self::RandomKey(3, 6, false);
-					   	if(in_array($rand, array_keys($classes_normal))){
-					   		$rand = self::RandomKey(3, 6, false);
-					    }
-					} else {
-				    	$rand = str_replace('#', '', $classes_normal["#{$id}"]);
-					}
-				   	preg_match("/[\-|\_][0-9][^\"|']*/", $ids[1][$i], $numbers);
-				   	$rand_class = $rand;
-				    if(is_numeric(preg_replace('/[\-|\_]/', '', $numbers[0]))){
-				   		$id = preg_replace('/[0-9]/i', '', $id);
-				   		if(isset($classes_normal["#{$id}"])){
-				    		$rand = preg_replace('/[#\-\_]/i', '', $classes_normal["#{$id}"]);
-				   		}
-					   	$rand_class = $rand.preg_replace('/[0-9]/i', '', $numbers[0]);
-					    $rand = "$rand{$numbers[0]}";
-				   	}
-					if(!isset($classes_normal["#{$id}"])){
-					    $classes_normal["#{$id}"] = "#{$rand_class}";
-					}
-				    if(substr($ids[1][$i], 0, 1) == '@'){
-				    	$rand = str_replace('@', '', $ids[1][$i]);
-				    	$outclass[] = "#{$rand}";
-				    }
-				    $page = preg_replace(array(
-				    	"/id=['|\"]({$ids[1][$i]})['|\"]/",
-				    	"/for=['|\"]({$ids[1][$i]})['|\"]/"
-				    ), array(
-				    	'id="'.$rand.'"',
-				    	'for="'.$rand.'"'
-				    ), $page);
-				}
-
-			    preg_match_all('/<[^>]*class=[\'|"](.+?)[\'|"][^>]*>/i', $page, $classes);
-			    for ($i=0; $i < count($classes[1]); $i++) {
-				   	$classes_exp = explode(' ', $classes[1][$i]);
-				   	$class_complete = array();
-				    for ($j=0; $j < count($classes_exp); $j++) { 
-				    	if(substr($classes_exp[$j], 0, 1) != '@'){
-						    $rand = self::RandomKey(3, 6, false);
-						    if(in_array($rand, array_values($classes_normal))){
-							    $rand = self::RandomKey(3, 6, false);
-						    }
-					    	if(isset($classes_normal[".{$classes_exp[$j]}"])){
-						   		$rand = $classes_normal[".{$classes_exp[$j]}"];
-						    } else {
-						    	$classes_normal[".{$classes_exp[$j]}"] = ".{$rand}";
-						    }
-						} else {
-					    	$rand = str_replace('@', '', $classes_exp[$j]);
-					    	$outclass[] = ".{$rand}";
-					    }
-					    $class_complete[] = preg_replace('/\.|#/', '', $rand);
-				    }
-				    if($classes[1][$i] != 'twitter-tweet'){
-				    	$page = preg_replace("/class=['|\"]({$classes[1][$i]})['|\"]/i", 'class="'.implode(' ', $class_complete).'"', $page);
-				    }
-				}
-
-				// $page = preg_replace(array('/\>[^\S ]+/s', '/[^\S ]+\</s', '/(\s)+/s'), array('>', '<', '\\1'), $page);
-
-				$scripthtml_count = preg_match_all('/<script type=(?:\'|")(.+?)(?:\'|")>(.+?)<\/script>|<script>(.+?)<\/script>/is', $page, $scripthtml);
-				for ($i=0; $i < $scripthtml_count; $i++) {
-				    $htmlfinal = $scripthtml[2][$i];
-				    // $htmlfinal = str_replace(array( "\n", "\r", "\t" ), '', preg_replace(array('#\/\*[\s\S]*?\*\/|([^:]|^)\/\/.*$#m', '/\s+/'), array('', ' '), $htmlfinal));
-
-				    if($scripthtml[1][$i] == 'text/javascript'){
-						foreach ($classes_normal as $class => $rand_class) {
-							preg_match("/[\-|\_][0-9]*/", $class, $numbers);
-			                $numbers_replace = preg_replace('/[\-|\_]/', '', $numbers[0]);
-			                if(is_numeric($numbers_replace)){
-			                    $class = str_replace($numbers_replace, '', $class);
-			                }
-			                preg_match("/[\-|\_][0-9]*/", $rand_class, $numbers);
-			                $numbers_replace = preg_replace('/[\-|\_]/', '', $numbers[0]);
-			                if(is_numeric($numbers_replace)){
-			                    $rand_class = str_replace($numbers_replace, '', $rand_class);
-			                }
-			                if(substr($class, 0, 1)){
-			                	$htmlfinal = preg_replace('/{#('.str_replace('#', '', $class).')#}/', str_replace('#', '', $rand_class), $htmlfinal);
-			                }
-			                $htmlfinal = str_replace(array(
-			                   	"'$class'",
-			                   	'"'.$class.'"',
-			                   	" $class",
-			                   	"$class ",
-			                   	"{$class}.",
-			                   	"{$class}#",
-			                   	"$class:",
-			                   	"{$class}>",
-			                   	"{$class}[",
-			                   	"($class",
-			                   	"$class,",
-			                   	",$class",
-			                    ", $class"
-			                ), array(
-			                   	"'$rand_class'",
-			                   	'"'.$rand_class.'"',
-			                   	" $rand_class",
-			                   	"$rand_class ",
-			                   	"{$rand_class}.",
-			                   	"{$rand_class}#",
-			                   	"$rand_class:",
-			                   	"{$rand_class}>",
-			                   	"{$rand_class}[",
-			                   	"($rand_class",
-			                   	"$rand_class,",
-			                   	",$rand_class",
-			                    ", $rand_class"
-			                ), $htmlfinal);
-			            }
-
-			            $clasess = preg_match_all("/(?:addClass|removeClass|hassClass|toggleClass)\([\'|\"]([\w0-9_-]+)[\'|\"]\)/", $htmlfinal, $class);
-			            for ($j=0; $j < $clasess; $j++) { 
-			               	if(!isset($classes_normal[".{$class[1][$j]}"])){
-			                	$rand = self::RandomKey(3, 6, false);
-								if(in_array($rand, array_values($classes_normal))){
-								    $rand = self::RandomKey(3, 6, false);
-							    }
-							    $classes_normal[".{$class[1][$j]}"] = ".{$rand}";
-			               	}
-			               	$class_one = preg_replace('/\.|#/', '', $classes_normal[".{$class[1][$j]}"]);
-			               	$class_one = str_replace($class[1][$j], $class_one, $class[0][$j]);
-			               	$htmlfinal = str_replace($class[0][$j], $class_one, $htmlfinal);
-			            }
-			        }
-				    $page = str_replace($scripthtml[2][$i], $htmlfinal, $page);
-				}
-
-				$stylehtml_count = preg_match_all('/<style type=[\'|"]text\/css[\'|"]>(.+?)<\/style>|<style>(.+?)<\/style>/is', $page, $stylehtml);
-				for ($i=0; $i < $stylehtml_count; $i++) {
-				    $htmlfinal = $stylehtml[1][$i];
-				    // $htmlfinal = preg_replace(array('#\/\*[\s\S]*?\*\/#', '/\s+/'), array('', ' '), str_replace(array( "\n", "\r", "\t"), '', $htmlfinal));
-
-				    $stylesout_count = preg_match_all('/(?:\.|#)((?!woff|w3|org)[^0-9][\w0-9_-]+)/', $htmlfinal, $stylesout);
-				   	for ($j=0; $j < $stylesout_count; $j++) {
-				   		if(!ctype_xdigit($stylesout[1][$j])){
-				   			if(!isset($classes_normal[$stylesout[0][$j]]) && !in_array($stylesout[0][$j], array_values($outclass))){
-				   				$rand = self::RandomKey(3, 6, false);
-								if(in_array($rand, array_values($classes_normal))){
-							    	$rand = self::RandomKey(3, 6, false);
-							    }
-					    		$classes_normal[$stylesout[0][$j]] = (strpos($stylesout[0][$j], '#') ? "#" : ".").$rand;
-					    	}
-				   		}
-				    }
-
-					foreach ($classes_normal as $class => $rand_class) {
-					   	$htmlfinal = str_replace(array(
-					   		"$class ",
-					   		"{$class}.", 
-					   		"{$class}#", 
-					    	"{$class}{", 
-				    		"{$class}:", 
-				    		"{$class}>", 
-					   		"{$class}[", 
-					   		":not($class", 
-					   		"$class,",
-					   	), array(
-					   		"$rand_class ", 
-					   		"{$rand_class}.", 
-					    	"{$rand_class}#", 
-					    	"{$rand_class}{", 
-				    		"{$rand_class}:", 
-				    		"{$rand_class}>", 
-					   		"{$rand_class}[", 
-					   		":not($rand_class", 
-					   		"$rand_class,", 
-					    ), $htmlfinal);
-				    }
-				    $page = str_replace($stylehtml[1][$i], $htmlfinal, $page);
-				}
-				$_SESSION['noscript'] = $classes_normal;
-			}
-		}
 		preg_match_all('/{%%(.+?)%%}/is', $page, $scripts);
 		$page = preg_replace(array(
 			'/{\*HERE\*}/',
@@ -2239,7 +1997,8 @@ class Specific {
 			'class=$1$2',
 			'$1'
 		), $page);
-		return array('content' => $page, 'status' => true);
+		
+		return $page;
 	}
 
 	public static function Logged() {

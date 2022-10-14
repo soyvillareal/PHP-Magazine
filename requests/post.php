@@ -12,14 +12,11 @@ if($one == 'load'){
 			$html = $post_load['html'];
 
 			if($post_load['return']){
-				$HTMLFormatter = Specific::HTMLFormatter($html, true);
-				if($HTMLFormatter['status'] == true){
-					$deliver = array(
-						'S' => 200,
-						'ID' => $post['id'],
-						'HT' => $HTMLFormatter['content']
-					);
-				}
+				$deliver = array(
+					'S' => 200,
+					'ID' => $post['id'],
+					'HT' => $html
+				);
 			}
 		}
 	}

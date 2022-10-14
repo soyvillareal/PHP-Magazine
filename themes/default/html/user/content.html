@@ -14,6 +14,7 @@
                 <?php if($TEMP['#profile_blocked'] == false){ ?>
                 <div class="item-piname display-flex direction-row align-center position-relative">
                     <h1 class="font-bold font-supraly font-postoni-gara">{$username}</h1>
+                    <?php if(!Specific::IsOwner($TEMP['#user_id'])){ ?>
                     <div id="container-poptions" class="margin-l15">
                         <button id="btn-poptions" class="btn-noway color-blackly btn-noway animation-ease3s animate-tab-button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->options}">
                             <svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -35,6 +36,7 @@
                             <?php } ?>
                         </div>
                     </div>
+                    <?php } ?>
                 </div>
                 <?php if($TEMP['#followers'] > 0 && ($TEMP['#profile']['shows']['followers'] == 'on' || Specific::IsOwner($TEMP['#user_id']))) { ?>
                 <span id="item-followers" class="font-medium font-postoni-gara<?php echo($TEMP['#profile']['shows']['followers'] == 'off' && Specific::IsOwner($TEMP['#user_id'])) ? ' color-grey ' : ' color-blackly ';?>margin-b10">{$followers}</span>
@@ -55,6 +57,7 @@
                 <?php } else { ?>
                 <div class="item-piname display-flex direction-row align-center position-relative">
                     <h1 class="font-bold font-supraly font-postoni-gara">{$word->user}</h1>
+                    <?php if(!Specific::IsOwner($TEMP['#user_id'])){ ?>
                     <div id="container-poptions" class="margin-l15">
                         <button id="btn-poptions" class="btn-noway color-blackly btn-noway animation-ease3s animate-tab-button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->options}">
                             <svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -74,6 +77,7 @@
                             <button id="btn-preport" class="w-100 text-left btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover-button animate-tab-button animation-ease3s">{$word->report}</button>
                         </div>
                     </div>
+                    <?php } ?>
                 </div>
                 <?php } ?>
             </div>

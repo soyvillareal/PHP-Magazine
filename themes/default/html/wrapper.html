@@ -191,7 +191,7 @@
                            <div class="display-flex direction-row align-center w-100 padding-b5">
                               <span class="color-black font-bold margin-right-auto">{$word->followed}</span>
                               <label class="content-nscheckbox display-inline-block position-relative margin-r5">
-                                 <input class="input_nsettings item_place hidden" name="followed" type="checkbox"<?php echo(in_array('followed', $TEMP['#user']['notifications'])) ? ' checked' : '';?>>
+                                 <input class="input_nsettings item_place hidden" name="post" type="checkbox"<?php echo(in_array('post', $TEMP['#user']['notifications'])) ? ' checked' : '';?>>
                                  <span class="slider-nsettings position-absolute background-grely"></span>
                               </label>
                            </div>
@@ -724,6 +724,11 @@
    {%%<script type="text/javascript">
       $(document).ready(function(){
          let a = $('body'),
+             c = $('#container-menu'),
+             d = $('#container-languages'),
+             l = $('#container-notifications'),
+             z = $('#content-notifications'),
+             x = $('#btn-bnmenu'),
              h = $('.btn_account'),
              f = $('.btn_drawer'),
              j = h.find('svg'),
@@ -737,7 +742,7 @@
          }), $(document).click(function(e){
             $(e.target).is('.container-drawer') && (a.removeClass(k).removeClass('backdrop-active-as'), g(f)), <?php echo($TEMP['#loggedin'] === true) ? "$(e.target).is('.content-dropdown-account') && (a.removeClass(k).removeClass('backdrop-active-ac'), h.removeClass('active').siblings().addClass('hidden'), j.removeClass('rotate-180'), g(h))" : "$(e.target).is('.content-login-modal') && a.removeClass('modal-login-active')" ?>
          })<?php if($TEMP['#loggedin'] === true){ ?>, h.click(function(){
-            a.hasClass(k) ? f.attr('aria-expanded') == 'false' && a.removeClass(k) : a.addClass(k), a.toggleClass('backdrop-active-ac'), h.toggleClass('active').next().removeAttr('style').toggleClass('hidden').next().addClass('hidden'), g(h), f.attr('aria-expanded', !1), !$(this).hasClass('button-login') && j.toggleClass('rotate-180'), a.removeClass('backdrop-active-as')
+            a.hasClass(k) ? f.attr('aria-expanded') == 'false' && a.removeClass(k) : a.addClass(k), a.toggleClass('backdrop-active-ac'), d.hasClass('hidden') && c.removeAttr('style').toggleClass('hidden'), h.toggleClass('active'), (!l.hasClass('hidden') || !d.hasClass('hidden')) && (l.addClass('hidden'), d.addClass('hidden'), z.addClass('hidden').siblings().addClass('hidden'), x.removeClass('hidden').siblings(':not(:last-child)').addClass('hidden').next(':last-child').removeClass('hidden')), g(h), f.attr('aria-expanded', !1), !$(this).hasClass('button-login') && j.toggleClass('rotate-180'), a.removeClass('backdrop-active-as')
          })<?php } else { ?>, $('#btn-modal-login').click(function(){
             a.toggleClass('modal-login-active'), g($(this)), a.removeClass('backdrop-active-as')
          })<?php } ?>
