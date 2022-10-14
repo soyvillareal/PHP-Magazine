@@ -20,9 +20,9 @@ $label_load = Load::Tag($label['id']);
 
 $TEMP['tag'] = ucwords($label['name']);
 $TEMP['catag_id'] = $label['id'];
+$TEMP['posts_result'] = $label_load['html'];
 
 if($label_load['return']){
-	$TEMP['posts_result'] = $label_load['html'];
 	$widget = Specific::GetWidget('horizposts');
 	if($widget['return']){
 		$TEMP['posts_result'] .= $widget['html'];

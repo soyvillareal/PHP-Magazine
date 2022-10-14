@@ -30,8 +30,8 @@ if($one == 'load'){
 	$post_id = Specific::Filter($_POST['post_id']);
 
 	if(!empty($post_id) && is_numeric($post_id)){
-		$user_id = $dba->query('SELECT user_id FROM '.T_POST.' WHERE id = ?', $post_id)->fetchArray(true);
-		if(Specific::IsOwner($user_id)){
+		$post = $dba->query('SELECT user_id, COUNT(*) as count FROM '.T_POST.' WHERE id = ? AND status <> "deleted"', $post_id)->fetchArray();
+		if($post['count'] > 0 && Specific::IsOwner($post['user_id'])){
 			if($dba->query('UPDATE '.T_POST.' SET status = "deleted", deleted_at = ? WHERE id = ?', time(), $post_id)->returnStatus()){
 				$_SESSION['post_deleted'] = $post_id;
 				$deliver = array(

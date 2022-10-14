@@ -19,10 +19,9 @@ $TEMP['#profile'] = $user = Specific::Data($user, 3);
 $query = '';
 
 $profile_load = Load::Profile($user['id']);
+$TEMP['posts_result'] = $profile_load['html'];
 
 if($profile_load['return']){
-	$TEMP['posts_result'] = $profile_load['html'];
-
 	$widget = Specific::GetWidget('horizposts');
 	if($widget['return']){
 		$TEMP['posts_result'] .= $widget['html'];

@@ -73,10 +73,10 @@ $search_load = Load::Search(array(
 	'author' => $author,
 	'sort' => $sort
 ));
+$TEMP['posts_result'] = $search_load['html'];
+$TEMP['search_info'] = $search_load['info'];
 
 if($search_load['return']){
-	$TEMP['posts_result'] = $search_load['html'];
-	$TEMP['search_info'] = $search_load['info'];
 	$widget = Specific::GetWidget('horizposts');
 	if($widget['return']){
 		$TEMP['posts_result'] .= $widget['html'];

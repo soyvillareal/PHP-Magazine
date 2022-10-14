@@ -19,10 +19,6 @@ if(!Specific::IsOwner($post['user_id'])){
 
 if(!in_array($post['user_id'], Specific::BlockedUsers(false)) || Specific::IsOwner($post['user_id'])){
 
-	$TEMP['#is_approved'] = false;
-	if($post['status'] == 'approved'){
-		$TEMP['#is_approved'] = true;
-	}
 	$post_load = Load::Post($post);
 	$TEMP['main'] = $post_load['html'];
 

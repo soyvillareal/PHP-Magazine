@@ -23,9 +23,9 @@ $category_name = $TEMP['#word']["category_{$category['name']}"];
 $TEMP['category_name'] = $category_name;
 $TEMP['category_slug'] = strtolower($category_name);
 $TEMP['catag_id'] = $category['id'];
+$TEMP['posts_result'] = $category_load['html'];
 
 if($category_load['return']){
-	$TEMP['posts_result'] = $category_load['html'];
 	$widget = Specific::GetWidget('horizposts');
 	if($widget['return']){
 		$TEMP['posts_result'] .= $widget['html'];
