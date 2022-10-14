@@ -1997,7 +1997,7 @@ class Specific {
 			'class=$1$2',
 			'$1'
 		), $page);
-		
+
 		return $page;
 	}
 
@@ -2025,12 +2025,33 @@ class Specific {
 	    }
 	    return $input;
 	}
+	
+	public static function PostCreate($deliver = array()) {
+	    ob_end_clean();
+	    header("Content-Encoding: none");
+	    header("Connection: close");
+	    ignore_user_abort(); // optional
+	    ob_start();
+	    if (!empty($deliver)) {
+	        header('Content-Type: application/json');
+	        echo json_encode($deliver);
+	    }
+	    $size = ob_get_length();
+	    header("Content-Length: $size");
+	    ob_end_flush(); // Strange behaviour, will not work
+	    flush(); // Unless both are called!
+	   	session_write_close();
+	    if (is_callable('fastcgi_finish_request')) {
+	        fastcgi_finish_request();
+	    }
+	    // Do processing here
+	}
 
 	public static function Sitemap($background = false){
 		global $dba, $TEMP;
 		$dbaLimit = 45000;
-		$videos = $dba->query('SELECT COUNT(*) FROM videos WHERE privacy = 0 AND approved = 1 AND deleted = 0')->fetchArray(true);
-		if(empty($videos)){
+		$posts = $dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE status = "approved"')->fetchArray(true);
+		if(empty($posts)){
 			return false;
 		}
 		$time = time();
@@ -2041,34 +2062,38 @@ class Specific {
                 'time' => self::DateFormat($time)
 			));
 		}
-		$limit = ceil($videos / $dbaLimit);
+		$folder_sitemap = 'sitemaps';
+		if (!file_exists($folder_sitemap)) {
+			mkdir($folder_sitemap, 0777, true);
+		}
+		$limit = ceil($posts / $dbaLimit);
 		$sitemap_x = '<?xml version="1.0" encoding="UTF-8"?>
 		                <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 		$sitemap_index = '<?xml version="1.0" encoding="UTF-8"?>
 		                    <sitemapindex  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" >';
 		for ($i=1; $i <= $limit; $i++) {            
-		  $sitemap_index .= "\n<sitemap>
+		  	$sitemap_index .= "\n<sitemap>
 		                          <loc>" . self::Url("sitemaps/sitemap-$i.xml") . "</loc>
 		                          <lastmod>" . date('c') . "</lastmod>
 		                        </sitemap>";
-		  $paginate = $dba->query('SELECT * FROM videos WHERE privacy = 0 AND approved = 1 AND deleted = 0 ORDER BY id ASC LIMIT ? OFFSET ?', $dbaLimit, $i)->fetchAll();
-		  foreach ($paginate as $value) {
-		    $video = self::Video($value);
+		  	$paginate = $dba->query('SELECT * FROM '.T_POST.' WHERE status = "approved" ORDER BY id ASC LIMIT ? OFFSET ?', $dbaLimit, $i)->fetchAll();
+		  	foreach ($paginate as $post) {
 		    $sitemap_x .= '<url>
-		                    <loc>' . $video['url'] . '</loc>
-		                    <lastmod>' . date('c', $video['time']). '</lastmod>
+		                    <loc>' . self::Url($post['slug']) . '</loc>
+		                    <lastmod>' . date('c', $post['created_at']). '</lastmod>
 		                    <changefreq>monthly</changefreq>
 		                    <priority>0.8</priority>
 		                  </url>' . "\n";
-		  }
-		  $sitemap_x .= "\n</urlset>";
-		  file_put_contents("sitemaps/sitemap-$i.xml", $sitemap_x);
-		  $sitemap_x = '<?xml version="1.0" encoding="UTF-8"?>
+		  	}
+		  	$sitemap_x .= "\n</urlset>";
+
+		  	file_put_contents("sitemaps/sitemap-$i.xml", $sitemap_x);
+		  	$sitemap_x = '<?xml version="1.0" encoding="UTF-8"?>
 		                  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'; 
 		}
 		$sitemap_index .= '</sitemapindex>';
 		$file_final = file_put_contents('sitemap-index.xml', $sitemap_index);
-		$dba->query('UPDATE settings SET value = "'.$time.'" WHERE name = "last_sitemap"');
+		$dba->query('UPDATE '.T_SETTING.' SET value = ? WHERE name = "last_sitemap"', $time);
 		return true;
 	}
 }

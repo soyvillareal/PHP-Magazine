@@ -1,2 +1,4 @@
+*.xml
+sitemaps/
 uploads/
 node_modules/

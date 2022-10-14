@@ -1,6 +1,11 @@
 <?php
 require_once('./includes/autoload.php');
 
+if(empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest'){
+	header("Location: " . Specific::Url('home'));
+	exit();
+}
+
 $deliver = array();
 $one = Specific::Filter($_GET['one']);
 $token = Specific::Filter($_POST['token']);
