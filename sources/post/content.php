@@ -2,7 +2,17 @@
 
 $slug = Specific::Filter($_GET['one']);
 $post = $dba->query('SELECT * FROM '.T_POST.' WHERE slug = ?', $slug)->fetchArray();
-if(empty($post) || (!Specific::IsOwner($post['user_id']) && !$TEMP['#moderator'] && $post['status'] == 'pending')){
+if(empty($post)){
+	header("Location: " . Specific::Url('404'));
+	exit();
+}
+
+if(!Specific::IsOwner($post['user_id'])){
+	if($TEMP['#moderator'] == false && $post['status'] != 'approved'){
+		header("Location: " . Specific::Url('404'));
+		exit();
+	}
+} else if($post['status'] == 'deleted'){
 	header("Location: " . Specific::Url('404'));
 	exit();
 }

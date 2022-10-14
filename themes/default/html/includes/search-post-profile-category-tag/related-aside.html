@@ -11,7 +11,7 @@
          </div>
          <?php } ?>
          <picture class="picture-related no-hover">
-            <img src="{!thumbnail}" alt="{!title}">
+            <img class="blur-up lazyload" src="{!thumbnail}" alt="{!title}">
          </picture>
          <figcaption class="content-hpublished position-absolute no-hover">
             <time class="color-white font-lowly ellipsis-horizontal no-hover" datetime="{!published_date}">{!published_at}</time>
@@ -38,7 +38,7 @@
          <a class="display-flex" href="{!url}" target="_self" title="{!title}">
             <h3 class="color-black font-medium font-normal break-all hover-blue margin-r10">{!title}</h3>
             <figure class="position-relative margin-left-auto" aria-hidden="true">
-               <img src="{!thumbnail}" alt="{!title}">
+               <img class="blur-up lazyload" src="{!thumbnail}" alt="{!title}">
             </figure>
          </a>
       </div>

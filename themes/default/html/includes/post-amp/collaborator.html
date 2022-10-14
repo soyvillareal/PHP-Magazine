@@ -5,7 +5,7 @@
       <?php if($TEMP['#is_amp'] == true){ ?>
       <amp-img class="w-100px h-100px" src="{!collab_avatar}" alt="{!collab_name}" width="100" height="100" layout="responsive"></amp-img>
       <?php } else { ?>
-      <img src="{!collab_avatar}" alt="{!collab_name}" draggable="false">
+      <img class="blur-up lazyload" src="{!collab_avatar}" alt="{!collab_name}" draggable="false">
       <?php } ?>
     </figure>
     <h3 class="color-black text-center margin-t15">{!collab_name}</h3>
@@ -35,7 +35,7 @@
 <div class="content-cpost display-flex">
   <div class="content-cpfigure display-flex">
     <figure class="w-100px h-100px margin-auto overflow-hidden border-rall border-grely boxshadow-grey animation-ease3s">
-      <img src="{!collab_avatar}" alt="{!collab_name}">
+      <img class="blur-up lazyload" src="{!collab_avatar}" alt="{!collab_name}">
     </figure>
   </div>
   <div class="content-cpinfo display-flex direction-colum">

@@ -23,21 +23,24 @@ $category_name = $TEMP['#word']["category_{$category['name']}"];
 $TEMP['category_name'] = $category_name;
 $TEMP['category_slug'] = strtolower($category_name);
 $TEMP['catag_id'] = $category['id'];
-$TEMP['posts_result'] = $category_load['html'];
 
-$widget = Specific::GetWidget('horizposts');
-if($widget['return']){
-	$TEMP['posts_result'] .= $widget['html'];
-}
+if($category_load['return']){
+	$TEMP['posts_result'] = $category_load['html'];
+	$widget = Specific::GetWidget('horizposts');
+	if($widget['return']){
+		$TEMP['posts_result'] .= $widget['html'];
+	}
 
-$widget = Specific::GetWidget('aside');
-if($widget['return']){
-	$TEMP['content_aad'] = $widget['html'];
-}
+	$widget = Specific::GetWidget('aside');
+	if($widget['return']){
+		$TEMP['content_aad'] = $widget['html'];
+	}
 
-$query = '';
-if(!empty($category_load['catag_ids'])){
-	$query = ' AND id NOT IN ('.implode(',', $category_load['catag_ids']).')';
+	$query = '';
+	if(!empty($category_load['catag_ids'])){
+		$query = ' AND id NOT IN ('.implode(',', $category_load['catag_ids']).')';
+	}
+	$TEMP['catag_ids'] = implode(',', $category_load['catag_ids']);
 }
 
 $TEMP['#related_cat'] = $dba->query('SELECT * FROM '.T_POST.' WHERE user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"'.$query.' ORDER BY RAND() DESC LIMIT 5')->fetchAll();
@@ -60,7 +63,6 @@ if(!empty($TEMP['#related_cat'])){
 	Specific::DestroyMaket();
 }
 
-$TEMP['catag_ids'] = implode(',', $category_load['catag_ids']);
 $TEMP['form_newsletter'] = Specific::Maket('includes/search-post-profile-category-tag/includes/form-newsletter');
 $TEMP['newsletter'] = Specific::Maket('includes/search-post-profile-category-tag/newsletter');
 

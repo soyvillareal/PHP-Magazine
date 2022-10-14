@@ -62,7 +62,7 @@
                            </div>
                            <?php } ?>
                            <picture class="no-hover">
-                              <img src="{$main_right_thumbnail}" alt="{$main_right_title}" role="presentation">
+                              <img class="blur-up lazyload" src="{$main_right_thumbnail}" alt="{$main_right_title}" role="presentation">
                            </picture>
                            <figcaption class="content-hpublished position-absolute no-hover">
                               <time class="color-white font-lowly ellipsis-horizontal no-hover" datetime="{$main_right_published_date}">{$main_right_published_at}</time>
@@ -118,7 +118,7 @@
             </button>
             <figure class="display-flex direction-colum background-grely">
                <picture>
-                  <img src="{$thumbnail}" alt="{$title}">
+                  <img class="blur-up lazyload" src="{$thumbnail}" alt="{$title}">
                </picture>
             </figure>
          </div>

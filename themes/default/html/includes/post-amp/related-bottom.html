@@ -6,7 +6,7 @@
                <?php if($TEMP['#is_amp'] == true){ ?>
                <amp-img src="{!thumbnail}" alt="{!title}" width="226" height="146" layout="fixed"></amp-img>
                <?php } else { ?>
-               <img src="{!thumbnail}" alt="{!title}">
+               <img class="blur-up lazyload" src="{!thumbnail}" alt="{!title}">
                <?php } ?>
             </picture>
          </div>

@@ -4,9 +4,9 @@
             <div class="item-pimage margin-l15 padding-r20">
                 <figure class="overflow-hidden border-rall">
                     <?php if($TEMP['#profile_blocked'] == false){ ?>
-                    <img src="{$avatar_b}" alt="{$username}"/>
+                    <img class="blur-up lazyload" src="{$avatar_b}" alt="{$username}"/>
                     <?php } else{ ?>
-                    <img src="{$theme->{images/users/default-holder-b.jpeg}}" alt="{$word->user}"/>
+                    <img class="blur-up lazyload" src="{$theme->{images/users/default-holder-b.jpeg}}" alt="{$word->user}"/>
                     <?php } ?>
                 </figure>
             </div>
@@ -362,7 +362,7 @@
 {%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/search-profile-category-tag/style.related-aside.min.css}}" />%%}
 {%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home-post-messages-profile/style.modal.min.css}}" />%%}
 {%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post-profile/style.report.min.css}}" />%%}
-{%%<script src="{$theme->{assets/js/theia-sticky-sidebar.min.js}}"></script>%%}
+{%%<script src="{$theme->{assets/js/plugins/theia-sticky-sidebar.min.js}}"></script>%%}
 {%%<script type="text/javascript">
     paper_u = {
         token: '{#token_session}',

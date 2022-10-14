@@ -11,7 +11,7 @@
                 <?php if($TEMP['#is_amp'] == true){ ?>
                 <amp-img src="{!frame}" alt="{!title}" width="100" height="100" layout="responsive"></amp-img>
                 <?php } else { ?>
-                <img src="{!frame}" alt="{!title}">
+                <img class="blur-up lazyload" src="{!frame}" alt="{!title}">
                 <?php } ?>
             </picture>
             <?php if(!empty($TEMP['!esource'])){ ?>

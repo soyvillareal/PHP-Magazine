@@ -10,7 +10,6 @@
    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
    <meta name="format-detection" content="telephone=no">
    <link rel="shortcut icon" type="image/png" href="{$theme->{images/favicon.ico}}" />
-   {%%<script src="{$theme->{assets/js/jquery-3.6.0.min.js}}"></script>%%}
 </head>
 <body class="position-relative w-100 mw-1170 h-100 background-white color-black margin-auto" dir="{$dir}">
    <noscript>
@@ -62,7 +61,7 @@
                <div class="dropdown-account-item padding-t10 padding-b10 padding-l10 padding-r10 border-bottom border-grely">
                   <a class="display-flex direction-row align-center hover-button animation-ease3s" href="{$me->slug}" target="_self" title="{$me->username}">
                      <div class="dropdown-account-image margin-r5">
-                        <img class="border-rall" src="{$me->avatar_s}" alt="{$me->username}">
+                        <img class="blur-up border-rall lazyload" src="{$me->avatar_s}" alt="{$me->username}">
                      </div>
                      <span class="color-blackly font-medium text-capitalize">{$me->username}</span>
                   </a>
@@ -721,7 +720,8 @@
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.header.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.footer.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.aside.css}}" />
-   {%%<script type="text/javascript">
+   <script src="{$theme->{assets/js/jquery-3.6.0.min.js}}"></script>
+   <script type="text/javascript">
       $(document).ready(function(){
          let a = $('body'),
              c = $('#container-menu'),
@@ -762,8 +762,9 @@
             sort_by: '{$word->sort_by}'
          }
       };
-   </script>%%}
-   {%%<script src="{$theme->{assets/js/jquery.general.min.js}}"></script>%%}
+   </script>
+   <script src="{$theme->{assets/js/jquery.general.min.js}}"></script>
+   <script src="{$theme->{assets/js/plugins/lazysizes.min.js}}"></script>
    {*HERE*}
 </body>
 </html>

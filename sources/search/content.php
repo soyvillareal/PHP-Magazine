@@ -74,22 +74,22 @@ $search_load = Load::Search(array(
 	'sort' => $sort
 ));
 
-$TEMP['posts_result'] = $search_load['html'];
-$TEMP['search_info'] = $search_load['info'];
-
-$widget = Specific::GetWidget('horizposts');
-if($widget['return']){
-	$TEMP['posts_result'] .= $widget['html'];
-}
-
-$widget = Specific::GetWidget('aside');
-if($widget['return']){
-	$TEMP['content_aad'] = $widget['html'];
-}
-
-$query = '';
-if(!empty($search_load['search_ids'])){
-	$query = ' AND id NOT IN ('.implode(',', $search_load['search_ids']).')';
+if($search_load['return']){
+	$TEMP['posts_result'] = $search_load['html'];
+	$TEMP['search_info'] = $search_load['info'];
+	$widget = Specific::GetWidget('horizposts');
+	if($widget['return']){
+		$TEMP['posts_result'] .= $widget['html'];
+	}
+	$widget = Specific::GetWidget('aside');
+	if($widget['return']){
+		$TEMP['content_aad'] = $widget['html'];
+	}
+	$query = '';
+	if(!empty($search_load['search_ids'])){
+		$query = ' AND id NOT IN ('.implode(',', $search_load['search_ids']).')';
+	}
+	$TEMP['search_ids'] = implode(',', $search_load['search_ids']);
 }
 
 $TEMP['#related_cat'] = $dba->query('SELECT * FROM '.T_POST.' WHERE user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"'.$query.' ORDER BY RAND() DESC LIMIT 5')->fetchAll();
@@ -121,8 +121,6 @@ $TEMP['#show_sinfo'] = false;
 if(empty($keyword) || $search_load['return'] == false){
 	$TEMP['#show_sinfo'] = true;
 }
-
-$TEMP['search_ids'] = implode(',', $search_load['search_ids']);
 
 $TEMP['#page']        = 'search';
 $TEMP['#title']       = $TEMP['#word']['search'] . ' - ' . $TEMP['#settings']['title'];

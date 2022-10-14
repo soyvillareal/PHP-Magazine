@@ -900,6 +900,15 @@ body.backdrop-active-as .content-backdrop-as:before {
     -o-transform: rotateY(180deg);
     transform: rotate(180deg);
 }
+.blur-up {
+    -webkit-filter: blur(5px);
+    filter: blur(5px);
+    transition: filter 400ms, -webkit-filter 400ms;
+}
+.blur-up.lazyloaded {
+    -webkit-filter: blur(0);
+    filter: blur(0);
+}
 
 
 /* Con display-flex, direction-row y align-center se hace el vertical-center */

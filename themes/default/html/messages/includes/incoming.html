@@ -27,7 +27,7 @@
 			</div>
 			<?php } else { ?>
 			<div class="content-pmtfile content_pmtimage" data-id="{!fi_aid}" data-type="image">
-				<img class="item-pmtimage border-rlow" src="{!fi_aurl}" alt="{!fi_aname}">
+				<img class="blur-up item-pmtimage border-rlow lazyload" src="{!fi_aurl}" alt="{!fi_aname}">
 			</div>
 			<?php } ?>
 			<?php } else { ?>
@@ -37,7 +37,7 @@
 	</div>
 	<div class="item-pmtreply display-flex direction-row align-center position-relative margin-t15">
 		<div class="item-mavatar margin-r5 overflow-hidden border-rall">
-			<img src="{!avatar_s}" alt="{!username}">
+			<img class="blur-up lazyload" src="{!avatar_s}" alt="{!username}">
 		</div>
 		<p class="item_pmtext break-all background-grely padding-t5 padding-b5 padding-l15 padding-r15 border-r25px">{!text}</p>
 		<button class="btn_pmtreply w-30px h-30 btn-noway margin-l5 margin-r5 padding-5 background-hover color-grey border-rall opacity-0 hover-button animation-ease3s animate-tab-button" data-id="{!id}" data-type="text">
@@ -60,7 +60,7 @@
 <?php } else { ?>
 <div class="content_pmtmessage display-flex direction-row align-center margin-l10 padding-t15" data-id="{!id}">
 	<div class="item-mavatar margin-r5 overflow-hidden border-rall">
-		<img src="{!avatar_s}" alt="{!username}">
+		<img class="blur-up lazyload" src="{!avatar_s}" alt="{!username}">
 	</div>
 	<p class="item_pmtext break-all background-grely padding-t5 padding-b5 padding-l15 padding-r15 border-r25px">{!text}</p>
 	<button class="btn_pmtreply w-30px h-30 btn-noway margin-l5 margin-r5 padding-5 background-hover color-grey border-rall opacity-0 hover-button animation-ease3s animate-tab-button" data-id="{!id}" data-type="text">

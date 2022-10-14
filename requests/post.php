@@ -15,7 +15,7 @@ if($one == 'load'){
 				$deliver = array(
 					'S' => 200,
 					'ID' => $post['id'],
-					'HT' => $html
+					'HT' => Specific::HTMLFormatter($html)
 				);
 			}
 		}

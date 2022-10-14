@@ -68,7 +68,7 @@
                      </button>
                      <div class="content_saved position-absolute">
                         <div class="item-saved">
-                           <img alt="{$title}" src="{$thumbnail}">
+                           <img class="blur-up lazyload" alt="{$title}" src="{$thumbnail}">
                         </div>
                      </div>
                      <?php } else { ?>
@@ -172,7 +172,7 @@
                         </button>
                         <div class="content_saved position-absolute">
                            <div class="item-saved">
-                              <img alt="{$title}" src="{$thumbnail}">
+                              <img class="blur-up lazyload" alt="{$title}" src="{$thumbnail}">
                            </div>
                         </div>
                         <?php } else { ?>
@@ -196,7 +196,7 @@
                </div>
                <figure class="margin-t15" aria-label="{$word->illustration}" role="group">
                   <picture>
-                     <img alt="{$title}" src="{$thumbnail}">
+                     <img class="blur-up lazyload" alt="{$title}" src="{$thumbnail}">
                   </picture>
                   <?php if(!empty($TEMP['#thumb_sources'])){ ?>
                   <figcaption class="position-absolute w-100 margin-b10 text-center">
@@ -208,7 +208,7 @@
             <div class="display-flex margin-t15 margin-b15">
                <div class="item-photo display-inline-block w-50px margin-r10" aria-hidden="true">
                   <a href="{$author_url}" target="_self" title="{$author_name}">
-                     <img class="margin-r10" alt="{$author_name}" title="{$author_name}" src="{$author_avatar}">
+                     <img class="blur-up margin-r10 lazyload" alt="{$author_name}" title="{$author_name}" src="{$author_avatar}">
                   </a>
                </div>
                <div class="display-flex direction-colum align-start">
@@ -390,7 +390,7 @@
          <section class="items_comments display-flex direction-colum" data-type="system">
             <div class="display-flex direction-row align-center w-100 margin-t15 margin-b15">
                <div class="margin-bottom-auto margin-r10">
-                  <img class="w-45px h-45 border-rall" alt="{$cusername}" title="{$cusername}" src="{$avatar_cs}">
+                  <img class="blur-up w-45px h-45 border-rall lazyload" alt="{$cusername}" title="{$cusername}" src="{$avatar_cs}">
                </div>
                <div class="content-pcomment content_comment display-flex direction-colum w-100 margin-bottom-auto">
                   <textarea class="text_carea w-100 background-white color-black padding-5 resize-none border-none border-focus-blue border-bottom border-grely sizing-box animation-ease3s" rows="1" placeholder="{$word->write_something}"></textarea>

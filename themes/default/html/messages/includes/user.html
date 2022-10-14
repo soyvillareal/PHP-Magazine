@@ -1,7 +1,7 @@
 <li class="content_pnuser position-relative margin-l5 margin-r5 padding-l5 padding-r5<?php echo(empty($TEMP['!last_text'])) ? ' is_new' : '';?>" data-id="{!user_id}">
 	<a class="content-pnmessage background-hover display-flex direction-row align-center color-black padding-t10 padding-b10 padding-l10 padding-r10<?php echo($TEMP['#profile_id'] == $TEMP['!user_id'] || empty($TEMP['!last_text'])) ? ' active' : '';?><?php echo($TEMP['#last_unseen'] == true) ? ' unseen' : '';?>" href="{$url->{{#r_messages}/{!user}}}">
 		<div class="item-pnmessage overflow-hidden border-rall margin-r10">
-			<img src="{!avatar_s}" alt="{!username}">
+			<img class="blur-up lazyload" src="{!avatar_s}" alt="{!username}">
 		</div>
 		<div class="display-flex direction-colum">
 			<span class="margin-b5">{!username}</span>

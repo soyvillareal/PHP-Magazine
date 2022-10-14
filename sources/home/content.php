@@ -22,9 +22,11 @@ $TEMP['#has_main_left'] = false;
 $TEMP['#has_main_right'] = false;
 $TEMP['#has_main_two'] = false;
 
-$widget = Specific::GetWidget('htop');
-if($widget['return']){
-	$TEMP['advertisement_htad'] = $widget['html'];
+if(count($TEMP['#main']) > 0){
+	$widget = Specific::GetWidget('htop');
+	if($widget['return']){
+		$TEMP['advertisement_htad'] = $widget['html'];
+	}
 }
 
 if(count($TEMP['#main']) >= $TEMP['#limit_main']){

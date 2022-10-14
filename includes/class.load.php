@@ -599,12 +599,19 @@ class Load {
 			'profile_ids' => $profile_ids
 		);
 
-
 		if(!empty($profile_ids)){
 			$query = ' AND id NOT IN ('.implode(',', $profile_ids).')';
 		}
 
-		$posts = $dba->query('SELECT * FROM '.T_POST.' p WHERE user_id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND (SELECT status FROM '.T_USER.' WHERE id = p.user_id) = "active" AND status = "approved"'.$query.' ORDER BY created_at DESC LIMIT 10', $user_id)->fetchAll();
+		if($TEMP['#moderator'] == false){
+			if(!Specific::IsOwner($user_id)){
+				$query .= ' AND status = "approved"';
+			} else {
+				$query .= ' AND status <> "deleted"';
+			}
+		}
+
+		$posts = $dba->query('SELECT * FROM '.T_POST.' p WHERE user_id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND (SELECT status FROM '.T_USER.' WHERE id = p.user_id) = "active"'.$query.' ORDER BY created_at DESC LIMIT 10', $user_id)->fetchAll();
 
 		if(!empty($posts)){
 			foreach ($posts as $post) {

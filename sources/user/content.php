@@ -16,24 +16,29 @@ if(empty($user)){
 
 $TEMP['#profile'] = $user = Specific::Data($user, 3);
 
+$query = '';
+
 $profile_load = Load::Profile($user['id']);
 
-$TEMP['posts_result'] = $profile_load['html'];
+if($profile_load['return']){
+	$TEMP['posts_result'] = $profile_load['html'];
 
-$widget = Specific::GetWidget('horizposts');
-if($widget['return']){
-	$TEMP['posts_result'] .= $widget['html'];
+	$widget = Specific::GetWidget('horizposts');
+	if($widget['return']){
+		$TEMP['posts_result'] .= $widget['html'];
+	}
+
+	$widget = Specific::GetWidget('aside');
+	if($widget['return']){
+		$TEMP['content_aad'] = $widget['html'];
+	}
+	
+	if(!empty($profile_load['profile_ids'])){
+		$query = ' AND id NOT IN ('.implode(',', $profile_load['profile_ids']).')';
+	}
 }
 
-$widget = Specific::GetWidget('aside');
-if($widget['return']){
-	$TEMP['content_aad'] = $widget['html'];
-}
 
-$query = '';
-if(!empty($profile_load['profile_ids'])){
-	$query = ' AND id NOT IN ('.implode(',', $profile_load['profile_ids']).')';
-}
 
 $TEMP['#related_cat'] = $dba->query('SELECT * FROM '.T_POST.' WHERE user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"'.$query.' ORDER BY RAND() DESC LIMIT 5')->fetchAll();
 
