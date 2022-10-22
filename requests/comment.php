@@ -133,7 +133,9 @@ if($TEMP['#loggedin'] == true){
 			if($type == 'comment'){
 				$comment = $dba->query('SELECT *, COUNT(*) as count FROM '.T_COMMENTS.' WHERE id = ?', $comment_id)->fetchArray();
 				if($comment['count'] > 0){
-					if(Specific::IsOwner($comment['user_id']) || $dba->query('SELECT user_id FROM '.T_POST.' WHERE id = ? AND status = "approved"', $comment['post_id'])->fetchArray(true) == $TEMP['#user']['id']){
+					$user_id = $dba->query('SELECT user_id FROM '.T_POST.' WHERE id = ? AND status = "approved"', $comment['post_id'])->fetchArray(true);
+
+					if(Specific::IsOwner($comment['user_id']) || Specific::IsOwner($user_id)){
 						if($dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id = ? AND type = "n_pcomment"', $comment_id)->returnStatus()){
 							if($dba->query('DELETE FROM '.T_COMMENTS.' WHERE id = ?', $comment_id)->returnStatus()){
 								$deliver = array(
@@ -147,7 +149,10 @@ if($TEMP['#loggedin'] == true){
 			} else {
 				$reply = $dba->query('SELECT *, COUNT(*) as count FROM '.T_REPLY.' WHERE id = ?', $comment_id)->fetchArray();
 				if($reply['count'] > 0){
-					if(Specific::IsOwner($reply['user_id']) || $dba->query('SELECT user_id FROM '.T_POST.' WHERE (SELECT post_id FROM '.T_COMMENTS.' WHERE id = ? AND status = "approved") = id', $reply['comment_id'])->fetchArray(true) == $TEMP['#user']['id']){
+
+					$user_id = $dba->query('SELECT user_id FROM '.T_POST.' WHERE (SELECT post_id FROM '.T_COMMENTS.' WHERE id = ? AND status = "approved") = id', $reply['comment_id'])->fetchArray(true);
+
+					if(Specific::IsOwner($reply['user_id']) || Specific::IsOwner($user_id)){
 						if($dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id = ? AND (type = "n_preply" OR type = "n_ureply")', $comment_id)->returnStatus()){
 							if($dba->query('DELETE FROM '.T_REPLY.' WHERE id = ?', $comment_id)->returnStatus()){
 								$deliver = array(

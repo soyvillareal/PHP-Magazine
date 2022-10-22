@@ -398,7 +398,7 @@ class Specific {
 
 	public static function Settings() {
 	    global $dba;
-	    $data  = array();
+	    $data = array();
 	    $settings = $dba->query('SELECT * FROM setting')->fetchAll();
 	    foreach ($settings as $value) {
 	        $data[$value['name']] = $value['value'];
@@ -411,13 +411,13 @@ class Specific {
 
 	    if(is_numeric($type)){
 		    if($type == 1){
-		        $user = $dba->query('SELECT * FROM user WHERE id = ?', $data)->fetchArray();
+		        $user = $dba->query('SELECT * FROM '.T_USER.' WHERE id = ?', $data)->fetchArray();
 		    } else if($type == 3){
 		    	$user = $data;
 		    } else {
 		        $token = !empty($_SESSION['_LOGIN_TOKEN']) ? $_SESSION['_LOGIN_TOKEN'] : $_COOKIE['_LOGIN_TOKEN'];
-		        $data = $dba->query('SELECT user_id FROM session WHERE token = ?', $token)->fetchArray(true);
-		        $user = $dba->query('SELECT * FROM user WHERE id = ?', $data)->fetchArray();
+				
+		        $user = $dba->query('SELECT * FROM '.T_USER.' WHERE (SELECT user_id FROM '.T_SESSION.' WHERE token = ?) = id', $token)->fetchArray();
 		    }
 
 		    $user['user'] = $user['username'];
@@ -448,7 +448,7 @@ class Specific {
 				);
 			}
 	    } else {
-	    	$user = $dba->query('SELECT '.implode(',', $type).' FROM user WHERE id = ?', $data)->fetchArray();
+	    	$user = $dba->query('SELECT '.implode(',', $type).' FROM '.T_USER.' WHERE id = ?', $data)->fetchArray();
 	    }
 
 	    if (empty($user)) {
@@ -459,7 +459,7 @@ class Specific {
 	   	} else if(!empty($user['username'])){
 	    	$user['username'] = $user['username'];
 	   	}
-	    if(isset($user['birthday']) && $user['birthday'] != 0){
+	    if(!empty($user['birthday'])){
 		    $birthday = explode("-", date('d-n-Y', $user['birthday']));
 
 		    $user['birth_day'] = $birthday[0];
@@ -928,7 +928,8 @@ class Specific {
 							'return' => true,
 							'data' => $is_amp ? 400 : array(
 								'S' => 200,
-								'AC' => 'delete'
+								'AC' => 'delete',
+								'BT' => '.btn_save[data-id='.$post_id.']'
 							)
 						);
 					}
@@ -938,7 +939,8 @@ class Specific {
 							'return' => true,
 							'data' => $is_amp ? 200 : array(
 								'S' => 200,
-								'AC' => 'save'
+								'AC' => 'save',
+								'BT' => '.btn_save[data-id='.$post_id.']'
 							)
 						);
 					}
@@ -1634,23 +1636,23 @@ class Specific {
 	public static function DateFormat($ptime, $type = 'normal') {
 	    global $TEMP; 
 
-	    $date = date("j-m-Y", $ptime); 
-	    $day = strtolower(strftime("%A", strtotime($date)));
-	    $month = strtolower(strftime("%B", strtotime($date))); 
+	    $day = strtolower(strftime("%A", $ptime));
+	    $month = strtolower(strftime("%B", $ptime)); 
 	    $day = $TEMP['#word'][$day];
 	    $month = $TEMP['#word'][$month];
 	    $B = mb_substr($month, 0, 3, 'UTF-8');
 
-	    $dateFinaly = strftime("%e " . $B . ". %Y", strtotime($date));
+	    $dateFinaly = strftime("%e " . $B . ". %Y", $ptime);
 	    if($type == 'day'){
-	    	$dateFinaly = strftime("%e", strtotime($date));
+	    	$dateFinaly = strftime("%e", $ptime);
 	    }
 	    if($type == 'month'){
 	    	$dateFinaly = $month;
 	    }
 	    if($type == 'complete'){
-	    	$dateFinaly = strftime("$day, %e {$TEMP['#word']['of']} $month, %Y", strtotime($date));
+	    	$dateFinaly = strftime("$day, %e {$TEMP['#word']['of']} $month, %Y", $ptime);
 	    }
+
 	    return $dateFinaly;
 	}
 
@@ -1665,7 +1667,7 @@ class Specific {
 	        $data['sql'] = $dba->query("SELECT * FROM word{$query} LIMIT ? OFFSET ?", 10, $page)->fetchAll();
 	        $data['total_pages'] = $dba->totalPages;
 	    } else {
-	        $sql = $dba->query("SELECT word, {$language} FROM word")->fetchAll();
+	        $sql = $dba->query("SELECT word, {$language} FROM ".T_WORD)->fetchAll();
 	        foreach ($sql as $value) {
 	            $data[$value['word']] = $value[$language];
 	        }
@@ -1713,9 +1715,8 @@ class Specific {
 			} else if(!empty($_COOKIE['language'])){
 				$language = Specific::Filter($_COOKIE['language']);	
 			}
-			setcookie("language", $language, time() + 315360000, "/");
 		}
-
+		setcookie("language", $language, time() + 315360000, "/");
 		return $language;
 	}
 

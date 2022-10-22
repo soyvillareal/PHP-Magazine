@@ -45,6 +45,7 @@ $RUTE['#p_category'] = 'categoria';
 $RUTE['#p_author'] = 'autor';
 $RUTE['#p_sort'] = 'orden';
 $RUTE['#p_show_alert'] = 'mostrar-alerta';
+$RUTE['#p_deleted_post'] = 'publicacion-eliminada';
 $RUTE['#p_comment_id'] = 'c';
 $RUTE['#p_reply_id'] = 'r';
 $RUTE['#p_all'] = 'todo';

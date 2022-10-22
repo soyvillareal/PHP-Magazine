@@ -1,0 +1,38 @@
+{
+  "name": "php-magazine",
+  "version": "1.0.0",
+  "description": "The best digital magazine for newspapers or bloggers",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soyvillareal/PHP-Magazine.git"
+  },
+  "scripts": {
+    "start": "node nodejs/server.js"
+  },
+  "keywords": [
+    "Web",
+    "Website",
+    "Magazine",
+    "Open-source-project",
+    "PHP-Script",
+    "Magazine-website"
+  ],
+  "author": "Oscar Garces",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/soyvillareal/PHP-Magazine/issues"
+  },
+  "homepage": "https://github.com/soyvillareal/PHP-Magazine#readme",
+  "dependencies": {
+    "async": "^3.2.4",
+    "async-foreach": "^0.1.3",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "lodash": "^4.17.21",
+    "mysql": "^2.18.1",
+    "read-file": "^0.2.0",
+    "socket.io": "^4.5.3",
+    "unix-time": "^1.0.1",
+    "urldecode": "^1.0.1"
+  }
+}

@@ -33,10 +33,9 @@ if($one == 'load'){
 		$post = $dba->query('SELECT user_id, COUNT(*) as count FROM '.T_POST.' WHERE id = ? AND status <> "deleted"', $post_id)->fetchArray();
 		if($post['count'] > 0 && Specific::IsOwner($post['user_id'])){
 			if($dba->query('UPDATE '.T_POST.' SET status = "deleted", deleted_at = ? WHERE id = ?', time(), $post_id)->returnStatus()){
-				$_SESSION['post_deleted'] = $post_id;
 				$deliver = array(
 					'S' => 200,
-					'LK' => Specific::Url("?{$RUTE['#p_show_alert']}=deleted_post")
+					'LK' => Specific::Url("?{$RUTE['#p_show_alert']}={$RUTE['#p_deleted_post']}")
 				);
 			}
 		}

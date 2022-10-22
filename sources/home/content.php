@@ -140,9 +140,8 @@ if(count($TEMP['#main']) >= $TEMP['#limit_main']){
 
 $show_alert = Specific::Filter($_GET[$RUTE['#p_show_alert']]);
 $TEMP['#show_alert'] = false;
-if($show_alert == 'deleted_post'){
-	if(isset($_SESSION['post_deleted'])){
-		unset($_SESSION['post_deleted']);
+if($TEMP['#loggedin'] == true){
+	if($show_alert == $RUTE['#p_deleted_post']){
 		$TEMP['#show_alert'] = true;
 	}
 }

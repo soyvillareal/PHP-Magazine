@@ -270,18 +270,18 @@
       <button id="btn-close" class="btn-noway w-100px h-36 background-red color-white margin-t15 font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->close}</button>
    </div>
 </div>%%}
-{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home-post-messages-profile/style.modal.min.css}}" />%%}
 {%%<script type="text/javascript">
    $(document).ready(function(){
       var w = $('#alert-delete');
       setTimeout(function(){
          w.removeClass('hidden');
       }, 300), $('#btn-close').click(function(){
-         w.remove()
+         w.remove(), window.history.pushState({state:'new'}, '', '{$url->{{#r_home}}}')
       })
    })
 </script>%%}
 <?php } ?>
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home-post-messages-profile/style.modal.min.css}}" />%%}
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.general.css}}" />
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.main.css}}" />
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/home/style.home.video.css}}" />

@@ -720,8 +720,18 @@
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.header.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.footer.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.aside.css}}" />
+   <script src="{$theme->{assets/js/socket.io.min.js}}"></script>
    <script src="{$theme->{assets/js/jquery-3.6.0.min.js}}"></script>
    <script type="text/javascript">
+      <?php if($TEMP['#settings']['nodejs'] == 'on'){ ?>
+      const socket = io('192.168.1.52:3000', { transports: ['websocket', 'polling', 'flashsocket'] });
+      socket.on('connect_error', function (error) {
+         console.log(error);
+      });
+      <?php } else { ?>
+      const socket = 0;
+      <?php } ?>
+
       $(document).ready(function(){
          let a = $('body'),
              c = $('#container-menu'),
@@ -760,7 +770,8 @@
             date: '{$word->date}',
             category: '{$word->category}',
             sort_by: '{$word->sort_by}'
-         }
+         },
+         nodejs: '{$settings->nodejs}' == 'on'
       };
    </script>
    <script src="{$theme->{assets/js/jquery.general.min.js}}"></script>
