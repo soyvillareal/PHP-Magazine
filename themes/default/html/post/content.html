@@ -363,7 +363,6 @@
          show: '{$word->show}',
          link_copied_clipboard: '{$word->link_copied_clipboard}'
       },
-      socket: socket,
       nodejs: '{$settings->nodejs}' == 'on',
       category_id: '{$category_id}',
       post_id: '{$post_id}',
@@ -392,23 +391,4 @@
 </script>%%}
 <?php } ?>
 <?php } ?>
-
-<!--
-{%%<script type="text/javascript">
-   
-   setTimeout(function () {
-      getNotifications();
-   }, 500);
-   function getNotifications() {
-      socket.emit('get user'); 
-      setTimeout(function () {
-         getNotifications();
-      }, 500);
-   }
-   socket.on('set user', function (e) {
-      console.log(e)
-   });
-</script>%%}
--->
-
 {%%<script src="{$theme->{assets/js/post/jquery.post.min.js}}"></script>%%}

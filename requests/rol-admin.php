@@ -1,5 +1,5 @@
 <?php 
-if ($TEMP['#loggedin'] === true && Specific::Admin() === true) {
+if ($TEMP['#loggedin'] === true && $TEMP['#admin'] === true) {
     
 }
 ?>

@@ -120,11 +120,9 @@ class Specific {
 	    if($data['folder'] == 'posts'){
 	    	$image = sha1(rand(111,666).self::RandomKey()).'_'.time();
 	    	$file = "{$dir_image['full']}/{$image}";
-	    	if(exif_imagetype($getImage) == IMAGETYPE_GIF){
-	    		$ext = '.gif';
-	    	}
 		    $filename_b = "{$file}-b.jpeg";
 		    $filename_s = "{$file}-s.jpeg";
+			
 	    	if (!empty($getImage)){
 		        $importImage_b = file_put_contents($filename_b, $getImage);
 		        $importImage_s = file_put_contents($filename_s, $getImage);
@@ -427,6 +425,7 @@ class Specific {
 			} else {
 				$user['notifications'] = array(
 					'followers',
+					'post',
 					'followed',
 					'collab',
 					'react',
@@ -1115,6 +1114,7 @@ class Specific {
 	public static function ValidateUrl($url, $protocol = false){
 		global $TEMP;
 		$return = preg_match($TEMP['#url_regex'], $url, $match);
+
 		if($protocol){
 			if(empty($match[2])){
 				$url = "http://{$url}";

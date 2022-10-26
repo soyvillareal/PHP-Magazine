@@ -3,7 +3,7 @@ if($one == 'follow'){
 	$user_id = Specific::Filter($_POST['user_id']);
 
 	if(!empty($user_id) && is_numeric($user_id) && !in_array($user_id, Specific::BlockedUsers(false))){
-		if($TEMP['#user']['id'] != $user_id && $dba->query('SELECT COUNT(*) FROM '.T_USER.' WHERE id = ? AND status = "active"', $user_id)->fetchArray(true) > 0){
+		if(!Specific::IsOwner($user_id) && $dba->query('SELECT COUNT(*) FROM '.T_USER.' WHERE id = ? AND status = "active"', $user_id)->fetchArray(true) > 0){
 			$updated = false;
 			if($dba->query('SELECT COUNT(*) FROM '.T_FOLLOWER.' WHERE user_id = ? AND profile_id = ?', $TEMP['#user']['id'], $user_id)->fetchArray(true) > 0){
 				if($dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE (SELECT id FROM '.T_FOLLOWER.' WHERE user_id = ? AND profile_id = ?) = notified_id', $TEMP['#user']['id'], $user_id)->returnStatus()){

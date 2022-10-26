@@ -1,41 +1,32 @@
 var specific = require('./includes/specific');
 
-module.exports = function(io){
+module.exports = function(){
 
-    var user = {},
-        blocked_users = [];
+    global.TEMP.io.on('connection', function(socket) {
 
-    global.TEMP = {
-        io: io
-    };
+        global.TEMP[socket.id] = {
+            blocked_arrusers: [],
+            blocked_inusers: 0,
+            loggedin: !1,
+            word: {},
+            user: {}
+        };
 
-    io.on('connection', async function(socket) {
-
-        var init = specific.Init(socket);
-        
-        global.TEMP[socket.id] = new Object;
-
-        global.TEMP[socket.id].blocked_users = [];
-        global.TEMP[socket.id].loggedin = !1;
-        global.TEMP[socket.id].word = {};
-        global.TEMP[socket.id].user = {};
-
-        await init.then(async function(res){
-            global.TEMP[socket.id].blocked_users = res.blocked_users;
+        specific.Init(socket).then(function(res){
+            if(res.blocked_users.length > 0){
+                global.TEMP[socket.id].blocked_arrusers = res.blocked_users;
+                global.TEMP[socket.id].blocked_inusers = res.blocked_users.join(',');
+            }
             global.TEMP[socket.id].loggedin = res.loggedin;
             global.TEMP[socket.id].word = res.word;
 
-            await specific.Data(socket, null, 4).then(function(res){
+            specific.Data(socket, null, 4).then(function(res){
                 global.TEMP[socket.id].user = res;
+                require('./sockets')(socket);
             }).catch(function(err){
                 console.log(err);
             })
         });
-
-        if(global.TEMP[socket.id].loggedin){
-            require('./socketsIn')(socket);
-        }
-        require('./socketsOut')(socket);
 
         socket.on('disconnect', function(data) {
             specific.pullSocket(socket.id);

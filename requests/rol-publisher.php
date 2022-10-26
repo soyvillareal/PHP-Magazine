@@ -1,5 +1,5 @@
 <?php
-if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
+if ($TEMP['#publisher'] === true) {
     if($one == 'create-post'){
     	$empty = array();
 		$error = array();
@@ -124,9 +124,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 					if($_FILES['thumbnail']['size'] > $TEMP['#settings']['file_size_limit']){
 						$error[] = array(
 							'EL' => '#post-right .item-placeholder',
-							'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}"),
-							'XD' => $_POST,
-							'XD2' => $_FILES
+							'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
 						);
 					}
 				}
@@ -233,7 +231,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 					}
 
 					if($entry[0] == 'tweet'){
-						if(preg_match('/^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/', $entry[2]) == false){
+						if(preg_match('/^https?:\/\/(mobile.|)twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/', $entry[2]) == false){
 							$error[] = array(
 								'EL' => $key,
 								'CS' => '.item-input',
@@ -357,6 +355,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 				}
 
 				if(empty($error)){
+					$files = array();
 					if(!empty($_FILES['thumbnail'])){
 						$thumbnail = Specific::UploadImage(array(
 							'name' => $_FILES['thumbnail']['name'],
@@ -365,11 +364,13 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 							'type' => $_FILES['thumbnail']['type'],
 							'folder' => 'posts',
 						));
+						$files['posts'] = $thumbnail['image'];
 					} else {
 						$thumbnail = Specific::UploadThumbnail(array(
 							'media' => $thumbnail,
 							'folder' => 'posts'
 						));
+						$files['posts'] = $thumbnail['image'];
 					}
 					if(!empty($post_sources)){
 						$post_sources = json_encode(array_values($post_sources));
@@ -389,8 +390,13 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 
 					if($thumbnail['return']){
 						$st_regex = '/<(?:script|style)[^>]*>(.*?)<\/(?:script|style)>/is';
-						$slug = Specific::CreateSlug($title);
 						$published_at = $created_at = time();
+						
+						$slug = Specific::CreateSlug($title);
+						$slugs = $dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE slug = ?', $slug)->fetchArray(true);
+						if($slugs > 0){
+							$slug = "{$slug}-{$slugs}";
+						}
 						
 						if($action == 'eraser'){
 							$published_at = 0;
@@ -434,6 +440,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 												'folder' => 'entries'
 											));
 											$content_frame = $image['image_ext'];
+											$files['entries'][] = $image['image_ext'];
 										} else if(!empty($entry[2])){
 											$image = Specific::UploadThumbnail(array(
 												'media' => $entry[2],
@@ -442,6 +449,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 												'folder' => 'entries'
 											));
 											$content_frame = $image['image_ext'];
+											$files['entries'][] = $image['image_ext'];
 										}
 										$thumbnail_accept = $content_frame['return'];
 									} else if($entry[0] == 'carousel'){
@@ -463,6 +471,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 													'folder' => 'entries'
 												));
 												if($image['return']){
+													$files['entries'][] = $image['image_ext'];
 													$carousel[] = array(
 														'image' => $image['image_ext'],
 														'caption' => $captions[$i]
@@ -476,6 +485,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 													'folder' => 'entries'
 												));
 												if($image['return']){
+													$files['entries'][] = $image['image_ext'];
 													$carousel[] = array(
 														'image' => $image['image_ext'],
 														'caption' => $captions[$i]
@@ -487,7 +497,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 											$carousel_accept = true;
 											$content_frame = json_encode($carousel);
 										}
-									} else if($entry[0] == 'tweet' || $entry[0] == 'soundcloud' || $entry[0] == 'spotify' || $entry[0] == 'tiktok'){
+									} else if(in_array($entry[0], array('tweet', 'soundcloud', 'spotify', 'tiktok'))){
 										if($entry[0] == 'tweet'){
 											$api = 'https://api.twitter.com/1/statuses/oembed.json?omit_script1&url=';
 										} else if($entry[0] == 'soundcloud'){
@@ -540,7 +550,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 								}
 							}
 
-							foreach ($tags as $key => $tag) {
+							foreach ($tags as $tag) {
 								$label = $dba->query('SELECT id, COUNT(*) as count FROM '.T_LABEL.' WHERE name = ?', $tag)->fetchArray();
 								if($label['count'] > 0){
 									$label_id = $label['id'];
@@ -604,7 +614,18 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 									'LK' => Specific::Url($slug)
 								);
 							} else {
-								$dba->query('DELETE FROM '.T_POST.' WHERE id = ?', $post_id);
+								if($dba->query('DELETE FROM '.T_POST.' WHERE id = ?', $post_id)->returnStatus()){
+									foreach($files as $key => $file){
+										if($key == 'posts'){
+											unlink("uploads/posts/{$file}-b.jpeg");
+											unlink("uploads/posts/{$file}-s.jpeg");
+										} else {
+											foreach($file as $fi){
+												unlink("uploads/entries/{$fi}");
+											}
+										}
+									}
+								}
 							}
 						}
 					}
@@ -859,7 +880,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 							}
 
 							if($entry[0] == 'tweet'){
-								if(preg_match('/^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/', $entry[2]) == false){
+								if(preg_match('/^https?:\/\/(mobile.|)twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/', $entry[2]) == false){
 									$error[] = array(
 										'EL' => $key,
 										'CS' => '.item-input',
@@ -1163,7 +1184,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 
 												$content_frame = json_encode($frame);
 											} else if(empty($entry_id)){
-												if($entry[0] == 'tweet' || $entry[0] == 'soundcloud' || $entry[0] == 'spotify' || $entry[0] == 'tiktok'){
+												if(in_array($entry[0], array('tweet', 'soundcloud', 'spotify', 'tiktok'))){
 													if($entry[0] == 'tweet'){
 														$api = 'https://api.twitter.com/1/statuses/oembed.json?omit_script1&url=';
 													} else if($entry[0] == 'soundcloud'){
@@ -1477,7 +1498,7 @@ if ($TEMP['#loggedin'] === true && Specific::Publisher() === true) {
 								);
 							}
 						} else {
-							$tweet = preg_match('/^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/', $url);
+							$tweet = preg_match('/^https?:\/\/(mobile.|)twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/', $url);
 							$soundcloud = preg_match('/^(?:(https?):\/\/)?(?:(?:www|m)\.)?(soundcloud\.com|snd\.sc)\/[a-z0-9](?!.*?(-|_){2})[\w-]{1,23}[a-z0-9](?:\/.+)?$/', $url);
 
 							$spotify = preg_match('/https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:(track|artist|album|playlist|episode)|user\/([a-zA-Z0-9]+)\/playlist)\/([a-zA-Z0-9]+)|spotify:((track|artist|album|playlist|episode):([a-zA-Z0-9]+)|user:([a-zA-Z0-9]+):playlist:([a-zA-Z0-9]+))/', $url);

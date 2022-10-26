@@ -372,6 +372,7 @@
             block: '{$url->{req/profile/block}}',
             report: '{$url->{req/report}}'
         },
+        nodejs: '{$settings->nodejs}' == 'on',
         user_id: {#user_id},
         profile_ids: [{$profile_ids}]
     }, $('#profile-right').theiaStickySidebar();

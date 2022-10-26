@@ -13,11 +13,10 @@ if(!empty($reported_id) && is_numeric($reported_id) && in_array($place, array('u
 		if(!in_array($type, array('r_spam', 'r_none', 'ru_hate', 'ru_picture', 'ru_copyright'))){
 			$error = true;
 		}
-		$user = $dba->query('SELECT id, COUNT(*) as count FROM '.T_USER.' WHERE id = ? AND status = "active"', $reported_id)->fetchArray();
-		if($user['count'] == 0){
+		if($dba->query('SELECT COUNT(*) FROM '.T_USER.' WHERE id = ? AND status = "active"', $reported_id)->fetchArray(true) == 0){
 			$error = true;
 		}
-		if(Specific::IsOwner($user['id'])){
+		if(Specific::IsOwner($reported_id)){
 			$error = true;
 		}
 
@@ -63,7 +62,7 @@ if(!empty($reported_id) && is_numeric($reported_id) && in_array($place, array('u
 	}
 
 	if($error == false){
-		if($dba->query('SELECT COUNT(*) FROM '.T_REPORT.' WHERE user_id = ? AND reported_id = ? AND place = ?', $TEMP['#user']['id'], $reported_id, $place)->fetchArray(true) == 0){
+		if($dba->query('SELECT COUNT(*) FROM '.T_REPORT.' WHERE user_id = ? AND reported_id = ? AND place = ? AND status = "unanswered"', $TEMP['#user']['id'], $reported_id, $place)->fetchArray(true) == 0){
 			if(empty($description)){
 				$description = NULL;
 			}

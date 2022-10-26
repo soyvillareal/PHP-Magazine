@@ -1,7 +1,8 @@
 var info = require('./info');
 var express = require('express');
 var app = express();
-const fs = require('fs');
+var fs = require('fs');
+var path = require('path');
 
 if (info.ssl == true) {
     const options = {
@@ -13,13 +14,18 @@ if (info.ssl == true) {
    var server = require('http').createServer(app);
 }
 
-var io = require('socket.io')(server);
-
 app.use(express.static(__dirname + '/node_modules'));
 
 app.get('/', function(req, res, next) {
     res.send('Hello World! Node.js is working correctly.');
 });
+
+
+global.TEMP = {
+    path: path.join(__dirname, '../'),
+    io: require('socket.io')(server),
+    app: app
+};
 
 try {
     server.listen(info.server_port, info.server_ip);
@@ -27,4 +33,4 @@ try {
     console.log(e);
 }
 
-require('./request_init.js')(io);
+require('./request_init.js')();

@@ -40,7 +40,6 @@ foreach($TEMP['#languages'] as $lang){
     $TEMP['languages'] .= Specific::Maket('includes/wrapper/languages');
 }
 
-
 $TEMP['#return_url'] = $TEMP['#site_url'];
 $return = Specific::Filter($_GET[$RUTE['#p_return']]);
 if(!empty($return)){

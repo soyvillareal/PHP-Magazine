@@ -404,8 +404,10 @@
 
 {%%<script type="text/javascript">
   paper_cp = {
+    token: '{#token_session}',
+    lang: '{#lang}',
     url: {
-      create_post: '{$url->{req/rol-publisher/create-post}}',
+      create_post: '<?php echo($TEMP['#settings']['nodejs'] == 'on') ? '//{$settings->node_hostname}:{$settings->node_server_port}' : '{$url->{req/rol-publisher}}';?>/create-post',
       get_tags: '{$url->{req/rol-publisher/get-tags}}',
       get_image: '{$url->{req/rol-publisher/get-image}}',
       get_frame: '{$url->{req/rol-publisher/get-frame}}',
@@ -419,8 +421,6 @@
       number_of_fonts: '{$settings->number_of_fonts}',
       number_labels: '{$settings->number_labels}'
     },
-    token: '{#token_session}',
-    lang: '{#lang}',
     word: {
       name: '{$word->name}',
       link: '{$word->link}',
@@ -430,7 +430,8 @@
       attribute: '{$word->attribute}',
       value: '{$word->value}',
       preview: '{$word->preview}'
-    }
+    },
+    nodejs: '{$settings->nodejs}' == 'on',
   }, window.fbAsyncInit = function() {
     FB.init({
       appId: '{$settings->fb_app_id}',
