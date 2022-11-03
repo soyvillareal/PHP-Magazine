@@ -320,10 +320,10 @@
                      <input id="report-5" class="item_rinput radio-paper hidden" name="option" type="radio" value="r_none">
                      <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-5">{$word->r_none}</label>
                      <div class="content_description position-relative margin-t5 hidden">
-                        <textarea class="item_rtextarea background-white color-black w-100 padding-t10 padding-b10 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s" type="text" maxlength="500" placeholder="{$word->describe_reason_report}" autocomplete="off" autocapitalize="off"></textarea>
+                        <textarea class="item_rtextarea background-white color-black w-100 padding-t10 padding-b10 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s" type="text" maxlength="{$settings->max_words_report}" placeholder="{$word->describe_reason_report}" autocomplete="off" autocapitalize="off"></textarea>
                         <div class="display-flex">
                            <div class="margin-left-auto color-green">
-                              <span class="text_email_count">0</span>/500
+                              <span class="text_count animation-ease3s">0</span>/{$settings->max_words_report}
                            </div>
                         </div>
                      </div>
@@ -372,7 +372,10 @@
             block: '{$url->{req/profile/block}}',
             report: '{$url->{req/report}}'
         },
-        nodejs: '{$settings->nodejs}' == 'on',
+        settings: {
+            nodejs: '{$settings->nodejs}',
+            max_words_report: {$settings->max_words_report}
+        },
         user_id: {#user_id},
         profile_ids: [{$profile_ids}]
     }, $('#profile-right').theiaStickySidebar();

@@ -1,3 +1,4 @@
+<?php if($TEMP['#deleted_fprofile'] == 0){ ?>
 <div class="content-pmtwdeleted content_pmtmessage display-flex direction-row align-center margin-l10 padding-t15" data-id="{!id}">
 	<span class="item-pmtwdeleted break-all background-white color-grey padding-t5 padding-b5 padding-l15 padding-r15 border-r25px border-all border-grely">{$word->message_was_deleted}</span>
 	<button class="btn_pmtmdelete w-30px h-30 btn-noway margin-l5 background-hover border-rall opacity-0 hover-button animation-ease3s animate-tab-button" data-id="{!id}" data-type="text">
@@ -11,4 +12,17 @@
 		</div>
 	</button>
 </div>
-<div class="margin-t5 margin-l15 font-lowly color-grey">{!created_at}</div>
+<?php } ?>
+<?php if($TEMP['#messafi'] == true){ ?>
+<?php if($TEMP['#has_file'] == true){ ?>
+<div class="content_pmtfiles display-grid margin-l10">
+	{!files}
+</div>
+<?php } ?>
+<?php if($TEMP['#has_image'] == true){ ?>
+<div class="content_pmtimages display-grid margin-l10">
+	{!images}
+</div>
+<?php } ?>
+<?php } ?>
+<div class="item_pmttime margin-t5 margin-l15 font-lowly color-grey">{!created_at}</div>

@@ -724,7 +724,13 @@
    <script src="{$theme->{assets/js/jquery-3.6.0.min.js}}"></script>
    <script type="text/javascript">
       <?php if($TEMP['#settings']['nodejs'] == 'on'){ ?>
-      const SOCKET = io('192.168.1.52:3000', { transports: ['websocket', 'polling', 'flashsocket'] });
+      const SOCKET = io('{$settings->node_hostname}:{$settings->node_server_port}', {
+         query: {
+            <?php echo($TEMP['#page'] == 'messages') ? 'profile_id : {#profile_id},' : '' ;?>
+            page: '{#page}'
+         },
+         transports: ['websocket', 'polling', 'flashsocket']
+      });
       SOCKET.on('connect_error', function (error) {
          console.log(error);
       });
@@ -770,7 +776,9 @@
             category: '{$word->category}',
             sort_by: '{$word->sort_by}'
          },
-         nodejs: '{$settings->nodejs}' == 'on'
+         settings: {
+            nodejs: '{$settings->nodejs}'
+         }
       };
    </script>
    <script src="{$theme->{assets/js/jquery.general.min.js}}"></script>

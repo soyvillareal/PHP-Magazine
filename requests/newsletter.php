@@ -146,7 +146,7 @@ if($one == 'subscribe'){
 	$slug = Specific::Filter($_POST['slug']);
 	$reason = Specific::Filter($_POST['reason']);
 
-	if(!empty($slug) && strlen(strip_tags($reason)) <= 500){
+	if(!empty($slug) && mb_strlen(strip_tags($reason), "UTF8") <= $TEMP['#settings']['max_words_unsub_newsletter']){
 		if(empty($reason)){
 			$reason = NULL;
 		}

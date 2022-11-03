@@ -1,4 +1,4 @@
-var info = require('../info'),
+const info = require('../info'),
     mysql = require('mysql');
 
 // connect to the db

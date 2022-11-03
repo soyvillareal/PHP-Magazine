@@ -1,8 +1,8 @@
-var info = require('./info');
-var express = require('express');
-var app = express();
-var fs = require('fs');
-var path = require('path');
+const info = require('./info'),
+      express = require('express'),
+      app = express(),
+      fs = require('fs'),
+      path = require('path');
 
 if (info.ssl == true) {
     const options = {

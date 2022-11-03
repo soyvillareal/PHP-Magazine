@@ -208,7 +208,7 @@
           </div>
         </div>
         <div class="color-grey w-100 margin-t5 font-mediumly text-center">
-          {$word->images_taken_from}: <span class="item_csexample">{$word->place_your_source_here}</span><span class="item_csource"></span>
+          {$word->images_taken_from}: <?php echo(!empty($TEMP['esource'])) ? '<span class="item_csexample">{$word->place_your_source_here}</span>' : '<span class="item_csource">{!esource}</span>';?>
         </div>
         <div class="content_files hidden">
           <?php foreach($TEMP['!images'] as $key => $car){ ?>
@@ -369,14 +369,14 @@
   </div>
   <?php if($TEMP['#type'] == 'text' || $TEMP['#type'] == 'image' || $TEMP['#type'] == 'carousel'){ ?>
   <div class="entry-source">
-    <div class="w-100 position-relative margin-b15<?php echo(empty($TEMP['!source'])) ? ' hidden' : '';?>">
-      <input class="item-input item_key disable_before no_validate w-100 h-45 background-white color-black padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue animation-ease3s sizing-box<?php echo(!empty($TEMP['!source'])) ? ' active' : '';?>" type="text" value="{!source}">
+    <div class="w-100 position-relative margin-b15<?php echo(empty($TEMP['!esource'])) ? ' hidden' : '';?>">
+      <input class="item-input item_key disable_before no_validate w-100 h-45 background-white color-black padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue animation-ease3s sizing-box<?php echo(!empty($TEMP['!esource'])) ? ' active' : '';?>" type="text" value="{!esource}">
       <label class="item-label first-capitalize font-mediumly position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->source} ({$word->optional})</label>
     </div>
     <button class="btn_esource display-flex direction-row align-center btn-noway font-low margin-auto color-blackly" type="button">
-      <span class="color-blackly margin-r5<?php echo(!empty($TEMP['!source'])) ? ' hidden' : '';?>">{$word->more_details}</span>
-      <span class="color-blackly margin-r5<?php echo(empty($TEMP['!source'])) ? ' hidden' : '';?>">{$word->less_details}</span>
-      <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"<?php echo(!empty($TEMP['!source'])) ? ' transform="rotate(180)' : '';?>">
+      <span class="color-blackly margin-r5<?php echo(!empty($TEMP['!esource'])) ? ' hidden' : '';?>">{$word->more_details}</span>
+      <span class="color-blackly margin-r5<?php echo(empty($TEMP['!esource'])) ? ' hidden' : '';?>">{$word->less_details}</span>
+      <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"<?php echo(!empty($TEMP['!esource'])) ? ' transform="rotate(180)' : '';?>">
         <path fill="currentColor" d="M21.707,8.707l-9,9a1,1,0,0,1-1.414,0l-9-9A1,1,0,1,1,3.707,7.293L12,15.586l8.293-8.293a1,1,0,1,1,1.414,1.414Z"/>
       </svg>
     </button>

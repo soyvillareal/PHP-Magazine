@@ -7,8 +7,10 @@ if($TEMP['#loggedin'] == false){
 
 $profiles_ids = array();
 $TEMP['#profile_id'] = 0;
+$TEMP['#chat_id'] = 0;
 $TEMP['#users_exists'] = false;
 $TEMP['#messages_exists'] = false;
+$TEMP['#enable_messages'] = true;
 $TEMP['#username'] = Specific::Filter($_GET['username']);
 if(!empty($TEMP['#username'])){
 	$user = $dba->query('SELECT * FROM '.T_USER.' WHERE username = ?', $TEMP['#username'])->fetchArray();
@@ -22,12 +24,16 @@ if(!empty($TEMP['#username'])){
 		exit();
 	}
 
-	$dba->query('DELETE FROM '.T_TYPING.' WHERE user_id = ? AND profile_id = ?', $user['id'], $TEMP['#user']['id']);
+	Specific::DeleteMyTypings();
 
 	$user = Specific::Data($user, 3);
 	$TEMP['#role'] = $user['role'];
 	$TEMP['#user_deleted'] = $user['status'] != 'deleted';
 	$TEMP['#profile_id'] = $user['id'];
+	
+	if($user['shows']['messages'] == 'off' || $TEMP['#user']['shows']['messages'] == 'off'){
+		$TEMP['#enable_messages'] = false;
+	}
 	
 	if($user['status'] == 'deleted'){
 		$TEMP['slug'] = '#';
@@ -39,14 +45,15 @@ if(!empty($TEMP['#username'])){
 		$TEMP['avatar_s'] = $user['avatar_s'];
 	}
 
-
 	$messages = Load::Messages($user);
 	$chats_html = Specific::Chat(array(
 		'user_id' => $TEMP['#user']['id'],
 		'profile_id' => $user['id']
 	));
 	
-	$TEMP['#chat_id'] = $chats_html['chat_id'];
+	if(!empty($chats_html['chat_id'])){
+		$TEMP['#chat_id'] = $chats_html['chat_id'];
+	}
 
 	$profiles_ids[] = $user['id'];
 

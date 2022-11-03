@@ -1,40 +1,35 @@
-var info = require('../info');
-var connection = require('../mysql/DB');
-var unixTime = require('unix-time');
-var R = require('./rutes');
-var T = require('./tables');
-var entities = require('../utils/entities');
-var url_regex = require('../utils/url_regex');
-var async = require('async');
-var forEach = require('async-foreach').forEach;
-var _ = require('lodash');
-var cookie = require('cookie');
-var SETTINGS = Settings();
-var util = require('util');
-var fs = require('fs');
-var iconv = require('iconv-lite');
-
-
-var Sha1 = require('sha1'),
-    Md5 = require('md5'),
-    Download = require('image-downloader'),
-    Sharp = require('sharp'),
-    path = require('path');
-
-const sockets = [];
-
-const query = util.promisify(connection.query).bind(connection);
+const info = require('../info'),
+      connection = require('../mysql/DB'),
+      unixTime = require('unix-time'),
+      R = require('./rutes'),
+      T = require('./tables'),
+      entities = require('../utils/entities'),
+      url_regex = require('../utils/url_regex'),
+      async = require('async'),
+      forEach = require('async-foreach').forEach,
+      _ = require('lodash'),
+      cookie = require('cookie'),
+      SETTINGS = Settings(),
+      util = require('util'),
+      fs = require('fs'),
+      forEachAsync = util.promisify(forEach),
+      iconv = require('iconv-lite'),
+      Sha1 = require('sha1'),
+      Md5 = require('md5'),
+      Download = require('image-downloader'),
+      Sharp = require('sharp'),
+      path = require('path'),
+      query = util.promisify(connection.query).bind(connection),
+      sockets = [];
 
 async function Init(socket){
     var data = {
-        loggedin: !1,
-        word: {}
-    };
-
-    var validUsers = {};
-    var blocked_users = [];
-    
-    var cookies = cookie.parse(socket.handshake.headers.cookie);
+            loggedin: !1,
+            word: {}
+        },
+        validUsers = {},
+        blocked_users = [],
+        cookies = cookie.parse(socket.handshake.headers.cookie);
 
     if (!!cookies._LOGIN_TOKEN) {
         try {
@@ -65,14 +60,6 @@ async function Init(socket){
             console.log(err);
         }
     }
-    /*
-    emitChangesJustMe('setCookie', {
-        name: 'language',
-        value: Language(loggedin, cookies),
-        maxAge: Time() + 315360000,
-        path: "/"
-    })
-    */
     await Words(cookies.language).then(function(res){
         data.word = res;
     }).catch(function(err){
@@ -127,7 +114,7 @@ function BlockedUsers(user_id){
     var data = [];
     return new Promise(function(resolve, reject) {
         try {
-            if (SETTINGS['blocked_users'] == 'on') {
+            if (SETTINGS.blocked_users == 'on') {
                 connection.query(`SELECT user_id FROM ${T.BLOCK} WHERE user_id <> ? AND profile_id = ?`, [user_id, user_id], function(error, result, field){
                     if (error) { 
                         console.log(error);
@@ -160,7 +147,7 @@ function BlockedUsers(user_id){
 
 async function Data(socket, data, type = 1) {
     var user = {};
-    
+
     if(!isNaN(type)){
         if(type == 1){
             await query(`SELECT * FROM ${T.USER} WHERE id = ?`, [data]).then(function(res){
@@ -185,8 +172,10 @@ async function Data(socket, data, type = 1) {
 
         user = user[0];
         
-        user.user = user.username;
-        user.slug = ProfileUrl(user.username);
+        if(user.username != undefined){
+            user.user = user.username;
+            user.slug = ProfileUrl(user.username);
+        }
 
         if(user.notifications != null){
             user.notifications = JSON.parse(user.notifications);
@@ -203,15 +192,16 @@ async function Data(socket, data, type = 1) {
                 'ureply'
             ];
         }
+            
         if(user.shows != null){
             user.shows = JSON.parse(user.shows);
         } else {
             user.shows = {
-                'birthday': 'on',
-                'gender': 'on',
-                'contact_email': 'on',
-                'followers': 'on',
-                'messages': 'on'
+                birthday: 'on',
+                gender: 'on',
+                contact_email: 'on',
+                followers: 'on',
+                messages: 'on'
             };
         }
     } else {
@@ -223,13 +213,13 @@ async function Data(socket, data, type = 1) {
         return !1;
     }
 
-    if(user.name != '' && user.surname != ''){
+    if(user.name != '' && user.name != undefined && user.surname != '' && user.surname != undefined){
         user.username = `${user.name} ${user.surname}`;
-    } else if(user.username != ''){
+    } else if(user.username != '' && user.username != undefined){
         user.username = user.username;
     }
 
-    if(user.birthday != 0){
+    if(user.birthday != 0 && user.birth_day != undefined){
         var birthday = new Date(user.birthday*1000);
         user.birth_day = birthday.getUTCDate();
         user.birthday_month = birthday.getUTCMonth()+1;
@@ -237,7 +227,7 @@ async function Data(socket, data, type = 1) {
         user.birthday_format = DateFormat(socket, user.birthday);
     }
     
-    if(user.avatar != ''){
+    if(user.avatar != '' && user.avatar != undefined){
         var rute = 4;
         if(user.avatar == 'default-holder'){
             rute = 5;
@@ -247,10 +237,10 @@ async function Data(socket, data, type = 1) {
         user.avatar_b = GetFile(user.avatar, rute, 'b');
         user.avatar_s = GetFile(user.avatar, rute, 's');
     }
-    if(user.gender != ''){
+    if(user.gender != '' && user.gender != undefined){
         user.gender_txt = global.TEMP[socket.id].word[user.gender];
     }
-    if(user.created_at != ''){
+    if(user.created_at != '' && user.created_at != undefined){
         user.created_fat = DateFormat(socket, user.created_at);
         user.created_sat = DateString(socket, user.created_at);
     }
@@ -377,8 +367,11 @@ async function SetNotify(socket, data = {}){
                     var type = `n_${data.type}`;
                     await query(`SELECT COUNT(*) as count FROM ${T.NOTIFICATION} WHERE user_id = ? AND notified_id = ? AND type = ?`, [data.user_id, data.notified_id, type]).then(async function(res){
                         if (res[0].count == 0) {
-                            await query(`INSERT INTO ${T.NOTIFICATION} (user_id, notified_id, type, created_at) VALUES (?, ?, ?, ?)`, [data.user_id, data.notified_id, type, Time()]).then(function(res){
+                            await query(`INSERT INTO ${T.NOTIFICATION} (user_id, notified_id, type, created_at) VALUES (?, ?, ?, ?)`, [data.user_id, data.notified_id, type, Time()]).then(async function(res){
                                 retrn = !0;
+                                await Notifies(data.user_id).catch(function(err){
+                                    console.log(err);
+                                });
                             }).catch(function(err){
                                 retrn = !1;
                             })
@@ -396,6 +389,42 @@ async function SetNotify(socket, data = {}){
     })
 
     return retrn;
+}
+
+async function Notifies(user_id){
+
+    var sockets = getSockets(user_id);
+
+    if(sockets.length > 0){
+        var notifications = 0,
+            messages = 0,
+            notifies = 0,
+            USER = global.TEMP[sockets[0]].user;
+
+        await query(`SELECT COUNT(*) as count FROM ${T.NOTIFICATION} WHERE user_id = ? AND seen = 0`, USER.id).then(function(res){
+            notifies = notifications = res[0].count;
+        }).catch(function(err){
+            console.log(err);
+        });
+
+        await query(`SELECT COUNT(*) as count FROM ${T.MESSAGE} WHERE profile_id = ? AND seen = 0`, USER.id).then(function(res){
+            notifies += messages = res[0].count;
+        }).catch(function(err){
+            console.log(err);
+        });
+
+        if(notifies > 0){
+            emitChamgesTo(user_id, 'setOutnotifies', {
+                S: 200,
+                CT: notifies <= 9 ? notifies : "9+",
+                CN: notifications,
+                CM: messages
+            });
+            return !0;
+        }
+    }
+
+    return !1;
 }
 
 async function Followers(socket, user_id){
@@ -497,8 +526,6 @@ async function IsOwner(socket, user_id) {
         }).catch(function(err){
             retrn = !1;
         })
-
-        
     }
     return retrn;
 }
@@ -511,12 +538,13 @@ function CreateDirImage(folder){
         dates = `${year}-${month}/${month}`,
         folder_last = `${global.TEMP.path}/uploads/${folder}/${dates}`;
 
+    
     if (!fs.existsSync(folder_first)) {
-        fs.mkdir(folder_first, {recursive: true});
+        fs.mkdirSync(folder_first, {recursive: true});
     }
 
     if (!fs.existsSync(folder_last)) {
-        fs.mkdir(folder_last, {recursive: true});
+        fs.mkdirSync(folder_last, {recursive: true});
     }
     return {
         full: folder_last,
@@ -784,7 +812,7 @@ function MaketFrame(url, attrs = [], defult = !0, is_amp = !1){
     }
     
     if(ValidateUrl(url)){
-        url = url.replace('/([h|H][t|T]{2}[p|P][s|S]?|[r|R][t|T][s|S][p|P]):\/\//', '//');
+        url = url.replace(/([h|H][t|T]{2}[p|P][s|S]?|[r|R][t|T][s|S][p|P]):\/\//, '//');
     }
 
     var html = `<iframe src="${url}"${attributes}></iframe>`
@@ -798,27 +826,547 @@ function MaketFrame(url, attrs = [], defult = !0, is_amp = !1){
     };
 }
 
-// Tal vez no lo utilice
-function Language(socket, cookies){
-    var language = SETTINGS.language;
+function TextFilter(socket, text, links = !0){
+    if(text != ''){
+        if(SETTINGS.censored_words != ''){
+            var censored_words = SETTINGS.censored_words.split(',');
 
-    if (global.TEMP[socket.id].loggedin == true) {
-        var user = Data(socket, null, 4);
-        if (in_array(user.language, $TEMP['#languages'])) {
-            language = user.language;
+            forEach(censored_words, function(item, index, arr){
+                var word = item.replace(/\s+/gi, '');
+                text = _.replace(text, word, word.replace(/(.+?)/ig, '*'));
+            });
         }
-    } else {
-        if(cookies.language != ''){
-            language = Filter(cookies.language);	
+        
+        if(SETTINGS.hidden_domains != ''){
+            var hidden_domains = SETTINGS.hidden_domains.split(',');
+
+            forEach(hidden_domains, function(item, index, arr){
+                var domain = item.replace(/\s+/gi, ''),
+                    regex = new RegExp(`(?:(?:[\S]*)(${domain})(?:[\S])*)`, 'i');
+
+                text = text.replace(regex, `[${global.TEMP[socket.id].word.hidden_link}]`);
+            });
+        }
+
+        if(links){
+            text = text.replace(url_regex, '<a class="color-blue hover-button animation-ease3s" href="//$3$4" target="_blank">$3$4</a>');
         }
     }
-    return language;
+
+    return text;
+}
+
+async function CommentFilter(socket, text, mention_uid){
+    text = TextFilter(socket, text);
+
+    var username_exists = Array.from(text.matchAll(/@([a-zA-Z0-9]+)/ig), (u) => u[1]);
+
+    if(username_exists.length > 0){
+        await forEachAsync(username_exists, function(item, index, arr){
+            var done = this.async();
+            connection.query(`SELECT id, username, COUNT(*) as count FROM ${T.USER} WHERE username = ? AND status = "active"`, item, function(error, result, field){
+                if(error){
+                    done();
+                    return console.log(error);
+                }
+                if(result[0].count > 0){
+                    if(result[0].id != mention_uid){
+                        var regex = new RegExp(`@(${item}+)`, 'i');
+                        text = text.replace(regex, `<a class="color-blue hover-button" href="${ProfileUrl(result[0].username)}" target="_blank">@${result[0].username}</a>`);
+                    }
+                }
+                done();
+            })
+        }).catch(function(err){})
+    }
+    return text;
+}
+
+async function ToMention(socket, data = {}, type = 'comment'){
+
+    var username_exists = Array.from(data.text.matchAll(/@([a-zA-Z0-9]+)/ig), (u) => u[1]),
+        retrn = !1;
+
+    if(username_exists.length > 0){
+        await forEachAsync(username_exists, function(item, index, arr){
+            var done = this.async();
+            connection.query(`SELECT id, COUNT(*) as count FROM ${T.USER} WHERE username = ? AND status = "active"`, item, async function(error, result, field){
+                if(error){
+                    done();
+                    return console.log(error);
+                }
+                if(result[0].count > 0){
+                    if(result[0].id != data.user_id){
+                        retrn = !0;
+                        await SetNotify(socket, {
+                            user_id: result[0].id,
+                            notified_id: data.insert_id,
+                            type: `u${type}`,
+                        }).catch(function(err){
+                            console.log(err);
+                        });
+                    }
+                }
+                done();
+            })
+        }).catch(function(err){})
+    }
+    return retrn;
+}
+
+
+async function CommentMaket(socket, comment = {}, order = 'recent', type = 'normal'){
+    var retrn = {
+            return: !1
+        };
+
+    if(Object.keys(comment).length > 0){
+        var temp = new Object;
+
+
+        await Data(socket, comment.user_id, ['username', 'avatar']).then(async function(res){
+            var user = res,
+                USER = global.TEMP[socket.id].user;
+
+            await query(`SELECT user_id, slug FROM ${T.POST} WHERE id = ?`, comment.post_id).then(async function(res){
+                var post = res[0];
+
+                temp.url_comment = Url(`${post.slug}?${R.p_comment_id}=${comment.id}`);
+                temp.comment_id = comment.id;
+
+                temp.comment_owner = !1;
+                await IsOwner(socket, comment.user_id).then(async function(res){
+                    temp.comment_owner = res;
+                }).catch(function(err){
+                    console.log(err);
+                });
+
+                temp.comment_powner = !1;
+                await IsOwner(socket, post.user_id).then(async function(res){
+                    temp.comment_powner = res;
+                }).catch(function(err){
+                    console.log(err);
+                });
+
+                temp.cusername = global.TEMP[socket.id].word.user_without_login;
+                temp.avatar_cs = Url('/themes/default/images/users/default-holder-s.jpeg');
+
+                if(global.TEMP[socket.id].loggedin){
+                    temp.cusername = USER.username;
+                    temp.avatar_cs = USER.avatar_s;
+                };
+                
+                var reply_ids = [];
+
+                temp.comment_type = type;
+                if(type == 'featured-reply'){
+                    // To fetch the reply sent by url
+                    var featured_rid = global.TEMP[socket.id].featured_rid;
+                    await query(`SELECT * FROM ${T.REPLY} WHERE id = ?`, ).then(function(res){
+                        var featured_reply = ReplyMaket(res[0], 'featured-reply');
+
+                        if(featured_reply.return){
+                            temp.featured_reply = featured_reply.html;
+                            reply_ids.push(featured_rid);
+                        }
+                    }).catch(function(err){
+                        console.log(err);
+                    })
+                }
+
+                temp.replies = '';
+                temp.reply_owner = !1;
+                
+                temp.count_replies = 0;
+                await query(`SELECT COUNT(*) as count FROM ${T.REPLY} WHERE comment_id = ?`, comment.id).then(function(res){
+                    temp.count_replies = res[0].count;
+                }).catch(function(err){
+                    console.log(err);
+                });
+
+                await Replies(comment.id, order, reply_ids).then(function(res){
+                    if(res.return){
+                        temp.replies = res.html;
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+
+                temp.post_id = comment.post_id;
+                await CommentFilter(socket, comment.text, comment.user_id).then(function(res){
+                    temp.text = res;
+                }).catch(function(err){
+                    console.log(err);
+                });
+
+                temp.author_name = user.username;
+                temp.author_url = ProfileUrl(temp.author_name);
+                temp.author_avatar = user.avatar_s;
+
+                temp.likes_active = 0;
+                await query(`SELECT COUNT(*) as count FROM ${T.REACTION} WHERE user_id = ? AND reacted_id = ? AND type = "like" AND place = "comment"`, [USER.id, comment.id]).then(function(res){
+                    temp.likes_active = res[0].count;
+                }).catch(function(err){
+                    console.log(err);
+                });
+    
+                temp.dislikes_active = 0;
+                await query(`SELECT COUNT(*) as count FROM ${T.REACTION} WHERE user_id = ? AND reacted_id = ? AND type = "dislike" AND place = "comment"`, [USER.id, comment.id]).then(function(res){
+                    temp.dislikes_active = res[0].count;
+                }).catch(function(err){
+                    console.log(err);
+                });
+
+
+                temp.likes = 0;
+                await query(`SELECT COUNT(*) as count FROM ${T.REACTION} WHERE reacted_id = ? AND type = "like" AND place = "comment"`, comment.id).then(function(res){
+                    temp.likes = NumberShorten(res[0].count);
+                }).catch(function(err){
+                    console.log(err);
+                });
+    
+                temp.dislikes = 0;
+                await query(`SELECT COUNT(*) as count FROM ${T.REACTION} WHERE reacted_id = ? AND type = "dislike" AND place = "comment"`, comment.id).then(function(res){
+                    temp.dislikes = NumberShorten(res[0].count);
+                }).catch(function(err){
+                    console.log(err);
+                });
+
+                temp.created_date = new Date(comment.created_at).toISOString();
+                temp.created_at = DateString(socket, comment.created_at);
+                
+                var maket = 'comment';
+                if(comment.pinned == 1){
+                    maket = 'pinned-comment';
+                }
+
+                retrn = {
+                    return: !0,
+                    html: Maket(socket, `comments/${maket}`, temp)
+                };
+
+            }).catch(function(err){
+                console.log(err);
+            })
+        }).catch(function(err){
+            console.log(err);
+        })
+    }
+
+    return retrn;
+}
+
+
+async function ReplyMaket(socket, reply = {}, type = 'normal'){
+    var retrn = {
+            return: !1
+        };
+
+    if(Object.keys(reply).length > 0){
+        var temp = new Object;
+        temp.reply_type = type;
+
+        await Data(socket, reply.user_id, ['username', 'avatar']).then(async function(res){
+            var user = res,
+                USER = global.TEMP[socket.id].user;
+
+            await query(`SELECT user_id, slug FROM ${T.POST} WHERE (SELECT post_id FROM ${T.COMMENTS} WHERE id = ?) = id`, reply.comment_id).then(async function(res){
+                var post = res[0];
+                
+                temp.comment_id = reply.comment_id;
+                temp.url_reply = Url(`${post.slug}?${R.p_reply_id}=${reply.id}`);
+                temp.reply_id = reply.id;
+                temp.reply_owner = !1;
+                await IsOwner(socket, reply.user_id).then(async function(res){
+                    temp.reply_owner = res;
+                }).catch(function(err){
+                    console.log(err);
+                });
+                temp.cusername = global.TEMP[socket.id].word.user_without_login;
+                temp.avatar_cs = Url(`${global.TEMP.path}/themes/default/images/users/default-holder-s.jpeg`);
+    
+                
+                if(global.TEMP[socket.id].loggedin){
+                    temp.cusername = USER.username;
+                    temp.avatar_cs = USER.avatar_s;
+                }
+    
+                temp.reply_powner = !1;
+                await IsOwner(socket, post.user_id).then(async function(res){
+                    temp.reply_powner = res;
+                }).catch(function(err){
+                    console.log(err);
+                });
+    
+                await CommentFilter(socket, reply.text, reply.user_id).then(function(res){
+                    temp.text = res;
+                }).catch(function(err){
+                    console.log(err);
+                });
+
+                temp.author_name = user.username;
+                temp.author_url = ProfileUrl(temp.author_name);
+                temp.author_avatar = user.avatar_s;
+    
+                temp.likes_active = 0;
+                await query(`SELECT COUNT(*) as count FROM ${T.REACTION} WHERE user_id = ? AND reacted_id = ? AND type = "like" AND place = "reply"`, [USER.id, reply.id]).then(function(res){
+                    temp.likes_active = res[0].count;
+                }).catch(function(err){
+                    console.log(err);
+                });
+    
+                temp.dislikes_active = 0;
+                await query(`SELECT COUNT(*) as count FROM ${T.REACTION} WHERE user_id = ? AND reacted_id = ? AND type = "dislike" AND place = "reply"`, [USER.id, reply.id]).then(function(res){
+                    temp.dislikes_active = res[0].count;
+                }).catch(function(err){
+                    console.log(err);
+                });
+                
+                temp.likes = 0;
+                await query(`SELECT COUNT(*) as count FROM ${T.REACTION} WHERE reacted_id = ? AND type = "like" AND place = "reply"`, reply.id).then(function(res){
+                    temp.likes = NumberShorten(res[0].count);
+                }).catch(function(err){
+                    console.log(err);
+                });
+    
+                temp.dislikes = 0;
+                await query(`SELECT COUNT(*) as count FROM ${T.REACTION} WHERE reacted_id = ? AND type = "dislike" AND place = "reply"`, reply.id).then(function(res){
+                    temp.dislikes = NumberShorten(res[0].count);
+                }).catch(function(err){
+                    console.log(err);
+                });
+    
+                temp.created_date = new Date(reply.created_at).toISOString();
+                temp.created_at = DateString(socket, reply.created_at);
+    
+                retrn = {
+                    return: !0,
+                    html: Maket(socket, 'comments/reply', temp)
+                };
+    
+            }).catch(function(err){
+                console.log(err);
+            })
+        }).catch(function(err){
+            console.log(err);
+        })
+    }
+    return retrn;
+}
+
+async function Replies(comment_id, order = 'recent', reply_ids = []){
+
+    var qury = '',
+        retrn = {
+            return: !1
+        };
+    if(reply_ids.length > 0){
+        qury = ` AND id NOT IN (${reply_ids.join(',')})`;
+    }
+
+    var sql = `SELECT * FROM ${T.REPLY} WHERE comment_id = ?${qury} LIMIT 5`;
+    if(order == 'featured'){
+        if(reply_ids.length > 0){
+            qury = ` AND a.id NOT IN (${reply_ids.join(',')})`;
+        }
+        sql = `SELECT a.*, COUNT(c.id) as count FROM ${T.REPLY} a LEFT JOIN ${T.REACTION} c ON a.id = c.reacted_id AND c.type = "like" AND c.place = "reply" WHERE a.comment_id = ?${qury} GROUP BY a.id ORDER BY count DESC, a.id ASC LIMIT 5`;
+    }
+
+    await query(sql, comment_id).then(async function(res){
+        var html = '';
+        if(res.length > 0){
+            await forEachAsync(res, function(item, index, arr){
+                var done = this.async();
+                ReplyMaket(item).then(async function(res){
+                    html += res.html;
+                    done();
+                }).catch(function(err){
+                    console.log(err);
+                });
+            }).catch(function(err){});
+        }
+
+        retrn = {
+            return: !0,
+            html: html
+        };
+    }).catch(function(err){
+        console.log(err);
+    });
+
+    return retrn;
+}
+
+
+async function UploadMessagefi(data = {}){
+    var dir_file = CreateDirImage('messages'),
+        retrn = {
+            return: !1
+        };
+    
+    if(Object.keys(data).length > 0){
+        if (data.size <= SETTINGS.file_size_limit) {
+            var ext = path.extname(data.name),
+                filename = `${data.message_id}-${Md5(`${Time()}${RandomKey()}`)}${ext}`;
+            
+            await fs.promises.readFile(data.tmp_name).then(async function(res){
+                await fs.promises.writeFile(`${dir_file.full}/${filename}`, res).then(function(res){
+                    retrn = {
+                        return: !0,
+                        file: `${dir_file.dates}/${filename}`
+                    }
+                }).catch(function(err){
+                    return retrn;
+                });
+            }).catch(function(err){
+                return retrn;
+            });
+
+        }
+    }
+
+    return retrn;
+}
+
+
+async function LastMessage(socket, profile_id, del_typing = !1){
+
+    var data = {
+            return: !1
+        },
+        temp = new Object,
+        USER = global.TEMP[socket.id].user,
+        WORD = global.TEMP[socket.id].word,
+        blocked_inusers = global.TEMP[socket.id].blocked_inusers;
+
+        await query(`SELECT * FROM ${T.MESSAGE} m WHERE user_id NOT IN (${blocked_inusers}) AND profile_id NOT IN (${blocked_inusers}) AND ((user_id = ? AND deleted_fuser = 0) OR (profile_id = ? AND deleted_fprofile = 0)) AND (SELECT id FROM ${T.CHAT} WHERE ((user_id = ? AND profile_id = ?) OR (user_id = ? AND profile_id = ?) AND id = m.chat_id)) = chat_id ORDER BY id DESC LIMIT 1`, [USER.id, USER.id, USER.id, profile_id, profile_id, USER.id]).then(async function(res){
+            var last_message = res[0];
+
+            if(Object.keys(last_message).length > 0){
+                var unseen = !1;
+                temp.last_unseen = !1;
+
+                await IsOwner(socket, last_message.profile_id).then(function(res){
+                    if(res && last_message.seen == 0){
+                        temp.last_unseen = unseen = !0;
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                });
+
+                await query(`SELECT COUNT(*) as count FROM ${T.TYPING} WHERE user_id = ? AND profile_id = ?`, [profile_id, USER.id]).then(async function(res){
+                    if(res[0].count > 0 && del_typing == !1){
+                        unseen = !1;
+                        last_text = WORD.is_writing;
+                    } else {
+                        var qury = ' AND deleted_fprofile = 0';
+                        await IsOwner(socket, last_message.user_id).then(function(res){
+                            if(res){
+                                qury = ' AND deleted_fuser = 0';
+                            }
+                        }).catch(function(err){
+                            console.log(err);
+                        });
+
+                        await query(`SELECT COUNT(*) as count FROM ${T.MESSAFI} WHERE message_id = ?${qury}`, last_message.id).then(async function(res){
+                            if(res[0].count > 0){
+                                await query(`SELECT * FROM ${T.MESSAFI} WHERE message_id = ?${qury} ORDER BY id DESC LIMIT 1`, last_message.id).then(async function(res){
+                                    if(res[0].deleted_at == 0){
+                                        last_text = WORD.attached_file;
+                                        await IsOwner(socket, last_message.user_id).then(function(res){
+                                            if(res){
+                                                unseen = !1;
+                                                last_text = `${WORD.you}: ${WORD.attached_file}`;
+                                            }
+                                        }).catch(function(err){
+                                            console.log(err);
+                                        });
+                                    } else {
+                                        last_text = WORD.deputy_file_deleted;
+                                        await IsOwner(socket, last_message.user_id).then(function(res){
+                                            if(res){
+                                                unseen = !1;
+                                                last_text = `${WORD.you}: ${last_text}`;
+                                            }
+                                        }).catch(function(err){
+                                            console.log(err);
+                                        });
+                                    }
+                                }).catch(function(err){
+                                    console.log(err);
+                                })
+                            } else {
+                                if(last_message.deleted_at == 0){
+                                    last_text = TextFilter(socket, last_message.text, !1);
+                                } else {
+                                    last_text = WORD.message_was_deleted;
+                                }
+                                await IsOwner(socket, last_message.user_id).then(function(res){
+                                    if(res){
+                                        unseen = !1;
+                                        last_text = `${WORD.you}: ${last_text}`;
+                                    }
+                                }).catch(function(err){
+                                    console.log(err);
+                                });
+                            }
+                        }).catch(function(err){
+                            console.log(err);
+                        })
+                    }
+                }).catch(function(err){
+                    console.log(err);
+                })
+        
+        
+                data = {
+                    return: !0,
+                    unseen: unseen,
+                    text: last_text,
+                    chat_id: last_message.chat_id,
+                    created_at: DateString(socket, last_message.created_at)
+                };
+            }
+
+        }).catch(function(err){
+            console.log(err);
+        })
+
+    return data;
+}
+
+
+
+function Maket(socket, page, temp){
+    var html = require(`${global.TEMP.path}/nodejs/html/${page}.js`)(socket, temp);
+
+    html = html.replace(/{\$word->(.+?)}/ig, function(match, word){
+        var WORD = global.TEMP[socket.id].word;
+        return WORD[word] != undefined ? WORD[word] : "";
+    });
+    
+    html = html.replace(/{\$url->\{(.+?)\}}/ig, function(match, url){
+        return Url(url != "home" ? url : "");
+    });
+
+    html = html.replace(/{\#([a-zA-Z0-9_]+)}/ig, function(match, rute){
+        return R[rute] != undefined ? R[rute] : "";
+    });
+
+    html = html.replace(/{\$([a-zA-Z0-9_]+)}/ig, function(match, vr){
+        return temp[vr] != undefined ? temp[vr] : "";
+    });
+    
+    html = html.replace(/{\!([a-zA-Z0-9_]+)}/ig, function(match, vr){
+        return temp[vr] != undefined ? temp[vr] : "";
+    });
+
+    return html;
 }
 
 function Rand(min, max){
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
 
 function RandomKey(minlength = 12, maxlength = 20, number = !0) {
     var length = Math.floor(Rand(maxlength, minlength));
@@ -828,9 +1376,9 @@ function RandomKey(minlength = 12, maxlength = 20, number = !0) {
 
 function Filter(input = ''){
     if(input != ''){
-        input = MysqlRealEscapeString(input);
         input = htmlEntities(input);
-        input = input.replace('/(\r\n|\n\r|\r|\n)/gm', " <br>");
+        input = input.replace(/(\r\n|\n\r|\r|\n)/gm, " <br>");
+        input = MysqlRealEscapeString(input);
         input = stripSlashes(input);
     }
     return input;
@@ -870,23 +1418,24 @@ function htmlEntityDecode(str){
 }
 
 function ValidateUrl(url, protocol = !1){
-    //var match = url.match(url_regex);
-    try {
-        var UR = new URL(url);
-        if(protocol){
-            if(!UR.protocol){
+    var match = url.match(url_regex);
+
+    if(protocol){
+        if(match == null){
+            match = !1;
+        } else {
+            if(match[2] == undefined){
                 url = `http://${url}`;
             }
-            return {
-                return: !0,
-                url: url
-            };
         }
-        return !0;
-    } catch (error) {
-        return !1;
+        return {
+            return: !!match,
+            url: url
+        };
     }
+    return !!match;
 }
+
 
 function stripSlashes(str) {
     return (str + '').replace(/\\(.?)/g, function(s,n1) {
@@ -901,6 +1450,10 @@ function stripSlashes(str) {
                 return n1;
         }
     });
+}
+
+function ArrayDiff(first, second) {
+    return first.filter(x => second.indexOf(x) === -1);
 }
 
 function Time(){
@@ -920,10 +1473,10 @@ function setSocket(socket_id, user_id){
     sockets.push(user);
 }
 
-function getSockets(user_id, socket_id = 0){
+function getSockets(user_id, socket_id = ''){
     var data = [];
     forEach(sockets, function(sock){
-        if(sock.user_id === user_id && sock.socket_id != socket_id){
+        if(sock.user_id == user_id && (socket_id == '' || sock.socket_id != socket_id)){
             data.push(sock.socket_id);
         }
     })
@@ -954,6 +1507,14 @@ function emitChangesOffme(socket, emit, data) {
     socket.broadcast.emit(emit, data);
 }
 
+function emitChamgesTo(user_id, emit, data, socket_id = '') {
+    var socks = getSockets(user_id, socket_id);
+    if(socks.length > 0){
+        return global.TEMP.io.to(socks).emit(emit, data);
+    }
+    return !1;
+}
+
 module.exports = {
     Init,
     Admin,
@@ -972,20 +1533,30 @@ module.exports = {
     DateString,
     GetFile,
     Words,
-    Language,
     Filter,
     htmlEntities,
     htmlEntityDecode,
     ValidateUrl,
     stripSlashes,
+    ArrayDiff,
     Time,
     SetNotify,
+    Notifies,
     IsOwner,
     CreateDirImage,
     UploadThumbnail,
     UploadImage,
     CreateSlug,
     MaketFrame,
+    TextFilter,
+    CommentFilter,
+    ToMention,
+    ReplyMaket,
+    CommentMaket,
+    Replies,
+    UploadMessagefi,
+    LastMessage,
+    Maket,
     Followers,
     NumberShorten,
     SizeFormat,
@@ -995,5 +1566,6 @@ module.exports = {
     getCurrentUser,
     emitChangesAll,
     emitChangesOffme,
-    emitChangesJustMe
+    emitChangesJustMe,
+    emitChamgesTo
 };

@@ -1,11 +1,11 @@
-<li class="content_pnuser position-relative margin-l5 margin-r5 padding-l5 padding-r5<?php echo(empty($TEMP['!last_text'])) ? ' is_new' : '';?>" data-id="{!user_id}">
-	<a class="content-pnmessage background-hover display-flex direction-row align-center color-black padding-t10 padding-b10 padding-l10 padding-r10<?php echo($TEMP['#profile_id'] == $TEMP['!user_id'] || empty($TEMP['!last_text'])) ? ' active' : '';?><?php echo($TEMP['#last_unseen'] == true) ? ' unseen' : '';?>" href="{$url->{{#r_messages}/{!user}}}">
+<li class="content_pnuser position-relative margin-l5 margin-r5 padding-l5 padding-r5<?php echo(!isset($TEMP['!last_text'])) ? ' is_new' : '';?>" data-id="{!user_id}">
+	<a class="content-pnmessage background-hover display-flex direction-row align-center color-black padding-t10 padding-b10 padding-l10 padding-r10<?php echo($TEMP['#profile_id'] == $TEMP['!user_id'] || !isset($TEMP['!last_text'])) ? ' active' : '';?><?php echo($TEMP['#last_unseen'] == true) ? ' unseen' : '';?>" href="{$url->{{#r_messages}/{!user}}}">
 		<div class="item-pnmessage overflow-hidden border-rall margin-r10">
 			<img class="blur-up lazyload" src="{!avatar_s}" alt="{!username}">
 		</div>
 		<div class="display-flex direction-colum">
 			<span class="margin-b5">{!username}</span>
-			<div class="content_pninfo display-flex direction-row font-franklin font-low<?php echo(empty($TEMP['!last_text'])) ? ' hidden' : '';?>">
+			<div class="content_pninfo display-flex direction-row font-franklin font-low<?php echo(!isset($TEMP['!last_text'])) ? ' hidden' : '';?>">
 				<span class="item_pntuser ellipsis-horizontal">{!last_text}</span>
 				<span class="margin-l5 margin-r5 font-normal" aria-hidden="true">·</span>
 				<span class="item_pncuser font-normal">{!last_created_at}</span>
@@ -23,7 +23,7 @@
 			<?php if($TEMP['#settings']['blocked_users'] == 'on' && in_array($TEMP['!role'], array('publisher', 'viewer')) && $TEMP['!user_deleted'] == true){ ?>
 			<button class="btn_pcblock w-100 text-left btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover-button animate-tab-button animation-ease3s" data-id="{!user_id}">{$word->block}</button>
 			<?php } ?>
-			<button class="btn_pcdelete w-100 text-left btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover-button animate-tab-button animation-ease3s<?php echo(empty($TEMP['!last_text'])) ? ' hidden' : '';?>" data-id="{!id}">{$word->delete}</button>
+			<button class="btn_pcdelete w-100 text-left btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover-button animate-tab-button animation-ease3s<?php echo(!isset($TEMP['!last_text'])) ? ' hidden' : '';?>" data-id="{!id}">{$word->delete}</button>
 		</div>
 	</div>
 	<div class="item-pnmpoint position-absolute background-blue border-rall"></div>

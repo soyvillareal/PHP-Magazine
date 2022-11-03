@@ -103,6 +103,7 @@
 }
 .content-pmtext.has-pmhead {
 	height: calc(70vh - 54px);
+	overflow-x: hidden;
 }
 .container-pnchats {
 	height: calc(70vh - 61px);
@@ -123,8 +124,33 @@
 .item_pmtmessage {
 	bottom: -15px;
 }
+
+.item-pmtreply .content_pmtfiles .content-pmtwdeleted.is-out:first-child,
 .item_pmtmessage ~ .item-pmtreply {
 	margin-top: 0;
+}
+
+.item-pmtreply .content_pmtimages a,
+.content_pmtimages .content_pmtimage:last-child,
+.content_pmtimages .content_pmtmessage:last-child,
+.item-pmtreply .content_pmtfiles .content_pmtfile:first-child a,
+.item-pmtreply .content_pmtfiles .content-pmtwdeleted.is-in:first-child {
+	margin: 0 !important;
+}
+
+.item-pmtreply .content_pmtfiles .content-pmtwdeleted.is-in {
+	padding: 0;
+	margin: 5px 0 0 0;
+}
+
+.item-pmtreply .content_pmtfiles .content-pmtwdeleted.is-out {
+	padding: 0;
+	margin: 5px 0 0 auto;
+}
+
+.item-pmtreply .content_pmtimages .content-pmtwdeleted {
+	padding: 0;
+	margin: 0 0 10px 0;
 }
 .btn-mdown {
 	bottom: -36px;
@@ -221,18 +247,14 @@
 .item-mffile:focus ~ span {
 	background-color: #ebebeb;
 }
-.content_pmtfiles:last-child,
-.content_pmtimages:last-child,
 .content_pmtmessage:not(.content-pmtwdeleted):last-child {
 	margin-bottom: 15px;
 }
 .content_pmtfile:not(.content-pmtfile) {
-	max-width: 80%;
 	min-width: 128px;
 	min-height: 48px;
 }
-.content_pmtmessage:not(.content-pmtwdeleted),
-.content_pmtimages {
+.content_pmtmessage:not(.content-pmtwdeleted) {
 	max-width: 80%;
 }
 .item-pmtimage {
@@ -262,6 +284,9 @@
 .content-pmsearch::-webkit-scrollbar-thumb,
 .content-mffiles::-webkit-scrollbar-thumb {
     background: #909090;
+}
+.content-emessages {
+	width: calc(100% - 50px);
 }
 @media(max-width: 767px){
 	.container-pnmessage {

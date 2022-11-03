@@ -554,12 +554,14 @@ class Specific {
 		$text = self::TextFilter($text);
 
 		$username_exists = preg_match_all('/@([a-zA-Z0-9]+)/i', $text, $username);
+
+		
 		if($username_exists > 0){
 			for ($i=0; $i < $username_exists; $i++) {
 				$user = $dba->query('SELECT id, username, COUNT(*) as count FROM '.T_USER.' WHERE username = ? AND status = "active"', $username[1][$i])->fetchArray();
 				if($user['count'] > 0){
 					if($user['id'] != $mention_uid){
-						return preg_replace("/@({$username[1][$i]}+)/i", '<a class="color-blue hover-button" href="'.self::ProfileUrl($user['username']).'" target="_blank">@'.$user['username'].'</a>', $text);
+						$text = preg_replace("/@({$username[1][$i]}+)/i", '<a class="color-blue hover-button" href="'.self::ProfileUrl($user['username']).'" target="_blank">@'.$user['username'].'</a>', $text);
 					}
 				}
 			}
@@ -646,11 +648,11 @@ class Specific {
 
 		if(!empty($comment)){
 
-			$TEMP['cusername'] = $TEMP['#word']['user_without_login'];
-			$TEMP['avatar_cs'] = self::Url('/themes/default/images/users/default-holder-s.jpeg');
+			$TEMP['!cusername'] = $TEMP['#word']['user_without_login'];
+			$TEMP['!avatar_cs'] = self::Url('/themes/default/images/users/default-holder-s.jpeg');
 			if($TEMP['#loggedin'] == true){
-				$TEMP['cusername'] = $TEMP['#user']['username'];
-				$TEMP['avatar_cs'] = $TEMP['#user']['avatar_s'];
+				$TEMP['!cusername'] = $TEMP['#user']['username'];
+				$TEMP['!avatar_cs'] = $TEMP['#user']['avatar_s'];
 			}
 			
 			$post = $dba->query('SELECT user_id, slug FROM '.T_POST.' WHERE id = ?', $comment['post_id'])->fetchArray();
@@ -663,20 +665,20 @@ class Specific {
 			$TEMP['!comment_type'] = $type;
 			if($type == 'featured-reply'){
 				$reply = $dba->query('SELECT * FROM '.T_REPLY.' WHERE id = ?', $TEMP['#featured_rid'])->fetchArray();
-				$featured_reply = self::ReplyMaket($reply, $comment['id'], 'featured-reply');
+				$featured_reply = self::ReplyMaket($reply, 'featured-reply');
 
 				if($featured_reply['return']){
-					$TEMP['featured_reply'] = $featured_reply['html'];
+					$TEMP['!featured_reply'] = $featured_reply['html'];
 					$reply_ids[] = $TEMP['#featured_rid'];
 				}
 			}
 
-			$TEMP['replies'] = '';
+			$TEMP['!replies'] = '';
 			$TEMP['!reply_owner'] = false;
 			$TEMP['!count_replies'] = $dba->query('SELECT COUNT(*) FROM '.T_REPLY.' WHERE comment_id = ?', $comment['id'])->fetchArray(true);
 			$replies = self::Replies($comment['id'], $order, $reply_ids);
 			if($replies['return']){
-				$TEMP['replies'] = $replies['html'];
+				$TEMP['!replies'] = $replies['html'];
 			}
 
 			$user = self::Data($comment['user_id'], array('username', 'avatar'));
@@ -715,7 +717,7 @@ class Specific {
 		);
 	}
 
-	public static function ReplyMaket($reply = array(), $comment_id, $type = 'normal'){
+	public static function ReplyMaket($reply = array(), $type = 'normal'){
 		global $dba, $TEMP, $RUTE;
 
 		if(!empty($reply)){
@@ -723,15 +725,17 @@ class Specific {
 			$user = self::Data($reply['user_id'], array('username', 'avatar'));
 
 			$post = $dba->query('SELECT user_id, slug FROM '.T_POST.' WHERE (SELECT post_id FROM '.T_COMMENTS.' WHERE id = ?) = id', $reply['comment_id'])->fetchArray();
+
+			$TEMP['!comment_id'] = $reply['comment_id'];
 			$TEMP['!url_reply'] = self::Url("{$post['slug']}?{$RUTE['#p_reply_id']}={$reply['id']}");
 			$TEMP['!reply_id'] = $reply['id'];
 			$TEMP['!reply_owner'] = self::IsOwner($reply['user_id']);
 
-			$TEMP['cusername'] = $TEMP['#word']['user_without_login'];
-			$TEMP['avatar_cs'] = self::Url('/themes/default/images/users/default-holder-s.jpeg');
+			$TEMP['!cusername'] = $TEMP['#word']['user_without_login'];
+			$TEMP['!avatar_cs'] = self::Url('/themes/default/images/users/default-holder-s.jpeg');
 			if($TEMP['#loggedin'] == true){
-				$TEMP['cusername'] = $TEMP['#user']['username'];
-				$TEMP['avatar_cs'] = $TEMP['#user']['avatar_s'];
+				$TEMP['!cusername'] = $TEMP['#user']['username'];
+				$TEMP['!avatar_cs'] = $TEMP['#user']['avatar_s'];
 			}
 
 			$TEMP['!reply_powner'] = self::IsOwner($post['user_id']);
@@ -783,7 +787,7 @@ class Specific {
 		if(!empty($replies)){
 			$html = '';
 			foreach ($replies as $reply) {
-				$reply = self::ReplyMaket($reply, $comment_id);
+				$reply = self::ReplyMaket($reply);
 				$html .= $reply['html'];
 			}
 
@@ -992,7 +996,7 @@ class Specific {
 		);
 	}
 
-	public static function LastMessage($profile_id, $is_new = false){
+	public static function LastMessage($profile_id){
 		global $dba, $TEMP;
 
 		$data = array(
@@ -1006,30 +1010,36 @@ class Specific {
 			if($last_message['seen'] == 0 && self::IsOwner($last_message['profile_id'])){
 				$TEMP['#last_unseen'] = $unseen = true;
 			}
-			if($last_message['text'] == NULL){
-				$file = $dba->query('SELECT * FROM '.T_MESSAFI.' WHERE message_id = ? ORDER BY id DESC LIMIT 1', $last_message['id'])->fetchArray();
-				if($file['deleted_at'] == 0){
-					$last_text = $TEMP['#word']['attached_file'];
-					if(self::IsOwner($last_message['user_id'])){
-						$unseen = false;
-						$last_text = "{$TEMP['#word']['you']}: {$TEMP['#word']['attached_file']}";
-					}
-				} else {
-					$last_text = $TEMP['#word']['deputy_file_deleted'];
-					if(self::IsOwner($last_message['user_id'])){
-						$unseen = false;
-						$last_text = "{$TEMP['#word']['you']}: {$last_text}";
-					}
-				}
+
+			if($dba->query('SELECT COUNT(*) FROM '.T_TYPING.' WHERE user_id = ? AND profile_id = ?', $profile_id, $TEMP['#user']['id'])->fetchArray(true) > 0){
+				$unseen = false;
+				$last_text = $TEMP['#word']['is_writing'];
 			} else {
-				if($last_message['deleted_at'] == 0){
-					$last_text = self::TextFilter($last_message['text'], false);
-					if(self::IsOwner($last_message['user_id'])){
-						$unseen = false;
-						$last_text = "{$TEMP['#word']['you']}: {$last_text}";
+				$query = ' AND deleted_fprofile = 0';
+				if(Specific::IsOwner($last_message['user_id'])){
+					$query = ' AND deleted_fuser = 0';
+				}
+				if($dba->query("SELECT COUNT(*) FROM ".T_MESSAFI." WHERE message_id = ?{$query}", $last_message['id'])->fetchArray(true) > 0){
+					$file = $dba->query("SELECT * FROM ".T_MESSAFI." WHERE message_id = ?{$query} ORDER BY id DESC LIMIT 1", $last_message['id'])->fetchArray();
+					if($file['deleted_at'] == 0){
+						$last_text = $TEMP['#word']['attached_file'];
+						if(self::IsOwner($last_message['user_id'])){
+							$unseen = false;
+							$last_text = "{$TEMP['#word']['you']}: {$TEMP['#word']['attached_file']}";
+						}
+					} else {
+						$last_text = $TEMP['#word']['deputy_file_deleted'];
+						if(self::IsOwner($last_message['user_id'])){
+							$unseen = false;
+							$last_text = "{$TEMP['#word']['you']}: {$last_text}";
+						}
 					}
 				} else {
-					$last_text = $TEMP['#word']['message_was_deleted'];
+					if($last_message['deleted_at'] == 0){
+						$last_text = self::TextFilter($last_message['text'], false);
+					} else {
+						$last_text = $TEMP['#word']['message_was_deleted'];
+					}
 					if(self::IsOwner($last_message['user_id'])){
 						$unseen = false;
 						$last_text = "{$TEMP['#word']['you']}: {$last_text}";
@@ -1049,7 +1059,7 @@ class Specific {
 		return $data;
 	}
 
-	public static function Chat($chat, $is_new = false){
+	public static function Chat($chat){
 		global $dba, $TEMP;
 
 		$data = array();
@@ -1059,7 +1069,7 @@ class Specific {
 			$user_id = $chat['profile_id'];
 		}
 		
-		$last_message = self::LastMessage($user_id, $is_new);
+		$last_message = self::LastMessage($user_id);
 
 		if($last_message['return']){
 			$chat_id = $last_message['chat_id'];
@@ -1090,6 +1100,44 @@ class Specific {
 		
 
 		$data['html'] = self::Maket("messages/includes/user");
+
+		return $data;
+	}
+	
+	public static function DeleteMyTypings($profile_id = 0){
+		global $dba, $TEMP;
+
+		$data = array(
+			'return' => false
+		);
+
+		$qtypings = $dba->query('SELECT * FROM '.T_TYPING.' WHERE profile_id = ?', $TEMP['#user']['id'])->fetchAll();
+
+		if(!empty($qtypings)){
+			$typings = [];
+			$delete_dot = false;
+
+			foreach ($qtypings as $key => $typing) {
+				
+				if(!empty($profile_id)){
+					if($typing['user_id'] == $profile_id){
+						$delete_dot = true;
+					}
+				}
+				if($dba->query('DELETE FROM '.T_TYPING.' WHERE profile_id = ?', $typing['profile_id'])->returnStatus()){
+					$last_message = self::LastMessage($typing['user_id']);
+					$typings[] = array(
+						'TX' => $last_message['text'],
+						'EL' => ".content_pnuser[data-id={$typing['user_id']}]"
+					);
+				}
+			}
+			$data = array(
+				'return' => true,
+				'typings' => $typings,
+				'delete_dot' => $delete_dot
+			);
+		}
 
 		return $data;
 	}

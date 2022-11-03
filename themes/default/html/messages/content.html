@@ -177,9 +177,20 @@
 					</div>
 					<div id="content-mfinputs" class="content-mfinputs hidden"></div>
 				</div>
+				<?php if($TEMP['#enable_messages'] == false){ ?>
+				<div class="display-flex">
+					<?php if($TEMP['#user']['shows']['messages'] == 'off'){ ?>
+					<div class="content-emessages display-flex padding-l15 padding-r15">
+						<span class="color-black margin-left-auto margin-r5 ellipsis-horizontal">{$word->modify_message_settings_in}</span><a class="color-blue margin-right-auto hover-button animation-ease3s" href="{$url->{{#r_settings}}}" target="_blank">{$word->settings}</a>
+					</div>
+					<?php } else { ?>
+					<span class="color-black margin-left-auto margin-right-auto ellipsis-horizontal">{$word->this_user_disabled_messages}</span>
+					<?php } ?>
+				</div>
+				<?php } ?>
 				<div class="display-flex direction-row align-center padding-t10 padding-b10 margin-l10 margin-r10">
 					<div class="content-mffile position-relative margin-top-auto margin-r5">
-						<input id="item-mffile" class="item-mffile disable_before w-100 h-100 position-absolute z-index-1 opacity-0 cursor-pointer" type="file"<?php echo(empty($TEMP['#username'])) ? ' disabled' : '';?>>
+						<input id="item-mffile" class="item-mffile disable_before w-100 h-100 position-absolute z-index-1 opacity-0 cursor-pointer" type="file"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>>
 						<span class="display-flex color-blue padding-5 border-rall animation-ease3s">
 							<svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
@@ -191,9 +202,9 @@
 					    </div>
 					</div>
 					<div class="content-pmarea display-flex item-pnbackground w-100 border-r25px overflow-hidden">
-						<textarea id="text-message" class="disable_before w-100 background-trans padding-t5 padding-b5 padding-l10 padding-r10 resize-none border-none" rows="1" placeholder="{$word->write_your_message}"<?php echo(empty($TEMP['#username'])) ? ' disabled' : '';?>></textarea>
+						<textarea id="text-message" class="disable_before w-100 background-trans padding-t5 padding-b5 padding-l10 padding-r10 resize-none border-none" rows="1" placeholder="{$word->write_your_message}"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>></textarea>
 					</div>
-					<button id="btn-pmsend" class="disable_before btn-noway background-hover margin-top-auto margin-l5 padding-5 border-rall animation-ease3s animate-tab-button" type="submit"<?php echo(empty($TEMP['#username'])) ? ' disabled' : '';?>>
+					<button id="btn-pmsend" class="disable_before btn-noway background-hover margin-top-auto margin-l5 padding-5 border-rall animation-ease3s animate-tab-button" type="submit"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>>
 						<span class="color-blue">
 							<svg class="icon-z vertical-middle" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 24" xml:space="preserve">
 								<title>{$word->send_message}</title>
@@ -318,23 +329,26 @@
 	paper_m = {
         token: '{#token_session}',
         url: {
-            send: '{$url->{req/messages/send}}',
+			send: '<?php echo($TEMP['#settings']['nodejs'] == 'on') ? '//{$settings->node_hostname}:{$settings->node_server_port}' : '{$url->{req}}';?>/messages/send',
             fetch: '{$url->{req/messages/fetch}}',
             search_users: '{$url->{req/messages/search-users}}',
             search_chats: '{$url->{req/messages/search-chats}}',
             new_message: '{$url->{req/messages/new-message}}',
             block: '{$url->{req/profile/block}}',
             delete_chat: '{$url->{req/messages/delete-chat}}',
+			delete_my_typings: '{$url->{req/messages/delete-my-typings}}',
             delete_both_message: '{$url->{req/messages/delete-both-message}}',
             delete_me_message: '{$url->{req/messages/delete-me-message}}'
         },
+		settings: {
+			nodejs: '{$settings->nodejs}'
+		},
         word: {
             attached_file: '{$word->attached_file}',
             image: '{$word->image}',
             more_files: '{$word->more_files}',
             search: '{$word->search}',
             close: '{$word->close}'
-
         },
         profile_id: {#profile_id},
         last_cupdate: {$last_cupdate},

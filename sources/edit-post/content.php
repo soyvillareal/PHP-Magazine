@@ -29,7 +29,7 @@ $TEMP['#category_id'] = $post['category_id'];
 $TEMP['#post_description'] = $post['description'];
 
 $TEMP['#thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
-$TEMP['#type'] = $post['type'];
+$TEMP['#post_type'] = $post['type'];
 
 $TEMP['#tags'] = $dba->query('SELECT * FROM '.T_LABEL.' l WHERE (SELECT label_id FROM '.T_TAG.' WHERE post_id = ? AND label_id = l.id) = id', $post_id)->fetchAll();
 
@@ -58,10 +58,11 @@ foreach ($entries as $entry) {
 
 $max_cimages = $carousel_json = array();
 foreach ($entries as $entry) {
-    $TEMP['!id'] = $entry['id'];
     $TEMP['#type'] = $entry['type'];
-    $TEMP['!title'] = $entry['title'];
-    $TEMP['!source'] = $entry['source'];
+    
+    $TEMP['!id'] = $entry['id'];
+    $TEMP['!title'] = $entry['title']; 
+    $TEMP['!esource'] = $entry['esource'];
     if($entry['type'] == 'text'){
         $TEMP['!body'] = $entry['body'];
     } else {

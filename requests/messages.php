@@ -6,7 +6,6 @@ if($one == 'fetch'){
 	if(in_array($type, array('first', 'last', 'users'))){
 		$profile_id = Specific::Filter($_POST['profile_id']);
 
-		//  && in_array($type, array('first', 'last'))
 		if(!empty($profile_id) && is_numeric($profile_id)){
 			$messages_ids = Specific::Filter($_POST['messages_ids']);
 			$messages_ids = html_entity_decode($messages_ids);
@@ -141,129 +140,135 @@ if($one == 'fetch'){
 
 	if(!empty($profile_id) && is_numeric($profile_id) && (!empty(trim($text)) || $count_files > 0) && is_numeric($count_files) && in_array($type, array('text', 'file', 'image')) && !in_array($profile_id, Specific::BlockedUsers(false))){
 
-		$created_at = $updated_at = time();
-		$TEMP['#messafi'] = false;
-		$TEMP['#has_image'] = false;
-		$TEMP['#has_file'] = false;
-
-		if($count_files > 0){
-			if(empty($text)){
-				$text = NULL;
-			}
-		}
-		
-		$chat = $dba->query('SELECT *, COUNT(*) as count FROM '.T_CHAT.' WHERE (user_id = ? AND profile_id = ?) OR (profile_id = ? AND user_id = ?)', $TEMP['#user']['id'], $profile_id, $TEMP['#user']['id'], $profile_id)->fetchArray();
-
-		$chat_id = $chat['id'];
-		if($chat['count'] > 0){
-			$dba->query('UPDATE '.T_CHAT.' SET updated_at = ? WHERE id = ?', $updated_at, $chat_id);
-		} else {
-			$chat_id = $dba->query('INSERT INTO '.T_CHAT.' (user_id, profile_id, updated_at, created_at) VALUES (?, ?, ?, ?)', $TEMP['#user']['id'], $profile_id, $updated_at, $created_at)->insertId();
-		}
-
-		if(!empty($chat_id)){
-			$message_exists = $dba->query('SELECT COUNT(*) FROM '.T_MESSAGE.' WHERE chat_id = ? AND ((user_id = ? AND deleted_fuser = 0) OR (profile_id = ? AND deleted_fprofile = 0))', $chat_id, $TEMP['#user']['id'], $TEMP['#user']['id'])->fetchArray(true);
-
-			$insert_id = $dba->query('INSERT INTO '.T_MESSAGE.' (chat_id, user_id, profile_id, text, created_at) VALUES (?, ?, ?, ?, ?)', $chat_id, $TEMP['#user']['id'], $profile_id, $text, $created_at)->insertId();
-
-			if($insert_id){
-				$dba->query('DELETE FROM '.T_TYPING.' WHERE user_id = ? AND profile_id = ?', $TEMP['#user']['id'], $profile_id);
-
+		$user = $dba->query('SELECT shows, COUNT(*) as count FROM '.T_USER.' WHERE id = ?', $profile_id)->fetchArray();
+		if($user['count'] > 0){
+			$user = Specific::Data($user, 3);
+			if($user['shows']['messages'] == 'on' && $TEMP['#user']['shows']['messages'] == 'on'){
+				$created_at = $updated_at = time();
+				$TEMP['#messafi'] = false;
+				$TEMP['#has_image'] = false;
+				$TEMP['#has_file'] = false;
 
 				if($count_files > 0){
-					$TEMP['#messafi'] = true;
-					$files = $messafis = array();
-					for ($i=0; $i < $count_files; $i++) {
-						$messafi = $_FILES["file_{$i}"];
-						if(!empty($messafi)){
-							$file = Specific::UploadMessagefi(array(
-								'name' => $messafi['name'],
-								'tmp_name' => $messafi['tmp_name'],
-								'size' => $messafi['size'],
-								'type' => $messafi['type'],
-								'message_id' => $insert_id
-							));
-							if($file['return']){
-								$files[] = "('{$messafi['name']}', {$insert_id}, '{$file['file']}', {$messafi['size']}, {$created_at})";
-							}
-						}
+					if(empty(trim($text))){
+						$text = NULL;
 					}
-					$dba->query('INSERT INTO '.T_MESSAFI.' (name, message_id, file, size, created_at) VALUES '.implode(',', $files));
+				}
+				
+				$chat = $dba->query('SELECT *, COUNT(*) as count FROM '.T_CHAT.' WHERE (user_id = ? AND profile_id = ?) OR (profile_id = ? AND user_id = ?)', $TEMP['#user']['id'], $profile_id, $TEMP['#user']['id'], $profile_id)->fetchArray();
+
+				$chat_id = $chat['id'];
+				if($chat['count'] > 0){
+					$dba->query('UPDATE '.T_CHAT.' SET updated_at = ? WHERE id = ?', $updated_at, $chat_id);
+				} else {
+					$chat_id = $dba->query('INSERT INTO '.T_CHAT.' (user_id, profile_id, updated_at, created_at) VALUES (?, ?, ?, ?)', $TEMP['#user']['id'], $profile_id, $updated_at, $created_at)->insertId();
 				}
 
-				if(!empty($answered_id) && is_numeric($answered_id)){
-					if(($type == 'text' && $dba->query('SELECT COUNT(*) FROM '.T_MESSAGE.' WHERE id = ? AND chat_id = ?', $answered_id, $chat_id)->fetchArray(true) > 0) || (in_array($type, array('file', 'image')) && $dba->query('SELECT COUNT(*) FROM '.T_MESSAFI.' WHERE id = ?', $answered_id)->fetchArray(true) > 0)){
-						if($dba->query('SELECT COUNT(*) FROM '.T_MESSAAN.' WHERE message_id = ? AND answered_id = ? AND type = ?', $insert_id, $answered_id, $type)->fetchArray(true) == 0){
-							if($dba->query('INSERT INTO '.T_MESSAAN.' (message_id, answered_id, type, created_at) VALUES (?, ?, ?, ?)', $insert_id, $answered_id, $type, $created_at)->returnStatus()){
-								if($type == 'text'){
-									$answered = $dba->query('SELECT * FROM '.T_MESSAGE.' WHERE id = ?', $answered_id)->fetchArray();
+				if(!empty($chat_id)){
+					$message_exists = $dba->query('SELECT COUNT(*) FROM '.T_MESSAGE.' WHERE chat_id = ? AND ((user_id = ? AND deleted_fuser = 0) OR (profile_id = ? AND deleted_fprofile = 0))', $chat_id, $TEMP['#user']['id'], $TEMP['#user']['id'])->fetchArray(true);
 
-									$ans_pid = $answered['profile_id'];
-									$user_id = $answered['user_id'];
-									$TEMP['!ans_text'] = Specific::TextFilter($answered['text'], false);
-								} else {
-									$amessafi = $dba->query('SELECT f.*, m.user_id, m.profile_id FROM '.T_MESSAFI.' f INNER JOIN '.T_MESSAGE.' m WHERE f.id = ? AND m.id = f.message_id', $answered_id)->fetchArray();
-									
-									$ans_pid = $amessafi['profile_id'];
-									$user_id = $ans_uid = $amessafi['user_id'];
-									$TEMP['!fi_aname'] = $amessafi['name'];
-									$TEMP['!fi_asize'] = Specific::SizeFormat($amessafi['size']);
-									if($type == 'image'){
-										$TEMP['!fi_aurl'] = Specific::Url("uploads/messages/{$amessafi['file']}");
+					$insert_id = $dba->query('INSERT INTO '.T_MESSAGE.' (chat_id, user_id, profile_id, text, created_at) VALUES (?, ?, ?, ?, ?)', $chat_id, $TEMP['#user']['id'], $profile_id, $text, $created_at)->insertId();
+
+					if($insert_id){
+						$dba->query('DELETE FROM '.T_TYPING.' WHERE user_id = ? AND profile_id = ?', $TEMP['#user']['id'], $profile_id);
+
+
+						if($count_files > 0){
+							$TEMP['#messafi'] = true;
+							$files = array();
+							for ($i=0; $i < $count_files; $i++) {
+								$messafi = $_FILES["file_{$i}"];
+								if(!empty($messafi)){
+									$file = Specific::UploadMessagefi(array(
+										'name' => $messafi['name'],
+										'tmp_name' => $messafi['tmp_name'],
+										'size' => $messafi['size'],
+										'type' => $messafi['type'],
+										'message_id' => $insert_id
+									));
+									if($file['return']){
+										$files[] = "('{$messafi['name']}', {$insert_id}, '{$file['file']}', {$messafi['size']}, {$created_at})";
 									}
 								}
+							}
+							$dba->query('INSERT INTO '.T_MESSAFI.' (name, message_id, file, size, created_at) VALUES '.implode(',', $files));
+						}
 
-								$ans_user = Specific::Data($user_id, array('username', 'name', 'surname'));
-								$TEMP['!type'] = 'answered';
-								$TEMP['!ans_type'] = $type;
-								$TEMP['!ans_title'] = "{$TEMP['#word']['you_responded_to']} {$ans_user['username']}";
-								if($ans_pid == $profile_id){
-									$TEMP['!ans_title'] = $TEMP['#word']['you_replied_own_message'];
+						if(!empty($answered_id) && is_numeric($answered_id)){
+							if(($type == 'text' && $dba->query('SELECT COUNT(*) FROM '.T_MESSAGE.' WHERE id = ? AND chat_id = ?', $answered_id, $chat_id)->fetchArray(true) > 0) || (in_array($type, array('file', 'image')) && $dba->query('SELECT COUNT(*) FROM '.T_MESSAFI.' WHERE id = ?', $answered_id)->fetchArray(true) > 0)){
+								if($dba->query('SELECT COUNT(*) FROM '.T_MESSAAN.' WHERE message_id = ? AND answered_id = ? AND type = ?', $insert_id, $answered_id, $type)->fetchArray(true) == 0){
+									if($dba->query('INSERT INTO '.T_MESSAAN.' (message_id, answered_id, type, created_at) VALUES (?, ?, ?, ?)', $insert_id, $answered_id, $type, $created_at)->returnStatus()){
+										$TEMP['!ans_deleted'] = false;
+										if($type == 'text'){
+											$answered = $dba->query('SELECT * FROM '.T_MESSAGE.' WHERE id = ?', $answered_id)->fetchArray();
+
+											$ans_pid = $answered['profile_id'];
+											$user_id = $answered['user_id'];
+											$TEMP['!ans_text'] = Specific::TextFilter($answered['text'], false);
+										} else {
+											$amessafi = $dba->query('SELECT f.*, m.user_id, m.profile_id FROM '.T_MESSAFI.' f INNER JOIN '.T_MESSAGE.' m WHERE f.id = ? AND m.id = f.message_id', $answered_id)->fetchArray();
+											
+											$ans_pid = $amessafi['profile_id'];
+											$user_id = $amessafi['user_id'];
+											$TEMP['!fi_aname'] = $amessafi['name'];
+											$TEMP['!fi_asize'] = Specific::SizeFormat($amessafi['size']);
+											if($type == 'image'){
+												$TEMP['!fi_aurl'] = Specific::Url("uploads/messages/{$amessafi['file']}");
+											}
+										}
+
+										$ans_user = Specific::Data($user_id, array('username', 'name', 'surname'));
+										$TEMP['!type'] = 'answered';
+										$TEMP['!ans_type'] = $type;
+										$TEMP['!ans_title'] = "{$TEMP['#word']['you_responded_to']} {$ans_user['username']}";
+										if($ans_pid == $profile_id){
+											$TEMP['!ans_title'] = $TEMP['#word']['you_replied_own_message'];
+										}
+
+									}
 								}
 							}
 						}
-					}
-				}
 
 
-				$messafis = $dba->query('SELECT * FROM '.T_MESSAFI.' WHERE message_id = ?', $insert_id)->fetchAll();
-				if(!empty($messafis)){
-					$TEMP['#messafi'] = true;
-					foreach ($messafis as $messafi) {
-						$TEMP['!fi_id'] = $messafi['id'];
-						$TEMP['!fi_name'] = $messafi['name'];
-						$TEMP['!fi_url'] = Specific::Url("uploads/messages/{$messafi['file']}");
-						$TEMP['!fi_size'] = Specific::SizeFormat($messafi['size']);
+						$messafis = $dba->query('SELECT * FROM '.T_MESSAFI.' WHERE message_id = ?', $insert_id)->fetchAll();
+						if(!empty($messafis)){
+							$TEMP['#messafi'] = true;
+							foreach ($messafis as $messafi) {
+								$TEMP['!fi_id'] = $messafi['id'];
+								$TEMP['!fi_name'] = $messafi['name'];
+								$TEMP['!fi_url'] = Specific::Url("uploads/messages/{$messafi['file']}");
+								$TEMP['!fi_size'] = Specific::SizeFormat($messafi['size']);
 
-						if(in_array(pathinfo($messafi['name'], PATHINFO_EXTENSION), array('jpeg', 'jpg', 'png', 'gif'))){
-							$TEMP['#has_image'] = true;
-							$TEMP['images'] .= Specific::Maket("messages/includes/outimage");
-						} else {
-							$TEMP['#has_file'] = true;
-							$TEMP['files'] .= Specific::Maket("messages/includes/outfile");
+								if(in_array(pathinfo($messafi['name'], PATHINFO_EXTENSION), array('jpeg', 'jpg', 'png', 'gif'))){
+									$TEMP['#has_image'] = true;
+									$TEMP['!images'] .= Specific::Maket("messages/includes/outimage");
+								} else {
+									$TEMP['#has_file'] = true;
+									$TEMP['!files'] .= Specific::Maket("messages/includes/outfile");
+								}
+							}
 						}
+
+						$TEMP['!id'] = $insert_id;
+						$TEMP['!text'] = Specific::TextFilter($text);
+						$TEMP['!created_at'] = Specific::DateString($created_at);
+
+						$deliver['S'] = 200;
+						$deliver['CID'] = $chat_id;
+						$deliver['MID'] = $insert_id;
+
+						$deliver['CO'] = $message_exists == 0;
+
+						$deliver['HTM'] = Specific::Maket('messages/includes/outgoing');
+						$deliver['TX'] = "{$TEMP['#word']['you']}: ".Specific::TextFilter($text, false);
+						if($text == NULL){
+							$deliver['TX'] = "{$TEMP['#word']['you']}: {$TEMP['#word']['attached_file']}";
+						}
+						$deliver['CA'] = Specific::DateString($created_at);
+						$deliver['EL'] = '.content_pnuser[data-id='.$profile_id.']';
 					}
 				}
-
-				$TEMP['!id'] = $insert_id;
-				$TEMP['!text'] = Specific::TextFilter($text);
-				$TEMP['!created_at'] = Specific::DateString($created_at);
-
-				$deliver['S'] = 200;
-				$deliver['CID'] = $chat_id;
-				$deliver['MID'] = $insert_id;
-
-				$deliver['CO'] = false;
-
-				$deliver['CO'] = $message_exists == 0;
-
-				$deliver['HTM'] = Specific::Maket('messages/includes/outgoing');
-				$deliver['TX'] = "{$TEMP['#word']['you']}: ".Specific::TextFilter($text, false);
-				if($text == NULL){
-					$deliver['TX'] = "{$TEMP['#word']['you']}: {$TEMP['#word']['attached_file']}";
-				}
-				$deliver['CA'] = Specific::DateString($created_at);
-				$deliver['EL'] = '.content_pnuser[data-id='.$profile_id.']';
 			}
 		}
 	}
@@ -314,6 +319,19 @@ if($one == 'fetch'){
 		$deliver['S'] = 204;
 		$deliver['HT'] = Specific::Maket('not-found/no-result-for');
 	}
+} else if($one == 'delete-my-typings'){
+	$profile_id = Specific::Filter($_POST['profile_id']);
+
+	if(!empty($profile_id) && is_numeric($profile_id)){
+		$delete_my_typings = Specific::DeleteMyTypings($profile_id);
+		if($delete_my_typings['return']){
+			$deliver = array(
+				'S' => 200,
+				'DL' => $delete_my_typings['delete_dot'],
+				'TPS' => $delete_my_typings['typings']
+			);
+		}
+	}
 } else if($one == 'delete-both-message'){
 	$id = Specific::Filter($_POST['id']);
 	$for = Specific::Filter($_POST['for']);
@@ -337,12 +355,13 @@ if($one == 'fetch'){
 					$TEMP['!id'] = $id;
 					$deliver = array(
 						'S' => 200,
-						'HT' => Specific::Maket('messages/includes/deleted-outgoing')
+						'HT' => Specific::Maket('messages/includes/deleted-outgoing'),
+						'DA' => false
 					);
 				}
 			}
 		} else {
-			$messafi = $dba->query('SELECT m.id, m.user_id, COUNT(f.id) as count FROM '.T_MESSAFI.' f INNER JOIN '.T_MESSAGE.' m WHERE f.id = ? AND m.id = f.message_id AND m.profile_id NOT IN ('.$TEMP['#blocked_users'].')', $id)->fetchArray();
+			$messafi = $dba->query('SELECT m.id, m.text, m.user_id, f.message_id, COUNT(f.id) as count FROM '.T_MESSAFI.' f INNER JOIN '.T_MESSAGE.' m WHERE f.id = ? AND m.id = f.message_id AND m.profile_id NOT IN ('.$TEMP['#blocked_users'].')', $id)->fetchArray();
 
 			if($messafi['count'] > 0){
 				$query = 'deleted_fprofile = ?';
@@ -350,6 +369,10 @@ if($one == 'fetch'){
 					$query = 'deleted_at = ?';
 					if($for == 'me'){
 						$query = 'deleted_fuser = ?';
+						$deliver['DA'] = false;
+						if($messafi['text'] == NULL && $dba->query('SELECT COUNT(*) FROM '.T_MESSAAN.' WHERE message_id = ?', $messafi['message_id'])->fetchArray(true) > 0 && $dba->query('SELECT COUNT(*) FROM '.T_MESSAFI.' WHERE message_id = ? AND deleted_fuser = 0', $messafi['message_id'])->fetchArray(true) == 1){
+							$deliver['DA'] = true;
+						}
 					}
 				}
 
@@ -358,10 +381,8 @@ if($one == 'fetch'){
 						$TEMP['!fi_id'] = $id;
 						$TEMP['!fi_type'] = $type;
 
-						$deliver = array(
-							'S' => 200,
-							'HT' => Specific::Maket('messages/includes/deleted-outfile')
-						);
+						$deliver['S'] = 200;
+						$deliver['HT'] = Specific::Maket('messages/includes/deleted-outfile');
 					}
 				}
 			}
@@ -383,11 +404,14 @@ if($one == 'fetch'){
 				}
 
 				if($dba->query('UPDATE '.T_MESSAGE." SET {$query} WHERE id = ?", $deleted_at, $id)->returnStatus()){
-					$deliver['S'] = 200;
+					$deliver = array(
+						'S' => 200,
+						'DA' => false
+					);
 				}
 			}
 		} else {
-			$messafi = $dba->query('SELECT m.user_id, COUNT(f.id) as count FROM '.T_MESSAFI.' f INNER JOIN '.T_MESSAGE.' m WHERE f.id = ? AND m.id = f.message_id AND m.profile_id NOT IN ('.$TEMP['#blocked_users'].')', $id)->fetchArray();
+			$messafi = $dba->query('SELECT m.user_id, m.text, f.message_id, COUNT(f.id) as count FROM '.T_MESSAFI.' f INNER JOIN '.T_MESSAGE.' m WHERE f.id = ? AND m.id = f.message_id AND m.profile_id NOT IN ('.$TEMP['#blocked_users'].')', $id)->fetchArray();
 
 			if($messafi['count'] > 0){
 				$query = 'deleted_fprofile = ?';
@@ -397,6 +421,10 @@ if($one == 'fetch'){
 
 				if($dba->query('UPDATE '.T_MESSAFI." SET {$query} WHERE id = ?", $deleted_at, $id)->returnStatus()){
 					$deliver['S'] = 200;
+					$deliver['DA'] = false;
+					if($messafi['text'] == NULL && $dba->query('SELECT COUNT(*) FROM '.T_MESSAAN.' WHERE message_id = ?', $messafi['message_id'])->fetchArray(true) > 0 && $dba->query("SELECT COUNT(*) FROM ".T_MESSAFI." WHERE message_id = ? AND {$query}", $messafi['message_id'], 0)->fetchArray(true) == 0){
+						$deliver['DA'] = true;
+					}
 				}
 			}
 		}

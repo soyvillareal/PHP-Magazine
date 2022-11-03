@@ -20,7 +20,8 @@ if($TEMP['#loggedin'] == true){
 			} else if($input != 'newsletter'){
 				$no_emptys = array('username', 'new_email', 'gender', 'birthday');
 				$red_social = array('facebook', 'twitter', 'instagram');
-				if(!empty($value) || !in_array($input, $no_emptys)){
+				$trim_value = trim($value);
+				if(!empty($trim_value) || !in_array($input, $no_emptys)){
 					$error = false;
 					if($input == 'birthday'){
 						$value = json_decode($value, true);
@@ -41,7 +42,7 @@ if($TEMP['#loggedin'] == true){
 						$error = true;
 					}
 					if($input == 'about'){
-						if(strlen(strip_tags($value)) > 500){
+						if(mb_strlen(strip_tags($value), "UTF8") > $TEMP['#settings']['max_words_about']){
 							$error = true;
 						}
 					}
@@ -60,8 +61,8 @@ if($TEMP['#loggedin'] == true){
 								if(($input == 'surname' && strlen($value) <= 55) || $input != 'surname'){
 									if(($input == 'username' && preg_match('/^[a-zA-Z0-9]+$/', $value)) || $input != 'username'){
 										$emails = in_array($input, array('new_email', 'contact_email'));
-										if(($emails && (filter_var($value, FILTER_VALIDATE_EMAIL) || ($input == 'contact_email' && empty($value)))) || !$emails){
-											if((in_array($input, $red_social) && filter_var($value, FILTER_VALIDATE_URL) === false || empty($value)) || !in_array($input, $red_social)){
+										if(($emails && (filter_var($value, FILTER_VALIDATE_EMAIL) || ($input == 'contact_email' && empty($trim_value)))) || !$emails){
+											if((in_array($input, $red_social) && filter_var($value, FILTER_VALIDATE_URL) === false || empty($trim_value)) || !in_array($input, $red_social)){
 												$pass = true;
 												$send_email = false;
 												if($input == 'birthday'){
@@ -77,6 +78,10 @@ if($TEMP['#loggedin'] == true){
 														$time = strtotime("+3 month, 12:00am", time());
 														$update = ", user_changed = $time";
 														$deliver['EM'] = $TEMP['#word']['have_already_changed_username_change_day'].Specific::DateFormat($time);
+													} else if($input == 'about'){
+														if(empty($trim_value)){
+															$update = ", about = NULL";
+														}
 													} else if($input == 'birthday'){
 														$time = time();
 														$update = ', birthday_changed = '.$time;
@@ -120,7 +125,7 @@ if($TEMP['#loggedin'] == true){
 													if($dba->query("UPDATE ".T_USER." SET $input = ? {$update} WHERE id = ?", $value, $TEMP['#data']['id'])->returnStatus()){
 														$deliver['M'] = $value;
 														
-														if(empty($value) && !in_array($input, $no_emptys)){
+														if(empty(trim($value)) && !in_array($input, $no_emptys)){
 															$deliver['M'] = $TEMP['#word'][$input];
 														} else {
 															if($input == 'birthday'){

@@ -4,7 +4,7 @@ if($TEMP['#loggedin'] == true){
 		$post_id = Specific::Filter($_POST['post_id']);
 		$text = Specific::Filter($_POST['text']);
 
-		if(!empty($post_id) && is_numeric($post_id) && !empty($text) && strlen($text) <= 1000){
+		if(!empty($post_id) && is_numeric($post_id) && !empty(trim($text)) && mb_strlen(strip_tags(html_entity_decode($text)), "UTF8") <= $TEMP['#settings']['max_words_comments']){
 
 			$post = $dba->query('SELECT user_id, COUNT(*) as count FROM '.T_POST.' WHERE id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"', $post_id)->fetchArray();
 			if($post['count'] > 0){
@@ -44,7 +44,7 @@ if($TEMP['#loggedin'] == true){
 		$comment_id = Specific::Filter($_POST['comment_id']);
 		$text = Specific::Filter($_POST['text']);
 
-		if(!empty($comment_id) && is_numeric($comment_id) && !empty($text) && strlen($text) <= 1000){
+		if(!empty($comment_id) && is_numeric($comment_id) && !empty(trim($text)) && mb_strlen(strip_tags(html_entity_decode($text)), "UTF8") <= $TEMP['#settings']['max_words_comments']){
 			if($dba->query('SELECT COUNT(*) FROM '.T_POST.' p WHERE (SELECT post_id FROM '.T_COMMENTS.' WHERE id = ? AND post_id = p.id) = id AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"', $comment_id)->fetchArray(true) > 0){
 				$created_at = time();
 				$insert_id = $dba->query('INSERT INTO '.T_REPLY.' (user_id, comment_id, text, created_at) VALUES (?, ?, ? ,?)', $TEMP['#user']['id'], $comment_id, $text, $created_at)->insertId();
@@ -56,7 +56,7 @@ if($TEMP['#loggedin'] == true){
 						'comment_id' => $comment_id,
 						'text' => $text,
 						'created_at' => $created_at
-					), $comment_id, 'new');
+					), 'new');
 
 					$count_replies = $dba->query('SELECT COUNT(*) FROM '.T_REPLY.' WHERE comment_id = ?', $comment_id)->fetchArray(true);
 
@@ -136,7 +136,7 @@ if($TEMP['#loggedin'] == true){
 					$user_id = $dba->query('SELECT user_id FROM '.T_POST.' WHERE id = ? AND status = "approved"', $comment['post_id'])->fetchArray(true);
 
 					if(Specific::IsOwner($comment['user_id']) || Specific::IsOwner($user_id)){
-						if($dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id = ? AND type = "n_pcomment"', $comment_id)->returnStatus()){
+						if($dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id = ? AND (type = "n_pcomment" OR type = "n_ucomment")', $comment_id)->returnStatus()){
 							if($dba->query('DELETE FROM '.T_COMMENTS.' WHERE id = ?', $comment_id)->returnStatus()){
 								$deliver = array(
 									'S' => 200,

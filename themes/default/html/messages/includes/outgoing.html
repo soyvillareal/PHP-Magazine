@@ -1,4 +1,4 @@
-<?php if($TEMP['!text'] != NULL){ ?>
+<?php if($TEMP['#deleted_fuser'] == 0){ ?>
 <?php if($TEMP['!type'] == 'answered'){ ?>
 <div class="content_pmtmessage display-flex direction-row align-center margin-left-auto" data-id="{!id}">
 	<div class="display-flex direction-colum w-100 margin-r10">
@@ -14,7 +14,7 @@
 				<?php if($TEMP['!ans_type'] == 'text'){ ?>
 				<p class="item_pmtmmessage break-all background-grely margin-left-auto padding-t5 padding-b15 padding-l15 padding-r15" data-id="{!ans_id}" data-type="text">{!ans_text}</p>
 				<?php } else if($TEMP['!ans_type'] == 'file') { ?>
-				<div class="content-pmtfile content_pmtfile display-flex direction-row align-center background-grely position-relative margin-t5 margin-l10 border-r25px" data-id="{!fi_aid}" data-type="file">
+				<div class="content-pmtfile content_pmtfile display-flex direction-row align-center background-grely position-relative margin-t5 margin-left-auto border-r25px" data-id="{!fi_aid}" data-type="file">
 					<div class="item-pmtfile display-flex background-white margin-l10 margin-r10 border-rall">
 						<svg class="icon-y vertical-middle color-black margin-auto" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="95.52 95.52 24 24" enable-background="new 796 796 200 200" xml:space="preserve">
 							<title>{$word->file}</title>
@@ -28,7 +28,7 @@
 				</div>
 				<?php } else { ?>
 				<div class="content-pmtfile content_pmtimage margin-left-auto" data-id="{!fi_aid}" data-type="image">
-					<img class="blur-up item-pmtimage border-rlow lazyload" src="{!fi_aurl}" alt="{!fi_aname}">
+					<img class="blur-up item-pmtimage is-reply border-rlow lazyload" src="{!fi_aurl}" alt="{!fi_aname}">
 				</div>
 				<?php } ?>
 				<?php } else { ?>
@@ -37,6 +37,7 @@
 			</div>
 		</div>
 		<div class="item-pmtreply display-flex direction-row align-center position-relative margin-t15 margin-l5">
+			<?php if($TEMP['!text'] != NULL){ ?>
 			<button class="btn_pmtdelete w-30px h-30 btn-noway margin-left-auto margin-r5 background-hover border-rall opacity-0 hover-button animation-ease3s animate-tab-button" data-id="{!id}" data-type="text">
 				<span class="color-grey">
 					<svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -53,11 +54,30 @@
 				</svg>
 			</button>
 			<p class="item_pmtext break-all background-blue color-white padding-t5 padding-b5 padding-l15 padding-r15 border-r25px">{!text}</p>
+			<?php } else { ?>
+
+			<div class="display-flex direction-colum">
+				<?php if($TEMP['#messafi'] == true){ ?>
+				<?php if($TEMP['#has_file'] == true){ ?>
+				<div class="content_pmtfiles display-grid<?php echo($TEMP['#has_image'] == true) ? ' margin-b10' : '';?>">
+					{!files}
+				</div>
+				<?php } ?>
+				<?php if($TEMP['#has_image'] == true){ ?>
+				<div class="content_pmtimages display-grid">
+					{!images}
+				</div>
+				<?php } ?>
+				<?php } ?>
+			</div>
+
+			<?php } ?>
 		</div>
 	</div>
 </div>
 <?php } else { ?>
 <div class="content_pmtmessage display-flex direction-row align-center margin-left-auto margin-r10 padding-t15" data-id="{!id}">
+	<?php if($TEMP['!text'] != NULL){ ?>
 	<button class="btn_pmtdelete w-30px h-30 btn-noway margin-left-auto margin-r5 background-hover border-rall opacity-0 hover-button animation-ease3s animate-tab-button" data-id="{!id}" data-type="text">
 		<span class="color-grey">
 			<svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -74,19 +94,36 @@
 		</svg>
 	</button>
 	<p class="item_pmtext break-all background-blue color-white padding-t5 padding-b5 padding-l15 padding-r15 border-r25px">{!text}</p>
+	<?php } else { ?>
+
+	<?php if($TEMP['#messafi'] == true){ ?>
+	<?php if($TEMP['#has_file'] == true){ ?>
+	<div class="content_pmtfiles display-grid">
+		{!files}
+	</div>
+	<?php } ?>
+	<?php if($TEMP['#has_image'] == true){ ?>
+	<div class="content_pmtimages display-grid">
+		{!images}
+	</div>
+	<?php } ?>
+	<?php } ?>
+	<?php } ?>
 </div>
 <?php } ?>
 <?php } ?>
+<?php if($TEMP['!text'] != NULL){ ?>
 <?php if($TEMP['#messafi'] == true){ ?>
 <?php if($TEMP['#has_file'] == true){ ?>
-<div class="content_pmtfiles display-grid">
-	{$files}
+<div class="content_pmtfiles display-grid margin-r10">
+	{!files}
 </div>
 <?php } ?>
 <?php if($TEMP['#has_image'] == true){ ?>
-<div class="content_pmtimages display-grid margin-left-auto margin-r5">
-	{$images}
+<div class="content_pmtimages display-grid margin-left-auto margin-r10">
+	{!images}
 </div>
 <?php } ?>
 <?php } ?>
-<div class="margin-t5 margin-left-auto margin-r15 font-lowly color-grey">{!created_at}</div>
+<?php } ?>
+<div class="item_pmttime margin-t5 margin-left-auto margin-r15 font-lowly color-grey">{!created_at}</div>

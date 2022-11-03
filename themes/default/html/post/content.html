@@ -255,10 +255,10 @@
                      <input id="report-2" class="item_rinput radio-paper hidden" name="option" type="radio" value="rp_writing">
                      <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-2">{$word->rp_writing}</label>
                      <div class="content_description position-relative margin-t5 hidden">
-                        <textarea class="item_rtextarea background-white color-black w-100 padding-t10 padding-b10 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s" type="text" maxlength="500" placeholder="{$word->describe_the_error}" autocomplete="off" autocapitalize="off"></textarea>
+                        <textarea class="item_rtextarea background-white color-black w-100 padding-t10 padding-b10 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s" type="text" maxlength="{$settings->max_words_report}" placeholder="{$word->describe_the_error}" autocomplete="off" autocapitalize="off"></textarea>
                         <div class="display-flex">
                            <div class="margin-left-auto color-green">
-                              <span class="text_email_count">0</span>/500
+                              <span class="text_count animation-ease3s">0</span>/{$settings->max_words_report}
                            </div>
                         </div>
                      </div>
@@ -291,10 +291,10 @@
                      <input id="report-9" class="item_rinput radio-paper hidden" name="option" type="radio" value="r_none">
                      <label class="display-block position-relative color-black font-medium margin-t5 padding-l20 cursor-pointer no-select" for="report-9">{$word->r_none}</label>
                      <div class="content_description position-relative margin-t5 hidden">
-                        <textarea class="item_rtextarea background-white color-black w-100 padding-t10 padding-b10 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s" type="text" maxlength="500" placeholder="{$word->describe_reason_report}" autocomplete="off" autocapitalize="off"></textarea>
+                        <textarea class="item_rtextarea background-white color-black w-100 padding-t10 padding-b10 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s" type="text" maxlength="{$settings->max_words_report}" placeholder="{$word->describe_reason_report}" autocomplete="off" autocapitalize="off"></textarea>
                         <div class="display-flex">
                            <div class="margin-left-auto color-green">
-                              <span class="text_email_count">0</span>/500
+                              <span class="text_count animation-ease3s">0</span>/{$settings->max_words_report}
                            </div>
                         </div>
                      </div>
@@ -356,6 +356,11 @@
          sort_comments: '{$url->{req/post/sort-comments}}',
          delete_comment: '{$url->{req/comment/delete}}'
       },
+      settings: {
+         max_words_comments: {$settings->max_words_comments},
+         max_words_report: {$settings->max_words_report},
+         nodejs: '{$settings->nodejs}'
+      },
       word: {
          report_post: '{$word->report_post}',
          report_comment: '{$word->report_comment}',
@@ -363,7 +368,6 @@
          show: '{$word->show}',
          link_copied_clipboard: '{$word->link_copied_clipboard}'
       },
-      nodejs: '{$settings->nodejs}' == 'on',
       category_id: '{$category_id}',
       post_id: '{$post_id}',
       post_url: '{$url}'

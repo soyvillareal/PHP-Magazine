@@ -1,4 +1,4 @@
-<?php if($TEMP['!text'] != NULL){ ?>
+<?php if($TEMP['#deleted_fprofile'] == 0){ ?>
 <?php if($TEMP['!type'] == 'answered'){ ?>
 <div class="content_pmtmessage display-flex direction-colum position-relative margin-l10" data-id="{!id}">
 	<div class="item_pmtmessage position-relative padding-l20 margin-l15" data-id="{!answered_id}" data-type="{!ans_type}">
@@ -27,7 +27,7 @@
 			</div>
 			<?php } else { ?>
 			<div class="content-pmtfile content_pmtimage" data-id="{!fi_aid}" data-type="image">
-				<img class="blur-up item-pmtimage border-rlow lazyload" src="{!fi_aurl}" alt="{!fi_aname}">
+				<img class="blur-up item-pmtimage is-reply border-rlow lazyload" src="{!fi_aurl}" alt="{!fi_aname}">
 			</div>
 			<?php } ?>
 			<?php } else { ?>
@@ -36,9 +36,11 @@
 		</div>
 	</div>
 	<div class="item-pmtreply display-flex direction-row align-center position-relative margin-t15">
-		<div class="item-mavatar margin-r5 overflow-hidden border-rall">
+		<div class="item-mavatar margin-top-auto margin-r5 overflow-hidden border-rall">
 			<img class="blur-up lazyload" src="{!avatar_s}" alt="{!username}">
 		</div>
+		<?php if($TEMP['!text'] != NULL){ ?>
+			
 		<p class="item_pmtext break-all background-grely padding-t5 padding-b5 padding-l15 padding-r15 border-r25px">{!text}</p>
 		<button class="btn_pmtreply w-30px h-30 btn-noway margin-l5 margin-r5 padding-5 background-hover color-grey border-rall opacity-0 hover-button animation-ease3s animate-tab-button" data-id="{!id}" data-type="text">
 			<svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -55,13 +57,36 @@
 				<div class="spinner-circle"></div>
 			</div>
 		</button>
+
+		<?php } else { ?>
+
+		
+		<div class="display-flex direction-colum">
+			<?php if($TEMP['#messafi'] == true){ ?>
+			<?php if($TEMP['#has_file'] == true){ ?>
+			<div class="content_pmtfiles display-grid<?php echo($TEMP['#has_image'] == true) ? ' margin-b10' : '';?>">
+				{!files}
+			</div>
+			<?php } ?>
+			<?php if($TEMP['#has_image'] == true){ ?>
+			<div class="content_pmtimages display-grid">
+				{!images}
+			</div>
+			<?php } ?>
+			<?php } ?>
+		</div>
+
+		<?php } ?>
 	</div>
+	<span class="item_pmtutext hidden">{!username}</span>
 </div>
 <?php } else { ?>
 <div class="content_pmtmessage display-flex direction-row align-center margin-l10 padding-t15" data-id="{!id}">
-	<div class="item-mavatar margin-r5 overflow-hidden border-rall">
+	<div class="item-mavatar margin-top-auto margin-r5 overflow-hidden border-rall">
 		<img class="blur-up lazyload" src="{!avatar_s}" alt="{!username}">
 	</div>
+
+	<?php if($TEMP['!text'] != NULL){ ?>
 	<p class="item_pmtext break-all background-grely padding-t5 padding-b5 padding-l15 padding-r15 border-r25px">{!text}</p>
 	<button class="btn_pmtreply w-30px h-30 btn-noway margin-l5 margin-r5 padding-5 background-hover color-grey border-rall opacity-0 hover-button animation-ease3s animate-tab-button" data-id="{!id}" data-type="text">
 		<svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -78,19 +103,39 @@
 			<div class="spinner-circle"></div>
 		</div>
 	</button>
+	<?php } else { ?>
+	<?php if($TEMP['#messafi'] == true){ ?>
+	<?php if($TEMP['#has_file'] == true){ ?>
+	<div class="content_pmtfiles display-grid">
+		{!files}
+	</div>
+	<?php } ?>
+	<?php if($TEMP['#has_image'] == true){ ?>
+	<div class="content_pmtimages display-grid">
+		{!images}
+	</div>
+	<?php } ?>
+	<?php } ?>
+	<?php } ?>
+
+	<span class="item_pmtutext hidden">{!username}</span>
 </div>
 <?php } ?>
 <?php } ?>
+
+<?php if($TEMP['!text'] != NULL){ ?>
 <?php if($TEMP['#messafi'] == true){ ?>
 <?php if($TEMP['#has_file'] == true){ ?>
-<div class="content_pmtfiles display-grid">
-	{$files}
+<div class="content_pmtfiles display-grid margin-l10">
+	{!files}
 </div>
 <?php } ?>
 <?php if($TEMP['#has_image'] == true){ ?>
-<div class="content_pmtimages display-grid margin-l5">
-	{$images}
+<div class="content_pmtimages display-grid margin-l10">
+	{!images}
 </div>
 <?php } ?>
 <?php } ?>
-<div class="margin-t5 margin-l15 font-lowly color-grey">{!created_at}</div>
+<?php } ?>
+
+<div class="item_pmttime margin-t5 margin-l15 font-lowly color-grey">{!created_at}</div>

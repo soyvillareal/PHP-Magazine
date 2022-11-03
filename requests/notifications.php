@@ -58,7 +58,9 @@ if($TEMP['#loggedin'] == true){
 					    	$post_id = $reaction['reacted_id'];
 					    	if(in_array($notify['type'], array('n_creact', 'n_rreact'))){
 					    		$t_query = 'SELECT post_id FROM '.T_COMMENTS.' WHERE id = ?';
+								$params = "?{$RUTE['#p_comment_id']}={$reaction['reacted_id']}";
 					    		if($notify['type'] == 'n_rreact'){
+									$params = "?{$RUTE['#p_reply_id']}={$reaction['reacted_id']}";
 					    			$t_query = 'SELECT post_id FROM '.T_COMMENTS.' c WHERE (SELECT comment_id FROM '.T_REPLY.' WHERE id = ? AND comment_id = c.id) = id';
 					    		}
 					    		$post_id = $dba->query($t_query, $reaction['reacted_id'])->fetchArray(true);

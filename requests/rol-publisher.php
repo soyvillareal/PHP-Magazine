@@ -411,13 +411,22 @@ if ($TEMP['#publisher'] === true) {
 									$entry_title = $entry[1];
 								}
 								$entry_source = NULL;
-								if($entry[0] != 'image'){
-									if(isset($entry[3])){
-										$entry_source = $entry[3];
+								if(in_array($entry[0], array('text', 'image', 'carousel'))){
+									if($entry[0] == 'text'){
+										if(isset($entry[3])){
+											$entry_source = $entry[3];
+										}
+									} else if($entry[0] == 'image'){
+										if(isset($entry[4])){
+											$entry_source = $entry[4];
+										}
+									} else {
+										if(isset($entry[5])){
+											$entry_source = $entry[5];
+										}
 									}
-								} else {
-									$entry_source = $entry[4];
 								}
+
 
 								$entry_source = preg_replace($st_regex, '', $entry_source);
 									
@@ -499,7 +508,7 @@ if ($TEMP['#publisher'] === true) {
 										}
 									} else if(in_array($entry[0], array('tweet', 'soundcloud', 'spotify', 'tiktok'))){
 										if($entry[0] == 'tweet'){
-											$api = 'https://api.twitter.com/1/statuses/oembed.json?omit_script1&url=';
+											$api = 'https://api.twitter.com/1/statuses/oembed.json?omit_script=1&url=';
 										} else if($entry[0] == 'soundcloud'){
 											$api = 'https://soundcloud.com/oembed?format=json&url=';
 										} else if($entry[0] == 'spotify'){
@@ -783,6 +792,71 @@ if ($TEMP['#publisher'] === true) {
 					foreach ($entries as $key => $entry) {
 						$ids[] = (int)end($entry);
 
+						if($entry[0] == 'image'){
+							if(!empty($_FILES['thumbnail_'.$key])){
+								if($_FILES['thumbnail_'.$key]['size'] > $TEMP['#settings']['file_size_limit']){
+									$error[] = array(
+										'EL' => $key,
+										'CS' => '.item-placeholder',
+										'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
+									);
+								}
+							} else {
+								if(!empty($entry[2])){
+									$image_err = false;
+									$validate_url = Specific::ValidateUrl($entry[2], true);
+									$entries[$key][2] = $entry[2] = $validate_url['url'];
+									if(!$validate_url['return']){
+										$image_err = true;
+										$image_errt = "*{$TEMP['#word']['enter_a_valid_url']}";
+									} else if(exif_imagetype($entry[2]) == false){
+										$image_err = true;
+										$image_errt = "*{$TEMP['#word']['download_could_not_completed']}";
+									}
+									if($image_err){
+										$error[] = array(
+											'EL' => $key,
+											'CS' => '.item-placeholder',
+											'TX' => $image_errt
+										);
+									}
+								}
+							}
+						}
+
+						if($entry[0] == 'carousel'){
+							$carousel_id = 'carousel_'.$key.'_1';
+							if(empty($_FILES[$carousel_id]) && empty($_POST[$carousel_id])){
+								$error[] = array(
+									'EL' => $key,
+									'CS' => '.content-carrusel',
+									'TX' => "*{$TEMP['#word']['must_insert_more_one_image']}"
+								);
+							} else {
+								for ($i=0; $i < (int)$entry[2]; $i++) {
+									$carousel_id = 'carousel_'.$key.'_'.$i;
+									if($_FILES[$carousel_id]['size'] > $TEMP['#settings']['file_size_limit']){
+										$error[] = array(
+											'EL' => $key,
+											'CS' => '.content-carrusel',
+											'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['one_file_too_big_maximum_size']}")
+										);
+										break;
+									}
+								}
+							}
+						}
+
+						if($entry[0] == 'embed'){
+							if(!Specific::ValidateUrl($entry[2])){
+								$error[] = array(
+									'EL' => $key,
+									'CS' => '.item_url',
+									'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
+								);
+							}
+						}
+
 						if(!((bool)$entry[3])){
 							if($entry[0] == 'video'){
 								if(preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?(?:youtu\.be|youtube\.com)\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/)([^\?&\"'>]+)/", $entry[2]) == false && preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?vimeo\.com\/([0-9]+)$/", $entry[2]) == false && preg_match("/^.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/", $entry[2]) == false){
@@ -791,71 +865,6 @@ if ($TEMP['#publisher'] === true) {
 										'CS' => '.item-input',
 										'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
 									);
-								}
-							}
-
-							if($entry[0] == 'embed'){
-								if(!Specific::ValidateUrl($entry[2])){
-									$error[] = array(
-										'EL' => $key,
-										'CS' => '.item_url',
-										'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
-									);
-								}
-							}
-
-							if($entry[0] == 'image'){
-								if(!empty($_FILES['thumbnail_'.$key])){
-									if($_FILES['thumbnail_'.$key]['size'] > $TEMP['#settings']['file_size_limit']){
-										$error[] = array(
-											'EL' => $key,
-											'CS' => '.item-placeholder',
-											'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
-										);
-									}
-								} else {
-									if(!empty($entry[2])){
-										$image_err = false;
-										$validate_url = Specific::ValidateUrl($entry[2], true);
-										$entries[$key][2] = $entry[2] = $validate_url['url'];
-										if(!$validate_url['return']){
-											$image_err = true;
-											$image_errt = "*{$TEMP['#word']['enter_a_valid_url']}";
-										} else if(exif_imagetype($entry[2]) == false){
-											$image_err = true;
-											$image_errt = "*{$TEMP['#word']['download_could_not_completed']}";
-										}
-										if($image_err){
-											$error[] = array(
-												'EL' => $key,
-												'CS' => '.item-placeholder',
-												'TX' => $image_errt
-											);
-										}
-									}
-								}
-							}
-
-							if($entry[0] == 'carousel'){
-								$carousel_id = 'carousel_'.$key.'_1';
-								if(empty($_FILES[$carousel_id]) && empty($_POST[$carousel_id])){
-									$error[] = array(
-										'EL' => $key,
-										'CS' => '.content-carrusel',
-										'TX' => "*{$TEMP['#word']['must_insert_more_one_image']}"
-									);
-								} else {
-									for ($i=0; $i < (int)$entry[2]; $i++) {
-										$carousel_id = 'carousel_'.$key.'_'.$i;
-										if($_FILES[$carousel_id]['size'] > $TEMP['#settings']['file_size_limit']){
-											$error[] = array(
-												'EL' => $key,
-												'CS' => '.content-carrusel',
-												'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['one_file_too_big_maximum_size']}")
-											);
-											break;
-										}
-									}
 								}
 							}
 
@@ -1063,12 +1072,21 @@ if ($TEMP['#publisher'] === true) {
 										$entry_title = $entry[1];
 									}
 									$entry_source = NULL;
-									if(!in_array($entry[0], array('image', 'embed'))){
-										if(isset($entry[3])){
-											$entry_source = $entry[3];
+
+									if(in_array($entry[0], array('text', 'image', 'carousel'))){
+										if($entry[0] == 'text'){
+											if(isset($entry[3])){
+												$entry_source = $entry[3];
+											}
+										} else if($entry[0] == 'image'){
+											if(isset($entry[4])){
+												$entry_source = $entry[4];
+											}
+										} else {
+											if(isset($entry[5])){
+												$entry_source = $entry[5];
+											}
 										}
-									} else {
-										$entry_source = $entry[4];
 									}
 
 									$entry_source = preg_replace($st_regex, '', $entry_source);
@@ -1186,7 +1204,7 @@ if ($TEMP['#publisher'] === true) {
 											} else if(empty($entry_id)){
 												if(in_array($entry[0], array('tweet', 'soundcloud', 'spotify', 'tiktok'))){
 													if($entry[0] == 'tweet'){
-														$api = 'https://api.twitter.com/1/statuses/oembed.json?omit_script1&url=';
+														$api = 'https://api.twitter.com/1/statuses/oembed.json?omit_script=1&url=';
 													} else if($entry[0] == 'soundcloud'){
 														$api = 'https://soundcloud.com/oembed?format=json&url=';
 													} else if($entry[0] == 'spotify'){

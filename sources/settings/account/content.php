@@ -53,7 +53,7 @@ $TEMP['username_alert'] = time() < $TEMP['#profile']['user_changed'] ? "{$TEMP['
 $TEMP['email_alert'] = empty($TEMP['#profile']['new_email']) ? $TEMP['#word']['use_email_login_where_will_send'] : $TEMP['#word']['requested_change_email_need_verify'];
 $TEMP['birthday_alert'] = $TEMP['#profile']['birthday_changed'] == 0 ? $TEMP['#word']['can_only_change_date_birth'] : "{$TEMP['#word']['just_changed_date_birth_day']} ".Specific::DateFormat($TEMP['#profile']['birthday_changed']);
 $TEMP['red_social'] = ucfirst($TEMP['#profile']['type']);
-$TEMP['#text_email_count'] = strlen(strip_tags($TEMP['#profile']['about']));
+$TEMP['#text_count'] = mb_strlen(strip_tags($TEMP['#profile']['about']), "UTF8");
 $TEMP['about_br2nl'] = Specific::br2nl($TEMP['#profile']['about']);
 
 $TEMP['month'] = ucfirst($TEMP['#word']['month']);

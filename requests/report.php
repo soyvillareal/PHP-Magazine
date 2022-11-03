@@ -6,7 +6,7 @@ $place = Specific::Filter($_POST['place']);
 $description = Specific::Filter($_POST['description']);
 
 if(!empty($reported_id) && is_numeric($reported_id) && in_array($place, array('user', 'post', 'comment', 'reply'))){
-	if(strlen($description) > 500){
+	if(mb_strlen(strip_tags($description), "UTF8") > $TEMP['#settings']['max_words_report']){
 		$error = true;
 	}
 	if($place == 'user'){

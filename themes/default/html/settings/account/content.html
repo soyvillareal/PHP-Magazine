@@ -425,16 +425,16 @@
                     <div class="content_citems margin-b15 margin-b5 hidden">
                         <form novalidate>
                             <div class="margin-b10">
-                                <strong>{$word->enter_a_new_} {$word->description}</strong>
+                                <strong>{$word->enter_a_new_} {$word->about}</strong>
                             </div>
                             <div class="w-100 position-relative">
-                                <textarea id="about" class="item_input background-white color-black w-100 padding-t25 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s<?php echo(!empty($TEMP['#profile']['about'])) ? ' active' : '';?>" type="text" aria-label="{$data->about}" maxlength="500" autocomplete="about" autocapitalize="off" data-send="about">{$about_br2nl}</textarea>
+                                <textarea id="about" class="item_input background-white color-black w-100 padding-t25 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s<?php echo(!empty($TEMP['#profile']['about'])) ? ' active' : '';?>" type="text" aria-label="{$data->about}" maxlength="{$settings->max_words_about}" autocomplete="about" autocapitalize="off" data-send="about">{$about_br2nl}</textarea>
                                 <div class="color-red text-left text-error font-low margin-t5"></div>
-                                <label class="item-label background-white w-100 first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->description}</label>
+                                <label class="item-label background-white w-100 first-capitalize position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->about}</label>
                             </div>
                             <div class="display-flex">
-                                <div class="margin-left-auto<?php echo($TEMP['#text_email_count'] > 400) ? ' color-red' : (($TEMP['#text_email_count'] > 250) ? ' color-orange' : ' color-green');?>">
-                                    <span id="text-email-count">{#text_email_count}</span>/500
+                                <div class="margin-left-auto<?php echo($TEMP['#text_count'] > ($TEMP['#settings']['max_words_about']*.8)) ? ' color-red' : (($TEMP['#text_count'] > ($TEMP['#settings']['max_words_about']*.5)) ? ' color-orange' : ' color-green');?>">
+                                    <span class="animation-ease3s" id="text-count">{#text_count}</span>/{$settings->max_words_about}
                                 </div>
                             </div>
                             <div class="margin-t10">
@@ -693,6 +693,9 @@
             shows: '{$url->{req/settings/shows}}',
             send_code: '{$url->{req/settings/send-code}}',
             delete_account: '{$url->{req/settings/delete-account}}'
+        },
+        settings: {
+            max_words_about: {$settings->max_words_about}
         },
         word: {
             upload: '{$word->upload}',

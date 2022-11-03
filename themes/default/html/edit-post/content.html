@@ -402,8 +402,8 @@
           <legend class="font-bigly font-bold margin-b5">{$word->post_type}</legend>
           <div class="content-field w-100 position-relative">
             <select id="type" class="item-input item_change disable_before w-100 h-45 color-black padding-l10 border-focus-blue border-rlow border-all border-grely caret-down background-grely animation-ease3s">
-              <option value="normal"<?php echo($TEMP['#type'] == 'normal') ? ' selected' : '';?>>{$word->normal}</option>
-              <option value="video"<?php echo($TEMP['#type'] == 'video') ? ' selected' : '';?>>{$word->video}</option>
+              <option value="normal"<?php echo($TEMP['#post_type'] == 'normal') ? ' selected' : '';?>>{$word->normal}</option>
+              <option value="video"<?php echo($TEMP['#post_type'] == 'video') ? ' selected' : '';?>>{$word->video}</option>
             </select>
             <div class="color-red text-left text-error font-low margin-t5"></div>
           </div>
@@ -463,7 +463,7 @@
     recobo_ids: [{$recobo_ids}],
     collaborators_ids: [{$collaborators_ids}],
     url: {
-      edit_post: '{$url->{req/rol-publisher/edit-post}}',
+      edit_post: '<?php echo($TEMP['#settings']['nodejs'] == 'on') ? '//{$settings->node_hostname}:{$settings->node_server_port}' : '{$url->{req/rol-publisher}}';?>/edit-post',
       get_tags: '{$url->{req/rol-publisher/get-tags}}',
       get_image: '{$url->{req/rol-publisher/get-image}}',
       get_frame: '{$url->{req/rol-publisher/get-frame}}',
@@ -475,7 +475,8 @@
     },
     settings: {
       number_of_fonts: '{$settings->number_of_fonts}',
-      number_labels: '{$settings->number_labels}'
+      number_labels: '{$settings->number_labels}',
+      nodejs: '{$settings->nodejs}'
     },
     token: '{#token_session}',
     lang: '{#lang}',

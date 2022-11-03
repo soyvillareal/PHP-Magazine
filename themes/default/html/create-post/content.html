@@ -419,7 +419,8 @@
     },
     settings: {
       number_of_fonts: '{$settings->number_of_fonts}',
-      number_labels: '{$settings->number_labels}'
+      number_labels: '{$settings->number_labels}',
+      nodejs: '{$settings->nodejs}'
     },
     word: {
       name: '{$word->name}',
@@ -430,8 +431,7 @@
       attribute: '{$word->attribute}',
       value: '{$word->value}',
       preview: '{$word->preview}'
-    },
-    nodejs: '{$settings->nodejs}' == 'on',
+    }
   }, window.fbAsyncInit = function() {
     FB.init({
       appId: '{$settings->fb_app_id}',

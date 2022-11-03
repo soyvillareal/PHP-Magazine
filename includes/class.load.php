@@ -279,6 +279,12 @@ class Load {
 			$max_cimages = $carousel_json = array();
 			foreach ($entries as $key => $entry) {
 				$TEMP['!frame'] = $entry['frame'];
+				$TEMP['!id'] = $entry['id'];
+				$TEMP['!title'] = $entry['title'];
+				$TEMP['!esource'] = $entry['esource'];
+				$TEMP['!type'] = $entry['type'];
+				$TEMP['!eorder'] = $entry['eorder'];
+
 				if($entry['type'] == 'text'){
 			        $j = 0;
 			        $paragraph = explode('</p>', $entry['body']);
@@ -303,13 +309,13 @@ class Load {
 							if(!empty($recommended_bo)){
 								$category = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $recommended_bo['category_id'])->fetchArray();
 
-		                		$TEMP['!title'] = $recommended_bo['title'];
-								$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-								$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
-		                		$TEMP['!url'] = Specific::Url($recommended_bo['slug']);
-								$TEMP['!thumbnail'] = Specific::GetFile($recommended_bo['thumbnail'], 1, 's');
-								$TEMP['!published_date'] = date('c', $recommended_bo['published_at']);
-								$TEMP['!published_at'] = Specific::DateString($recommended_bo['published_at']);
+		                		$TEMP['!re_title'] = $recommended_bo['title'];
+								$TEMP['!re_category'] = $TEMP['#word']["category_{$category['name']}"];
+								$TEMP['!re_category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
+		                		$TEMP['!re_url'] = Specific::Url($recommended_bo['slug']);
+								$TEMP['!re_thumbnail'] = Specific::GetFile($recommended_bo['thumbnail'], 1, 's');
+								$TEMP['!re_published_date'] = date('c', $recommended_bo['published_at']);
+								$TEMP['!re_published_at'] = Specific::DateString($recommended_bo['published_at']);
 		                    	$entry['body'] .= Specific::Maket('includes/post-amp/recommended-body');
 		                		$post_ids[] = $recommended_bo['id'];
 		                	}
@@ -383,12 +389,8 @@ class Load {
 					}
 				}
 
-				$TEMP['!id'] = $entry['id'];
-				$TEMP['!title'] = $entry['title'];
 				$TEMP['!body'] = $entry['body'];
-				$TEMP['!type'] = $entry['type'];
-				$TEMP['!eorder'] = $entry['eorder'];
-				$TEMP['!esource'] = $entry['esource'];
+
 				$TEMP['entries'] .= Specific::Maket("includes/post-amp/entries");
 			}
 			Specific::DestroyMaket();
@@ -896,13 +898,15 @@ class Load {
 			}
 		}
 
-		$messages = $dba->query('SELECT * FROM '.T_MESSAGE." m WHERE user_id NOT IN ({$TEMP['#blocked_users']}) AND profile_id NOT IN ({$TEMP['#blocked_users']}) AND ((user_id = {$TEMP['#user']['id']} AND deleted_fuser = 0) OR (profile_id = {$TEMP['#user']['id']} AND deleted_fprofile = 0)) AND (SELECT id FROM ".T_CHAT." WHERE ((user_id = {$TEMP['#user']['id']} AND profile_id = {$user['id']}) OR (user_id = {$user['id']} AND profile_id = {$TEMP['#user']['id']}) AND id = m.chat_id)) = chat_id".$query." ORDER BY id ASC LIMIT ? OFFSET ?", 20, 'reverse')->fetchAll();
+		$messages = $dba->query('SELECT * FROM '.T_MESSAGE." m WHERE user_id NOT IN ({$TEMP['#blocked_users']}) AND profile_id NOT IN ({$TEMP['#blocked_users']}) AND ((user_id = {$TEMP['#user']['id']} AND deleted_fuser = 0) OR (profile_id = {$TEMP['#user']['id']} AND deleted_fprofile = 0) OR (SELECT COUNT(id) FROM ".T_MESSAFI." WHERE message_id = m.id AND deleted_fuser = 0) > 0) AND (SELECT id FROM ".T_CHAT." WHERE ((user_id = {$TEMP['#user']['id']} AND profile_id = {$user['id']}) OR (user_id = {$user['id']} AND profile_id = {$TEMP['#user']['id']}) AND id = m.chat_id)) = chat_id".$query." ORDER BY id ASC LIMIT ? OFFSET ?", 20, 'reverse')->fetchAll();
 
 		if(!empty($messages)){
 			$update_ids = array();
 			foreach ($messages as $message) {
-				$TEMP['files'] = '';
-				$TEMP['images'] = '';
+				$TEMP['!files'] = '';
+				$TEMP['!images'] = '';
+				$TEMP['#deleted_fuser'] = $message['deleted_fuser'];
+				$TEMP['#deleted_fprofile'] = $message['deleted_fprofile'];
 				$TEMP['#messafi'] = false;
 				$TEMP['#has_image'] = false;
 				$TEMP['#has_file'] = false;
@@ -928,14 +932,14 @@ class Load {
 								if($message['user_id'] == $user['id']){
 									$img_maket = 'inimage';
 								}
-								$TEMP['images'] .= Specific::Maket("messages/includes/{$img_maket}");
+								$TEMP['!images'] .= Specific::Maket("messages/includes/{$img_maket}");
 							} else {
 								$TEMP['#has_file'] = true;
 								$fi_maket = 'outfile';
 								if($message['user_id'] == $user['id']){
 									$fi_maket = 'infile';
 								}
-								$TEMP['files'] .= Specific::Maket("messages/includes/{$fi_maket}");
+								$TEMP['!files'] .= Specific::Maket("messages/includes/{$fi_maket}");
 							}
 						} else {
 							$TEMP['!fi_id'] = $messafi['id'];
@@ -946,111 +950,113 @@ class Load {
 							if(in_array(pathinfo($messafi['name'], PATHINFO_EXTENSION), array('jpeg', 'jpg', 'png', 'gif'))){
 								$TEMP['#has_image'] = true;
 								$TEMP['!fi_type'] = 'image';
-								$TEMP['images'] .= Specific::Maket("messages/includes/{$deleted_maket}");
+								$TEMP['!images'] .= Specific::Maket("messages/includes/{$deleted_maket}");
 							} else {
 								$TEMP['#has_file'] = true;
 								$TEMP['!fi_type'] = 'file';
-								$TEMP['files'] .= Specific::Maket("messages/includes/{$deleted_maket}");
+								$TEMP['!files'] .= Specific::Maket("messages/includes/{$deleted_maket}");
 							}
 						}
 					}
 				}
 
-				$TEMP['!id'] = $message['id'];
-				$TEMP['!text'] = Specific::TextFilter($message['text']);
-				$TEMP['!type'] = 'normal';
+				if(($message['text'] == NULL && !empty($messafis)) || $message['text'] != NULL){
+					$TEMP['!id'] = $message['id'];
+					$TEMP['!text'] = Specific::TextFilter($message['text']);
+					$TEMP['!type'] = 'normal';
 
-				$messaan = $dba->query('SELECT answered_id, type, COUNT(*) as count FROM '.T_MESSAAN.' a WHERE message_id = ?', $message['id'])->fetchArray();
+					$messaan = $dba->query('SELECT answered_id, type, COUNT(*) as count FROM '.T_MESSAAN.' a WHERE message_id = ?', $message['id'])->fetchArray();
 
-				if($messaan['count'] > 0){
-					$has_answer = false;
-					$TEMP['!ans_deleted'] = false;
-					if($messaan['type'] == 'text'){
-						$answered = $dba->query('SELECT * FROM '.T_MESSAGE.' WHERE id = ? AND ((user_id = ? AND deleted_fuser = 0) OR (profile_id = ? AND deleted_fprofile = 0))', $messaan['answered_id'], $TEMP['#user']['id'], $TEMP['#user']['id'])->fetchArray();
-						if(!empty($answered)){
-							$has_answer = true;
-							$ans_pid = $answered['profile_id'];
-							$user_id = $ans_uid = $answered['user_id'];
-							if(Specific::IsOwner($answered['user_id'])){
-								$user_id = $answered['profile_id'];
+					if($messaan['count'] > 0){
+						$has_answer = false;
+						$TEMP['!ans_deleted'] = false;
+						if($messaan['type'] == 'text'){
+							$answered = $dba->query('SELECT * FROM '.T_MESSAGE.' WHERE id = ? AND ((user_id = ? AND deleted_fuser = 0) OR (profile_id = ? AND deleted_fprofile = 0))', $messaan['answered_id'], $TEMP['#user']['id'], $TEMP['#user']['id'])->fetchArray();
+							if(!empty($answered)){
+								$has_answer = true;
+								$ans_pid = $answered['profile_id'];
+								$user_id = $ans_uid = $answered['user_id'];
+								if(Specific::IsOwner($answered['user_id'])){
+									$user_id = $answered['profile_id'];
+								}
+
+								if($answered['deleted_at'] == 0){
+									$TEMP['!ans_id'] = $answered['id'];
+									$TEMP['!ans_text'] = Specific::TextFilter($answered['text'], false);
+								} else {
+									$TEMP['!ans_deleted'] = true;
+									$TEMP['!ans_deleted_word'] = $TEMP['#word']['message_was_deleted'];
+								}
 							}
+						} else {
+							$amessafi = $dba->query('SELECT f.*, m.user_id, m.profile_id FROM '.T_MESSAFI.' f INNER JOIN '.T_MESSAGE.' m WHERE f.id = ? AND m.id = f.message_id AND ((m.user_id = ? AND f.deleted_fuser = 0) OR (m.profile_id = ? AND f.deleted_fprofile = 0))', $messaan['answered_id'], $TEMP['#user']['id'], $TEMP['#user']['id'])->fetchArray();
 
-							if($answered['deleted_at'] == 0){
-								$TEMP['!ans_id'] = $answered['id'];
-								$TEMP['!ans_text'] = Specific::TextFilter($answered['text'], false);
-							} else {
-								$TEMP['!ans_deleted'] = true;
-								$TEMP['!ans_deleted_word'] = $TEMP['#word']['message_was_deleted'];
+							if(!empty($amessafi)){
+								$has_answer = true;
+								$ans_pid = $amessafi['profile_id'];
+								$user_id = $ans_uid = $amessafi['user_id'];
+								if(Specific::IsOwner($amessafi['user_id'])){
+									$user_id = $amessafi['profile_id'];
+								}
+
+								if($amessafi['deleted_at'] == 0){
+
+									$TEMP['!fi_aid'] = $amessafi['id'];
+									$TEMP['!fi_aname'] = $amessafi['name'];
+									$TEMP['!fi_asize'] = Specific::SizeFormat($amessafi['size']);
+									if($messaan['type'] == 'image'){
+										$TEMP['!fi_aurl'] = Specific::Url("uploads/messages/{$amessafi['file']}");
+									}
+								} else {
+									$TEMP['!ans_deleted'] = true;
+									$TEMP['!ans_deleted_word'] = $TEMP['#word']['deputy_file_deleted'];
+								}
 							}
+						}
+
+						if($has_answer){
+							$ans_user = Specific::Data($user_id, array('username', 'name', 'surname', 'status'));
+							$TEMP['!type'] = 'answered';
+							$TEMP['!ans_type'] = $messaan['type'];
+							$TEMP['!answered_id'] = $messaan['answered_id'];
+
+							$you_responded_to = "{$TEMP['#word']['you_responded_to']} {$ans_user['username']}";
+							if($ans_user['status'] == 'deleted'){
+								$you_responded_to = "{$TEMP['#word']['you_responded_to']} {$TEMP['#word']['user']}";
+							}
+							$TEMP['!ans_title'] = $you_responded_to;
+
+							if($ans_pid == $message['profile_id']){
+								if(Specific::IsOwner($ans_uid)){
+									$TEMP['!ans_title'] = $TEMP['#word']['you_replied_own_message'];
+								} else {
+									$TEMP['!ans_title'] = $TEMP['#word']['replied_his_own_message'];
+								}
+							} else if($message['user_id'] == $user['id']){
+								$TEMP['!ans_title'] = "{$ans_user['username']} {$TEMP['#word']['answered_you']}";
+							}
+						}
+					}
+
+					if($message['deleted_at'] == 0){
+						$maket = 'outgoing';
+						if($message['user_id'] == $user['id']){
+							$TEMP['!avatar_s'] = $user['avatar_s'];
+							$TEMP['!username'] = $user['username'];
+							$maket = 'incoming';
+						}
+						if(Specific::IsOwner($message['profile_id'])){
+							$update_ids[] = $message['id'];
 						}
 					} else {
-						$amessafi = $dba->query('SELECT f.*, m.user_id, m.profile_id FROM '.T_MESSAFI.' f INNER JOIN '.T_MESSAGE.' m WHERE f.id = ? AND m.id = f.message_id AND ((m.user_id = ? AND f.deleted_fuser = 0) OR (m.profile_id = ? AND f.deleted_fprofile = 0))', $messaan['answered_id'], $TEMP['#user']['id'], $TEMP['#user']['id'])->fetchArray();
-
-						if(!empty($amessafi)){
-							$has_answer = true;
-							$ans_pid = $amessafi['profile_id'];
-							$user_id = $ans_uid = $amessafi['user_id'];
-							if(Specific::IsOwner($amessafi['user_id'])){
-								$user_id = $amessafi['profile_id'];
-							}
-
-							if($amessafi['deleted_at'] == 0){
-
-								$TEMP['!fi_aid'] = $amessafi['id'];
-								$TEMP['!fi_aname'] = $amessafi['name'];
-								$TEMP['!fi_asize'] = Specific::SizeFormat($amessafi['size']);
-								if($messaan['type'] == 'image'){
-									$TEMP['!fi_aurl'] = Specific::Url("uploads/messages/{$amessafi['file']}");
-								}
-							} else {
-								$TEMP['!ans_deleted'] = true;
-								$TEMP['!ans_deleted_word'] = $TEMP['#word']['deputy_file_deleted'];
-							}
+						$maket = 'deleted-outgoing';
+						if($message['user_id'] == $user['id']){
+							$maket = 'deleted-incoming';
 						}
 					}
-
-					if($has_answer){
-						$ans_user = Specific::Data($user_id, array('username', 'name', 'surname', 'status'));
-						$TEMP['!type'] = 'answered';
-						$TEMP['!ans_type'] = $messaan['type'];
-						$TEMP['!answered_id'] = $messaan['answered_id'];
-
-						$you_responded_to = "{$TEMP['#word']['you_responded_to']} {$ans_user['username']}";
-						if($ans_user['status'] == 'deleted'){
-							$you_responded_to = "{$TEMP['#word']['you_responded_to']} {$TEMP['#word']['user']}";
-						}
-						$TEMP['!ans_title'] = $you_responded_to;
-
-						if($ans_pid == $message['profile_id']){
-							if(Specific::IsOwner($ans_uid)){
-								$TEMP['!ans_title'] = $TEMP['#word']['you_replied_own_message'];
-							} else {
-								$TEMP['!ans_title'] = $TEMP['#word']['replied_his_own_message'];
-							}
-						} else if($message['user_id'] == $user['id']){
-							$TEMP['!ans_title'] = "{$ans_user['username']} {$TEMP['#word']['answered_you']}";
-						}
-					}
+					$html .= Specific::Maket("messages/includes/{$maket}");
+					$messages_ids[] = $message['id'];
 				}
-
-				if($message['deleted_at'] == 0){
-					$maket = 'outgoing';
-					if($message['user_id'] == $user['id']){
-						$TEMP['!avatar_s'] = $user['avatar_s'];
-						$TEMP['!username'] = $user['username'];
-						$maket = 'incoming';
-					}
-					if(Specific::IsOwner($message['profile_id'])){
-						$update_ids[] = $message['id'];
-					}
-				} else {
-					$maket = 'deleted-outgoing';
-					if($message['user_id'] == $user['id']){
-						$maket = 'deleted-incoming';
-					}
-				}
-				$html .= Specific::Maket("messages/includes/{$maket}");
-				$messages_ids[] = $message['id'];
 			}
 			Specific::DestroyMaket();
 			if(!empty($update_ids)){

@@ -68,7 +68,7 @@
          </div>
          <div class="content_preply display-flex direction-row align-center w-100 margin-t15 hidden">
             <div class="margin-bottom-auto margin-t5 margin-r15">
-               <img class="blur-up icon-z border-rall lazyload" alt="{$cusername}" title="{$cusername}" src="{$avatar_cs}">
+               <img class="blur-up icon-z border-rall lazyload" alt="{!cusername}" title="{!cusername}" src="{!avatar_cs}">
             </div>
             <div class="display-flex direction-colum w-100 margin-bottom-auto">
                <textarea class="text_carea w-100 background-white color-black resize-none border-none border-focus-blue border-bottom border-grely sizing-box animation-ease3s" rows="1" placeholder="{$word->write_something}"></textarea>
@@ -157,9 +157,9 @@
    <?php } ?>
    <div class="content_replies<?php echo($TEMP['!comment_type'] != 'featured-reply') ? ' hidden' : '';?>">
       <?php if($TEMP['!comment_type'] == 'featured-reply'){ ?>
-      {$featured_reply}
+      {!featured_reply}
       <?php } ?>
-      {$replies}
+      {!replies}
    </div>
    <?php if($TEMP['!count_replies'] > 5){ ?>
    <button class="btn_rload display-flex direction-row align-center btn-noway margin-t10 hover-button animate-tab-button animation-ease3s<?php echo($TEMP['!comment_type'] != 'featured-reply') ? ' hidden' : '';?>" data-id="{!comment_id}">

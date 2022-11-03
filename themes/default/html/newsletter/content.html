@@ -89,13 +89,13 @@
                         <option value="other">{$word->other}</option>
                     </select>
                     <div class="display-block position-relative w-100 margin-t10 hidden">
-                        <textarea id="other" class="item-nother item_place item-input background-white color-black w-100 padding-t25 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="text" aria-label="{$word->another_reason_unsubscribe}" maxlength="500" autocomplete="other" autocapitalize="off"></textarea>
+                        <textarea id="other" class="item-nother item_place item-input background-white color-black w-100 padding-t25 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="text" aria-label="{$word->another_reason_unsubscribe}" maxlength="{$settings->max_words_unsub_newsletter}" autocomplete="other" autocapitalize="off"></textarea>
                         <label class="item-label background-white w-100 first-capitalize position-absolute pointer-events-none ellipsis-horizontal text-left">{$word->why_do_you_want_leave}</label>
                     </div>
                     <div class="display-flex">
                         <div class="color-red text-left text-error font-low margin-t5"></div>
                         <div class="margin-left-auto color-green hidden">
-                            <span id="text-rcount">0</span>/500
+                            <span id="text-rcount">0</span>/{$settings->max_words_unsub_newsletter}
                         </div>
                     </div>
                     <div class="display-flex direction-row align-center justify-center margin-t15" role="dialog" aria-label="{$word->unsubscribe_the_newsletter}">
@@ -124,6 +124,9 @@
             update: '{$url->{req/newsletter/update}}',
             settings: '{$url->{{#r_settings}}}',
             newsletter: '{$url->{{#r_newsletter}}}'
+        },
+        settings: {
+            max_words_unsub_newsletter: {$settings->max_words_unsub_newsletter}
         },
         count_exists: {#count_exists},
         newsletter_exists: {#newsletter_exists},
