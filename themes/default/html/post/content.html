@@ -258,7 +258,7 @@
                         <textarea class="item_rtextarea background-white color-black w-100 padding-t10 padding-b10 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s" type="text" maxlength="{$settings->max_words_report}" placeholder="{$word->describe_the_error}" autocomplete="off" autocapitalize="off"></textarea>
                         <div class="display-flex">
                            <div class="margin-left-auto color-green">
-                              <span class="text_count animation-ease3s">0</span>/{$settings->max_words_report}
+                              <span class="display-inline-block text_count animation-ease3s">0</span>/{$settings->max_words_report}
                            </div>
                         </div>
                      </div>
@@ -294,7 +294,7 @@
                         <textarea class="item_rtextarea background-white color-black w-100 padding-t10 padding-b10 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s" type="text" maxlength="{$settings->max_words_report}" placeholder="{$word->describe_reason_report}" autocomplete="off" autocapitalize="off"></textarea>
                         <div class="display-flex">
                            <div class="margin-left-auto color-green">
-                              <span class="text_count animation-ease3s">0</span>/{$settings->max_words_report}
+                              <span class="display-inline-block text_count animation-ease3s">0</span>/{$settings->max_words_report}
                            </div>
                         </div>
                      </div>
@@ -368,6 +368,7 @@
          show: '{$word->show}',
          link_copied_clipboard: '{$word->link_copied_clipboard}'
       },
+      dir: '{#dir}',
       category_id: '{$category_id}',
       post_id: '{$post_id}',
       post_url: '{$url}'

@@ -44,10 +44,10 @@
                 <?php if($TEMP['#profile']['shows']['birthday'] == 'on' || $TEMP['#profile']['shows']['gender'] == 'on') { ?>
                 <div class="margin-b10">
                     <?php if(!empty($TEMP['#birthday_format']) && $TEMP['#profile']['shows']['birthday'] == 'on') { ?>
-                    <h2 class="font-medium font-bold first-capitalize">{$word->date_of_birth}: {#birthday_format}</h2>
+                    <h2 class="font-medium font-bold first-capitalize">{$word->date_of_birth}: <span class="display-inline-block">{#birthday_format}</span></h2>
                     <?php } ?>
                     <?php if($TEMP['#profile']['shows']['gender'] == 'on') { ?>
-                    <h2 class="font-medium font-bold first-capitalize">{$word->gender}: <span class="text-lowercase">{$gender_txt}</span></h2>
+                    <h2 class="font-medium font-bold first-capitalize">{$word->gender}: <span class="display-inline-block text-lowercase">{$gender_txt}</span></h2>
                     <?php } ?>
                 </div>
                 <?php } ?>
@@ -154,7 +154,7 @@
             <?php } ?>
             <?php if($TEMP['#profile']['shows']['messages'] == 'on'){ ?>
             <?php if(!Specific::IsOwner($TEMP['#user_id']) && $TEMP['#profile_blocked'] == false){ ?>
-            <a class="display-inline-block padding-t10 padding-b10 padding-l10 padding-r10 color-black border-all border-grely hover-button animation-ease3s" href="{$url->{{#r_messages}/{$user}}}" target="_self">
+            <a class="btn-upmsend display-inline-block padding-t10 padding-b10 padding-l10 padding-r10 color-black border-all border-grely hover-button animation-ease3s" href="{$url->{{#r_messages}/{$user}}}" target="_self">
                 <span class="color-black">{$word->send_message}</span>
                 <svg class="icon-y vertical-sub" viewBox="-1.5 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="img">
                     <title>{$word->send_message}</title>
@@ -162,7 +162,7 @@
                 </svg>
             </a>
             <?php } else { ?>
-            <button class="display-inline-block padding-t10 padding-b10 padding-l10 padding-r10 color-black border-all border-grely hover-button animation-ease3s<?php echo($TEMP['#profile_blocked'] == true) ? ' margin-left-auto' : '';?>" disabled>
+            <button class="btn-upmsend display-inline-block padding-t10 padding-b10 padding-l10 padding-r10 color-black border-all border-grely hover-button animation-ease3s<?php echo($TEMP['#profile_blocked'] == true) ? ' margin-left-auto' : '';?>" disabled>
                 <span class="color-black">{$word->send_message}</span>
                 <svg class="icon-y vertical-sub" viewBox="-1.5 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="img">
                     <title>{$word->send_message}</title>
@@ -323,7 +323,7 @@
                         <textarea class="item_rtextarea background-white color-black w-100 padding-t10 padding-b10 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box animation-ease3s" type="text" maxlength="{$settings->max_words_report}" placeholder="{$word->describe_reason_report}" autocomplete="off" autocapitalize="off"></textarea>
                         <div class="display-flex">
                            <div class="margin-left-auto color-green">
-                              <span class="text_count animation-ease3s">0</span>/{$settings->max_words_report}
+                              <span class="display-inline-block text_count animation-ease3s">0</span>/{$settings->max_words_report}
                            </div>
                         </div>
                      </div>

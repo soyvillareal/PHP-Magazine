@@ -229,23 +229,12 @@
 .content_mfimage {
 	width: 48px;
 	height: 48px;
-  min-width: 48px;
-  min-height: 48px;
+  	min-width: 48px;
+  	min-height: 48px;
 }
 .btn_mffile {
 	top: -7px;
-  right: -7px;
-}
-.item-mffile[disabled] {
-	pointer-events: none;
-}
-.item-mffile[disabled] ~ span {
-  cursor: no-drop;
-  opacity: .5;
-}
-.item-mffile:active ~ span,
-.item-mffile:focus ~ span {
-	background-color: #ebebeb;
+  	right: -7px;
 }
 .content_pmtmessage:not(.content-pmtwdeleted):last-child {
 	margin-bottom: 15px;

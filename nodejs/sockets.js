@@ -3053,7 +3053,7 @@ module.exports = async function(socket){
                                                                 await forEachAsync(arr_files, function(item, index, arr){
                                                                     var done = this.async(),
                                                                         messafi = `file_${index}`;
-                                                                    if(Object.keys(files).indexOf(`file_${index}`) !== -1){
+                                                                    if(Object.keys(files).indexOf(messafi) !== -1){
                                                                         var mess = files[messafi];
                                                                         specific.UploadMessagefi({
                                                                             name: mess.originalFilename,
@@ -3078,7 +3078,7 @@ module.exports = async function(socket){
                                                                             }
                                                                             done();
                                                                         });
-                                                                    }
+                                                                    } else done();
                                                                 }).catch(function(err){});
 
                                                                 if(fils.length > 0){
@@ -3273,17 +3273,5 @@ module.exports = async function(socket){
         });
 
     });
-
-
-    /*
-    socket.on('setIndelete', function(e){
-        try {
-            
-        } catch (err) {
-            console.log(err)
-        }
-    })
-    */
-
 
 }

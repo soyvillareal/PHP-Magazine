@@ -11,10 +11,16 @@
    <meta name="format-detection" content="telephone=no">
    <link rel="shortcut icon" type="image/png" href="{$theme->{images/favicon.ico}}" />
 </head>
-<body class="position-relative w-100 mw-1170 h-100 background-white color-black margin-auto" dir="{$dir}">
+<body class="position-relative w-100 mw-1170 h-100 background-white color-black margin-auto" dir="{#dir}">
+   <style type="text/css">
+      .page-loader{position:fixed;top:0;left:0;right:0;bottom:0;background-color:#fff;display:flex;justify-content:center;align-items:center;z-index:9999;transition:1s all;opacity:0}.page-loader.show{opacity:1}.page-loader .spin{border:3px solid hsla(205,48%,38%,.2);border-top-color:#326891;border-radius:50%;width:3em;height:3em;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}           
+   </style>
+   <div id="page-loader" class="page-loader show">
+      <div class="spin"></div>
+   </div>
    <noscript>
       <div class="display-flex w-100 h-100vh">
-         <div class="w-450px background-grely border-rlow margin-auto padding-t15 padding-b15 padding-l15 padding-r15 text-center">
+         <div class="content-noscript w-450px background-grely border-rlow margin-auto padding-t15 padding-b15 padding-l15 padding-r15 text-center">
             <style type="text/css">
                #global-content, #header, .drawer {
                   display: none;
@@ -111,7 +117,7 @@
                   </button>
                </div>
 
-               <ul class="padding-t10 padding-b10">
+               <ul class="container-langs padding-t10 padding-b10 overflow-autoy">
                   {$languages}
                </ul>
             </div>
@@ -272,11 +278,22 @@
             </div>
          </div>
          <?php } else { ?>
-         <a class="display-none-mob margin-left-auto margin-r10 inhover-button" href="{$url->{{#r_register}}}" target="_self" title="{$word->register}" role="button">
-            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase animation-ease3s">{$word->register}</span>
+         <div class="content-dropdown-langs position-relative margin-left-auto">
+            <button class="btn_lang btn-noway display-none-mob margin-r10 inhover-button animate-tab-button animation-ease3s" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->languages}">
+               <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase">{#language}</span>
+            </button>
+
+            <div class="container_languages dropdown-tlangs position-absolute background-white border-rlow border-all border-grely z-index-1 hidden" role="dialog" aria-label="{$word->languages}" aria-modal="true">
+               <ul class="container-langs padding-t10 padding-b10 overflow-autoy">
+                  {$languages}
+               </ul>
+            </div>
+         </div>
+         <a class="display-none-mob margin-r10 inhover-button animation-ease3s" href="{$url->{{#r_register}}}" target="_self" title="{$word->register}" role="button">
+            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase">{$word->register}</span>
          </a>
-         <a class="display-none-mob inhover-button" href="{$url->{{#r_login}}}" target="_self" title="{$word->login}" role="button">
-            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase animation-ease3s">{$word->login}</span>
+         <a class="display-none-mob inhover-button animation-ease3s" href="{$url->{{#r_login}}}" target="_self" title="{$word->login}" role="button">
+            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase">{$word->login}</span>
          </a>
          <?php } ?>
          <div class="button-modal-login display-inline position-absolute">
@@ -698,13 +715,26 @@
    <?php if($TEMP['#loggedin'] == false){ ?>
    <div class="content-login-modal content-backdrop display-none-desk position-fixed w-100 animation-ease3s">
       <div class="item-login-modal display-flex background-white padding-t15 padding-b15 padding-l15 padding-r15 border-top border-grey">
-         <div class="margin-auto">
-            <a class="inhover-button margin-r10" href="{$url->{{#r_register}}}" target="_self" title="{$word->register}" role="button">
-               <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase animation-ease3s">{$word->register}</span>
-            </a>
-            <a class="inhover-button" href="{$url->{{#r_login}}}" target="_self" title="{$word->login}" role="button">
-               <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase animation-ease3s">{$word->login}</span>
-            </a>
+         <div class="display-flex direction-colum margin-auto">
+            <div class="item-lmodal text-center">
+               <div class="content-dropdown-langs item-lcmodal display-inline-block position-relative">
+                  <button class="btn_lang btn-noway margin-r10 inhover-button animate-tab-button animation-ease3s" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->languages}">
+                     <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase">{#language}</span>
+                  </button>
+      
+                  <div class="container_languages dropdown-blangs position-absolute background-white border-rlow border-all border-grely z-index-1 hidden" role="dialog" aria-label="{$word->languages}" aria-modal="true">
+                     <ul class="container-langs padding-t10 padding-b10 overflow-autoy">
+                        {$languages}
+                     </ul>
+                  </div>
+               </div>
+               <a class="button-general item-lcmodal display-inline-block margin-r10 vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase inhover-button animation-ease3s" href="{$url->{{#r_register}}}" target="_self" title="{$word->register}" role="button">
+                  {$word->register}
+               </a>
+               <a class="button-general item-lcmodal display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase inhover-button animation-ease3s" href="{$url->{{#r_login}}}" target="_self" title="{$word->login}" role="button">
+                  {$word->login}
+               </a>
+            </div>
             <div class="text-center margin-t15 margin-b15">
                <p>{$word->did_you_forget_your_password}</p>
                <a class="color-black font-medium font-bold text-underline" href="{$url->{{#r_forgot_password}}}" target="_self" title="{$word->retrieve_it_here}">{$word->retrieve_it_here}</a>
@@ -716,6 +746,9 @@
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.fonts.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.search.min.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.general.css}}" />
+   <?php if($TEMP['#dir'] == 'rtl'){ ?>
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.rtl.general.css}}" />
+   <?php } ?>
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.modal.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.header.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.footer.css}}" />
@@ -746,21 +779,29 @@
              x = $('#btn-bnmenu'),
              h = $('.btn_account'),
              f = $('.btn_drawer'),
+             q = $('.btn_lang'),
              j = h.find('svg'),
+             k = 'overflow-hidden',
              g = function(e){
-               e.attr('aria-expanded', !JSON.parse(e.attr('aria-expanded'))).blur()
-             },
-             k = 'overflow-hidden';
+               return e.attr('aria-expanded', !JSON.parse(e.attr('aria-expanded'))).blur()
+             };
          
          $(window).on('popstate', function(){
             location.reload();
          }), $(document).click(function(e){
-            $(e.target).is('.container-drawer') && (a.removeClass(k).removeClass('backdrop-active-as'), g(f)), <?php echo($TEMP['#loggedin'] === true) ? "$(e.target).is('.content-dropdown-account') && (a.removeClass(k).removeClass('backdrop-active-ac'), h.removeClass('active').siblings().addClass('hidden'), j.removeClass('rotate-180'), g(h))" : "$(e.target).is('.content-login-modal') && a.removeClass('modal-login-active')" ?>
+            $(e.target).is('.container-drawer') && (a.removeClass(k).removeClass('backdrop-active-as'), g(f)), <?php echo($TEMP['#loggedin'] === true) ? "$(e.target).is('.content-dropdown-account') && (a.removeClass(k).removeClass('backdrop-active-ac'), h.removeClass('active').siblings().addClass('hidden'), j.removeClass('rotate-180'), g(h))" : "!$(e.target).is('.btn_lang, .btn_lang *, .container_languages, .container_languages *') && q.attr('aria-expanded', !1).next().addClass('hidden'), $(e.target).is('.content-login-modal') && a.removeClass('modal-login-active')" ?>
          })<?php if($TEMP['#loggedin'] === true){ ?>, h.click(function(){
             a.hasClass(k) ? f.attr('aria-expanded') == 'false' && a.removeClass(k) : a.addClass(k), a.toggleClass('backdrop-active-ac'), d.hasClass('hidden') && c.removeAttr('style').toggleClass('hidden'), h.toggleClass('active'), (!l.hasClass('hidden') || !d.hasClass('hidden')) && (l.addClass('hidden'), d.addClass('hidden'), z.addClass('hidden').siblings().addClass('hidden'), x.removeClass('hidden').siblings(':not(:last-child)').addClass('hidden').next(':last-child').removeClass('hidden')), g(h), f.attr('aria-expanded', !1), !$(this).hasClass('button-login') && j.toggleClass('rotate-180'), a.removeClass('backdrop-active-as')
-         })<?php } else { ?>, $('#btn-modal-login').click(function(){
+         })<?php } else { ?>, q.click(function(){
+            g($(this)).next().toggleClass('hidden')
+         }), $('#btn-modal-login').click(function(){
             a.toggleClass('modal-login-active'), g($(this)), a.removeClass('backdrop-active-as')
          })<?php } ?>
+      }), $(window).on('load', function(){
+         var x = $('#page-loader');
+         x.removeClass("show"), setTimeout(function(){
+            x.remove();
+         }, 1000);
       }), paper_g = {
          token: '{#token_session}',
          loggedin: {#loggedin},

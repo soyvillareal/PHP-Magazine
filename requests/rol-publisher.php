@@ -1500,10 +1500,11 @@ if ($TEMP['#publisher'] === true) {
 					if(in_array($type, array('tweet', 'soundcloud', 'spotify', 'facebookpost', 'instagrampost', 'tiktok'))){
 						if($type == 'facebookpost'){
 							if(preg_match("/(?:(?:http|https):\/\/)?(?:www\.)?(?:facebook\.com)\/(\d+|[A-Za-z0-9\.]+)\/?/", $url)){
+								$TEMP['!fb_url'] = $url;
 								$deliver = array(
 									'S' => 200,
 									'FB' => 1,
-									'HT' => '<div class="fb-post display-block background-white" data-href="'.$url.'" data-width="100%"></div>'
+									'HT' => Specific::Maket('includes/load-publisher-edit/facebook-post')
 								);
 							}
 						} else if($type == 'instagrampost'){

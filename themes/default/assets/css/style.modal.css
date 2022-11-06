@@ -1,3 +1,27 @@
+.dropdown-tlangs {
+    top: 40px;
+}
+.dropdown-blangs {
+    left: calc(150% - 113px);
+    bottom: 40px;
+}
+.container_languages .container-langs {
+    max-width: 113px;
+}
+.container-langs {
+    max-height: 200px;
+}
+.container-langs::-webkit-scrollbar-track {
+    background: #cdcdcd;
+}
+.container-langs::-webkit-scrollbar-thumb {
+    background: #909090;
+    border-radius: 2px;
+}
+.container-langs::-webkit-scrollbar {
+    width: 8px;
+}
+
 .dropdown-account,
 .dropdown-notifications,
 .dropdown-languages {
@@ -162,5 +186,28 @@
     .dropdown-notifications:not([data-content=hide]) .content-notifications:not(:hover) {
         margin-right: 8px;
         overflow-y: hidden
+    }
+}
+@media(max-width: 340px) {
+    .content-login-modal .item-lmodal {  
+        display: -webkit-box !important;
+        display: -webkit-flex !important;
+        display: -ms-flexbox !important;
+        display: flex !important;
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+    }
+    .content-login-modal .item-lcmodal  {
+        margin: 0 0 10px 0;
+    }
+    .dropdown-blangs {
+        left: calc(-50% + 113px);
+    }
+    .content-login-modal {
+        bottom: -252px;
+    }
+    .item-login-modal {
+        height: 210px;
     }
 }

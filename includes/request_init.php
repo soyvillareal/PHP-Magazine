@@ -5,11 +5,19 @@ $TEMP['#site_url'] = $site_url;
 $TEMP['#settings'] = Specific::Settings();
 $TEMP['#loggedin'] = Specific::Logged();
 
-
-
-
 $TEMP['#languages'] = Specific::Languages();
 $TEMP['#language'] = Specific::Language();
+
+$TEMP['#rtl_languages'] = array();
+$languages = $dba->query('SELECT lang, dir FROM '.T_LANGUAGE)->fetchAll();
+foreach ($languages as $lang) {
+    if($lang['dir'] == 'rtl'){
+        $TEMP['#rtl_languages'][] = $lang['lang'];
+    }
+    if($TEMP['#language'] == $lang['lang']){
+        $TEMP['#dir'] = $lang['dir'];
+    }
+}
 
 $TEMP['#word'] = Specific::Words($TEMP['#language']);
 

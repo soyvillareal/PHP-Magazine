@@ -4,6 +4,9 @@ fieldset {
     padding: 0;
     min-inline-size: unset;
 }
+code {
+    direction: ltr;
+}
 .item-input ~ .item-label,
 .tag-label {
     top: 0;
@@ -353,6 +356,9 @@ li.content-cpost figure {
 }
 .color-spotify {
     color: #1ed760;
+}
+.content_tframe .item_attrs {
+    margin-left: 5px;
 }
 @media (min-width: 768px) {
     .content-left-fields {

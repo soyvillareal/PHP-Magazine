@@ -35,7 +35,7 @@ module.exports = function(socket, temp){
                                             <img class="blur-up item-pmtimage is-reply border-rlow lazyload" src="{!fi_aurl}" alt="{!fi_aname}">
                                         </div>`))
                             :
-                                `<span class="item-pmtdeleted break-all background-white color-grey padding-t5 padding-b5 padding-l15 padding-r15 border-r25px border-all border-grely">{!ans_deleted_word}</span>`)+`
+                                `<span class="item-pmtdeleted break-all background-white color-grey margin-left-auto padding-t5 padding-b5 padding-l15 padding-r15 border-r25px border-all border-grely">{!ans_deleted_word}</span>`)+`
                         </div>
                     </div>
                     <div class="item-pmtreply display-flex direction-row align-center position-relative margin-t15 margin-l5">`+(
@@ -80,7 +80,7 @@ module.exports = function(socket, temp){
                 </div>
             </div>`
         :
-            `<div class="content_pmtmessage display-flex direction-row align-center margin-left-auto margin-r10 padding-t15" data-id="{!id}">`+(
+            `<div class="content_pmtmessage margin-left-auto margin-r10 padding-t15" data-id="{!id}">`+(
                 temp.text != null ?
                     `<button class="btn_pmtdelete w-30px h-30 btn-noway margin-left-auto margin-r5 background-hover border-rall opacity-0 hover-button animation-ease3s animate-tab-button" data-id="{!id}" data-type="text">
                         <span class="color-grey">

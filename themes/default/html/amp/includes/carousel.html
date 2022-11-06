@@ -1,15 +1,15 @@
 <div class="container-carousel display-flex w-100">
   <div class="content-carousel margin-auto">
-    <amp-carousel id="item-wpreview" width="450" height="300" layout="responsive" type="slides" role="region" aria-label="{$word->carousel_of_images}" data-prev-button-aria-label="{$word->back_}" data-next-button-aria-label="{$word->next_}">
+    <amp-carousel id="item-wpreview-{!id}" width="450" height="300" layout="responsive" type="slides" role="region" aria-label="{$word->carousel_of_images}" data-prev-button-aria-label="{$word->back_}" data-next-button-aria-label="{$word->next_}">
       <?php foreach($TEMP['!images'] as $key => $car){ ?>
-      <amp-img src="<?php echo $car['image']?>" width="450" height="300" layout="responsive" alt="apples"></amp-img>
+      <amp-img src="<?php echo $car['image']?>" width="450" height="300" layout="responsive" alt="<?php echo $car['caption']?>"></amp-img>
       <?php } ?>
     </amp-carousel>
     <div class="item-cpreview display-flex margin-t10">
       <div class="margin-auto">
         <?php foreach($TEMP['!images'] as $key => $car){ ?>
-        <button class="item-pbcarousel padding-5 border-grely" on="tap:item-wpreview.goToSlide(index=<?php echo $key;?>)">
-          <amp-img src="<?php echo $car['image']?>" width="45" height="45" alt="apples"></amp-img>
+        <button class="item-pbcarousel padding-5 border-grely" on="tap:item-wpreview-{!id}.goToSlide(index=<?php echo $key;?>)">
+          <amp-img src="<?php echo $car['image']?>" width="45" height="45" alt="<?php echo $car['caption']?>"></amp-img>
         </button>
         <?php } ?>
       </div>

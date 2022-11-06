@@ -81,7 +81,7 @@
 	<span class="item_pmtutext hidden">{!username}</span>
 </div>
 <?php } else { ?>
-<div class="content_pmtmessage display-flex direction-row align-center margin-l10 padding-t15" data-id="{!id}">
+<div class="content_pmtmessage<?php echo($TEMP['!text'] != NULL) ? ' display-flex direction-row align-center ' : ' ';?>margin-l10 padding-t15" data-id="{!id}">
 	<div class="item-mavatar margin-top-auto margin-r5 overflow-hidden border-rall">
 		<img class="blur-up lazyload" src="{!avatar_s}" alt="{!username}">
 	</div>

@@ -75,11 +75,11 @@ if(!empty($posts)){
         }
 
         
-        $TEMP['items'] .= Specific::Maket('includes/rss-wrapper/items.xml');
+        $TEMP['items'] .= Specific::Maket('includes/rss-wrapper/items', 'xml');
     }
 }
 
-echo Specific::Maket('rss-wrapper.xml');
+echo Specific::Maket('rss-wrapper', 'xml');
 $dba->close();
 unset($TEMP);
 unset($RUTE);

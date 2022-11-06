@@ -354,10 +354,16 @@
     .margin-bottom-auto {
         margin-bottom: auto;
     }
-    .margin-left-auto {
+    body[dir=rtl] .margin-left-auto {
+        margin-right: auto;
+    }
+    body[dir=ltr] .margin-left-auto {
         margin-left: auto;
     }
-    .margin-right-auto {
+    body[dir=rtl] .margin-right-auto {
+        margin-left: auto;
+    }
+    body[dir=ltr] .margin-right-auto {
         margin-right: auto;
     }
     .margin-t5 {
@@ -366,7 +372,10 @@
     .margin-b5 {
         margin-bottom: 5px;
     }
-    .margin-r5 {
+    body[dir=rtl] .margin-r5 {
+        margin-left: 5px;
+    }
+    body[dir=ltr] .margin-r5 {
         margin-right: 5px;
     }
     .margin-t10 {
@@ -375,10 +384,16 @@
     .margin-b10 {
         margin-bottom: 10px;
     }
-    .margin-l10 {
+    body[dir=rtl] .margin-l10 {
+        margin-right: 10px;
+    }
+    body[dir=ltr] .margin-l10 {
         margin-left: 10px;
     }
-    .margin-r10 {
+    body[dir=rtl] .margin-r10 {
+        margin-left: 10px;
+    }
+    body[dir=ltr] .margin-r10 {
         margin-right: 10px;
     }
     .margin-t15 {
@@ -387,10 +402,16 @@
     .margin-b15 {
         margin-bottom: 15px;
     }
-    .margin-l15 {
+    body[dir=rtl] .margin-l15 {
+        margin-right: 15px;
+    }
+    body[dir=ltr] .margin-l15 {
         margin-left: 15px;
     }
-    .margin-r15 {
+    body[dir=rtl] .margin-r15 {
+        margin-left: 15px;
+    }
+    body[dir=ltr] .margin-r15 {
         margin-right: 15px;
     }
 
@@ -406,7 +427,10 @@
     .padding-b5 {
         padding-bottom: 5px;
     }
-    .padding-r10 {
+    body[dir=rtl] .padding-r10 {
+        padding-left: 10px;
+    }
+    body[dir=ltr] .padding-r10 {
         padding-right: 10px;
     }
     .padding-t10 {
@@ -415,7 +439,10 @@
     .padding-b10 {
         padding-bottom: 10px;
     }
-    .padding-l10 {
+    body[dir=rtl] .padding-l10 {
+        padding-right: 10px;
+    }
+    body[dir=ltr] .padding-l10 {
         padding-left: 10px;
     }
     .padding-t15 {
@@ -424,10 +451,16 @@
     .padding-b15 {
         padding-bottom: 15px;
     }
-    .padding-l15 {
+    body[dir=rtl] .padding-l15 {
+        padding-right: 15px;
+    }
+    body[dir=ltr] .padding-l15 {
         padding-left: 15px;
     }
-    .padding-r15 {
+    body[dir=rtl] .padding-r15 {
+        padding-left: 15px;
+    }
+    body[dir=ltr] .padding-r15 {
         padding-right: 15px;
     }
     .padding-t25 {
@@ -436,10 +469,16 @@
     .padding-b25 {
         padding-bottom: 25px;
     }
-    .padding-r20 {
+    body[dir=rtl] .padding-r20 {
+        padding-left: 20px;
+    }
+    body[dir=ltr] .padding-r20 {
         padding-right: 20px;
     }
-    .padding-l20 {
+    body[dir=rtl] .padding-l20 {
+        padding-right: 20px;
+    }
+    body[dir=ltr] .padding-l20 {
         padding-left: 20px;
     }
 
@@ -490,11 +529,19 @@
         border-bottom-width: 1px;
         border-bottom-style: solid;
     }
-    .border-right {
+    body[dir=rtl] .border-right {
+        border-left-width: 1px;
+        border-left-style: solid;
+    }
+    body[dir=ltr] .border-right {
         border-right-width: 1px;
         border-right-style: solid;
     }
-    .border-left {
+    body[dir=rtl] .border-left {
+        border-right-width: 1px;
+        border-right-style: solid;
+    }
+    body[dir=ltr] .border-left {
         border-left-width: 1px;
         border-left-style: solid;
     }

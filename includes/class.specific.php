@@ -4,31 +4,39 @@ use PHPMailer\PHPMailer\SMTP;
 
 class Specific {
 
-	public static function GetFile($file, $type = 1, $size = 's'){
+	public static function GetFile($file, $type = 1, $size = ''){
 	    global $TEMP;
-	    if (empty($file)) {
-	        return '';
-	    }
+
 	    $prefix = '';
 	    $suffix = '';
-	    if($type == 2){
-	        $prefix = "themes/{$TEMP['#settings']['theme']}/";
-	    } else {
-	    	if($type == 3) {
-	    		$prefix = 'uploads/entries/';
-	    	} else if($type == 5){
-	    		$prefix = 'themes/'.$TEMP['#settings']['theme'].'/images/users/';
-		    	if(!empty($size)){
-		    		$suffix = "-$size.jpeg";
-		    	}
-	    	} else {
-	    		$folder = $type == 4 ? 'users' : 'posts';
-	    		$prefix = "uploads/$folder/";
-		    	if(!empty($size)){
-		    		$suffix = "-$size.jpeg";
-		    	}
-	    	}
-	    }
+		$folder = 'posts';
+		if($type == 4){
+			$folder = 'users';
+		}
+		if(!empty($size)){
+			$suffix = "-$size.jpeg";
+		}
+
+		if(empty($file)){
+			$file = "default-holder";
+			$prefix = "themes/{$TEMP['#settings']['theme']}/images/{$folder}/";
+			if($type == 3){
+				$suffix = "-b.jpeg";
+			}
+		} else {
+			if($type == 2){
+				$prefix = "themes/{$TEMP['#settings']['theme']}/";
+			} else {
+				if($type == 3) {
+					$prefix = 'uploads/entries/';
+				} else if($type == 5){
+					$prefix = "themes/{$TEMP['#settings']['theme']}/images/users/";
+				} else {
+					$prefix = "uploads/$folder/";
+				}
+			}
+		}
+
 	    return self::Url($prefix.$file.$suffix);
 	}
 
@@ -299,7 +307,7 @@ class Specific {
 	    if (!in_array(pathinfo($data['avatar']['name'], PATHINFO_EXTENSION), array('jpeg','jpg','png')) || !in_array($data['avatar']['type'], array('image/jpeg', 'image/png'))) {
 	        return array('return' => false);
 	    }
-	    $image = "{$TEMP['#user']['username']}-".sha1(time().self::RandomKey());
+	    $image = "{$TEMP['#user']['user']}-".sha1(time().self::RandomKey());
 	    $file = 'uploads/users/' . $image;
 	    $filename_b = "{$file}-b.jpeg";
 	    $filename_s = "{$file}-s.jpeg";
@@ -314,7 +322,9 @@ class Specific {
 		    	'avatar_s' => self::Url($filename_s)
 		    );
 	    }
-	    return array('return' => false);
+	    return array(
+			'return' => false
+		);
 	}
 
 	public static function OAuthImage($media, $username) {
@@ -446,6 +456,7 @@ class Specific {
 					'messages' => 'on'
 				);
 			}
+
 	    } else {
 	    	$user = $dba->query('SELECT '.implode(',', $type).' FROM '.T_USER.' WHERE id = ?', $data)->fetchArray();
 	    }
@@ -467,7 +478,8 @@ class Specific {
 
 		    $user['birthday_format'] = self::DateFormat($user['birthday']);
 		}
-		if(!empty($user['avatar'])){
+
+		if(in_array('avatar', $user) || in_array('avatar', $type)){
 		    $rute = 4;
 		    if($user['avatar'] == 'default-holder'){
 		    	$rute = 5;
@@ -477,6 +489,7 @@ class Specific {
 		    $user['avatar_b'] = self::GetFile($user['avatar'], $rute, 'b');
 		   	$user['avatar_s'] = self::GetFile($user['avatar'], $rute, 's');
 		}
+
 		if(!empty($user['gender'])){
 			$user['gender_txt'] = $TEMP['#word'][$user['gender']];
 		}
@@ -1275,7 +1288,7 @@ class Specific {
 		if(!empty($_SERVER["REQUEST_URI"])){
 			$url = (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on' ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'] . $_SERVER["REQUEST_URI"];
 			if(self::Url() != $url){
-				$params = "home?{$RUTE['#p_return']}=".urlencode($url);
+				$params = "{$RUTE['#r_login']}?{$RUTE['#p_return']}=".urlencode($url);
 			}
 		}
 		return self::Url($params);
@@ -1445,19 +1458,43 @@ class Specific {
 						} else if($widget['type'] == 'aside'){
 							$maket = 'includes/search-post-profile-category-tag/advertisement-aside';
 						} else if(in_array($widget['type'], array('pbody', 'ptop'))){
-							$client_exists = preg_match('/data-ad-client=[\'|"]([^\"]+)[\'|"]/is', $widget['content'], $ad_client);
 							$advertisement = 'advertisement-post-top';
 							if($widget['type'] == 'pbody'){
 								$advertisement = 'advertisement-body';
 							}
 							$maket = "post/includes/{$advertisement}";
-							if($client_exists > 0){
+
+							$image_exists = preg_match('/<img [^>]*src=[\'|"](.+?)[\'|"][^>]*>/is', $widget['content'], $image);
+							if($image_exists > 0){
 								if($root == 'amp'){
-									preg_match('/data-ad-slot=[\'|"]([^\"]+)[\'|"]/is', $widget['content'], $ad_slot);
-									$TEMP['ad_client'] = $ad_client[1];
-									$TEMP['ad_slot'] = $ad_slot[1];
+									$alt_exists = preg_match('/<img [^>]*alt=[\'|"](.+?)[\'|"][^>]*>/is', $widget['content'], $alt);
+									$width_exists = preg_match('/<img [^>]*width=[\'|"](.+?)[\'|"][^>]*>/is', $widget['content'], $width);
+									$height_exists = preg_match('/<img [^>]*height=[\'|"](.+?)[\'|"][^>]*>/is', $widget['content'], $height);
+
+									$TEMP['src'] = $image[1];
+									if($alt_exists > 0){
+										$TEMP['#alt'] = $alt[1];
+									}
+									if($width > 0){
+										$TEMP['#width'] = $width[1];
+									}
+									if($height > 0){
+										$TEMP['#height'] = $height[1];
+									}
+									$maket = "amp/includes/advertisement-image";
 								}
-								$maket = "{$root}/includes/{$advertisement}";
+							} else {
+								if($root == 'amp'){
+									$client_exists = preg_match('/data-ad-client=[\'|"]([^\"]+)[\'|"]/is', $widget['content'], $ad_client);
+									if($client_exists > 0){
+										preg_match('/data-ad-slot=[\'|"]([^\"]+)[\'|"]/is', $widget['content'], $ad_slot);
+										$TEMP['ad_client'] = $ad_client[1];
+										$TEMP['ad_slot'] = $ad_slot[1];
+										$maket = "amp/includes/{$advertisement}";
+									} else {
+										return $data;
+									}
+								}
 							}
 						}
 						$data['html'] = self::Maket($maket);
@@ -1541,7 +1578,7 @@ class Specific {
 			} else if($dailymotion == true){
 				$type = 'dailymotion';
 				if($is_amp){
-					$html = '<amp-dailymotion data-videoid="'.$dm_video[2].'" layout="responsive" width="480" height="270"'.$autag.'></amp-dailymotion>';
+					$html = '<amp-dailymotion data-videoid="'.str_replace('?'.parse_url($frame)['query'], '', $dm_video[2]).'" layout="responsive" width="480" height="270"'.$autag.'></amp-dailymotion>';
 				} else {
 					$html = '<iframe src="//www.dailymotion.com/embed/video/'.$dm_video[2]."?{$auparam}".'" width="100%" height="450" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen'.$autag.'></iframe>';
 				}
@@ -1676,7 +1713,8 @@ class Specific {
 	        if ($was >= 1) {
 	            $was_int = intval($was);
 	            $string = $was_int > 1 ? $value[1] : $value[0];
-	            return "{$TEMP['#word']['does']} $was_int $string";
+	            return !in_array($TEMP['#language'], $TEMP['#rtl_languages']) ? "{$TEMP['#word']['does']} $was_int $string" : "$was_int $string {$TEMP['#word']['does']}";
+
 	        }
 	    }
 	}
@@ -1949,14 +1987,10 @@ class Specific {
 	    return $TEMP;
 	}
 
-	public static function Maket($page){
+	public static function Maket($page, $ext = 'html'){
 	    global $TEMP, $RUTE, $site_url;
 
-		if(empty(pathinfo($page, PATHINFO_EXTENSION))){
-			$page = "{$page}.html";
-		}
-
-	    $file = "./themes/{$TEMP['#settings']['theme']}/html/{$page}";
+	    $file = "./themes/{$TEMP['#settings']['theme']}/html/{$page}.{$ext}";
 	    if(!file_exists($file)){
 	    	exit("No found: $file");
 	    }
@@ -1989,7 +2023,10 @@ class Specific {
 		    	if(isset($TEMP['#current_url'])){
 		    		$current_url[1] = $TEMP['#current_url'];
 		    	}
-				$no_returns = array($RUTE['#r_home'], $RUTE['#r_login'], $RUTE['#r_register'], $RUTE['#r_forgot_password'], $RUTE['#r_reset_password'], $RUTE['#r_2check'], $RUTE['#r_verify_email']);
+				$no_returns = array($RUTE['#r_home'], $RUTE['#r_login'], $RUTE['#r_register'], $RUTE['#r_forgot_password'], $RUTE['#r_reset_password'], $RUTE['#r_2check'], $RUTE['#r_verify_email'], $RUTE['#r_settings'], $RUTE['#r_saved'], $RUTE['#r_create_post'], $RUTE['#r_edit_post']);
+				if($TEMP['#loggedin'] == true){
+					$no_returns[] = $RUTE['#r_newsletter'];
+				}
 				if(!in_array($current_url[1], $no_returns) || (!empty($return) && !in_array($return, $no_returns))){
 					if($current_url[1] == $current_url[2] || !isset($current_url[2])){
 						$current_url = urlencode($current_url[1]);

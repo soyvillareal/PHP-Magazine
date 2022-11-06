@@ -21,7 +21,7 @@ $category_load = Load::Category($category['id']);
 $category_name = $TEMP['#word']["category_{$category['name']}"];
 
 $TEMP['category_name'] = $category_name;
-$TEMP['category_slug'] = strtolower($category_name);
+$TEMP['category_slug'] = $category['slug'];
 $TEMP['catag_id'] = $category['id'];
 $TEMP['posts_result'] = $category_load['html'];
 

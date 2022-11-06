@@ -208,7 +208,7 @@
           </div>
         </div>
         <div class="color-grey w-100 margin-t5 font-mediumly text-center">
-          {$word->images_taken_from}: <?php echo(!empty($TEMP['esource'])) ? '<span class="item_csexample">{$word->place_your_source_here}</span>' : '<span class="item_csource">{!esource}</span>';?>
+          {$word->images_taken_from}: <?php echo(!empty($TEMP['esource'])) ? '<span class="display-inline-block item_csexample">{$word->place_your_source_here}</span>' : '<span class="display-inline-block item_csource">{!esource}</span>';?>
         </div>
         <div class="content_files hidden">
           <?php foreach($TEMP['!images'] as $key => $car){ ?>
@@ -295,7 +295,7 @@
           <span class="item_vval color-green">{$word->value}</span>
           <span class="color-greenly">"</span>
         </code>
-        <ul class="content_edattrs display-block padding-5 border-all border-grely<?php echo(empty($TEMP['!attrs'])) ? ' hidden' : '';?>">
+        <ul class="content_edattrs display-block margin-t15 padding-5 border-all border-grely<?php echo(empty($TEMP['!attrs'])) ? ' hidden' : '';?>">
           <?php foreach($TEMP['!attrs'] as $key => $attr){ ?>
           <?php if($attr['name'] == 'attribute'){ ?>
           <li class="content_edinput display-flex text-center margin-t15">
@@ -318,7 +318,7 @@
       <code class="content_tframe display-table background-white margin-t15 margin-b15 padding-t20 padding-b20 padding-l20 padding-r20 break-all border-rlow border-all border-grely">
         <span class="color-greenly"><</span>
         <span class="color-red">iframe</span>
-        <span class="item_attrs margin-l5"><span class="item_srcna color-purple">src</span><span class="color-greenly">="</span><span class="item_srcva color-green">{!url}</span><span class="color-greenly">"</span></span>
+        <span class="item_attrs"><span class="item_srcna color-purple">src</span><span class="color-greenly">="</span><span class="item_srcva color-green">{!url}</span><span class="color-greenly">"</span></span>
         <?php 
           $count = 0;
           foreach($TEMP['!attrs'] as $key => $attr){
@@ -326,7 +326,7 @@
         <?php
           if($attr['name'] == 'attribute'){
         ?>
-        <span class="display-inline-flex item_attrs margin-l5" data-pos="<?php echo $count;?>">
+        <span class="display-inline-flex item_attrs" data-pos="<?php echo $count;?>">
           <span class="item_attrna color-purple"><?php echo $attr['value'];?></span>
           <?php
             if($TEMP['!attrs'][$key+1]['name'] == 'value'){
@@ -364,7 +364,7 @@
       </button>
     </div>
     <div class="color-red text-left text-error font-low margin-t5"></div>
-    <div class="item_embed padding-t20 padding-b20 padding-l20 padding-r20">{!frame}</div>
+    <div class="item_embed display-flex padding-t20 padding-b20 padding-l20 padding-r20">{!frame}</div>
     <?php } ?>
   </div>
   <?php if($TEMP['#type'] == 'text' || $TEMP['#type'] == 'image' || $TEMP['#type'] == 'carousel'){ ?>

@@ -64,7 +64,7 @@ if($one == 'validate'){
 				        } else {
 				        	if ($user['2check'] == 'activated' && $user['ip'] != Specific::GetClientIp()) {
 								$user = Specific::Data($user, 3);
-								$_2check = Specific::UserToken('2check', $user['id']);
+								$_2check = Specific::UserToken('2check', $user['id'], true);
 				            	$code = $_2check['code'];
 				           		$token = $_2check['token'];
 
@@ -76,7 +76,7 @@ if($one == 'validate'){
 									$TEMP['username'] = $user['username'];
 									$TEMP['url'] = Specific::Url("{$RUTE['#r_2check']}/$token?{$RUTE['#p_insert']}=$code");
 									$TEMP['text'] = $TEMP['#word']['confirm_are_who_trying_enter'];
-									$TEMP['footer'] = "{$TEMP['#word']['arent_trying_access']}, {$TEMP['#word']['we_recommend_you']} <a target='_blank' href='".Specific::Url("{$RUTE['#r_reset_password']}/$reset_password")."'>{$TEMP['#word']['change_your_password']}</a>.";
+									$TEMP['footer'] = "{$TEMP['#word']['arent_trying_access']}, {$TEMP['#word']['we_recommend_you']} <a target='_blank' href='".Specific::Url("{$RUTE['#r_reset_password']}/$reset_password")."' style='display:inline-block;'>{$TEMP['#word']['change_your_password']}</a>.";
 									$TEMP['button'] = $TEMP['#word']['enter_code'];
 
 									$send = Specific::SendEmail(array(
@@ -103,6 +103,11 @@ if($one == 'validate'){
 									   		'E' => "*{$TEMP['#word']['error_sending_email_again_later']}"
 										);
 									}
+								} else {
+									$deliver = array(
+										'S' => 400,
+										'E' => "*{$TEMP['#word']['made_too_many_attempts_try']}"
+									);
 								}
 				            } else {
 					            $login_token = sha1(Specific::RandomKey().md5(time()));
@@ -181,7 +186,7 @@ if($one == 'validate'){
 
 										$TEMP['url'] = Specific::Url("{$RUTE['#r_verify_email']}/$token?{$RUTE['#p_insert']}=$code");
 										$TEMP['text'] = "{$TEMP['#word']['verify_your_account']} {$TEMP['#word']['of']} {$TEMP['#settings']['title']}";
-										$TEMP['footer'] = "{$TEMP['#word']['one_who_has_registered_this_account']}, <a target='_blank' href='".Specific::Url("{$RUTE['#r_unlink_email']}/$unlink_email")."'>{$TEMP['#word']['let_us_know']}</a>.";
+										$TEMP['footer'] = "{$TEMP['#word']['one_who_has_registered_this_account']}, <a target='_blank' href='".Specific::Url("{$RUTE['#r_unlink_email']}/$unlink_email")."' style='display:inline-block;'>{$TEMP['#word']['let_us_know']}</a>.";
 										$TEMP['button'] = $TEMP['#word']['verify_your_account'];
 
 						                $send = Specific::SendEmail(array(
@@ -359,7 +364,7 @@ if($one == 'validate'){
 							$TEMP['code'] = $code;
 							$TEMP['url'] = Specific::Url("{$RUTE['#r_2check']}/$token?{$RUTE['#p_insert']}=$code");
 							$TEMP['text'] = $TEMP['#word']['confirm_are_who_trying_enter'];
-							$TEMP['footer'] = "{$TEMP['#word']['arent_trying_access']}, {$TEMP['#word']['we_recommend_you']} <a target='_blank' href='".Specific::Url("{$RUTE['#r_reset_password']}/$reset_password")."'>{$TEMP['#word']['change_your_password']}</a>.";
+							$TEMP['footer'] = "{$TEMP['#word']['arent_trying_access']}, {$TEMP['#word']['we_recommend_you']} <a target='_blank' href='".Specific::Url("{$RUTE['#r_reset_password']}/$reset_password")."' style='display:inline-block;'>{$TEMP['#word']['change_your_password']}</a>.";
 							$TEMP['button'] = $TEMP['#word']['enter_code'];
 							$subject = $TEMP['#word']['2check'];
 						}

@@ -14,10 +14,6 @@ if (isset($one)) {
 foreach($TEMP['#languages'] as $lang){
     $language = $dba->query('SELECT * FROM '.T_LANGUAGE.' WHERE lang = ?', $lang)->fetchArray();
 
-    if($TEMP['#language'] == $lang){
-        $TEMP['dir'] = $language['dir'];
-    }
-
     $TEMP['!lang'] = $lang;
     $TEMP['!lang_name'] = $TEMP['#word']["lang_{$language['name']}"];
 
@@ -104,6 +100,11 @@ if($one == 'amp'){
     $maket = 'amp-wrapper';
     $TEMP['style_fonts'] = Specific::Maket('amp/styles/style.fonts');
     $TEMP['style_general'] = Specific::Maket('amp/styles/style.general');
+    
+    if($TEMP['#dir'] == 'rtl'){
+        $TEMP['style_rtl_general'] = Specific::Maket('amp/styles/style.rtl.general');
+    }
+
     $TEMP['style_header'] = Specific::Maket('amp/styles/style.header');
     $TEMP['style_post'] = Specific::Maket('amp/styles/style.post');
     $TEMP['style_apostb'] = Specific::Maket('amp/styles/style.post.related-bottom');

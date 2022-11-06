@@ -84,7 +84,7 @@ module.exports = function(socket, temp){
                 <span class="item_pmtutext hidden">{!username}</span>
             </div>`
         :
-            `<div class="content_pmtmessage display-flex direction-row align-center margin-l10 padding-t15" data-id="{!id}">
+            `<div class="content_pmtmessage`+(temp.text != null ? ' display-flex direction-row align-center ' : ' ')+`margin-l10 padding-t15" data-id="{!id}">
                 <div class="item-mavatar margin-top-auto margin-r5 overflow-hidden border-rall">
                     <img class="blur-up lazyload" src="{!avatar_s}" alt="{!username}">
                 </div>`+(

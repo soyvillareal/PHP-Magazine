@@ -40,7 +40,6 @@
     }
     .content-sa-posts .item_sapost:not(:nth-child(4n)) {
         margin-right: 30px;
-        border-right: 0;
     }
 }
 @media (max-width: 767px){
@@ -58,7 +57,6 @@
     }
     .content-sa-posts .item_sapost:not(:nth-child(2n)) {
         margin-right: 30px;
-        border-right: 0;
     }
 }
 @media(max-width: 660px){

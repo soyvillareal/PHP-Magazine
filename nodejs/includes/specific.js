@@ -25,7 +25,8 @@ const info = require('../info'),
 async function Init(socket){
     var data = {
             loggedin: !1,
-            word: {}
+            word: {},
+            language: SETTINGS.language
         },
         validUsers = {},
         blocked_users = [],
@@ -45,11 +46,10 @@ async function Init(socket){
                             await BlockedUsers(user_id).then(function(res) {
                                 blocked_users = res;
                             });
-                            data = {
-                                loggedin: !0,
-                                user_id: user_id,
-                                blocked_users: blocked_users
-                            };
+
+                            data.loggedin = !0;
+                            data.user_id = user_id;
+                            data.blocked_users = blocked_users;
                         }
                     }).catch(function(err){
                         console.log(err)
@@ -60,7 +60,10 @@ async function Init(socket){
             console.log(err);
         }
     }
-    await Words(cookies.language).then(function(res){
+    if (!!cookies.language) {
+        data.language = cookies.language;
+    }
+    await Words(data.language).then(function(res){
         data.word = res;
     }).catch(function(err){
         console.log(err);
@@ -226,8 +229,7 @@ async function Data(socket, data, type = 1) {
         user.birthday_year = birthday.getFullYear();
         user.birthday_format = DateFormat(socket, user.birthday);
     }
-    
-    if(user.avatar != '' && user.avatar != undefined){
+    if(Object.keys(user).indexOf('avatar') !== -1 || type.indexOf('avatar') !== -1){
         var rute = 4;
         if(user.avatar == 'default-holder'){
             rute = 5;
@@ -275,7 +277,8 @@ function DateFormat(socket, ptime, type = 'normal') {
 }
 
 function DateString(socket, time) {
-    var word = global.TEMP[socket.id].word;
+    var TEMP = global.TEMP[socket.id],
+        word = TEMP.word;
 
     var diff = Time() - time,
         string = String;
@@ -290,43 +293,51 @@ function DateString(socket, time) {
         60: [word.minute, word.minutes],
         1: [word.second, word.seconds]
     };
-
     async.forEachOf(dates, function(value, key){
         var was = diff/key;
         if (was >= 1) {
             var was_int = parseInt(was);
             string = was_int > 1 ? value[1] : value[0];
-            string = `${word.does} ${was_int} ${string}`;
+            string = TEMP.rtl_languages.indexOf(TEMP.language) === -1 ? `${word.does} ${was_int} ${string}` : `${was_int} ${string} ${word.does}`;
         }
     });
     return string;
 }
 
-function GetFile(file, type = 1, size = 's'){
-    if (file == '') {
-        return '';
+function GetFile(file, type = 1, size = ''){
+
+    var prefix = '',
+        suffix = '',
+        folder = 'posts';
+
+    if(type == 4){
+        folder = 'users';
     }
-    var prefix = '';
-    var suffix = '';
-    if(type == 2){
-        prefix = `themes/${SETTINGS.theme}/`;
+    if(size != ''){
+        suffix = `-${size}.jpeg`;
+    }
+
+    if(file == ''){
+        file = 'default-holder';
+        prefix = `themes/${SETTINGS.theme}/images/${folder}/`;
+        if(type == 3){
+            suffix = "-b.jpeg";
+        }
     } else {
-        if(type == 3) {
-            prefix = 'uploads/entries/';
-        } else if(type == 5){
-            prefix = `themes/${SETTINGS.theme}/images/users/`;
-            if(size != ''){
-                suffix = `-${size}.jpeg`;
-            }
+        if(type == 2){
+            prefix = `themes/${SETTINGS.theme}/`;
         } else {
-            var folder = type == 4 ? 'users' : 'posts';
-            prefix = `uploads/${folder}/`;
-            if(size != ''){
-                suffix = `-${size}.jpeg`;
+            if(type == 3) {
+                prefix = 'uploads/entries/';
+            } else if(type == 5){
+                prefix = `themes/${SETTINGS.theme}/images/users/`;
+            } else {
+                prefix = `uploads/${folder}/`;
             }
         }
     }
-    return Url(prefix+file+suffix);
+
+    return Url(`${prefix}${file}${suffix}`);
 }
 
 async function Words(language = 'en', paginate = false, page = 1, keyword = ''){

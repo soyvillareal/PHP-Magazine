@@ -140,7 +140,7 @@
 							<span id="item-mfrtuser" class="color-grey break-all ellipsis-horizontal hidden">{$word->replying_own_message}</span>
 							<span id="item-mfrmessage" class="color-grey break-all ellipsis-horizontal"></span>
 						</div>
-						<button id="btn-mfrclose" class="disable_before btn-noway w-30px h-30 margin-auto background-hover color-black margin-top-auto margin-r5 padding-5 border-rall animation-ease3s animate-tab-button" type="button">
+						<button id="btn-mfrclose" class="disable_before btn-noway w-30px h-30 background-hover color-black margin-top-auto margin-bottom-auto margin-left-auto margin-r5 padding-5 border-rall animation-ease3s animate-tab-button" type="button">
 							<svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<title>{$word->close}</title>
 								<path fill="none" stroke="currentColor" stroke-width="2" d="M3,3 L21,21 M3,21 L21,3"></path>
@@ -189,8 +189,7 @@
 				</div>
 				<?php } ?>
 				<div class="display-flex direction-row align-center padding-t10 padding-b10 margin-l10 margin-r10">
-					<div class="content-mffile position-relative margin-top-auto margin-r5">
-						<input id="item-mffile" class="item-mffile disable_before w-100 h-100 position-absolute z-index-1 opacity-0 cursor-pointer" type="file"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>>
+					<button id="btn-mffile" class="btn-mffile btn-noway position-relative margin-top-auto margin-r5" type="button"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>>
 						<span class="display-flex color-blue padding-5 border-rall animation-ease3s">
 							<svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
@@ -200,7 +199,7 @@
 					    <div class="content-spinner-circle position-absolute">
 					        <div class="spinner-circle"></div>
 					    </div>
-					</div>
+					</button>
 					<div class="content-pmarea display-flex item-pnbackground w-100 border-r25px overflow-hidden">
 						<textarea id="text-message" class="disable_before w-100 background-trans padding-t5 padding-b5 padding-l10 padding-r10 resize-none border-none" rows="1" placeholder="{$word->write_your_message}"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>></textarea>
 					</div>

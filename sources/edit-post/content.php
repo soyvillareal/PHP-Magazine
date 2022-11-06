@@ -90,9 +90,11 @@ foreach ($entries as $entry) {
             $frame = Specific::MaketFrame($frame['url'], $frame['attrs']);
             $TEMP['!frame'] = $frame['html'];
         } else if($entry['type'] == 'soundcloud'){
-            $TEMP['!frame'] = '<iframe width="100%" height="400" scrolling="no" frameborder="no" src="'.$entry['frame'].'"></iframe>';
+            $TEMP['!sc_url'] = $entry['frame'];
+            $TEMP['!frame'] = Specific::Maket('includes/load-edit/soundcloud');;
         } else if($entry['type'] == 'facebookpost'){
-            $TEMP['!frame'] = '<div class="fb-post display-block background-white" data-href="'. $entry['frame'] .'" data-width="100%"></div>';
+            $TEMP['!fb_url'] = $entry['frame'];
+            $TEMP['!frame'] = Specific::Maket('includes/load-publisher-edit/facebook-post');
         } else if($entry['type'] == 'instagrampost'){
             $TEMP['!omit_script'] = true;
             $TEMP['!url'] = $entry['frame'];

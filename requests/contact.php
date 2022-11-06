@@ -67,7 +67,7 @@ if(in_array($_POST['subject'], array('content', 'technical', 'pattern', 'ask', '
 				} else {
 					$deliver = array(
 						'S' => 400,
-						'M' => $TEMP['#word']['could_not_send_message_error']
+						'E' => $TEMP['#word']['could_not_send_message_error']
 					);
 				}
 			} else {

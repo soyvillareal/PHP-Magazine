@@ -227,14 +227,20 @@ class Load {
 				if(count($post_sources) > 1){
 					foreach ($post_sources as $key => $source) {
 						if($key != end(array_keys($post_sources))){
-							$TEMP['#post_sources'][] = " <a class='btn-noway color-blue hover-underline' href='{$source['source']}' target='_blank'>{$source['name']}</a>";
+							$TEMP['#post_sources'][] = " <span class='display-inline-block'><a class='btn-noway color-blue hover-underline' href='{$source['source']}' target='_blank'>{$source['name']}</a></span>";
 						}
 					}
 					$last_source = end($post_sources);
+					$last_rtl_psource = $last_ltr_psource = '';
+					if($TEMP['#dir'] == 'rtl'){
+						$last_rtl_psource = " {$TEMP['#word']['and']}";
+					} else {
+						$last_ltr_psource = "{$TEMP['#word']['and']} ";
+					}
 					$TEMP['#post_sources'] = implode(',', $TEMP['#post_sources']);
-					$TEMP['#post_sources'] = "<b>{$TEMP['#word']['consulted_sources']}:</b> {$TEMP['#post_sources']} {$TEMP['#word']['and']} <a class='btn-noway color-blue hover-underline' href='{$last_source['source']}' target='_blank'>{$last_source['name']}</a>";
+					$TEMP['#post_sources'] = "<span class='color-black font-georgia font-low font-bold'>{$TEMP['#word']['consulted_sources']}:</span> {$TEMP['#post_sources']} <span class='display-inline-block'>{$last_ltr_psource}<a class='btn-noway color-blue hover-underline' href='{$source['source']}' target='_blank'>{$source['name']}</a>{$last_rtl_psource}</span>";
 				} else {
-					$TEMP['#post_sources'] = "<b>{$TEMP['#word']['consulted_source']}:</b> <a class='btn-noway color-blue hover-underline' href='{$post_sources[0]['source']}' target='_blank'>{$post_sources[0]['name']}</a>";
+					$TEMP['#post_sources'] = "<span class='color-black font-georgia font-low font-bold'>{$TEMP['#word']['consulted_source']}:</span> <span class='display-inline-block'><a class='btn-noway color-blue hover-underline' href='{$post_sources[0]['source']}' target='_blank'>{$post_sources[0]['name']}</a></span>";
 				}
 			}
 
@@ -244,14 +250,20 @@ class Load {
 				if(count($thumb_sources) > 1){
 					foreach ($thumb_sources as $key => $source) {
 						if($key != end(array_keys($thumb_sources))){
-							$TEMP['#thumb_sources'][] = " <a class='btn-noway color-blue hover-button' href='{$source['source']}' target='_blank'>{$source['name']}</a>";
+							$TEMP['#thumb_sources'][] = " <span class='display-inline-block'><a class='btn-noway color-blue hover-button' href='{$source['source']}' target='_blank'>{$source['name']}</a></span>";
 						}
 					}
 					$last_source = end($thumb_sources);
+					$last_rtl_tsource = $last_ltr_tsource = '';
+					if($TEMP['#dir'] == 'rtl'){
+						$last_rtl_tsource = " {$TEMP['#word']['and']}";
+					} else {
+						$last_ltr_tsource = "{$TEMP['#word']['and']} ";
+					}
 					$TEMP['#thumb_sources'] = implode(',', $TEMP['#thumb_sources']);
-					$TEMP['#thumb_sources'] = "{$TEMP['#word']['images_taken_from']}: {$TEMP['#thumb_sources']} {$TEMP['#word']['and']} <a class='btn-noway color-blue hover-button' href='{$last_source['source']}' target='_blank'>{$last_source['name']}</a>";
+					$TEMP['#thumb_sources'] = "<span class='color-white font-georgia font-low font-bold'>{$TEMP['#word']['images_taken_from']}:</span> {$TEMP['#thumb_sources']} <span class='display-inline-block'>{$last_ltr_tsource}<a class='btn-noway color-blue hover-button' href='{$last_source['source']}' target='_blank'>{$last_source['name']}</a>{$last_rtl_tsource}</span>";
 				} else {
-					$TEMP['#thumb_sources'] = "{$TEMP['#word']['image_taken_from']}: <a class='btn-noway color-blue hover-button' href='{$thumb_sources[0]['source']}' target='_blank'>{$thumb_sources[0]['name']}</a>";
+					$TEMP['#thumb_sources'] = "<span class='color-white font-georgia font-low font-bold'>{$TEMP['#word']['image_taken_from']}:</span> <span class='display-inline-block'><a class='btn-noway color-blue hover-button' href='{$thumb_sources[0]['source']}' target='_blank'>{$thumb_sources[0]['name']}</a></span>";
 				}
 			}
 
@@ -331,10 +343,18 @@ class Load {
 				} else if($entry['type'] == 'image'){
 					$TEMP['!frame'] = Specific::GetFile($entry['frame'], 3);
 				} else if($entry['type'] == 'carousel'){
-					$carousel = json_decode($entry['frame'], true);
-
-					foreach ($carousel as $key => $car) {
-						$carousel[$key]['image'] = Specific::GetFile($car['image'], 3);
+					if(!empty($entry['frame'])){
+						$carousel = json_decode($entry['frame'], true);
+						foreach ($carousel as $key => $car) {
+							$carousel[$key]['image'] = Specific::GetFile($car['image'], 3);
+						}
+					} else {
+						$carousel = array(
+							array(
+								'image' => Specific::GetFile(NULL, 3),
+								'caption' => 'Upss error'
+							)
+						);
 					}
 
 					$TEMP['!max_cimages'] = count($carousel);
@@ -363,13 +383,16 @@ class Load {
 						$soundcloud = preg_match('/tracks\/(.*?)(?:&|$)/s', urldecode($entry['frame']), $sc_frame);
 						$TEMP['!frame'] = '<amp-soundcloud height="300" layout="fixed-height" data-trackid="'.$sc_frame[1].'" data-visual="true"></amp-soundcloud>';
 					} else {
-						$TEMP['!frame'] = '<iframe width="100%" height="400" scrolling="no" frameborder="no" src="'.$entry['frame'].'"></iframe>';
+						$TEMP['!sc_url'] = $entry['frame'];
+						$TEMP['!frame'] = Specific::Maket('includes/load-edit/soundcloud');;
 					}
 				} else if($entry['type'] == 'facebookpost'){
 					if($is_amp){
 						$TEMP['!frame'] = '<amp-facebook width="552" height="310" layout="responsive" data-href="'.$entry['frame'].'"></amp-facebook>';
 					} else {
-						$TEMP['!frame'] = '<div class="fb-post display-block margin-b15" data-href="'.$entry['frame'].'" data-width="100%"></div>';
+						$TEMP['!margin'] = true;
+						$TEMP['!fb_url'] = $entry['frame'];
+						$TEMP['!frame'] = Specific::Maket('includes/load-publisher-edit/facebook-post');
 					}
 				}
 

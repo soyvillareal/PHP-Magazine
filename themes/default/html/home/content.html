@@ -110,7 +110,7 @@
    <div class="display-block background-blue position-relative padding-l20 padding-r20">
       <section class="content-frame-posts display-flex direction-row align-center w-100 margin-b15 padding-t25 padding-b15 border-bottom border-grely" data-id="{$id}">
          <div id="content-video-posts" class="content-video-posts display-flex align-center position-relative background-blackly w-50 cursor-pointer margin-r15">
-            <button class="btn-play-video display-flex position-absolute background-blackly btn-noway text-center border-rall hover-all">
+            <button class="btn-play-video display-flex position-absolute z-index-1 background-blackly btn-noway text-center border-rall hover-all">
                <span class="hidden">{$word->close}</span>
                <svg class="icon-z margin-auto animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path fill="none" stroke="#fff" stroke-width="2" d="M3,22.0000002 L21,12 L3,2 L3,22.0000002 Z M5,19 L17.5999998,11.9999999 L5,5 L5,19 Z M7,16 L14.1999999,12 L7,8 L7,16 Z M9,13 L10.8,12 L9,11 L9,13 Z"/>
@@ -290,15 +290,16 @@
 {%%<script type="text/javascript">
    paper_h = {
       token: '{#token_session}',
-      <?php if($TEMP['#show_breaking']){ ?>
-      breaking_id: {$breaking_id},
-      <?php } ?>
-      post_ids: [{$home_ids}],
       url: {
          load_more: '{$url->{req/home/load_more}}',
          load_videos: '{$url->{req/home/load_videos}}',
          load_main_left: '{$url->{req/home/load_main_left}}'
-      }
+      },
+      <?php if($TEMP['#show_breaking']){ ?>
+      breaking_id: {$breaking_id},
+      <?php } ?>
+      post_ids: [{$home_ids}],
+      dir: '{#dir}'
    }, $('#content-video-posts').click(function(){
       $(this).html('{$frame}')
    }), $('#btn-cbreaking').click(function(){

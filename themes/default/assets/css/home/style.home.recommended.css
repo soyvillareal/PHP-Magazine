@@ -32,10 +32,9 @@
     .content-more-posts .item-recommended:not(:nth-child(4n)) {
         margin-right: 15px;
         padding-right: 15px;
-        border-right: 0;
     }
 }
-@media (min-width: 420px) and (max-width: 767px) {
+@media (min-width: 421px) and (max-width: 767px) {
     .content-more-posts .item-recommended {
         width: calc(50% - 15px);
         height: 100%;
@@ -43,7 +42,6 @@
     .content-more-posts .item-recommended:not(:nth-child(2n)) {
         margin-right: 15px;
         padding-right: 15px;
-        border-right: 0;
     }
 }
 @media (max-width: 419px) {
