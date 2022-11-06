@@ -31,18 +31,6 @@ body[dir=rtl] .content-bvideos {
     left: 8px;
 }
 
-
-/* Probablemente deba quitarlo (START) */
-body[dir=rtl] #content-shinfo,
-body[dir=rtl] #content-sinfo {
-    display: -webkit-box !important;
-    display: -webkit-flex !important;
-    display: -ms-flexbox !important;
-    display: flex !important;
-}
-/* Probablemente deba quitarlo (END) */
-
-
 body[dir=rtl] #content-shinfo b:first-child,
 body[dir=rtl] #content-sinfo b:first-child {
     margin-left: 5px;

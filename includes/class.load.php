@@ -597,7 +597,7 @@ class Load {
 			$data = array(
 				'return' => true,
 				'html' => $html,
-				'info' => "<b>{$search_count}</b> {$TEMP['#word']['results_related_to']} ".'<b>"'.$keyword.'"</b>',
+				'info' => '<span class="display-inline-block color-black font-bold">'.$search_count.'</span> '.$TEMP['#word']['results_related_to'].' <span class="display-inline-block color-black font-bold">"'.$keyword.'"</span>',
 				'search_ids' => $search_ids
 			);
 		} else {
