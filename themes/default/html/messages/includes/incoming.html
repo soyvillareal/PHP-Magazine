@@ -27,7 +27,7 @@
 			</div>
 			<?php } else { ?>
 			<div class="content-pmtfile content_pmtimage" data-id="{!fi_aid}" data-type="image">
-				<img class="blur-up item-pmtimage is-reply border-rlow lazyload" src="{!fi_aurl}" alt="{!fi_aname}">
+				<img class="content-preloader-image position-relative blur-up item-pmtimage is-reply border-rlow lazyload" src="{!fi_aurl}" alt="{!fi_aname}">
 			</div>
 			<?php } ?>
 			<?php } else { ?>
@@ -37,7 +37,7 @@
 	</div>
 	<div class="item-pmtreply display-flex direction-row align-center position-relative margin-t15">
 		<div class="item-mavatar margin-top-auto margin-r5 overflow-hidden border-rall">
-			<img class="blur-up lazyload" src="{!avatar_s}" alt="{!username}">
+			<img class="content-preloader-image position-relative blur-up lazyload" src="{!avatar_s}" alt="{!username}">
 		</div>
 		<?php if($TEMP['!text'] != NULL){ ?>
 			
@@ -83,7 +83,7 @@
 <?php } else { ?>
 <div class="content_pmtmessage<?php echo($TEMP['!text'] != NULL) ? ' display-flex direction-row align-center ' : ' ';?>margin-l10 padding-t15" data-id="{!id}">
 	<div class="item-mavatar margin-top-auto margin-r5 overflow-hidden border-rall">
-		<img class="blur-up lazyload" src="{!avatar_s}" alt="{!username}">
+		<img class="content-preloader-image position-relative blur-up lazyload" src="{!avatar_s}" alt="{!username}">
 	</div>
 
 	<?php if($TEMP['!text'] != NULL){ ?>

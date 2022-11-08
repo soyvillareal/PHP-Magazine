@@ -30,7 +30,7 @@ module.exports = function(socket, temp){
                                     </div>`
                                 :
                                     `<div class="content-pmtfile content_pmtimage" data-id="{!fi_aid}" data-type="image">
-                                        <img class="blur-up item-pmtimage is-reply border-rlow lazyload" src="{!fi_aurl}" alt="{!fi_aname}">
+                                        <img class="content-preloader-image position-relative blur-up item-pmtimage is-reply border-rlow lazyload" src="{!fi_aurl}" alt="{!fi_aname}">
                                     </div>`
                                 )
                             )
@@ -41,7 +41,7 @@ module.exports = function(socket, temp){
                 </div>
                 <div class="item-pmtreply display-flex direction-row align-center position-relative margin-t15">
                     <div class="item-mavatar margin-top-auto margin-r5 overflow-hidden border-rall">
-                        <img class="blur-up lazyload" src="{!avatar_s}" alt="{!username}">
+                        <img class="content-preloader-image position-relative blur-up lazyload" src="{!avatar_s}" alt="{!username}">
                     </div>`+(
                         temp.text != null ?
                             `<p class="item_pmtext break-all background-grely padding-t5 padding-b5 padding-l15 padding-r15 border-r25px">{!text}</p>
@@ -86,7 +86,7 @@ module.exports = function(socket, temp){
         :
             `<div class="content_pmtmessage`+(temp.text != null ? ' display-flex direction-row align-center ' : ' ')+`margin-l10 padding-t15" data-id="{!id}">
                 <div class="item-mavatar margin-top-auto margin-r5 overflow-hidden border-rall">
-                    <img class="blur-up lazyload" src="{!avatar_s}" alt="{!username}">
+                    <img class="content-preloader-image position-relative blur-up lazyload" src="{!avatar_s}" alt="{!username}">
                 </div>`+(
                     temp.text != null ?
                         `<p class="item_pmtext break-all background-grely padding-t5 padding-b5 padding-l15 padding-r15 border-r25px">{!text}</p>

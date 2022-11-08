@@ -13,7 +13,7 @@
       <div class="hide-desktop margin-left-auto padding-r20">
          <button id="btn-hfshare" class="display-inline-block btn-noway border-rall margin-right-auto animate-tab-button" type="button" aria-haspopup="true" aria-label="{$word->sharing_options}" aria-expanded="false">
             <svg class="share-icon display-inline-block icon-x padding-5 background-grely border-all border-grely border-rall vertical-middle animation-ease3s" viewBox="0 0 16 13" width="16" height="13">
-               <path fill-rule="evenodd" clip-rule="evenodd" d="M15.406 5.359L8.978 0v3.215C3.82 3.215.406 8.107.406 12.66 1.653 9.133 4.29 7.517 8.978 7.517v3.2l6.428-5.358z" fill="#000"></path>
+               <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M15.406 5.359L8.978 0v3.215C3.82 3.215.406 8.107.406 12.66 1.653 9.133 4.29 7.517 8.978 7.517v3.2l6.428-5.358z"></path>
             </svg>
          </button>
       </div>
@@ -203,9 +203,9 @@
    <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
       <span id="alert-dptitle" class="display-block font-medium font-bold">{$word->are_you_sure}</span>
       <p id="alert-dpcontent" class="font-mediumly color-black margin-t15 margin-b15">{$word->do_really_want_delete_post}</p>
-      <button id="btn-pcancel" class="btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
-      <button id="btn-pdelete" class="btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
-         <span class="color-white">{$word->yes}</span>
+      <button id="btn-pcancel" class="btn-noway w-50px h-36 background-blue color-wwhite font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
+      <button id="btn-pdelete" class="btn-noway w-50px h-36 background-red font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+         <span class="color-wwhite">{$word->yes}</span>
          <div class="content-spinner-circle position-absolute">
             <div class="spinner-circle"></div>
          </div>
@@ -216,9 +216,9 @@
    <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
       <span id="alert-dctitle" class="display-block font-medium font-bold">{$word->are_you_sure}</span>
       <p id="alert-dccontent" class="font-mediumly color-black margin-t15 margin-b15">{$word->do_really_want_delete_comment}</p>
-      <button id="btn-ccancel" class="btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
-      <button id="btn-cdelete" class="btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
-         <span class="color-white">{$word->yes}</span>
+      <button id="btn-ccancel" class="btn-noway w-50px h-36 background-blue color-wwhite font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
+      <button id="btn-cdelete" class="btn-noway w-50px h-36 background-red font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+         <span class="color-wwhite">{$word->yes}</span>
          <div class="content-spinner-circle position-absolute">
             <div class="spinner-circle"></div>
          </div>
@@ -228,8 +228,8 @@
 
 
 {%%<div id="content-lnotify" class="content-lnotify display-flex direction-row align-center position-fixed border-rlow padding-t10 padding-b10 padding-l10 padding-r10 animation-ease3s">
-   <p class="color-white margin-r10"></p>
-   <button id="btn-dnotify" class="btn-noway color-white">
+   <p class="color-wwhite margin-r10"></p>
+   <button id="btn-dnotify" class="btn-noway color-wwhite">
       <svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
          <title>{$word->close}</title>
          <path fill="currentColor" d="M 12 13.17 L 5.17 20 L 4 18.832 L 10.83 12 L 4 5.17 L 5.17 4 L 12 10.83 L 18.832 4 L 20 5.17 L 13.17 12 L 20 18.832 L 18.832 20 Z"></path>
@@ -307,9 +307,9 @@
       <div id="item-abuttons" class="display-block border-top border-grely">
          <div class="display-flex">
             <div class="margin-auto padding-t15 padding-b15 padding-l20 padding-r20">
-               <button id="btn-rcancel" class="btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
-               <button id="btn-rsend" class="btn-noway w-100px h-36 background-green color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button" disabled>
-                  <span class="color-white">{$word->send}</span>
+               <button id="btn-rcancel" class="btn-noway w-100px h-36 background-blue color-wwhite font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+               <button id="btn-rsend" class="btn-noway w-100px h-36 background-green font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button" disabled>
+                  <span class="color-wwhite">{$word->send}</span>
                   <div class="content-spinner-circle position-absolute">
                      <div class="spinner-circle"></div>
                   </div>
@@ -324,7 +324,7 @@
    <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
       <span id="alert-sptitle" class="display-block font-medium font-bold">{$word->report_sent}</span>
       <p id="alert-spcontent" class="font-mediumly color-black margin-t15">{$word->report_sent_successfully_reviewed}</p>
-      <button id="btn-spclose" class="btn-noway w-100px h-36 background-red color-white margin-t15 font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->close}</button>
+      <button id="btn-spclose" class="btn-noway w-100px h-36 background-red color-wwhite margin-t15 font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->close}</button>
    </div>
 </div>%%}
 <?php } ?>

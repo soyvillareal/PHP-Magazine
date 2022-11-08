@@ -9,9 +9,6 @@
 .item-acontent::-webkit-scrollbar {
     width: 8px;
 }
-.item-acontent::-webkit-scrollbar-track {
-    background: #cdcdcd;
-}
 .item-acontent::-webkit-scrollbar-thumb {
   background-color: #909090;
 }

@@ -6,12 +6,12 @@
                <?php if($TEMP['#is_amp'] == true){ ?>
                <amp-img src="{!thumbnail}" alt="{!title}" width="226" height="146" layout="fixed"></amp-img>
                <?php } else { ?>
-               <img class="blur-up lazyload" src="{!thumbnail}" alt="{!title}">
+               <img class="content-preloader-image position-relative blur-up lazyload" src="{!thumbnail}" alt="{!title}">
                <?php } ?>
             </picture>
          </div>
          <figcaption class="content-hpublished position-absolute no-hover">
-            <time class="color-white font-lowly ellipsis-horizontal no-hover" datetime="{!published_date}">{!published_at}</time>
+            <time class="color-wwhite font-lowly ellipsis-horizontal no-hover" datetime="{!published_date}">{!published_at}</time>
          </figcaption>
       </figure>
       <section class="related-wrapper margin-t10">
@@ -24,7 +24,7 @@
    </a>
    <div class="container-category position-absolute">
       <div class="content-category display-inline-block border-rlow">
-         <a class="btn-noway background-black color-white font-low text-uppercase border-rlow hover-button animation-ease3s" href="{!category_slug}" target="_self">{!category}</a>
+         <a class="btn-noway background-black color-white font-low text-uppercase boxshadow-grey border-rlow hover-button animation-ease3s" href="{!category_slug}" target="_self">{!category}</a>
       </div>
    </div>
 </div>

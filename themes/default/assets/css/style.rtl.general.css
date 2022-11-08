@@ -1,9 +1,5 @@
-/*    body[dir=rtl]    */
-
-
 /* Modals */
 body[dir=rtl] .dropdown-language-item:not(.selected) a {
-    padding-left: unset;
     padding-right: 33px;
 }
 
@@ -203,6 +199,14 @@ body[dir=rtl] .radio-paper[type="radio"] + label:after,
 body[dir=rtl] .radio-paper[type="radio"] + label:before {
     left: unset;
     right: 0;
+}
+
+body[dir=rtl] .item_ctbackground {
+    left: unset;
+    right: 0;
+}
+body[dir=rtl] .btn_ctchange.active:nth-child(2) ~ .item_ctbackground {
+    right: calc(50% + 8px);
 }
 
 

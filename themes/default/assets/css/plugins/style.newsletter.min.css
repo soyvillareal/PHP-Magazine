@@ -44,9 +44,6 @@ body.newsletter-personalized-active .item-newsletter-fixed {
 .newsletter_category::-webkit-scrollbar {
     width: 8px;
 }
-.newsletter_category::-webkit-scrollbar-track {
-    background: #cdcdcd;
-}
 .newsletter_category::-webkit-scrollbar-thumb {
   background-color: #909090;
   border-top-right-radius: 2px;

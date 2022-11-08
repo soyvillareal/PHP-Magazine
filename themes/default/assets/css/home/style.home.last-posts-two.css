@@ -82,7 +82,7 @@
 	.content-ntwo .item-left-ntwo,
 	.content-ntwo .item-right-ntwo,
 	.container-middle-ntwo .item-middle-ntwo {
-		padding: 0;
+		padding: 0 !important;
 	}
 	.container-ntwo .content-ntwo {
 		margin-bottom: 0;

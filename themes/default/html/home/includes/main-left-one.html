@@ -1,7 +1,7 @@
 <section class="main-posts-wrapper position-relative" data-id="{!id}">
    <a class="<?php echo($TEMP['!type'] == 'video') ? 'content-video-animate ' : '';?>hover-all" href="{!url}" target="_self" title="{!title}">
       <div class="content-posts-left no-hover">
-         <figure class="figure-posts-left content-gradient position-relative margin-none no-hover">
+         <figure class="figure-posts-left content-preloader-image content-gradient position-relative margin-none no-hover">
             <?php if($TEMP['!type'] == 'video'){ ?>
             <div class="content-vanimate display-flex direction-row align-center position-absolute no-hover">
                <svg class="icon-video no-hover" viewBox="0 0 40 40">
@@ -14,7 +14,7 @@
                <img class="blur-up border-rlow lazyload" src="{!thumbnail}" alt="{!title}" role="presentation">
             </picture>
             <figcaption class="content-hpublished position-absolute no-hover">
-               <time class="color-white font-lowly ellipsis-horizontal no-hover" datetime="{!published_date}">{!published_at}</time>
+               <time class="color-wwhite font-lowly ellipsis-horizontal no-hover" datetime="{!published_date}">{!published_at}</time>
             </figcaption>
          </figure>
          <section class="content-posts-wrapper margin-t10">
@@ -27,7 +27,7 @@
    </a>
    <div class="container-category position-absolute hide-mobile">
      <div class="content-category display-inline-block border-rlow">
-         <a class="btn-noway background-black color-white font-low text-uppercase border-rlow hover-button animation-ease3s" href="{!category_slug}" target="_self">{!category}</a>
+         <a class="btn-noway background-black color-white font-low text-uppercase boxshadow-grey border-rlow hover-button animation-ease3s" href="{!category_slug}" target="_self">{!category}</a>
       </div>
    </div>
 </section>

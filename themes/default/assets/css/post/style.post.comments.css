@@ -34,9 +34,6 @@
 .text_carea::-webkit-scrollbar {
     width: 8px;
 }
-.text_carea::-webkit-scrollbar-track {
-    background: #cdcdcd;
-}
 .text_carea::-webkit-scrollbar-thumb {
     background: #909090;
 }

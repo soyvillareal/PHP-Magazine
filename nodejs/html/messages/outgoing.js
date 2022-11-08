@@ -32,7 +32,7 @@ module.exports = function(socket, temp){
                                         </div>`
                                     :
                                         `<div class="content-pmtfile content_pmtimage margin-left-auto" data-id="{!fi_aid}" data-type="image">
-                                            <img class="blur-up item-pmtimage is-reply border-rlow lazyload" src="{!fi_aurl}" alt="{!fi_aname}">
+                                            <img class="content-preloader-image position-relative blur-up item-pmtimage is-reply border-rlow lazyload" src="{!fi_aurl}" alt="{!fi_aname}">
                                         </div>`))
                             :
                                 `<span class="item-pmtdeleted break-all background-white color-grey margin-left-auto padding-t5 padding-b5 padding-l15 padding-r15 border-r25px border-all border-grely">{!ans_deleted_word}</span>`)+`
@@ -55,7 +55,7 @@ module.exports = function(socket, temp){
                                     <path fill="currentColor" d="M0.389 8.899L8.64 1.774C9.362 1.151 10.5 1.657 10.5 2.626v3.752c7.529 0.086 13.5 1.595 13.5 8.731 0 2.88 -1.855 5.733 -3.906 7.225 -0.64 0.466 -1.552 -0.119 -1.316 -0.873 2.126 -6.797 -1.008 -8.602 -8.278 -8.707V16.875c0 0.97 -1.139 1.474 -1.86 0.851l-8.25 -7.125c-0.519 -0.448 -0.52 -1.254 0 -1.703z"/>
                                 </svg>
                             </button>
-                            <p class="item_pmtext break-all background-blue color-white padding-t5 padding-b5 padding-l15 padding-r15 border-r25px">{!text}</p>`
+                            <p class="item_pmtext break-all background-blue color-wwhite padding-t5 padding-b5 padding-l15 padding-r15 border-r25px">{!text}</p>`
                         :
                             `<div class="display-flex direction-colum">`+(
                                 temp.messafi == !0 ?
@@ -80,7 +80,7 @@ module.exports = function(socket, temp){
                 </div>
             </div>`
         :
-            `<div class="content_pmtmessage margin-left-auto margin-r10 padding-t15" data-id="{!id}">`+(
+            `<div class="content_pmtmessage`+(temp.text != null ? ' display-flex direction-row align-center ' : '')+`margin-left-auto margin-r10 padding-t15" data-id="{!id}">`+(
                 temp.text != null ?
                     `<button class="btn_pmtdelete w-30px h-30 btn-noway margin-left-auto margin-r5 background-hover border-rall opacity-0 hover-button animation-ease3s animate-tab-button" data-id="{!id}" data-type="text">
                         <span class="color-grey">
@@ -97,7 +97,7 @@ module.exports = function(socket, temp){
                             <path fill="currentColor" d="M0.389 8.899L8.64 1.774C9.362 1.151 10.5 1.657 10.5 2.626v3.752c7.529 0.086 13.5 1.595 13.5 8.731 0 2.88 -1.855 5.733 -3.906 7.225 -0.64 0.466 -1.552 -0.119 -1.316 -0.873 2.126 -6.797 -1.008 -8.602 -8.278 -8.707V16.875c0 0.97 -1.139 1.474 -1.86 0.851l-8.25 -7.125c-0.519 -0.448 -0.52 -1.254 0 -1.703z"/>
                         </svg>
                     </button>
-                    <p class="item_pmtext break-all background-blue color-white padding-t5 padding-b5 padding-l15 padding-r15 border-r25px">{!text}</p>`
+                    <p class="item_pmtext break-all background-blue color-wwhite padding-t5 padding-b5 padding-l15 padding-r15 border-r25px">{!text}</p>`
                 :
                     (temp.messafi == !0 ?
                         ((temp.has_file == !0 ?

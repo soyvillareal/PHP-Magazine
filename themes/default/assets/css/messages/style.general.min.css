@@ -262,12 +262,6 @@
 .content-mffiles::-webkit-scrollbar {
     height: 8px;
 }
-.container-pnchats::-webkit-scrollbar-track,
-.content-pmtext::-webkit-scrollbar-track,
-.content-pmsearch::-webkit-scrollbar-track,
-.content-mffiles::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
 .container-pnchats::-webkit-scrollbar-thumb,
 .content-pmtext::-webkit-scrollbar-thumb,
 .content-pmsearch::-webkit-scrollbar-thumb,

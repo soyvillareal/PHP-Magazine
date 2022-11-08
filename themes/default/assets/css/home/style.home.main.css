@@ -130,9 +130,6 @@
     .main-two::-webkit-scrollbar {
         height: 5px;
     }
-    .main-two::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
     .main-two::-webkit-scrollbar-thumb {
         background: #909090;
     }

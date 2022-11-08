@@ -166,7 +166,11 @@ if($one == 'validate'){
 				            if($TEMP['#settings']['verify_email'] == 'on'){
 				            	$status = 'pending';
 				            }
-				            $user_id = $dba->query('INSERT INTO '.T_USER.' (username, email, password, ip, status, type, created_at) VALUES (?, ?, ?, ?, ?, "normal", ?)', $username, $email, $password, $ip, $status, time())->insertId();
+							$darkmode = 0;
+							if($TEMP['#settings']['switch_mode'] == 'on' && $TEMP['#settings']['theme_mode'] == 'night'){
+								$darkmode = 1;
+							}
+				            $user_id = $dba->query('INSERT INTO '.T_USER.' (username, email, password, ip, darkmode, status, type, created_at) VALUES (?, ?, ?, ?, ?, ?, "normal", ?)', $username, $email, $password, $ip, $darkmode, $status, time())->insertId();
 
 				            if($user_id) {
 				            	$verify_email = Specific::UserToken('verify_email');

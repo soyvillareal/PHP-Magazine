@@ -15,7 +15,7 @@ foreach($TEMP['#languages'] as $lang){
     $language = $dba->query('SELECT * FROM '.T_LANGUAGE.' WHERE lang = ?', $lang)->fetchArray();
 
     $TEMP['!lang'] = $lang;
-    $TEMP['!lang_name'] = $TEMP['#word']["lang_{$language['name']}"];
+    $TEMP['!lang_name'] = $language['name'];
 
     $lang_url = "{$RUTE['#p_language']}={$lang}";
     if(strpos($_SERVER['REQUEST_URI'], '?') !== false){
@@ -48,7 +48,10 @@ if (isset($_COOKIE['_SAVE_SESSION'])) {
         $_COOKIE['_LOGIN_TOKEN'] = $_SESSION['_LOGIN_TOKEN'] = $_COOKIE['_SAVE_SESSION'];
     }
 }
+
+$TEMP['#darkmode'] = (bool)$_COOKIE['darkmode'];
 if($TEMP['#loggedin'] === true){
+    $TEMP['#darkmode'] = (bool)$TEMP['#user']['darkmode'];
     if ($TEMP['#user']['status'] != 'active') {
         if (isset($_COOKIE['_LOGIN_TOKEN'])) {
             setcookie('_LOGIN_TOKEN', null, -1,'/');
@@ -64,6 +67,14 @@ if($TEMP['#loggedin'] === true){
             header("Location: ".Specific::ReturnUrl());
             exit();
         }
+    }
+}
+
+if($TEMP['#settings']['switch_mode'] == 'off' || ($TEMP['#loggedin'] === false && !isset($_COOKIE['darkmode']))){
+    if($TEMP['#settings']['theme_mode'] == 'night'){
+        $TEMP['#darkmode'] = true;
+    } else if($TEMP['#settings']['theme_mode'] == 'ligth'){
+        $TEMP['#darkmode'] = false;
     }
 }
 
@@ -105,6 +116,10 @@ if($one == 'amp'){
         $TEMP['style_rtl_general'] = Specific::Maket('amp/styles/style.rtl.general');
     }
 
+    if($TEMP['#settings']['switch_mode'] == 'on' || $TEMP['#settings']['theme_mode'] == 'night'){
+        $TEMP['style_dark_general'] = Specific::Maket('amp/styles/style.dark.general');
+    }
+
     $TEMP['style_header'] = Specific::Maket('amp/styles/style.header');
     $TEMP['style_post'] = Specific::Maket('amp/styles/style.post');
     $TEMP['style_apostb'] = Specific::Maket('amp/styles/style.post.related-bottom');
@@ -119,6 +134,7 @@ if($one == 'amp'){
         $TEMP['notifications'] = $notifies['count_text'];
     }
 }
+
 $content = Specific::Maket($maket);
 echo Specific::HTMLFormatter($content);
 $dba->close();

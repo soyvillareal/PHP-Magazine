@@ -118,13 +118,13 @@
             <div class="display-flex w-100 h-30">
                <?php if($TEMP['#is_owner'] == true) { ?>
                <a class="display-flex direction-row align-center h-30 background-blue margin-r10 padding-l10 padding-r10 border-rlow boxshadow-grey hover-button animation-ease3s" href="{$url->{{#r_edit_post}}}/{$post_id}" target="_self">
-                  <svg class="color-white icon-x vertical-sub margin-r5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
+                  <svg class="color-wwhite icon-x vertical-sub margin-r5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
                      <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
                   </svg>
-                  <span class="color-white">{$word->edit}</span>
+                  <span class="color-wwhite">{$word->edit}</span>
                </a>
                <button class="btn_dalert h-30 btn-noway background-red margin-r10 padding-l10 padding-r10 border-rlow boxshadow-grey hover-button animation-ease3s" type="button" aria-label="{$word->delete_post}" data-id="{$post_id}">
-                <span class="color-white">
+                <span class="color-wwhite">
                   <svg class="icon-z vertical-sub" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                      <path fill="currentColor" d="M 10.091 16.688 L 10.091 9.813 C 10.091 9.721 10.061 9.646 10.001 9.588 C 9.942 9.529 9.866 9.5 9.773 9.5 L 9.136 9.5 C 9.044 9.5 8.967 9.529 8.908 9.588 C 8.848 9.646 8.818 9.721 8.818 9.813 L 8.818 16.688 C 8.818 16.779 8.848 16.854 8.908 16.912 C 8.967 16.971 9.044 17 9.136 17 L 9.773 17 C 9.866 17 9.942 16.971 10.001 16.912 C 10.061 16.854 10.091 16.779 10.091 16.688 Z M 12.636 16.688 L 12.636 9.813 C 12.636 9.721 12.607 9.646 12.547 9.588 C 12.487 9.529 12.411 9.5 12.318 9.5 L 11.682 9.5 C 11.589 9.5 11.513 9.529 11.453 9.588 C 11.393 9.646 11.364 9.721 11.364 9.813 L 11.364 16.688 C 11.364 16.779 11.393 16.854 11.453 16.912 C 11.513 16.971 11.589 17 11.682 17 L 12.318 17 C 12.411 17 12.487 16.971 12.547 16.912 C 12.607 16.854 12.636 16.779 12.636 16.688 Z M 15.182 16.688 L 15.182 9.813 C 15.182 9.721 15.152 9.646 15.092 9.588 C 15.033 9.529 14.956 9.5 14.864 9.5 L 14.227 9.5 C 14.134 9.5 14.058 9.529 13.999 9.588 C 13.939 9.646 13.909 9.721 13.909 9.813 L 13.909 16.688 C 13.909 16.779 13.939 16.854 13.999 16.912 C 14.058 16.971 14.134 17 14.227 17 L 14.864 17 C 14.956 17 15.033 16.971 15.092 16.912 C 15.152 16.854 15.182 16.779 15.182 16.688 Z M 9.773 7 L 14.227 7 L 13.75 5.857 C 13.704 5.799 13.647 5.763 13.581 5.75 L 10.429 5.75 C 10.363 5.763 10.306 5.799 10.26 5.857 Z M 19 7.313 L 19 7.938 C 19 8.029 18.97 8.104 18.911 8.162 C 18.851 8.221 18.775 8.25 18.682 8.25 L 17.727 8.25 L 17.727 17.508 C 17.727 18.048 17.572 18.515 17.26 18.909 C 16.948 19.303 16.574 19.5 16.136 19.5 L 7.864 19.5 C 7.426 19.5 7.052 19.31 6.74 18.929 C 6.429 18.548 6.273 18.087 6.273 17.547 L 6.273 8.25 L 5.318 8.25 C 5.225 8.25 5.149 8.221 5.089 8.162 C 5.03 8.104 5 8.029 5 7.938 L 5 7.313 C 5 7.221 5.03 7.146 5.089 7.088 C 5.149 7.029 5.225 7 5.318 7 L 8.391 7 L 9.087 5.369 C 9.186 5.128 9.365 4.923 9.624 4.754 C 9.882 4.585 10.144 4.5 10.409 4.5 L 13.591 4.5 C 13.856 4.5 14.118 4.585 14.376 4.754 C 14.635 4.923 14.814 5.128 14.913 5.369 L 15.609 7 L 18.682 7 C 18.775 7 18.851 7.029 18.911 7.088 C 18.97 7.146 19 7.221 19 7.313 Z"></path>
                   </svg>
@@ -219,9 +219,9 @@
             </div>
             <div class="post-thumbnail content-gradient position-relative">
                <div class="content-category position-absolute margin-t10 margin-l10">
-                  <a class="background-black color-white text-uppercase border-rlow hover-button animation-ease3s" href="{$category_slug}" target="_self">{$category}</a>
+                  <a class="background-black color-white text-uppercase boxshadow-grey border-rlow boxshadow-grey hover-button animation-ease3s" href="{$category_slug}" target="_self">{$category}</a>
                </div>
-               <figure class="margin-t15" aria-label="{$word->illustration}" role="group">
+               <figure class="content-preloader-image margin-t15" aria-label="{$word->illustration}" role="group">
                   <picture>
                      <img class="blur-up lazyload" alt="{$title}" src="{$thumbnail}">
                   </picture>
@@ -233,14 +233,14 @@
                </figure>
             </div>
             <div class="display-flex margin-t15 margin-b15">
-               <div class="item-photo display-inline-block w-50px margin-r10" aria-hidden="true">
+               <div class="item-photo content-preloader-image display-inline-block position-relative w-50px margin-r10" aria-hidden="true">
                   <a href="{$author_url}" target="_self" title="{$author_name}">
                      <img class="blur-up margin-r10 lazyload" alt="{$author_name}" title="{$author_name}" src="{$author_avatar}">
                   </a>
                </div>
                <div class="display-flex direction-colum align-start">
                   <p class="item-author display-inline-block" itemprop="name">
-                     <a class="color-blackly font-bold hover-button" href="{$author_url}" target="_self" title="{$author_name}">{$author_name}</a>
+                     <a class="color-blackly font-bold hover-button animation-ease3s" href="{$author_url}" target="_self" title="{$author_name}">{$author_name}</a>
                   </p>
                   <div class="item-time margin-t5">
                      <time datetime="{$published_date}">
@@ -417,7 +417,7 @@
          <section class="items_comments display-flex direction-colum" data-type="system">
             <div class="display-flex direction-row align-center w-100 margin-t15 margin-b15">
                <div class="margin-bottom-auto margin-r10">
-                  <img class="blur-up w-45px h-45 border-rall lazyload" alt="{$cusername}" title="{$cusername}" src="{$avatar_cs}">
+                  <img class="content-preloader-image position-relative blur-up w-45px h-45 border-rall overflow-hidden lazyload" alt="{$cusername}" title="{$cusername}" src="{$avatar_cs}">
                </div>
                <div class="content-pcomment content_comment display-flex direction-colum w-100 margin-bottom-auto">
                   <textarea class="text_carea w-100 background-white color-black padding-5 resize-none border-none border-focus-blue border-bottom border-grely sizing-box animation-ease3s" rows="1" placeholder="{$word->write_something}"></textarea>
@@ -446,7 +446,7 @@
                      </button>
                      <?php if($TEMP['#status'] == 'approved'){ ?>
                      <?php if($TEMP['#loggedin'] == true){ ?>
-                     <button class="btn_comment btn-noway font-mediumly font-bold text-uppercase background-blue color-white padding-t5 padding-b5 padding-l10 padding-r10 border-rlow boxshadow-grey hover-button animate-tab-button animation-ease3s" data-id="{$post_id}">
+                     <button class="btn_comment btn-noway font-mediumly font-bold text-uppercase background-blue color-wwhite padding-t5 padding-b5 padding-l10 padding-r10 border-rlow boxshadow-grey hover-button animate-tab-button animation-ease3s" data-id="{$post_id}">
                         <span class="color-white">
                            <span class="item-cbtext">{$word->comment}</span>
                            <span class="item-cbicon">
@@ -460,10 +460,10 @@
                         </div>
                      </button>
                      <?php } else { ?>
-                     <a class="font-mediumly font-bold text-uppercase background-blue color-white padding-t5 padding-b5 padding-l10 padding-r10 border-rlow boxshadow-grey hover-button animate-tab-button animation-ease3s" href="{$url->{{#r_login}}}" target="_self">{$word->comment}</a>
+                     <a class="font-mediumly font-bold text-uppercase background-blue color-wwhite padding-t5 padding-b5 padding-l10 padding-r10 border-rlow boxshadow-grey hover-button animate-tab-button animation-ease3s" href="{$url->{{#r_login}}}" target="_self">{$word->comment}</a>
                      <?php } ?>
                      <?php } else { ?>
-                     <button class="btn-noway font-mediumly font-bold text-uppercase background-blue color-white padding-t5 padding-b5 padding-l10 padding-r10 border-rlow boxshadow-grey hover-button animate-tab-button animation-ease3s" disabled>
+                     <button class="btn-noway font-mediumly font-bold text-uppercase background-blue color-wwhite padding-t5 padding-b5 padding-l10 padding-r10 border-rlow boxshadow-grey hover-button animate-tab-button animation-ease3s" disabled>
                         <span class="item-cbtext">{$word->comment}</span>
                         <span class="item-cbicon">
                            <svg class="icon-y vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

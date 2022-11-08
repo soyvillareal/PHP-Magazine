@@ -2,19 +2,19 @@
     <div class="content-carrusel display-flex direction-colum align-center position-relative background-grely h-100 margin-auto padding-5 overflow-hidden boxshadow-grey border-all border-grely">
         <div tabindex="-1" class="content-ecbuttons display-flex position-absolute">
             <div class="display-flex">
-                <button class="btn-caction btn_cchange display-flex direction-row align-center btn-noway w-45px h-45 padding-5 background-blue color-white border-rall boxshadow-grey hover-button animation-ease3s animate-tab-button" data-type="back">
+                <button class="btn-caction btn_cchange display-flex direction-row align-center btn-noway w-45px h-45 padding-5 background-blue color-wwhite border-rall boxshadow-grey hover-button animation-ease3s animate-tab-button" data-type="back">
                     <svg class="icon-x margin-auto" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" aria-hidden="true" focusable="false" role="img">
                         <title>{$word->back_}</title>
                         <path fill="currentColor" fill-rule="nonzero" d="M3.481 13.169c-0.316 -0.311 -0.481 -0.745 -0.45 -1.187c-0.032 -0.427 0.134 -0.844 0.45 -1.133l7.317 -7.343c0.608 -0.608 1.594 -0.608 2.202 0s0.608 1.594 0 2.202L8.254 10.453h11.164c0.854 -0.005 1.551 0.683 1.555 1.537c0 0.003 0 0.005 0 0.009c-0.005 0.857 -0.698 1.551 -1.555 1.555H8.254l4.746 4.737c0.608 0.608 0.608 1.594 0 2.202s-1.594 0.608 -2.202 0l0 0L3.481 13.169z"/>
                     </svg>
                 </button>
-                <button class="btn-caction btn_cauto display-flex direction-row align-center btn-noway w-45px h-45 margin-l10 margin-r10 padding-5 background-blue color-white border-rall boxshadow-grey hover-button animation-ease3s animate-tab-button" data-type="play">
+                <button class="btn-caction btn_cauto display-flex direction-row align-center btn-noway w-45px h-45 margin-l10 margin-r10 padding-5 background-blue color-wwhite border-rall boxshadow-grey hover-button animation-ease3s animate-tab-button" data-type="play">
                     <svg class="icon-x margin-auto" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" aria-hidden="true" focusable="false" role="img">
                         <title>{$word->play}</title>
                         <path fill="currentColor" fill-rule="evenodd" d="M18 12.001c0 0.359 -0.366 0.617 -0.366 0.617l-10.273 6.364C6.612 19.472 6 19.109 6 18.179V5.822c0 -0.932 0.612 -1.294 1.362 -0.804l10.273 6.366c-0.001 0 0.365 0.258 0.365 0.617z"/>
                     </svg>
                 </button>
-                <button class="btn-caction btn_cchange display-flex direction-row align-center btn-noway w-45px h-45 padding-5 background-blue color-white border-rall boxshadow-grey hover-button animation-ease3s animate-tab-button" data-type="next">
+                <button class="btn-caction btn_cchange display-flex direction-row align-center btn-noway w-45px h-45 padding-5 background-blue color-wwhite border-rall boxshadow-grey hover-button animation-ease3s animate-tab-button" data-type="next">
                     <svg class="icon-x margin-auto" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" aria-hidden="true" focusable="false" role="img">
                         <title>{$word->next_}</title>
                         <path fill="currentColor" fill-rule="nonzero" d="M20.519 10.831c0.316 0.311 0.481 0.745 0.45 1.187c0.032 0.427 -0.134 0.844 -0.45 1.133l-7.317 7.343c-0.608 0.608 -1.594 0.608 -2.202 0c-0.608 -0.608 -0.608 -1.594 0 -2.202l4.746 -4.746H4.582c-0.854 0.005 -1.551 -0.683 -1.555 -1.537c0 -0.003 0 -0.005 0 -0.009c0.005 -0.857 0.698 -1.551 1.555 -1.555h11.164L11.001 5.708c-0.608 -0.608 -0.608 -1.594 0 -2.202c0.608 -0.608 1.594 -0.608 2.202 0l0 0L20.519 10.831z"/>
@@ -28,7 +28,7 @@
                     <?php if($TEMP['#is_amp'] == true){ ?>
                     <amp-img class="entry_cimage" src="{!frame}" alt="{!caption}"></amp-img>
                     <?php } else { ?>
-                    <img class="entry_cimage blur-up lazyload" src="{!frame}" alt="{!caption}">
+                    <img class="content-preloader-image position-relative entry_cimage blur-up lazyload" src="{!frame}" alt="{!caption}">
                     <?php } ?>
                 </picture>
                 <figcaption class="item-entry-figcaption display-flex position-absolute w-100 color-white margin-t10 text-center break-all">

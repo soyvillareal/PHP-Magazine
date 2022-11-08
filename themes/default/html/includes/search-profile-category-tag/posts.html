@@ -13,7 +13,7 @@
          </div>
          <div class="display-flex direction-colum align-center margin-left-auto position-relative">
             <a <?php echo($TEMP['!type'] == 'video') ? 'class="content-video-animate" ' : '';?>href="{!url}" target="_self" tabindex="-1">
-               <figure class="content-simage content-gradient position-relative">
+               <figure class="content-simage content-preloader-image content-gradient position-relative">
                   <?php if($TEMP['!type'] == 'video'){ ?>
                   <div class="content-vanimate display-flex direction-row align-center position-absolute no-hover">
                      <svg class="icon-video no-hover" viewBox="0 0 40 40">
@@ -26,14 +26,14 @@
                      <img class="blur-up lazyload" src="{!thumbnail}" alt="{!title}">
                   </picture>
                   <figcaption class="content-hpublished position-absolute no-hover">
-                     <time class="color-white font-lowly ellipsis-horizontal no-hover" datetime="{!published_date}">{!published_at}</time>
+                     <time class="color-wwhite font-lowly ellipsis-horizontal no-hover" datetime="{!published_date}">{!published_at}</time>
                   </figcaption>
                </figure>
             </a>
             <?php if($TEMP['#page'] != 'category'){ ?>
             <div class="container-category position-absolute">
                <div class="content-category display-inline-block border-rlow">
-                  <a class="btn-noway background-black color-white font-low text-uppercase border-rlow hover-button animation-ease3s" href="{!category_slug}" target="_self">{!category}</a>
+                  <a class="btn-noway background-black color-white font-low text-uppercase boxshadow-grey border-rlow hover-button animation-ease3s" href="{!category_slug}" target="_self">{!category}</a>
                </div>
             </div>
             <?php } ?>

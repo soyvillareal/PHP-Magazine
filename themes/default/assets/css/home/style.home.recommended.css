@@ -17,9 +17,6 @@
 .recommended-posts::-webkit-scrollbar {
     height: 5px;
 }
-.recommended-posts::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
 .recommended-posts::-webkit-scrollbar-thumb {
     background: #909090;
 }

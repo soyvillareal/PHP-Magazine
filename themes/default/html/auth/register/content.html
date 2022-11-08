@@ -40,7 +40,7 @@
                            </svg>
                         </span>
                         <span class="display-block font-mediumly text-left">
-                        <span class="color-blackly">I agree to The Washington Post's <a class="color-blackly inhover-underline" href="https://www.washingtonpost.com/terms-of-service/2011/11/18/gIQAldiYiN_story.html" target="_blank">Terms of Service</a> and <a class="color-blackly inhover-underline" href="https://www.washingtonpost.com/privacy-policy/2011/11/18/gIQASIiaiN_story.html" target="_blank">Privacy Policy</a>.
+                        <span class="color-blackly">{$word->i_agree_with_in_your} <a class="display-inline-block color-blackly inhover-underline" href="{$url->{{#r_page}/{#r_terms_of_use}}}" target="_blank">{$word->page_terms_of_use}</a> {$word->and} <a class="display-inline-block color-blackly inhover-underline" href="{$url->{{#r_page}/{#r_habeas_data}}}" target="_blank">{$word->page_habeas_data}</a>.
                         </span>
                         <span class="font-medium color-red">*</span>
                         </span>
@@ -103,8 +103,8 @@
                   </div>
                </div>
             </div>
-            <button id="btn-register" class="button-access btn-noway w-100 h-36 background-blue color-white font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" disabled>
-               <span class="color-white">{$word->next}</span>
+            <button id="btn-register" class="button-access btn-noway w-100 h-36 background-blue font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" disabled>
+               <span class="color-wwhite">{$word->next}</span>
                <div class="content-spinner-circle position-absolute">
                   <div class="spinner-circle"></div>
                </div>

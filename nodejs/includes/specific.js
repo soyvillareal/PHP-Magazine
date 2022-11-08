@@ -317,23 +317,23 @@ function GetFile(file, type = 1, size = ''){
         suffix = `-${size}.jpeg`;
     }
 
-    if(file == ''){
+    if(type == 2){
+        prefix = `themes/${SETTINGS.theme}/`;
+    } else {
+        if(type == 3) {
+            prefix = 'uploads/entries/';
+        } else if(type == 5){
+            prefix = `themes/${SETTINGS.theme}/images/users/`;
+        } else {
+            prefix = `uploads/${folder}/`;
+        }
+    }
+
+    if(file == '' || !fs.existsSync(`${prefix}${file}${suffix}`)){
         file = 'default-holder';
         prefix = `themes/${SETTINGS.theme}/images/${folder}/`;
         if(type == 3){
             suffix = "-b.jpeg";
-        }
-    } else {
-        if(type == 2){
-            prefix = `themes/${SETTINGS.theme}/`;
-        } else {
-            if(type == 3) {
-                prefix = 'uploads/entries/';
-            } else if(type == 5){
-                prefix = `themes/${SETTINGS.theme}/images/users/`;
-            } else {
-                prefix = `uploads/${folder}/`;
-            }
         }
     }
 

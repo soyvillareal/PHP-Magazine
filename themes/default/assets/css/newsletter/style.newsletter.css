@@ -53,9 +53,6 @@ textarea.item-input:focus ~ .item-label {
 .item-category::-webkit-scrollbar {
     width: 8px;
 }
-.item-category::-webkit-scrollbar-track {
-    background: #cdcdcd;
-}
 .item-category::-webkit-scrollbar-thumb {
   background-color: #909090;
   border-top-right-radius: 2px;
@@ -111,9 +108,6 @@ textarea.item-input:focus ~ .item-label {
 }
 .item-nother::-webkit-scrollbar {
     width: 8px;
-}
-.item-nother::-webkit-scrollbar-track {
-    background: #cdcdcd;
 }
 .item-nother::-webkit-scrollbar-thumb {
     background: #909090;

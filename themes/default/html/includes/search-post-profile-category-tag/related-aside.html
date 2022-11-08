@@ -1,7 +1,7 @@
 <li class="item-related-aside display-flex direction-colum padding-t15 padding-b15">
    <?php if($TEMP['!key'] == 1) { ?>
    <a class="<?php echo($TEMP['!type'] == 'video') ? 'content-video-animate ' : '';?>display-block position-relative w-100 margin-b15" href="{!url}" target="_self" title="{!title}" aria-hidden="true" tabindex="-1">
-      <figure class="content-gradient position-relative">
+      <figure class="content-preloader-image content-gradient position-relative">
          <?php if($TEMP['!type'] == 'video'){ ?>
          <div class="content-vanimate display-flex direction-row align-center position-absolute no-hover">
             <svg class="icon-video no-hover" viewBox="0 0 40 40">
@@ -14,12 +14,12 @@
             <img class="blur-up lazyload" src="{!thumbnail}" alt="{!title}">
          </picture>
          <figcaption class="content-hpublished position-absolute no-hover">
-            <time class="color-white font-lowly ellipsis-horizontal no-hover" datetime="{!published_date}">{!published_at}</time>
+            <time class="color-wwhite font-lowly ellipsis-horizontal no-hover" datetime="{!published_date}">{!published_at}</time>
          </figcaption>
       </figure>
       <div class="container-category position-absolute">
          <div class="content-category display-inline-block border-rlow">
-            <a class="btn-noway background-black color-white font-low text-uppercase border-rlow hover-button animation-ease3s" href="{!category_slug}" target="_self">{!category}</a>
+            <a class="btn-noway background-black color-white font-low text-uppercase boxshadow-grey border-rlow hover-button animation-ease3s" href="{!category_slug}" target="_self">{!category}</a>
          </div>
       </div>
    </a>
@@ -38,7 +38,7 @@
          <a class="display-flex" href="{!url}" target="_self" title="{!title}">
             <h3 class="color-black font-medium font-normal break-all hover-blue margin-r10">{!title}</h3>
             <figure class="position-relative margin-left-auto" aria-hidden="true">
-               <img class="blur-up lazyload" src="{!thumbnail}" alt="{!title}">
+               <img class="content-preloader-image position-relative blur-up lazyload" src="{!thumbnail}" alt="{!title}">
             </figure>
          </a>
       </div>

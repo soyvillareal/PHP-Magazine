@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{#language}">
+<html lang="{#language}"<?php echo($TEMP['#darkmode'] == true) ? ' dark="{#darkmode}"' : '';?>>
 <head>
    <meta charset="UTF-8" />
    <title>{$global_title}</title>
@@ -11,9 +11,9 @@
    <meta name="format-detection" content="telephone=no">
    <link rel="shortcut icon" type="image/png" href="{$theme->{images/favicon.ico}}" />
 </head>
-<body class="position-relative w-100 mw-1170 h-100 background-white color-black margin-auto" dir="{#dir}">
+<body class="position-relative w-100 mw-1170 h-100 background-white color-black margin-auto" dir="{#dir}" style="overflow:hidden;">
    <style type="text/css">
-      .page-loader{position:fixed;top:0;left:0;right:0;bottom:0;background-color:#fff;display:flex;justify-content:center;align-items:center;z-index:9999;transition:1s all;opacity:0}.page-loader.show{opacity:1}.page-loader .spin{border:3px solid hsla(205,48%,38%,.2);border-top-color:#326891;border-radius:50%;width:3em;height:3em;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}           
+      html[dark=true] .page-loader{background-color:#181818}html[dark=true] .page-loader .spin{border:3px solid hsla(205,48%,25%,.2);border-top-color:#214560}.page-loader{position:fixed;top:0;left:0;right:0;bottom:0;background-color:#fff;display:flex;justify-content:center;align-items:center;z-index:9999;transition:1s all;opacity:0}.page-loader.show{opacity:1}.page-loader .spin{border:3px solid hsla(205,48%,38%,.2);border-top-color:#326891;border-radius:50%;width:3em;height:3em;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}           
    </style>
    <div id="page-loader" class="page-loader show">
       <div class="spin"></div>
@@ -40,24 +40,42 @@
   <header id="header" class="content-header w-100 h-100 background-white margin-none animation-ease3s">
     <section class="section-one position-relative">
       <div class="mobile-left display-flex justify-around position-absolute">
-         <button class="btn_drawer btn-noway button-menu border-rlow animate-tab-button animation-ease3s display-inline-block background-hover" aria-haspopup="true" aria-expanded="false" aria-label="{$word->sections_navigation}">
-            <svg class="icon-x vertical-sub" viewBox="0 0 16 16">
-               <rect x="1" y="3" fill="#333" width="14" height="2"></rect>
-               <rect x="1" y="7" fill="#333" width="14" height="2"></rect>
-               <rect x="1" y="11" fill="#333" width="14" height="2"></rect>
+         <button class="btn_drawer btn-noway button-menu display-inline-block background-hover color-black border-rlow animate-tab-button animation-ease3s" aria-haspopup="true" aria-expanded="false" aria-label="{$word->sections_navigation}">
+            <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="currentColor">
+               <rect x="1" y="3" width="14" height="2"></rect>
+               <rect x="1" y="7" width="14" height="2"></rect>
+               <rect x="1" y="11" width="14" height="2"></rect>
             </svg>
          </button>
       </div>
-      <div class="mobile-center display-none-desk">
+      <div class="mobile-center display-flex display-none-desk">
          <a href="{$url->{{#r_home}}}" target="_self" title="{$settings->title}" aria-label="{$settings->title}">
-            <div class="site-logo position-relative vertical-middle margin-auto"></div>
+            <div class="site-logo w-100 h-100 position-relative vertical-middle margin-auto"></div>
          </a>
       </div>
       <div class="mobile-right display-flex direction-row h-0 padding-t5">
          <?php if($TEMP['#loggedin'] === true){ ?>
-         <div class="content-dropdown-account content-backdrop-ac margin-left-auto">
+         <?php if($TEMP['#settings']['switch_mode'] == 'on'){ ?>
+         <button class="btn_darkmode display-none-mob btn-noway w-36px h-30 margin-left-auto" data-type="<?php echo($TEMP['#darkmode'] == true) ? 'light' : 'night';?>">
+            <span class="display-flex direction-row align-center justify-center ">
+               <svg class="icon-y" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <?php if($TEMP['#darkmode'] == true){ ?>
+                  <title>{$word->disable_night_mode}</title>
+                  <path fill="#fff" d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/>
+                  <?php } else { ?>
+                  <title>{$word->activate_night_mode}</title>
+                  <path fill="#ccc" d="M13.276 24c3.701 0 7.082 -1.684 9.321 -4.443 0.331 -0.408 -0.03 -1.005 -0.542 -0.907 -5.822 1.109 -11.169 -3.355 -11.169 -9.232 0 -3.385 1.812 -6.499 4.758 -8.175 0.454 -0.258 0.34 -0.947 -0.176 -1.042A12.101 12.101 0 0 0 13.276 0c-6.624 0 -12 5.368 -12 12 0 6.624 5.368 12 12 12z"/>
+                  <?php } ?>
+               </svg>
+            </span>
+            <div class="content-spinner-circle position-absolute">
+               <div class="spinner-circle"></div>
+            </div>
+         </button>
+         <?php } ?>
+         <div class="content-dropdown-account content-backdrop-ac">
             <button class="btn_account button-general display-flex direction-row align-center h-30 btn-noway display-none-mob background-hover border-rlow vertical-middle animate-tab-button animation-ease3s" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
-               <div class="item_caccount display-flex direction-colum align-center icon-c position-relative background-red font-lowly color-white border-rlow margin-r5">{$notifications}</div>
+               <div class="item_caccount display-flex direction-colum align-center icon-c position-relative background-red font-lowly color-wwhite border-rlow margin-r5">{$notifications}</div>
                <span class="display-inline-block vertical-middle color-black margin-r5 font-low">{$word->account}</span>
                <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                  <path fill="currentColor" d="M21.707,8.707l-9,9a1,1,0,0,1-1.414,0l-9-9A1,1,0,1,1,3.707,7.293L12,15.586l8.293-8.293a1,1,0,1,1,1.414,1.414Z"/>
@@ -102,6 +120,29 @@
                      </svg>
                   </button>
                </div>
+               <div class="dropdown-account-item display-flex display-none-desk border-bottom border-grely">
+                  <?php if($TEMP['#settings']['switch_mode'] == 'on'){ ?>
+                  <button class="btn_darkmode w-100 btn-noway h-auto margin-left-auto padding-t10 padding-b10 padding-l10 padding-r10" data-type="<?php echo($TEMP['#darkmode'] == true) ? 'light' : 'night';?>">
+                     <span class="display-flex direction-row align-center color-grey">
+                        <?php if($TEMP['#darkmode'] == true){ ?>
+                        <span id="item-tdarkmode" class="margin-right-auto">{$word->light_mode}</span>
+                        <?php } else { ?>
+                        <span id="item-tdarkmode" class="margin-right-auto">{$word->dark_mode}</span>
+                        <?php } ?>
+                        <svg class="icon-y" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                           <?php if($TEMP['#darkmode'] == true){ ?>
+                           <path fill="#fff" d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/>
+                           <?php } else { ?>
+                           <path fill="#ccc" d="M13.276 24c3.701 0 7.082 -1.684 9.321 -4.443 0.331 -0.408 -0.03 -1.005 -0.542 -0.907 -5.822 1.109 -11.169 -3.355 -11.169 -9.232 0 -3.385 1.812 -6.499 4.758 -8.175 0.454 -0.258 0.34 -0.947 -0.176 -1.042A12.101 12.101 0 0 0 13.276 0c-6.624 0 -12 5.368 -12 12 0 6.624 5.368 12 12 12z"/>
+                           <?php } ?>
+                        </svg>
+                     </span>
+                     <div class="content-spinner-circle position-absolute">
+                        <div class="spinner-circle"></div>
+                     </div>
+                  </button>
+                  <?php } ?>
+               </div>
                <div class="dropdown-account-item display-flex">
                   <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 animation-ease3s hover-button" href="{$url->{{#r_logout}}}" target="_self" title="{$word->logout}">{$word->logout}</a>
                </div>
@@ -109,9 +150,9 @@
 
             <div id="container-languages" class="dropdown-account position-absolute background-white border-rlow border-all border-grely hidden" role="dialog" aria-label="{$word->languages}" aria-modal="true">
                <div class="display-flex direction-row align-center w-100 border-bottom border-grely">
-                  <button id="btn-blmenu" class="btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover hover-button animation-ease3s">
+                  <button id="btn-blmenu" class="btn-noway color-black padding-t10 padding-b10 padding-l10 padding-r10 hover hover-button animation-ease3s">
                      <svg class="icon-y vertical-sub" viewBox="-1.5 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12.07 20.864l-1.041 1.041c-0.441 0.441 -1.153 0.441 -1.589 0L0.328 12.797c-0.441 -0.441 -0.441 -1.153 0 -1.589L9.441 2.095c0.441 -0.441 1.153 -0.441 1.589 0l1.041 1.041c0.445 0.445 0.436 1.172 -0.019 1.608L6.403 10.125H19.875c0.623 0 1.125 0.502 1.125 1.125v1.5c0 0.623 -0.502 1.125 -1.125 1.125H6.403l5.648 5.381c0.459 0.436 0.469 1.163 0.019 1.608z"/>
+                        <path fill="currentColor" d="M12.07 20.864l-1.041 1.041c-0.441 0.441 -1.153 0.441 -1.589 0L0.328 12.797c-0.441 -0.441 -0.441 -1.153 0 -1.589L9.441 2.095c0.441 -0.441 1.153 -0.441 1.589 0l1.041 1.041c0.445 0.445 0.436 1.172 -0.019 1.608L6.403 10.125H19.875c0.623 0 1.125 0.502 1.125 1.125v1.5c0 0.623 -0.502 1.125 -1.125 1.125H6.403l5.648 5.381c0.459 0.436 0.469 1.163 0.019 1.608z"/>
                      </svg>
                      <span class="font-medium font-bold color-black margin-l5">{$word->account_menu}</span>
                   </button>
@@ -123,7 +164,7 @@
             </div>
 
             <div id="container-notifications" class="dropdown-notifications position-absolute background-white overflow-hidden border-rlow border-all border-grely hidden" role="dialog" aria-label="{$word->notifications}" aria-modal="true">
-               <div id="content-nreload" class="content-nreload display-flex direction-row align-center position-absolute z-index-1 background-blue color-white boxshadow-grey border-r25px animation-ease3s">
+               <div id="content-nreload" class="content-nreload display-flex direction-row align-center position-absolute z-index-1 background-blue color-wwhite boxshadow-grey border-r25px animation-ease3s">
                   <button id="btn-nreload" class="display-flex direction-row align-center btn-noway margin-auto padding-t5 padding-b5 padding-l20 padding-r20 hover-button animate-tab-button animation-ease3s">
                      <svg class="icon-c margin-r5" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg">
                         <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21.75 12C21.75 16.5 18 21.75 12 21.75 6 21.75 2.25 16.5 2.25 12 2.25 7.5 6 2.25 12 2.25 15.75 2.25 18.75 4.5 20.25 6.75M15 7.5L20.25 6.75 21 1.5"/>
@@ -138,15 +179,15 @@
                   </button>
                </div>
                <div class="display-flex direction-row align-center w-100 border-bottom border-grely">
-                  <button id="btn-bnmenu" class="btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover hover-button animation-ease3s">
+                  <button id="btn-bnmenu" class="btn-noway color-black padding-t10 padding-b10 padding-l10 padding-r10 hover hover-button animation-ease3s">
                      <svg class="icon-y vertical-sub" viewBox="-1.5 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12.07 20.864l-1.041 1.041c-0.441 0.441 -1.153 0.441 -1.589 0L0.328 12.797c-0.441 -0.441 -0.441 -1.153 0 -1.589L9.441 2.095c0.441 -0.441 1.153 -0.441 1.589 0l1.041 1.041c0.445 0.445 0.436 1.172 -0.019 1.608L6.403 10.125H19.875c0.623 0 1.125 0.502 1.125 1.125v1.5c0 0.623 -0.502 1.125 -1.125 1.125H6.403l5.648 5.381c0.459 0.436 0.469 1.163 0.019 1.608z"/>
+                        <path fill="currentColor" d="M12.07 20.864l-1.041 1.041c-0.441 0.441 -1.153 0.441 -1.589 0L0.328 12.797c-0.441 -0.441 -0.441 -1.153 0 -1.589L9.441 2.095c0.441 -0.441 1.153 -0.441 1.589 0l1.041 1.041c0.445 0.445 0.436 1.172 -0.019 1.608L6.403 10.125H19.875c0.623 0 1.125 0.502 1.125 1.125v1.5c0 0.623 -0.502 1.125 -1.125 1.125H6.403l5.648 5.381c0.459 0.436 0.469 1.163 0.019 1.608z"/>
                      </svg>
                      <span class="font-medium font-bold color-black margin-l5">{$word->account_menu}</span>
                   </button>
-                  <button id="btn-bnotifications" class="btn-noway padding-t10 padding-b10 padding-l10 padding-r10 hover hover-button animation-ease3s hidden">
+                  <button id="btn-bnotifications" class="btn-noway color-black padding-t10 padding-b10 padding-l10 padding-r10 hover hover-button animation-ease3s hidden">
                      <svg class="icon-y vertical-sub" viewBox="-1.5 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12.07 20.864l-1.041 1.041c-0.441 0.441 -1.153 0.441 -1.589 0L0.328 12.797c-0.441 -0.441 -0.441 -1.153 0 -1.589L9.441 2.095c0.441 -0.441 1.153 -0.441 1.589 0l1.041 1.041c0.445 0.445 0.436 1.172 -0.019 1.608L6.403 10.125H19.875c0.623 0 1.125 0.502 1.125 1.125v1.5c0 0.623 -0.502 1.125 -1.125 1.125H6.403l5.648 5.381c0.459 0.436 0.469 1.163 0.019 1.608z"/>
+                        <path fill="currentColor" d="M12.07 20.864l-1.041 1.041c-0.441 0.441 -1.153 0.441 -1.589 0L0.328 12.797c-0.441 -0.441 -0.441 -1.153 0 -1.589L9.441 2.095c0.441 -0.441 1.153 -0.441 1.589 0l1.041 1.041c0.445 0.445 0.436 1.172 -0.019 1.608L6.403 10.125H19.875c0.623 0 1.125 0.502 1.125 1.125v1.5c0 0.623 -0.502 1.125 -1.125 1.125H6.403l5.648 5.381c0.459 0.436 0.469 1.163 0.019 1.608z"/>
                      </svg>
                      <span class="font-medium font-bold color-black margin-l5">{$word->notifications}</span>
                   </button>
@@ -156,9 +197,9 @@
                         <div class="spinner-circle"></div>
                      </div>
                   </button>
-                  <button id="btn-nsettings" class="btn-noway padding-t10 padding-b10 padding-l10 padding-r10 margin-left-auto margin-r10 hover-button animation-ease3s" disabled>
+                  <button id="btn-nsettings" class="btn-noway color-black padding-t10 padding-b10 padding-l10 padding-r10 margin-left-auto margin-r10 hover-button animation-ease3s" disabled>
                      <svg class="icon-y vertical-sub" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M36.5,75C41,89.5,54,100,70,100s29-10.5,33.5-25H170a10,10,0,0,0,0-20H103.5C99,40.5,86,30,70,30S41,40.5,36.5,55H25a10,10,0,0,0,0,20ZM70,50A15,15,0,1,1,55,65,14.73,14.73,0,0,1,70,50Zm105,75H163.5C159,110.5,146,100,130,100s-29,10.5-33.5,25H30a10,10,0,0,0,0,20H96.5c4.5,14.5,17.5,25,33.5,25s29-10.5,33.5-25H175a10,10,0,0,0,0-20Zm-45,25a15,15,0,1,1,15-15A14.73,14.73,0,0,1,130,150Z"/>
+                        <path fill="currentColor" d="M36.5,75C41,89.5,54,100,70,100s29-10.5,33.5-25H170a10,10,0,0,0,0-20H103.5C99,40.5,86,30,70,30S41,40.5,36.5,55H25a10,10,0,0,0,0,20ZM70,50A15,15,0,1,1,55,65,14.73,14.73,0,0,1,70,50Zm105,75H163.5C159,110.5,146,100,130,100s-29,10.5-33.5,25H30a10,10,0,0,0,0,20H96.5c4.5,14.5,17.5,25,33.5,25s29-10.5,33.5-25H175a10,10,0,0,0,0-20Zm-45,25a15,15,0,1,1,15-15A14.73,14.73,0,0,1,130,150Z"/>
                      </svg>
                   </button>
                </div>
@@ -278,9 +319,24 @@
             </div>
          </div>
          <?php } else { ?>
-         <div class="content-dropdown-langs position-relative margin-left-auto">
+         <?php if($TEMP['#settings']['switch_mode'] == 'on'){ ?>
+         <div class="display-none-mob margin-left-auto margin-r10">
+            <button class="btn_darkmode display-flex direction-row align-center justify-center btn-noway w-36px" data-type="<?php echo($TEMP['#darkmode'] == true) ? 'light' : 'night';?>">
+               <svg class="icon-y" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <?php if($TEMP['#darkmode'] == true){ ?>
+                  <title>{$word->disable_night_mode}</title>
+                  <path fill="#fff" d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/>
+                  <?php } else { ?>
+                  <title>{$word->activate_night_mode}</title>
+                  <path fill="#ccc" d="M13.276 24c3.701 0 7.082 -1.684 9.321 -4.443 0.331 -0.408 -0.03 -1.005 -0.542 -0.907 -5.822 1.109 -11.169 -3.355 -11.169 -9.232 0 -3.385 1.812 -6.499 4.758 -8.175 0.454 -0.258 0.34 -0.947 -0.176 -1.042A12.101 12.101 0 0 0 13.276 0c-6.624 0 -12 5.368 -12 12 0 6.624 5.368 12 12 12z"/>
+                  <?php } ?>
+               </svg>
+            </button>
+         </div>
+         <?php } ?>
+         <div class="content-dropdown-langs display-none-mob position-relative<?php echo($TEMP['#settings']['switch_mode'] == 'off') ? ' margin-left-auto' : '';?>">
             <button class="btn_lang btn-noway display-none-mob margin-r10 inhover-button animate-tab-button animation-ease3s" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->languages}">
-               <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase">{#language}</span>
+               <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-wwhite font-lowly font-bold text-uppercase">{#language}</span>
             </button>
 
             <div class="container_languages dropdown-tlangs position-absolute background-white border-rlow border-all border-grely z-index-1 hidden" role="dialog" aria-label="{$word->languages}" aria-modal="true">
@@ -290,24 +346,24 @@
             </div>
          </div>
          <a class="display-none-mob margin-r10 inhover-button animation-ease3s" href="{$url->{{#r_register}}}" target="_self" title="{$word->register}" role="button">
-            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase">{$word->register}</span>
+            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-wwhite font-lowly font-bold text-uppercase">{$word->register}</span>
          </a>
          <a class="display-none-mob inhover-button animation-ease3s" href="{$url->{{#r_login}}}" target="_self" title="{$word->login}" role="button">
-            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase">{$word->login}</span>
+            <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-wwhite font-lowly font-bold text-uppercase">{$word->login}</span>
          </a>
          <?php } ?>
          <div class="button-modal-login display-inline position-absolute">
             <?php if($TEMP['#loggedin'] == true){ ?>
-            <button class="btn_account btn-noway button-login border-rlow animation-ease3s display-inline-block display-none-desk background-hover" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
-               <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="#333">
+            <button class="btn_account btn-noway button-login border-rlow animation-ease3s display-inline-block display-none-desk background-hover color-black" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
+               <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="currentColor">
                   <path d="M8,10c-2.5,0-7,1.1-7,3.5V16h14v-2.5C15,11.1,10.5,10,8,10z"></path>
                   <circle cx="8" cy="4" r="4"></circle>
                </svg>
-               <div class="item_caccount display-flex direction-colum align-center icon-c position-absolute background-red font-lowly color-white border-r25px">{$notifications}</div>
+               <div class="item_caccount display-flex direction-colum align-center icon-c position-absolute background-red font-lowly color-wwhite border-r25px">{$notifications}</div>
             </button>
             <?php } else { ?>
-            <button id="btn-modal-login" class="btn-noway button-login border-rlow animation-ease3s display-inline-block display-none-desk background-hover" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
-               <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="#333">
+            <button id="btn-modal-login" class="btn-noway button-login border-rlow animation-ease3s display-inline-block display-none-desk background-hover color-black" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
+               <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="currentColor">
                   <path d="M8,10c-2.5,0-7,1.1-7,3.5V16h14v-2.5C15,11.1,10.5,10,8,10z"></path>
                   <circle cx="8" cy="4" r="4"></circle>
                </svg>
@@ -332,14 +388,14 @@
     <div class="content-logo display-none-mob">
       <div class="item-logo">
          <a class="display-flex hover-button" href="{$url->{{#r_home}}}" target="_self" title="{$settings->title}" aria-label="{$settings->title}">
-            <div class="site-logo display-inline-block position-relative vertical-middle margin-auto"></div>
+            <div class="site-logo display-inline-block w-100 h-45 position-relative vertical-middle margin-auto"></div>
          </a>
       </div>
     </div>
     <div class="content-categories display-none-mob border-top border-grey">
-      <ul class="item-categories display-flex align-center">
+      <ul class="item-categories display-flex align-center overflow-autox">
          <?php foreach($TEMP['#categories'] as $cat){ ?>
-         <li class="item-category animation-ease3s display-inline-block">
+         <li class="item-category display-inline-block margin-r15 animation-ease3s">
             <a class="color-black hover-underline" href="<?php echo Specific::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
          </li>
          <?php } ?>
@@ -350,27 +406,27 @@
       <div class="content-drawer background-white h-100">
          <div class="container-sposts padding-t25 padding-b25 padding-l20 padding-r20">
             <div class="container-slogo display-flex display-none-mob position-relative margin-b15">
-               <button class="btn_drawer btn-noway button-menu position-absolute border-rlow background-hover animate-tab-button animation-ease3s" type="button" aria-label="{$word->close_menu}">
-                  <svg class="icon-x vertical-sub" viewBox="0 0 16 16">
-                     <rect x="1" y="3" fill="#333" width="14" height="2"></rect>
-                     <rect x="1" y="7" fill="#333" width="14" height="2"></rect>
-                     <rect x="1" y="11" fill="#333" width="14" height="2"></rect>
+               <button class="btn_drawer btn-noway button-menu position-absolute border-rlow background-hover color-black animate-tab-button animation-ease3s" type="button" aria-label="{$word->close_menu}">
+                  <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="currentColor">
+                     <rect x="1" y="3" width="14" height="2"></rect>
+                     <rect x="1" y="7" width="14" height="2"></rect>
+                     <rect x="1" y="11" width="14" height="2"></rect>
                   </svg>
                </button>
                <a class="display-flex margin-auto hover-button" href="{$url->{{#r_home}}}" target="_self" title="{$settings->title}" aria-label="{$settings->title}">
-                  <div class="site-logo display-inline-block position-relative vertical-middle margin-auto"></div>
+                  <div class="site-logo display-inline-block w-100 h-45 position-relative vertical-middle margin-auto"></div>
                </a>
             </div>
             <form method="GET" action="{$url->{{#r_search}}}" class="display-flex direction-row align-center" novalidate>
                <div class="display-flex position-relative vertical-middle w-100 h-36 background-white margin-t5 margin-b5 margin-r10 padding-l15 padding-r20 border-all border-grely font-lowly border-rlow">
-                  <input id="key-hsearch" class="color-grey w-100 h-100" type="text" name="{#p_keyword}" placeholder="Buscar...">
+                  <input id="key-hsearch" class="background-white color-grey w-100 h-100" type="text" name="{#p_keyword}" placeholder="Buscar...">
                   <input id="type-hdate" type="hidden" name="{#p_date}">
                   <input id="type-hcategory" type="hidden" name="{#p_category}">
                   <input id="type-hauthor" type="hidden" name="{#p_author}">
                   <input id="type-hsort" type="hidden" name="{#p_sort}">
                   <button id="key-hreset" class="btn-noway hover-button animation-ease3s hidden" type="reset">{$word->clean_up}</button>
                </div>
-               <button id="btn-hsearch" class="button-general display-inline-block vertical-middle h-36 background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase inhover-button animation-ease3s" type="submit" disabled>{$word->to_go}</button>
+               <button id="btn-hsearch" class="button-general display-inline-block vertical-middle h-36 background-blue border-rlow border-all border-blue color-wwhite font-lowly font-bold text-uppercase inhover-button animation-ease3s" type="submit" disabled>{$word->to_go}</button>
             </form>
             <div class=" display-flex direction-colum background-white w-100">
                <div id="content-shfilter" class="content-sfilter overflow-autox display-flex font-medium margin-t15 padding-b15 border-bottom border-grely hidden">
@@ -638,7 +694,7 @@
          <!-- footer widget about-->
          <div class="margin-auto flex-2 padding-r15 padding-l15">
             <div class="footer-logo text-center">
-               <div class="site-logo display-inline-block position-relative vertical-middle"></div>
+               <div class="site-logo display-inline-block w-100 h-45 position-relative vertical-middle"></div>
             </div>
             <p class="color-black font-low text-center margin-t10">
                {$word->footer_message}
@@ -717,21 +773,48 @@
       <div class="item-login-modal display-flex background-white padding-t15 padding-b15 padding-l15 padding-r15 border-top border-grey">
          <div class="display-flex direction-colum margin-auto">
             <div class="item-lmodal text-center">
+               <?php if($TEMP['#settings']['switch_mode'] == 'on'){ ?>
+               <div class="display-inline-block">
+                  <button class="btn_darkmode display-inline-block btn-noway w-36px margin-r10" data-type="<?php echo($TEMP['#darkmode'] == true) ? 'light' : 'night';?>">
+                     <svg class="icon-y vertical-sub" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <?php if($TEMP['#darkmode'] == true){ ?>
+                        <title>{$word->disable_night_mode}</title>
+                        <path fill="#fff" d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/>
+                        <?php } else { ?>
+                        <title>{$word->activate_night_mode}</title>
+                        <path fill="#ccc" d="M13.276 24c3.701 0 7.082 -1.684 9.321 -4.443 0.331 -0.408 -0.03 -1.005 -0.542 -0.907 -5.822 1.109 -11.169 -3.355 -11.169 -9.232 0 -3.385 1.812 -6.499 4.758 -8.175 0.454 -0.258 0.34 -0.947 -0.176 -1.042A12.101 12.101 0 0 0 13.276 0c-6.624 0 -12 5.368 -12 12 0 6.624 5.368 12 12 12z"/>
+                        <?php } ?>
+                     </svg>
+                  </button>
+                  <div class="content-dropdown-langs item-lcmodal display-inline-block position-relative">
+                     <button class="btn_lang btn-noway margin-r10 inhover-button animate-tab-button animation-ease3s" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->languages}">
+                        <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-wwhite font-lowly font-bold text-uppercase">{#language}</span>
+                     </button>
+         
+                     <div class="container_languages dropdown-blangs position-absolute background-white border-rlow border-all border-grely z-index-1 hidden" role="dialog" aria-label="{$word->languages}" aria-modal="true">
+                        <ul class="container-langs padding-t10 padding-b10 overflow-autoy">
+                           {$languages}
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <?php } else { ?>
                <div class="content-dropdown-langs item-lcmodal display-inline-block position-relative">
                   <button class="btn_lang btn-noway margin-r10 inhover-button animate-tab-button animation-ease3s" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->languages}">
-                     <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase">{#language}</span>
+                     <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-wwhite font-lowly font-bold text-uppercase">{#language}</span>
                   </button>
-      
+         
                   <div class="container_languages dropdown-blangs position-absolute background-white border-rlow border-all border-grely z-index-1 hidden" role="dialog" aria-label="{$word->languages}" aria-modal="true">
                      <ul class="container-langs padding-t10 padding-b10 overflow-autoy">
                         {$languages}
                      </ul>
                   </div>
                </div>
-               <a class="button-general item-lcmodal display-inline-block margin-r10 vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase inhover-button animation-ease3s" href="{$url->{{#r_register}}}" target="_self" title="{$word->register}" role="button">
+               <?php } ?>
+               <a class="button-general item-lcmodal display-inline-block margin-r10 vertical-middle background-blue border-rlow border-all border-blue color-wwhite font-lowly font-bold text-uppercase inhover-button animation-ease3s" href="{$url->{{#r_register}}}" target="_self" title="{$word->register}" role="button">
                   {$word->register}
                </a>
-               <a class="button-general item-lcmodal display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-white font-lowly font-bold text-uppercase inhover-button animation-ease3s" href="{$url->{{#r_login}}}" target="_self" title="{$word->login}" role="button">
+               <a class="button-general item-lcmodal display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-wwhite font-lowly font-bold text-uppercase inhover-button animation-ease3s" href="{$url->{{#r_login}}}" target="_self" title="{$word->login}" role="button">
                   {$word->login}
                </a>
             </div>
@@ -748,6 +831,9 @@
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.general.css}}" />
    <?php if($TEMP['#dir'] == 'rtl'){ ?>
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.rtl.general.css}}" />
+   <?php } ?>
+   <?php if($TEMP['#settings']['switch_mode'] == 'on' || $TEMP['#settings']['theme_mode'] == 'night'){ ?>
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.dark.general.css}}" />
    <?php } ?>
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.modal.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.header.css}}" />
@@ -799,7 +885,7 @@
          })<?php } ?>
       }), $(window).on('load', function(){
          var x = $('#page-loader');
-         x.removeClass("show"), setTimeout(function(){
+         x.removeClass("show"), $('body').removeAttr('style'), setTimeout(function(){
             x.remove();
          }, 1000);
       }), paper_g = {
@@ -810,7 +896,8 @@
             table_search: '{$url->{req/search/table-search}}',
             nsettings: '{$url->{req/notifications/settings}}',
             get_ncontent: '{$url->{req/notifications/get-content}}',
-            get_count: '{$url->{req/notifications/get-count}}'
+            get_count: '{$url->{req/notifications/get-count}}',
+            set_darkmode: '{$url->{req/set-darkmode}}'
          },
          word: {
             date: '{$word->date}',
@@ -818,7 +905,8 @@
             sort_by: '{$word->sort_by}'
          },
          settings: {
-            nodejs: '{$settings->nodejs}'
+            nodejs: '{$settings->nodejs}',
+            switch_mode: '{$settings->switch_mode}'
          }
       };
    </script>

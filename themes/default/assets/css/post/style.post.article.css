@@ -138,6 +138,7 @@
 
 .item-rb-one {
     width: 150px;
+    height: 100px;
 }
 .item-rb-two {
     width: calc(100% - 165px);
@@ -281,9 +282,6 @@
 .container-apost::-webkit-scrollbar {
     height: 8px;
 }
-.container-apost::-webkit-scrollbar-track {
-    background: #cdcdcd;
-}
 .container-apost::-webkit-scrollbar-thumb {
     background: #909090;
 }
@@ -377,6 +375,7 @@
     }
     .item-rb-one {
         width: 120px;
+        height: 80px;
     }
     .item-rb-two {
         width: calc(100% - 135px);

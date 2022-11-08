@@ -2,7 +2,7 @@
 	<div id="container-pnmessage" class="container-pnmessage border-right border-grely<?php echo(!empty($TEMP['#username'])) ? ' hide-mobile' : '';?>">
 		<div class="display-flex direction-row align-center padding-t10 padding-b10 padding-l10 padding-r10">
 			<div class="w-36px h-36 overflow-hidden border-rall">
-				<img src="{$me->avatar_s}" alt="{$me->username}">
+				<img class="content-preloader-image position-relative blur-up lazyload" src="{$me->avatar_s}" alt="{$me->username}">
 			</div>
 			<span class="font-medium font-bold margin-auto">{$word->chats}</span>
 			<button id="btn-pmnew" class="w-36px h-36 btn-noway padding-5 background-hover border-rall animation-ease3s animate-tab-button">
@@ -25,7 +25,7 @@
 				    <div class="spinner-circle"></div>
 				</div>
 			</span>
-			<input id="item-pnsearch" class="w-100 text-left background-trans" type="text" autocomplete="off" placeholder="Buscar un usuario..">
+			<input id="item-pnsearch" class="w-100 text-left background-trans color-black" type="text" autocomplete="off" placeholder="{$word->find_a_user}..">
 		</div>
 		<div id="container-pnchats" class="container-pnchats overflow-autoy">
 			<div id="content-norefor" class="content-norefor hidden"></div>
@@ -33,7 +33,7 @@
 				<li id="content-pnnew" class="position-relative margin-l5 margin-r5 padding-l5 padding-r5 hidden">
 					<div class="content-pnmessage background-hover display-flex direction-row align-center color-black padding-t10 padding-b10 padding-l10 padding-r10 active">
 						<div class="item-pnmessage overflow-hidden border-rall margin-r10">
-							<img src="{$theme->{images/users/default-holder-s.jpeg}}" alt="Nuevo mensaje">
+							<img class="content-preloader-image position-relative blur-up lazyload" src="{$theme->{images/users/default-holder-s.jpeg}}" alt="{$word->new_message}">
 						</div>
 						<div class="display-flex direction-colum align-center">
 							{$word->new_message}
@@ -69,7 +69,7 @@
 				</button>
 				<a class="display-flex direction-row align-center padding-t5 padding-b5 padding-l10 padding-r10 color-black background-hover" href="{$slug}" title="{$username}">
 					<div class="w-36px h-36 margin-r5 overflow-hidden border-rall">
-						<img src="{$avatar_s}" alt="{$username}">
+						<img class="content-preloader-image position-relative blur-up lazyload" src="{$avatar_s}" alt="{$username}">
 					</div>
 					<span class="font-medium">{$username}</span>
 				</a>
@@ -100,7 +100,7 @@
 				</button>
 				<div class="display-flex w-100 padding-r10">
 					<div class="item-pmfor">{$word->for}:</div>
-					<input id="item-pmsearch" class="background-trans w-100" type="text" aria-expanded="false" aria-label="{$word->send_message_to}" role="combobox" autocomplete="off">
+					<input id="item-pmsearch" class="background-trans color-black w-100" type="text" aria-expanded="false" aria-label="{$word->send_message_to}" role="combobox" autocomplete="off">
 				</div>
 				<div class="content-pmsearch position-absolute background-white z-index-1 padding-5 overflow-autoy">
 					<div id="content-pmsspinner" class="content-pmsspinner spinner-is-loading display-flex position-relative w-100 h-45 margin-auto hidden">
@@ -150,7 +150,7 @@
 					<div id="content-mffiles" class="content-mffiles display-flex direction-row align-center padding-t10 padding-b10 overflow-autox hidden">
 						<div class="content_mfimage display-flex direction-row align-center position-relative margin-r15 hidden">
 							<div class="item_mfimage w-100 h-100 overflow-hidden">
-								<img src="" alt="">
+								<img class="content-preloader-image position-relative blur-up lazyload" src="" alt="">
 							</div>
 							<button class="btn_mffile disable_before icon-z btn-noway position-absolute background-white border-all border-grely border-rall background-hover animation-ease3s animate-tab-button" type="button">
 								<svg class="icon-c vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -189,8 +189,8 @@
 				</div>
 				<?php } ?>
 				<div class="display-flex direction-row align-center padding-t10 padding-b10 margin-l10 margin-r10">
-					<button id="btn-mffile" class="btn-mffile btn-noway position-relative margin-top-auto margin-r5" type="button"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>>
-						<span class="display-flex color-blue padding-5 border-rall animation-ease3s">
+					<button id="btn-mffile" class="btn-mffile btn-noway position-relative background-hover margin-r5 padding-5 border-rall animation-ease3s animate-tab-button" type="button"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>>
+						<span class="color-blue">
 							<svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
 								<polyline points="13 2 13 9 20 9"></polyline>
@@ -201,7 +201,7 @@
 					    </div>
 					</button>
 					<div class="content-pmarea display-flex item-pnbackground w-100 border-r25px overflow-hidden">
-						<textarea id="text-message" class="disable_before w-100 background-trans padding-t5 padding-b5 padding-l10 padding-r10 resize-none border-none" rows="1" placeholder="{$word->write_your_message}"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>></textarea>
+						<textarea id="text-message" class="disable_before w-100 background-trans color-black padding-t5 padding-b5 padding-l10 padding-r10 resize-none border-none" rows="1" placeholder="{$word->write_your_message}"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>></textarea>
 					</div>
 					<button id="btn-pmsend" class="disable_before btn-noway background-hover margin-top-auto margin-l5 padding-5 border-rall animation-ease3s animate-tab-button" type="submit"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>>
 						<span class="color-blue">
@@ -223,7 +223,7 @@
    <div class="item-alert background-white padding-t20 padding-b20 padding-l20 padding-r20 text-center border-rlow boxshadow-grey">
       <span id="alert-ltitle" class="display-block font-medium font-bold">{$word->error_uploading_files}</span>
       <p id="alert-lcontent" class="font-mediumly color-black margin-t15">{$word->file_selected_too_large}</p>
-      <button id="btn-close" class="btn-noway w-100px h-36 background-red color-white margin-t15 font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->close}</button>
+      <button id="btn-close" class="btn-noway w-100px h-36 background-red color-wwhite margin-t15 font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">{$word->close}</button>
    </div>
 </div>%%}
 <?php if($TEMP['#settings']['blocked_users'] == 'on'){ ?>
@@ -233,7 +233,7 @@
     <div class="display-flex direction-row margin-t10">
     	<div class="margin-bottom-auto">
     		<svg class="icon-z" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    			<path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM4 12c0-1.846.634-3.542 1.688-4.897l11.209 11.209A7.946 7.946 0 0 1 12 20c-4.411 0-8-3.589-8-8zm14.312 4.897L7.103 5.688A7.948 7.948 0 0 1 12 4c4.411 0 8 3.589 8 8a7.954 7.954 0 0 1-1.688 4.897z"/>
+    			<path fill="currentColor" d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM4 12c0-1.846.634-3.542 1.688-4.897l11.209 11.209A7.946 7.946 0 0 1 12 20c-4.411 0-8-3.589-8-8zm14.312 4.897L7.103 5.688A7.948 7.948 0 0 1 12 4c4.411 0 8 3.589 8 8a7.954 7.954 0 0 1-1.688 4.897z"/>
     		</svg>
     	</div>
     	<div class="display-flex direction-colum margin-l10">
@@ -252,9 +252,9 @@
     	</div>
     </div>
     <div class="display-flex direction-row align-center justify-center margin-t10">
-      <button id="btn-cbcancel" class="btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
-      <button id="btn-cblock" class="btn-noway w-100px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
-      		<span class="color-white">{$word->block}</span>
+      <button id="btn-cbcancel" class="btn-noway w-100px h-36 background-blue color-wwhite font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+      <button id="btn-cblock" class="btn-noway w-100px h-36 background-red font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+      		<span class="color-wwhite">{$word->block}</span>
 			<div class="content-spinner-circle position-absolute">
 				<div class="spinner-circle"></div>
 			</div>
@@ -268,9 +268,9 @@
 	    <span id="alert-cdtitle" class="display-block font-medium font-bold">{$word->are_you_sure}</span>
 	    <p id="alert-cdcontent" class="font-mediumly color-black margin-t5">{$word->delete_copy_conversation_wont_back}</p>
 	    <div class="display-flex direction-row align-center justify-center margin-t10">
-	      <button id="btn-cdcancel" class="btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
-	      <button id="btn-cdelete" class="btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
-	      		<span class="color-white">{$word->yes}</span>
+	      <button id="btn-cdcancel" class="btn-noway w-50px h-36 background-blue color-wwhite font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
+	      <button id="btn-cdelete" class="btn-noway w-50px h-36 background-red font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+	      		<span class="color-wwhite">{$word->yes}</span>
 				<div class="content-spinner-circle position-absolute">
 					<div class="spinner-circle"></div>
 				</div>
@@ -283,9 +283,9 @@
     <span id="alert-mmdtitle" class="display-block font-medium font-bold">{$word->are_you_sure}</span>
     <p id="alert-mmdcontent" class="font-mediumly color-black margin-t5">{$word->will_able_retrieve_message}</p>
     <div class="display-flex direction-row align-center justify-center margin-t10">
-      <button id="btn-mmcancel" class="btn-noway w-50px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
-      <button id="btn-mmdelete" class="btn-noway w-50px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
-      		<span class="color-white">{$word->yes}</span>
+      <button id="btn-mmcancel" class="btn-noway w-50px h-36 background-blue color-wwhite font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->no}</button>
+      <button id="btn-mmdelete" class="btn-noway w-50px h-36 background-red font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+      		<span class="color-wwhite">{$word->yes}</span>
 			<div class="content-spinner-circle position-absolute">
 				<div class="spinner-circle"></div>
 			</div>
@@ -311,9 +311,9 @@
     	</ul>
     </div>
     <div class="display-flex direction-row align-center justify-center margin-t10">
-      <button id="btn-mcancel" class="btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
-      <button id="btn-mdelete" class="btn-noway w-100px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
-      		<span class="color-white">{$word->delete}</span>
+      <button id="btn-mcancel" class="btn-noway w-100px h-36 background-blue color-wwhite font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+      <button id="btn-mdelete" class="btn-noway w-100px h-36 background-red font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+      		<span class="color-wwhite">{$word->delete}</span>
 			<div class="content-spinner-circle position-absolute">
 				<div class="spinner-circle"></div>
 			</div>
@@ -328,6 +328,7 @@
 	paper_m = {
         token: '{#token_session}',
         url: {
+            messages: '{$url->{{#r_messages}}}',
 			send: '<?php echo($TEMP['#settings']['nodejs'] == 'on') ? '//{$settings->node_hostname}:{$settings->node_server_port}' : '{$url->{req}}';?>/messages/send',
             fetch: '{$url->{req/messages/fetch}}',
             search_users: '{$url->{req/messages/search-users}}',

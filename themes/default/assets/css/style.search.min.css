@@ -30,10 +30,6 @@
 .content-sfilter::-webkit-scrollbar {
     height: 5px;
 }
-.content-sfilter::-webkit-scrollbar-track,
-.content-dfilter::-webkit-scrollbar-track {
-    background: #cdcdcd;
-}
 .content-sfilter::-webkit-scrollbar-thumb {
     background: #909090;
     border-radius: 2px;

@@ -19,8 +19,9 @@
                             <amp-social-share class="display-inline-block background-grely padding-5 border-rall border-all border-grely" type="email" width="16" height="16"></amp-social-share>
                         </li>
                         <li class="item-share display-flex w-100 margin-l15">
+                            <?php if($TEMP['#loggedin'] == true){ ?>
                             <form id="content-fsave" method="POST" action-xhr="{$url->{amp.php}}" target="_top">
-                                <input type="hidden" name="type" value="save">
+                                <input type="hidden" name="type" value="save" [value]="type">
                                 <input type="hidden" name="post_id" value="{$post_id}">
                                 <button class="btn-noway<?php echo($TEMP['#saved'] > 0) ? ' saved' : '';?>" type="submit">
 
@@ -42,6 +43,17 @@
 
                                 </button>
                             </form>
+                            <?php } else { ?>
+                            <a class="btn_save color-black" href="{$url->{{#r_login}}}" target="_self">
+                                <svg class="share-icon display-inline-block vertical-middle" stroke="none" width="16px" height="25px" viewBox="0 0 16 25">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <g stroke="currentColor" fill="none">
+                                        <path fill="<?php echo($TEMP['#saved'] > 0) ? 'currentColor' : 'none';?>" d="M0.5,0.5 L0.5,24.5 L8.1716264,19.5137775 L15.5,24.4404006 L15.5,0.5 L0.5,0.5 Z"></path>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </a>
+                            <?php } ?>
                         </li>
                     </ul>
                 </div>
@@ -49,7 +61,7 @@
 
             <div class="post-thumbnail content-gradient position-relative">
                 <div class="content-category position-absolute margin-t10 margin-l10">
-                    <a class="btn-noway background-black color-white text-uppercase border-rlow hover-button" href="{$category_slug}">{$category}</a>
+                    <a class="btn-noway background-black color-white text-uppercase boxshadow-grey border-rlow hover-button" href="{$category_slug}">{$category}</a>
                 </div>
                 <figure class="margin-t15" aria-label="{$word->illustration}" role="group">
                     <picture>
@@ -237,7 +249,7 @@
             <section id="comment-tabpanel2" class="items_comments display-flex direction-colum padding-t10 padding-b10 padding-l10 padding-r10"<?php echo($TEMP['#settings']['fb_comments'] == 'on') ? ' role="tabpanel" aria-labelledby="btn-ctab2" option' : '';?>>
                 <div class="content-cmessage display-flex direction-colum align-center position-absolute z-index-1 padding-t10 padding-b10 padding-l10 padding-r10">
                     <span class="color-black text-center margin-top-auto">{$word->using_amp_version_platform_comment}</span>
-                    <a class="background-blue color-white margin-bottom-auto margin-t15 padding-t5 padding-b5 padding-l20 padding-r20 border-rlow hover-button boxshadow-grey" href="{$url}" target="_blank">{$word->to_go}</a>
+                    <a class="background-blue color-wwhite margin-bottom-auto margin-t15 padding-t5 padding-b5 padding-l20 padding-r20 border-rlow hover-button boxshadow-grey" href="{$url}" target="_blank">{$word->to_go}</a>
                 </div>
                 <div class="display-flex direction-row align-center w-100 margin-t15 margin-b15">
                     <div class="margin-bottom-auto margin-r10">

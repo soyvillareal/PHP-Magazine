@@ -17,26 +17,26 @@ class Specific {
 			$suffix = "-$size.jpeg";
 		}
 
-		if(empty($file)){
+		if($type == 2){
+			$prefix = "themes/{$TEMP['#settings']['theme']}/";
+		} else {
+			if($type == 3) {
+				$prefix = 'uploads/entries/';
+			} else if($type == 5){
+				$prefix = "themes/{$TEMP['#settings']['theme']}/images/users/";
+			} else {
+				$prefix = "uploads/$folder/";
+			}
+		}
+			
+		if(empty($file) || !file_exists($prefix.$file.$suffix)){
 			$file = "default-holder";
 			$prefix = "themes/{$TEMP['#settings']['theme']}/images/{$folder}/";
 			if($type == 3){
 				$suffix = "-b.jpeg";
 			}
-		} else {
-			if($type == 2){
-				$prefix = "themes/{$TEMP['#settings']['theme']}/";
-			} else {
-				if($type == 3) {
-					$prefix = 'uploads/entries/';
-				} else if($type == 5){
-					$prefix = "themes/{$TEMP['#settings']['theme']}/images/users/";
-				} else {
-					$prefix = "uploads/$folder/";
-				}
-			}
 		}
-
+		
 	    return self::Url($prefix.$file.$suffix);
 	}
 

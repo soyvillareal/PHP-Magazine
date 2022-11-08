@@ -36,9 +36,72 @@
     body[dir=rtl] .text-right {
         text-align: left;
     }
+	body[dir=rtl] .dropdown-language-item:not(.selected) a {
+		padding-right: 33px;
+	}
     body[dir=rtl] .container_likes .btn_plike svg,
     body[dir=rtl] .container_likes .btn_pdislike svg,
     body[dir=rtl] .content-ctabs #btn-ctab2 svg,
     body[dir=rtl] .amp-carousel-button {
+        transform: scaleX(-1)
+    }
+
+
+    /* Margin */
+    body[dir=rtl] .margin-left-auto {
+        margin-right: auto;
+    }
+    body[dir=rtl] .margin-right-auto {
+        margin-left: auto;
+    }
+    body[dir=rtl] .margin-r5 {
+        margin-left: 5px;
+    }
+    body[dir=rtl] .margin-l10 {
+        margin-right: 10px;
+    }
+    body[dir=rtl] .margin-r10 {
+        margin-left: 10px;
+    }
+    body[dir=rtl] .margin-l15 {
+        margin-right: 15px;
+    }
+    body[dir=rtl] .margin-r15 {
+        margin-left: 15px;
+    }
+
+
+    /* Padding */
+    body[dir=rtl] .padding-r10 {
+        padding-left: 10px;
+    }
+    body[dir=rtl] .padding-l10 {
+        padding-right: 10px;
+    }
+    body[dir=rtl] .padding-l15 {
+        padding-right: 15px;
+    }
+    body[dir=rtl] .padding-r15 {
+        padding-left: 15px;
+    }
+    body[dir=rtl] .padding-r20 {
+        padding-left: 20px;
+    }
+    body[dir=rtl] .padding-l20 {
+        padding-right: 20px;
+    }
+
+    /* Border width and style */
+    body[dir=rtl] .border-right {
+        border-left-width: 1px;
+        border-left-style: solid;
+    }
+    body[dir=rtl] .border-left {
+        border-right-width: 1px;
+        border-right-style: solid;
+    }
+
+
+    body[dir=rtl] .btn-languages svg {
         transform: scaleX(-1)
     }

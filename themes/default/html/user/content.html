@@ -2,7 +2,7 @@
     <div class="display-flex direction-colum padding-t25">
         <div class="content-pinfo display-flex direction-row padding-t25 padding-b25">
             <div class="item-pimage margin-l15 padding-r20">
-                <figure class="overflow-hidden border-rall">
+                <figure class="content-preloader-image position-relative overflow-hidden border-rall">
                     <?php if($TEMP['#profile_blocked'] == false){ ?>
                     <img class="blur-up lazyload" src="{$avatar_b}" alt="{$username}"/>
                     <?php } else{ ?>
@@ -17,7 +17,7 @@
                     <?php if(!Specific::IsOwner($TEMP['#user_id'])){ ?>
                     <div id="container-poptions" class="margin-l15">
                         <button id="btn-poptions" class="btn-noway color-blackly btn-noway animation-ease3s animate-tab-button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->options}">
-                            <svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                                 <title>{$word->options}</title>
                                 <path cx="256" cy="256" r="48" d="M14.25 12A2.25 2.25 0 0 1 12 14.25A2.25 2.25 0 0 1 9.75 12A2.25 2.25 0 0 1 14.25 12z"></path>
                                 <path cx="256" cy="416" r="48" d="M14.25 19.5A2.25 2.25 0 0 1 12 21.75A2.25 2.25 0 0 1 9.75 19.5A2.25 2.25 0 0 1 14.25 19.5z"></path>
@@ -60,7 +60,7 @@
                     <?php if(!Specific::IsOwner($TEMP['#user_id'])){ ?>
                     <div id="container-poptions" class="margin-l15">
                         <button id="btn-poptions" class="btn-noway color-blackly btn-noway animation-ease3s animate-tab-button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->options}">
-                            <svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                                 <title>{$word->options}</title>
                                 <path cx="256" cy="256" r="48" d="M14.25 12A2.25 2.25 0 0 1 12 14.25A2.25 2.25 0 0 1 9.75 12A2.25 2.25 0 0 1 14.25 12z"></path>
                                 <path cx="256" cy="416" r="48" d="M14.25 19.5A2.25 2.25 0 0 1 12 21.75A2.25 2.25 0 0 1 9.75 19.5A2.25 2.25 0 0 1 14.25 19.5z"></path>
@@ -111,7 +111,7 @@
             <nav class="display-flex direction-row align-center margin-right-auto" aria-label="{$word->social_media}">
                 <?php if(!empty($TEMP['#contact_email']) && $TEMP['#profile']['shows']['contact_email'] == 'on'){ ?>
                 <a class="color-black margin-l15 margin-r15 padding-r10 hover-button animate-tab-button animation-ease3s" href="mailto:{#contact_email}" target="_blank" aria-label="{$word->contact_email}">
-                    <svg class="icon-z vertical-sub" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 24" xml:space="preserve" aria-hidden="true" focusable="false" role="img">
+                    <svg class="icon-z vertical-sub" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 24" xml:space="preserve" aria-hidden="true" focusable="false" role="img" fill="currentColor">
                         <title>{$word->contact_email}</title>
                         <path points="395,320.089 395,74.911 258.806,197.5" d="M24 19.448L24 4.552L15.725 12Z"/>
                         <path points="197.5,252.682 158.616,217.682 22.421,340.271 372.579,340.271 236.384,217.682" d="M12 15.353L9.637 13.226L1.362 20.675L22.638 20.675L14.363 13.226Z"/>
@@ -137,7 +137,7 @@
                 </a>
                 <?php } ?>
                 <?php if(!empty($TEMP['#facebook'])){ ?>
-                <a class="color-black margin-r15 padding-r10 hover-button animate-tab-button animation-ease3s" href="https://facebook.com/{#facebook}" target="_blank" aria-label="facebook">
+                <a class="color-black margin-r15 padding-r10 hover-button animate-tab-button animation-ease3s" href="https://facebook.com/{#facebook}" target="_blank" aria-label="{$word->facebook}">
                     <svg class="icon-z vertical-sub" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="img">
                         <title>{$word->facebook}</title>
                         <path fill="currentColor" d="M20.4 1.2H3.6c-1.32 0 -2.4 1.08 -2.4 2.4v16.8c0 1.321 1.08 2.4 2.4 2.4h8.4v-8.4H9.6V11.43h2.4v-2.46c0 -2.597 1.454 -4.421 4.519 -4.421l2.164 0.002v3.126h-1.436c-1.193 0 -1.646 0.895 -1.646 1.726v2.028h3.082L18 14.4h-2.4v8.4h4.8c1.32 0 2.4 -1.079 2.4 -2.4V3.6c0 -1.32 -1.08 -2.4 -2.4 -2.4z"/>
@@ -147,7 +147,7 @@
                 <a class="color-black hover-button animate-tab-button animation-ease3s" href="{$url->{{#r_rss}/{#r_user}/{$user}}}" target="_blank" aria-label="{$word->rss}">
                     <svg class="icon-z vertical-sub" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="img">
                         <title>{$word->rss}</title>
-                        <path fill-rule="nonzero" d="M2.88 2.88v2.84c8.503 0 15.396 6.895 15.396 15.398h2.843C21.119 11.046 12.953 2.88 2.88 2.88zm0 5.684v2.843a9.712 9.712 0 0 1 9.712 9.713h2.842c0 -6.934 -5.621 -12.556 -12.553 -12.556zm2.723 7.106a2.725 2.725 0 0 0 0 5.449c1.505 0 2.723 -1.219 2.723 -2.724s-1.218 -2.725 -2.723 -2.725z"></path>
+                        <path fill="currentColor" fill-rule="nonzero" d="M2.88 2.88v2.84c8.503 0 15.396 6.895 15.396 15.398h2.843C21.119 11.046 12.953 2.88 2.88 2.88zm0 5.684v2.843a9.712 9.712 0 0 1 9.712 9.713h2.842c0 -6.934 -5.621 -12.556 -12.553 -12.556zm2.723 7.106a2.725 2.725 0 0 0 0 5.449c1.505 0 2.723 -1.219 2.723 -2.724s-1.218 -2.725 -2.723 -2.725z"></path>
                     </svg>
                 </a>
             </nav>
@@ -259,8 +259,8 @@
     <span id="alert-pbtitle" class="display-block font-medium font-bold text-center">{$word->block_this_user}</span>
     <div class="display-flex direction-row margin-t10">
         <div class="margin-bottom-auto">
-            <svg class="icon-z" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM4 12c0-1.846.634-3.542 1.688-4.897l11.209 11.209A7.946 7.946 0 0 1 12 20c-4.411 0-8-3.589-8-8zm14.312 4.897L7.103 5.688A7.948 7.948 0 0 1 12 4c4.411 0 8 3.589 8 8a7.954 7.954 0 0 1-1.688 4.897z"/>
+            <svg class="icon-z color-black" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM4 12c0-1.846.634-3.542 1.688-4.897l11.209 11.209A7.946 7.946 0 0 1 12 20c-4.411 0-8-3.589-8-8zm14.312 4.897L7.103 5.688A7.948 7.948 0 0 1 12 4c4.411 0 8 3.589 8 8a7.954 7.954 0 0 1-1.688 4.897z"/>
             </svg>
         </div>
         <div class="display-flex direction-colum margin-l10">
@@ -279,9 +279,9 @@
         </div>
     </div>
     <div class="display-flex direction-row align-center justify-center margin-t10">
-      <button id="btn-pbcancel" class="btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
-      <button id="btn-pblock" class="btn-noway w-100px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
-            <span class="color-white">{$word->block}</span>
+      <button id="btn-pbcancel" class="btn-noway w-100px h-36 background-blue color-wwhite font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+      <button id="btn-pblock" class="btn-noway w-100px h-36 background-red font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+            <span class="color-wwhite">{$word->block}</span>
             <div class="content-spinner-circle position-absolute">
                 <div class="spinner-circle"></div>
             </div>
@@ -336,9 +336,9 @@
       <div id="item-abuttons" class="display-block border-top border-grely">
          <div class="display-flex">
             <div class="margin-auto padding-t15 padding-b15 padding-l20 padding-r20">
-               <button id="btn-rcancel" class="btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
-               <button id="btn-rsend" class="btn-noway w-100px h-36 background-green color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button" disabled>
-                  <span class="color-white">{$word->send}</span>
+               <button id="btn-rcancel" class="btn-noway w-100px h-36 background-blue color-wwhite font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+               <button id="btn-rsend" class="btn-noway w-100px h-36 background-green font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button" disabled>
+                  <span class="color-wwhite">{$word->send}</span>
                   <div class="content-spinner-circle position-absolute">
                      <div class="spinner-circle"></div>
                   </div>

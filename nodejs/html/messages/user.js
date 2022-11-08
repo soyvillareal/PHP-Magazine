@@ -5,7 +5,7 @@ module.exports = function(socket, temp){
     return `<li class="content_pnuser position-relative margin-l5 margin-r5 padding-l5 padding-r5`+(temp.last_text == '' ? ' is_new' : '')+`" data-id="{!user_id}">
         <a class="content-pnmessage background-hover display-flex direction-row align-center color-black padding-t10 padding-b10 padding-l10 padding-r10`+(temp.profile_id == temp.user_id || temp.last_text == '' ? ' active' : '')+(temp.last_unseen == !0 ? ' unseen' : '')+`" href="{$url->{{#r_messages}/{!user}}}">
             <div class="item-pnmessage overflow-hidden border-rall margin-r10">
-                <img class="blur-up lazyload" src="{!avatar_s}" alt="{!username}">
+                <img class="content-preloader-image position-relative blur-up lazyload" src="{!avatar_s}" alt="{!username}">
             </div>
             <div class="display-flex direction-colum">
                 <span class="margin-b5">{!username}</span>

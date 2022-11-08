@@ -219,9 +219,6 @@ li.content-cpost figure {
 .container-cpost::-webkit-scrollbar {
     height: 8px;
 }
-.container-cpost::-webkit-scrollbar-track {
-    background: #cdcdcd;
-}
 .container-cpost::-webkit-scrollbar-thumb,
 .content_edattrs::-webkit-scrollbar-thumb {
     background: #909090;
@@ -351,8 +348,9 @@ li.content-cpost figure {
 .content_edattrs .content_edinput:first-child {
     margin-top: 0;
 }
-.entry[data-type=carousel] {
-    z-index: 102;
+.btn-spotify,
+.btn-tiktok {
+    background-color: #000;
 }
 .color-spotify {
     color: #1ed760;

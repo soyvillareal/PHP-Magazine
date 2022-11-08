@@ -1,6 +1,6 @@
 <div class="container-newsletter">
     <?php if($TEMP['#newsletter_showhead'] == true){ ?>
-    <div class="content-back-settings background-grely padding-t10 padding-b10 padding-l10 padding-r10 border-rlow border-bottom border-grely">
+    <div class="content-back-settings background-grely padding-t10 padding-b10 padding-l10 padding-r10 border-rlow-top-left border-rlow-top-right border-bottom border-grely">
         <a class="display-flex direction-row align-center hover-button" href="{$url->{{#r_settings}}}" target="_self">
             <svg class="icon-z color-grey margin-r5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path fill="currentColor" d="M 20 11.343 L 20 12.657 C 20 13.02 19.882 13.33 19.647 13.587 C 19.411 13.843 19.105 13.972 18.728 13.972 L 11.076 13.972 L 14.261 16.991 C 14.536 17.237 14.674 17.546 14.674 17.915 C 14.674 18.285 14.536 18.593 14.261 18.84 L 13.446 19.62 C 13.178 19.873 12.851 20 12.467 20 C 12.091 20 11.761 19.873 11.478 19.62 L 4.402 12.924 C 4.134 12.671 4 12.363 4 12 C 4 11.644 4.134 11.332 4.402 11.065 L 11.478 4.39 C 11.754 4.13 12.083 4 12.467 4 C 12.844 4 13.17 4.13 13.446 4.39 L 14.261 5.15 C 14.536 5.41 14.674 5.722 14.674 6.085 C 14.674 6.448 14.536 6.759 14.261 7.019 L 11.076 10.028 L 18.728 10.028 C 19.105 10.028 19.411 10.157 19.647 10.413 C 19.882 10.67 20 10.98 20 11.343 Z"></path>
@@ -21,7 +21,7 @@
                         <?php if($TEMP['#newsletter_exists'] == false){ ?>
                         <div class="color-red text-left text-error font-low margin-t5"></div>
                         <?php } ?>
-                        <label class="item-label position-absolute pointer-events-none first-capitalize ellipsis-horizontal">{$word->email}</label>
+                        <label class="item-label color-black position-absolute pointer-events-none first-capitalize ellipsis-horizontal">{$word->email}</label>
                     </div>
                     <div class="item-newsletter w-50 margin-b10">
                         <select id="newsletter-type" class="item_place background-white color-black padding-l10 w-100 h-45 border-focus-blue border-rlow border-all border-black caret-down" aria-label="{$word->types_of_newsletters}">
@@ -69,15 +69,15 @@
                     </div>
                 </div>
             </div>
-            <button id="btn-newsletter" class="btn-noway w-100 h-36 background-blue color-white font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-label="{$aria_button}" disabled>
-                <span class="color-white">{$button}</span>
+            <button id="btn-newsletter" class="btn-noway w-100 h-36 background-blue font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-label="{$aria_button}" disabled>
+                <span class="color-wwhite">{$button}</span>
                 <div class="content-spinner-circle position-absolute">
                     <div class="spinner-circle"></div>
                 </div>
             </button>
             <?php if($TEMP['#newsletter_exists'] == true){ ?>
             <div class="position-relative">
-                <button id="btn-popup" class="btn-noway w-100 h-36 background-red color-white font-medium font-bold padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-label="{$word->unsubscribe_the_newsletter}" aria-expanded="false">{$word->unsubscribe}</button>
+                <button id="btn-popup" class="btn-noway w-100 h-36 background-red color-wwhite font-medium font-bold padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button" aria-label="{$word->unsubscribe_the_newsletter}" aria-expanded="false">{$word->unsubscribe}</button>
                 <div id="unsubscribe-popup" class="content-unsubscribe-popup position-absolute background-white margin-b10 padding-t20 padding-b20 padding-l20 padding-r20 text-center hidden">
                     <span class="display-block font-medium font-bold">{$word->regret_decides_go}</span>
                     <p class="font-mediumly color-black margin-t5">{$word->help_us_understand_why}.</p>
@@ -90,7 +90,7 @@
                     </select>
                     <div class="display-block position-relative w-100 margin-t10 hidden">
                         <textarea id="other" class="item-nother item_place item-input background-white color-black w-100 padding-t25 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="text" aria-label="{$word->another_reason_unsubscribe}" maxlength="{$settings->max_words_unsub_newsletter}" autocomplete="other" autocapitalize="off"></textarea>
-                        <label class="item-label background-white w-100 first-capitalize position-absolute pointer-events-none ellipsis-horizontal text-left">{$word->why_do_you_want_leave}</label>
+                        <label class="item-label background-white color-black w-100 first-capitalize position-absolute pointer-events-none ellipsis-horizontal text-left">{$word->why_do_you_want_leave}</label>
                     </div>
                     <div class="display-flex">
                         <div class="color-red text-left text-error font-low margin-t5"></div>
@@ -99,9 +99,9 @@
                         </div>
                     </div>
                     <div class="display-flex direction-row align-center justify-center margin-t15" role="dialog" aria-label="{$word->unsubscribe_the_newsletter}">
-                        <button id="btn-cancel" class="item_place btn-noway w-100px h-36 background-blue color-white font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
-                        <button id="btn-unsubscribe" class="item_place btn-noway w-100px h-36 background-red color-white font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
-                            <span class="color-white">{$word->send}</span>
+                        <button id="btn-cancel" class="item_place btn-noway w-100px h-36 background-blue color-wwhite font-franklin font-mediumly font-bold margin-r10 border-r25px inhover-button animation-ease3s" type="button">{$word->cancel}</button>
+                        <button id="btn-unsubscribe" class="item_place btn-noway w-100px h-36 background-red font-franklin font-mediumly font-bold border-r25px inhover-button animation-ease3s" type="button">
+                            <span class="color-wwhite">{$word->send}</span>
                             <div class="content-spinner-circle position-absolute">
                                 <div class="spinner-circle"></div>
                             </div>

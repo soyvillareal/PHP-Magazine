@@ -18,7 +18,7 @@ module.exports = function(socket, temp){
             </svg>
         </button>
         <a class="border-rlow overflow-hidden margin-t5" href="{!fi_url}" target="_blank">
-            <img class="blur-up item-pmtimage lazyload" src="{!fi_url}" alt="{!fi_name}">
+            <img class="content-preloader-image position-relative blur-up item-pmtimage lazyload" src="{!fi_url}" alt="{!fi_name}">
         </a>
     </div>`;
 };

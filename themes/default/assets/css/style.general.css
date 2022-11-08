@@ -205,7 +205,7 @@ ul {
 
 .content-advertisement::before {
     font-size: 10px;
-    color: #8592a4;
+    color: #cdcdcd;
     display: block;
     content: 'Ad';
     width: 100%;
@@ -214,6 +214,18 @@ ul {
     letter-spacing: .5px;
     text-align: center;
     text-transform: uppercase;
+}
+
+.content-categories .item-categories::-webkit-scrollbar-thumb {
+    background: #909090;
+    border-radius: 2px;
+}
+.content-categories .item-categories::-webkit-scrollbar {
+    height: 5px;
+}
+
+.btn_darkmode {
+    height: 32px;
 }
 
 /* Extra */
@@ -351,6 +363,7 @@ ul {
 }
 
 /* Background color */
+.background-wwhite,
 .background-white {
     background-color: #fff;
 }
@@ -383,6 +396,7 @@ ul {
 .color-black {
     color: #000;
 }
+.color-wwhite,
 .color-white {
     color: #fff;
 }
@@ -683,10 +697,19 @@ body[dir=ltr] .padding-r15 {
 .h-0 {
     height: 0;
 }
+.h-auto {
+    height: auto;
+}
 
 /* Border radius */
 .border-rall {
-    border-radius: 100%;
+    border-radius: 50%;
+}
+.border-rlow-top-left {
+    border-top-left-radius: 3px;
+}
+.border-rlow-top-right {
+    border-top-right-radius: 3px;
 }
 .border-rlow {
     border-radius: 3px;
@@ -878,6 +901,20 @@ body.backdrop-active-as .content-backdrop-as:before {
     background: transparent;
     background: -webkit-gradient(linear,left top,left bottom,color-stop(13%,transparent),color-stop(56%,rgba(0,0,0,.15)),color-stop(91%,rgba(0,0,0,.65)));
     background: linear-gradient(180deg, transparent 13%, rgba(0,0,0,.15) 56%, rgba(0,0,0,.65) 91%);
+}
+.content-preloader-image:after {
+    background: #f7f7f7 url('../../images/preloader.gif');
+    background-position: 50%;
+    background-size: cover;
+    bottom: 0;
+    content: "";
+    height: 100%;
+    left: 0;
+    opacity: 1;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: -1;
 }
 .content-category a {
     padding: 4px 8px;
