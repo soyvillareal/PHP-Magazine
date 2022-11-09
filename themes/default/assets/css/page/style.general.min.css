@@ -30,6 +30,15 @@
 .content-page {
 	max-width: 650px;
 }
+.link-twitter {
+    color: #00adee;
+}
+.link-instagram {
+    color: #8a3ab9;
+}
+.link-facebook {
+	color: #3b5998;
+}
 @media(max-width: 590px){
 	.container-page .item-page {
 		font-size: 32px;

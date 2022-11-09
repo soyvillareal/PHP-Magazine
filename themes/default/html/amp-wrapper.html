@@ -342,9 +342,11 @@
                     <div class="footer-logo text-center">
                        <div class="site-logo display-inline-block w-100 h-45 position-relative vertical-middle"></div>
                     </div>
+                    <?php if(!empty($TEMP['#word']['footer_message'])){ ?>
                     <p class="color-black font-low text-center margin-t10">
                        {$word->footer_message}
                     </p>
+                    <?php } ?>
                 </div>
                 <div class="footer-pages margin-t10 text-center">
                     <div class="font-mediumly font-bold margin-b5">      

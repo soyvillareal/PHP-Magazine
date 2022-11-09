@@ -303,7 +303,7 @@
    }, $('#content-video-posts').click(function(){
       $(this).html('{$frame}')
    }), $('#btn-cbreaking').click(function(){
-      $('#content-bnews').remove(), document.cookie = 'breaking_news='+paper_h.breaking_id+';max-age=604800;path=/';
+      $('#content-bnews').remove(), document.cookie = 'breaking_news='+paper_h.breaking_id+';max-age='+((new Date().getTime()) + 31536000000)+';path=/';
    });
 </script>%%}
 {%%<script src="{$theme->{assets/js/home/jquery.home.min.js}}"></script>%%}

@@ -37,7 +37,7 @@ if(!empty($type) && in_array($type, array('save', 'darkmode', 'reaction', 'next-
 				}
 			} else {
 				$code = 200;
-				setcookie("darkmode", $darkmodes[$darkmode], time() + 604800, "/");
+				setcookie("darkmode", $darkmodes[$darkmode], time() + 315360000, "/");
 				$deliver['type'] = json_encode($darkmode == 'true' ? false : true);
 			}
 		}

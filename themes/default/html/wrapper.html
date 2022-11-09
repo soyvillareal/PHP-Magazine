@@ -696,9 +696,11 @@
             <div class="footer-logo text-center">
                <div class="site-logo display-inline-block w-100 h-45 position-relative vertical-middle"></div>
             </div>
+            <?php if(!empty($TEMP['#word']['footer_message'])){ ?>
             <p class="color-black font-low text-center margin-t10">
                {$word->footer_message}
             </p>
+            <?php } ?>
          </div>
          <div class="footer-pages flex-1">
             <div class="font-mediumly font-bold margin-b5">      
@@ -826,6 +828,15 @@
       </div>
    </div>
    <?php } ?>
+   <?php if(empty($_COOKIE['dismiss_cookies'])){ ?>
+   <div id="container-ccookies" class="content-ccookies display-flex direction-row align-center justify-center w-100 position-fixed background-grely color-black padding-t10 padding-b10 padding-l15 padding-r15 pointer-events-none animation-ease3s" role="dialog" aria-live="polite" aria-label="{$word->cookie_consent}" aria-describedby="alert-dcookieconsent" style="opacity:0;">
+      <span id="alert-dcookieconsent" class="font-mediumly">
+         {$word->website_uses_cookies_ensure} <a class="color-grey hover-blue hover-underline animation-ease3s" aria-label="{$word->learn_more_about_cookies}" role="button" tabindex="0" href="{$url->{{#r_page}/{#r_habeas_data}}}" target="_blank">{$word->know_more}</a>
+      </span>
+      <button id="btn-cdismiss" class="btn-cdismiss btn-noway display-block background-blue color-wwhite margin-left-auto padding-r15 padding-l15 hover-button animation-ease3s" aria-label="{$word->dismiss_cookie_message}" tabindex="0">{$word->i_have_it}</button>
+   </div>
+   <?php } ?>
+
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.fonts.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.search.min.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.general.css}}" />
@@ -884,10 +895,15 @@
             a.toggleClass('modal-login-active'), g($(this)), a.removeClass('backdrop-active-as')
          })<?php } ?>
       }), $(window).on('load', function(){
-         var x = $('#page-loader');
+         var x = $('#page-loader'),
+             v = $('#container-ccookies');
          x.removeClass("show"), $('body').removeAttr('style'), setTimeout(function(){
             x.remove();
-         }, 1000);
+         }, 1000)<?php if(empty($_COOKIE['dismiss_cookies'])){ ?>, setTimeout(function(){
+            v.removeClass('pointer-events-none').css('opacity', 1);
+         }, 3000), $('#btn-cdismiss').click(function(){
+            document.cookie = 'dismiss_cookies=true;max-age='+((new Date().getTime()) + 31536000000)+';path=/', v.addClass('pointer-events-none').css('opacity', 0);
+         })<?php } ?>;
       }), paper_g = {
          token: '{#token_session}',
          loggedin: {#loggedin},
