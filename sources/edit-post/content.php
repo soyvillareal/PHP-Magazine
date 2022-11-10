@@ -19,12 +19,13 @@ if (empty($post_id)){
 
 $post = $dba->query('SELECT * FROM '.T_POST.' WHERE id = ?', $post_id)->fetchArray();
 
-if (empty($post) || !Specific::IsOwner($post['user_id'])){
+if (empty($post) || (!Specific::IsOwner($post['user_id']) && $TEMP['#moderator'] == false)){
     header("Location: ".Specific::Url('404'));
     exit();
 }
 
 $TEMP['#post_title'] = $post['title'];
+$TEMP['#published_at'] = $post['published_at'];
 $TEMP['#category_id'] = $post['category_id'];
 $TEMP['#post_description'] = $post['description'];
 

@@ -384,7 +384,7 @@ if ($TEMP['#publisher'] === true) {
 					}
 
 					$status = 'approved';
-					if($TEMP['#settings']['approve_posts'] == 'on' && $TEMP['#admin'] == false){
+					if($TEMP['#settings']['approve_posts'] == 'on' && $TEMP['#moderator'] == false){
 						$status = 'pending';
 					}
 
@@ -399,6 +399,7 @@ if ($TEMP['#publisher'] === true) {
 						}
 						
 						if($action == 'eraser'){
+							$status = 'pending';
 							$published_at = 0;
 						}
 						$post_id = $dba->query('INSERT INTO '.T_POST.' (user_id, category_id, title, description, slug, thumbnail, post_sources, thumb_sources, type, status, published_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', $TEMP['#user']['id'], $category, $title, $description, $slug, $thumbnail['image'], $post_sources, $thumb_sources, $type, $status, $published_at, $created_at)->insertId();
@@ -607,7 +608,7 @@ if ($TEMP['#publisher'] === true) {
 							}
 
 							if(!in_array(false, $arr_trues)){
-								if($action == 'post' && ($TEMP['#settings']['approve_posts'] == 'off' || $TEMP['#admin'] == true)){
+								if($action == 'post' && ($TEMP['#settings']['approve_posts'] == 'off' || $TEMP['#moderator'] == true)){
 									$followers = $dba->query('SELECT user_id FROM '.T_FOLLOWER.' WHERE profile_id = ?', $TEMP['#user']['id'])->fetchAll();
 									foreach($followers as $follow){
 										$user = Specific::Data($follow['user_id']);
@@ -686,6 +687,7 @@ if ($TEMP['#publisher'] === true) {
 
 		$thumbnail = !empty($_FILES['thumbnail']) ? $_FILES['thumbnail'] : Specific::Filter($_POST['thumbnail']);
 		$tags = Specific::Filter($_POST['tags']);
+		$action = Specific::Filter($_POST['action']);
 
 		if(empty($title)){
 			$empty[] = array(
@@ -774,366 +776,429 @@ if ($TEMP['#publisher'] === true) {
 		}
 
 		if(!empty($post_id)){
-			$post = $dba->query('SELECT slug, thumbnail, COUNT(*) as count FROM '.T_POST.' WHERE id = ? AND user_id = ?', $post_id, $TEMP['#user']['id'])->fetchArray();
+			$post = $dba->query('SELECT user_id, slug, thumbnail, status, published_at, COUNT(*) as count FROM '.T_POST.' WHERE id = ?', $post_id)->fetchArray();
 
-			if($post['count'] > 0){
-				if(empty($empty)){
-					if(!empty($_FILES['thumbnail'])){
-						if($_FILES['thumbnail']['size'] > $TEMP['#settings']['file_size_limit']){
+			if($post['count'] > 0 && (Specific::IsOwner($post['user_id']) || $TEMP['#moderator'] == true)){
+				if(in_array($action, array('post', 'save'))){
+					if(empty($empty)){
+						if(!empty($_FILES['thumbnail'])){
+							if($_FILES['thumbnail']['size'] > $TEMP['#settings']['file_size_limit']){
+								$error[] = array(
+									'EL' => '#post-right .item-placeholder',
+									'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
+								);
+							}
+						}
+						if(!in_array($category, $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false))){
 							$error[] = array(
-								'EL' => '#post-right .item-placeholder',
-								'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
+								'EL' => '#category',
+								'TX' => "*{$TEMP['#word']['oops_error_has_occurred']}"
 							);
 						}
-					}
-					if(!in_array($category, $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false))){
-						$error[] = array(
-							'EL' => '#category',
-							'TX' => "*{$TEMP['#word']['oops_error_has_occurred']}"
-						);
-					}
-					foreach ($entries as $key => $entry) {
-						$ids[] = (int)end($entry);
+						foreach ($entries as $key => $entry) {
+							$ids[] = (int)end($entry);
 
-						if($entry[0] == 'image'){
-							if(!empty($_FILES['thumbnail_'.$key])){
-								if($_FILES['thumbnail_'.$key]['size'] > $TEMP['#settings']['file_size_limit']){
-									$error[] = array(
-										'EL' => $key,
-										'CS' => '.item-placeholder',
-										'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
-									);
-								}
-							} else {
-								if(!empty($entry[2])){
-									$image_err = false;
-									$validate_url = Specific::ValidateUrl($entry[2], true);
-									$entries[$key][2] = $entry[2] = $validate_url['url'];
-									if(!$validate_url['return']){
-										$image_err = true;
-										$image_errt = "*{$TEMP['#word']['enter_a_valid_url']}";
-									} else if(exif_imagetype($entry[2]) == false){
-										$image_err = true;
-										$image_errt = "*{$TEMP['#word']['download_could_not_completed']}";
-									}
-									if($image_err){
+							if($entry[0] == 'image'){
+								if(!empty($_FILES['thumbnail_'.$key])){
+									if($_FILES['thumbnail_'.$key]['size'] > $TEMP['#settings']['file_size_limit']){
 										$error[] = array(
 											'EL' => $key,
 											'CS' => '.item-placeholder',
-											'TX' => $image_errt
+											'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
 										);
 									}
-								}
-							}
-						}
-
-						if($entry[0] == 'carousel'){
-							$carousel_id = 'carousel_'.$key.'_1';
-							if(empty($_FILES[$carousel_id]) && empty($_POST[$carousel_id])){
-								$error[] = array(
-									'EL' => $key,
-									'CS' => '.content-carrusel',
-									'TX' => "*{$TEMP['#word']['must_insert_more_one_image']}"
-								);
-							} else {
-								for ($i=0; $i < (int)$entry[2]; $i++) {
-									$carousel_id = 'carousel_'.$key.'_'.$i;
-									if($_FILES[$carousel_id]['size'] > $TEMP['#settings']['file_size_limit']){
-										$error[] = array(
-											'EL' => $key,
-											'CS' => '.content-carrusel',
-											'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['one_file_too_big_maximum_size']}")
-										);
-										break;
-									}
-								}
-							}
-						}
-
-						if($entry[0] == 'embed'){
-							if(!Specific::ValidateUrl($entry[2])){
-								$error[] = array(
-									'EL' => $key,
-									'CS' => '.item_url',
-									'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
-								);
-							}
-						}
-
-						if(!((bool)$entry[3])){
-							if($entry[0] == 'video'){
-								if(preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?(?:youtu\.be|youtube\.com)\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/)([^\?&\"'>]+)/", $entry[2]) == false && preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?vimeo\.com\/([0-9]+)$/", $entry[2]) == false && preg_match("/^.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/", $entry[2]) == false){
-									$error[] = array(
-										'EL' => $key,
-										'CS' => '.item-input',
-										'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
-									);
-								}
-							}
-
-							if($entry[0] == 'facebookpost'){
-								if(preg_match("/(?:(?:http|https):\/\/)?(?:www\.)?(?:facebook\.com)\/(\d+|[A-Za-z0-9\.]+)\/?/", $entry[2]) == false){
-									$error[] = array(
-										'EL' => $key,
-										'CS' => '.item-input',
-										'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
-									);
-								}
-							}
-
-							if($entry[0] == 'instagrampost'){
-								if(preg_match("/(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/(?:p|tv|reel)\/([A-Za-z0-9-_\.]+)/", $entry[2]) == false){
-									$error[] = array(
-										'EL' => $key,
-										'CS' => '.item-input',
-										'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
-									);
-								}
-							}
-
-							if($entry[0] == 'tweet'){
-								if(preg_match('/^https?:\/\/(mobile.|)twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/', $entry[2]) == false){
-									$error[] = array(
-										'EL' => $key,
-										'CS' => '.item-input',
-										'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
-									);
-								}
-							}
-
-							if($entry[0] == 'tiktok'){
-								$tiktok_url = preg_match("/(?:http(?:s)?:\/\/)?(?:(?:www)\.(?:tiktok\.com)(?:\/)(?!foryou)(@[a-zA-z0-9]+)(?:\/)(?:video)(?:\/)([\d]+)|(?:m)\.(?:tiktok\.com)(?:\/)(?!foryou)(?:v)(?:\/)?(?=([\d]+)\.html))/", $entry[2], $tk_video_url);
-								$tiktok_param = preg_match("/#\/(?P<username>@[a-zA-z0-9]*|.*)(?:\/)?(?:v|video)(?:\/)?(?P<id>[\d]+)/", $entry[2], $tk_video_param);
-
-								if($tiktok_param == true || ($tiktok_param == true && Specific::ValidateUrl($entry[2]))){
-									$tiktok_url = true;
-									$entries[$key][2] = "https://www.tiktok.com/{$tk_video_param['username']}/video/{$tk_video_param['id']}";
-								}
-
-								if($tiktok_url == false){
-									$error[] = array(
-										'EL' => $key,
-										'CS' => '.item-input',
-										'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
-									);
-								}
-							}
-
-							if($entry[0] == 'soundcloud'){
-								if(preg_match('/^(?:(https?):\/\/)?(?:(?:www|m)\.)?(soundcloud\.com|snd\.sc)\/[a-z0-9](?!.*?(-|_){2})[\w-]{1,23}[a-z0-9](?:\/.+)?$/', $entry[2]) == false){
-									$error[] = array(
-										'EL' => $key,
-										'CS' => '.item-input',
-										'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
-									);
-								}
-							}
-
-							if($entry[0] == 'spotify'){
-								if(preg_match('/https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:(track|artist|album|playlist|episode)|user\/([a-zA-Z0-9]+)\/playlist)\/([a-zA-Z0-9]+)|spotify:((track|artist|album|playlist|episode):([a-zA-Z0-9]+)|user:([a-zA-Z0-9]+):playlist:([a-zA-Z0-9]+))/', $entry[2]) == false){
-									$error[] = array(
-										'EL' => $key,
-										'CS' => '.item-input',
-										'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
-									);
-								}
-							}
-						}
-					}
-
-					if(!in_array($type, array('normal', 'video'))){
-						$error[] = array(
-							'EL' => '#type',
-							'TX' => "*{$TEMP['#word']['oops_error_has_occurred']}"
-						);
-					}
-
-					if(!empty($post_sources)){
-						$error_positions = array();
-						if(count($post_sources) < $TEMP['#settings']['number_of_fonts']){
-							foreach($post_sources as $key => $source) {
-								if(!empty($source['name']) && !empty($source['source'])){
-									if(!Specific::ValidateUrl($source['source'])){
-										$error_positions[] = $key;
-									}
-								}
-							}
-							if(!empty($error_positions)){
-								$error[] = array(
-									'EL' => '.post_sources',
-									'PS' => $error_positions,
-									'CT' => 0,
-									'FD' => 2,
-									'SW' => 0,
-									'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
-								);
-							}
-						} else {
-							$error[] = array(
-								'EL' => '.post_sources',
-								'CT' => 0,
-								'SW' => 0,
-								'TX' => "*{$TEMP['#word']['oops_error_has_occurred']}"
-							);
-						}	
-					}
-
-					if(!empty($thumb_sources)){
-						$error_positions = array();
-						if(count($thumb_sources) < $TEMP['#settings']['number_of_fonts']){
-							foreach($thumb_sources as $key => $source) {
-								if(!empty($source['name']) && !empty($source['source'])){
-									if(!Specific::ValidateUrl($source['source'])){
-										$error_positions[] = $key;
-									}
-								}
-							}
-							if(!empty($error_positions)){
-								$error[] = array(
-									'EL' => '.post_sources',
-									'PS' => $error_positions,
-									'CT' => 1,
-									'FD' => 2,
-									'SW' => 0,
-									'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
-								);
-							}
-						} else {
-							$error[] = array(
-								'EL' => '.post_sources',
-								'CT' => 1,
-								'SW' => 0,
-								'TX' => "*{$TEMP['#word']['oops_error_has_occurred']}"
-							);
-						}	
-					}
-
-					$tags = explode(',', $tags);
-					if(count($tags) > $TEMP['#settings']['number_labels']){
-						$error[] = array(
-							'EL' => '#content-tags',
-							'TX' => "*{$TEMP['#word']['oops_error_has_occurred']}"
-						);
-					}
-
-					if(empty($error)){
-						if(!empty($thumbnail) && !preg_match("/{$TEMP['#site_domain']}/i", $thumbnail)){
-							if(!empty($_FILES['thumbnail'])){
-								$thumbnail = Specific::UploadImage(array(
-									'name' => $_FILES['thumbnail']['name'],
-									'tmp_name' => $_FILES['thumbnail']['tmp_name'],
-									'size' => $_FILES['thumbnail']['size'],
-									'type' => $_FILES['thumbnail']['type'],
-									'folder' => 'posts',
-								));
-							} else {
-								$thumbnail = Specific::UploadThumbnail(array(
-									'media' => $thumbnail,
-									'folder' => 'posts'
-								));
-							}
-							if($thumbnail['return']){
-								unlink("uploads/posts/{$post['thumbnail']}-s.jpeg");
-								unlink("uploads/posts/{$post['thumbnail']}-b.jpeg");
-							}
-						} else {
-							$thumbnail = array(
-								'return' => true,
-								'image' => $post['thumbnail']
-							);
-						}
-						if(!empty($post_sources)){
-							$post_sources = json_encode(array_values($post_sources));
-						} else {
-							$post_sources = NULL;
-						}
-						if(!empty($thumb_sources)){
-							$thumb_sources = json_encode(array_values($thumb_sources));
-						} else {
-							$thumb_sources = NULL;
-						}
-						if($thumbnail['return']){
-							$st_regex = '/<(?:script|style)[^>]*>(.*?)<\/(?:script|style)>/is';
-							$slug = $post['slug'];
-							$updated_at = $created_at = time();
-
-							if($dba->query('UPDATE '.T_POST.' SET category_id = ?, title = ?, description = ?, thumbnail = ?, post_sources = ?, thumb_sources = ?, type = ?, updated_at = ? WHERE id = ?', $category, $title, $description, $thumbnail['image'], $post_sources, $thumb_sources, $type, $updated_at, $post_id)->returnStatus()){
-
-
-								$entries_ids = $dba->query('SELECT id FROM '.T_ENTRY.' WHERE post_id = ?', $post_id)->fetchAll(false);
-
-								$del_entries = array_diff($entries_ids, $ids);
-
-								$carousel_accept = false;
-								$arr_trues = array();
-								foreach ($entries as $key => $entry) {
-									$entry_id = (int)end($entry);
-									$entry_exists = $dba->query('SELECT eorder, frame FROM '.T_ENTRY.' WHERE id = ? AND post_id = ?', $entry_id, $post_id)->fetchArray();
-									
-									$entry_title = NULL;
-									if(!empty($entry[1])){
-										$entry_title = $entry[1];
-									}
-									$entry_source = NULL;
-
-									if(in_array($entry[0], array('text', 'image', 'carousel'))){
-										if($entry[0] == 'text'){
-											if(isset($entry[3])){
-												$entry_source = $entry[3];
-											}
-										} else if($entry[0] == 'image'){
-											if(isset($entry[4])){
-												$entry_source = $entry[4];
-											}
-										} else {
-											if(isset($entry[5])){
-												$entry_source = $entry[5];
-											}
+								} else {
+									if(!empty($entry[2])){
+										$image_err = false;
+										$validate_url = Specific::ValidateUrl($entry[2], true);
+										$entries[$key][2] = $entry[2] = $validate_url['url'];
+										if(!$validate_url['return']){
+											$image_err = true;
+											$image_errt = "*{$TEMP['#word']['enter_a_valid_url']}";
+										} else if(exif_imagetype($entry[2]) == false){
+											$image_err = true;
+											$image_errt = "*{$TEMP['#word']['download_could_not_completed']}";
+										}
+										if($image_err){
+											$error[] = array(
+												'EL' => $key,
+												'CS' => '.item-placeholder',
+												'TX' => $image_errt
+											);
 										}
 									}
+								}
+							}
 
-									$entry_source = preg_replace($st_regex, '', $entry_source);
+							if($entry[0] == 'carousel'){
+								$carousel_id = 'carousel_'.$key.'_1';
+								if(empty($_FILES[$carousel_id]) && empty($_POST[$carousel_id])){
+									$error[] = array(
+										'EL' => $key,
+										'CS' => '.content-carrusel',
+										'TX' => "*{$TEMP['#word']['must_insert_more_one_image']}"
+									);
+								} else {
+									for ($i=0; $i < (int)$entry[2]; $i++) {
+										$carousel_id = 'carousel_'.$key.'_'.$i;
+										if($_FILES[$carousel_id]['size'] > $TEMP['#settings']['file_size_limit']){
+											$error[] = array(
+												'EL' => $key,
+												'CS' => '.content-carrusel',
+												'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['one_file_too_big_maximum_size']}")
+											);
+											break;
+										}
+									}
+								}
+							}
+
+							if($entry[0] == 'embed'){
+								if(!Specific::ValidateUrl($entry[2])){
+									$error[] = array(
+										'EL' => $key,
+										'CS' => '.item_url',
+										'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
+									);
+								}
+							}
+
+							if(!((bool)$entry[3])){
+								if($entry[0] == 'video'){
+									if(preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?(?:youtu\.be|youtube\.com)\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/)([^\?&\"'>]+)/", $entry[2]) == false && preg_match("/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?vimeo\.com\/([0-9]+)$/", $entry[2]) == false && preg_match("/^.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/", $entry[2]) == false){
+										$error[] = array(
+											'EL' => $key,
+											'CS' => '.item-input',
+											'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
+										);
+									}
+								}
+
+								if($entry[0] == 'facebookpost'){
+									if(preg_match("/(?:(?:http|https):\/\/)?(?:www\.)?(?:facebook\.com)\/(\d+|[A-Za-z0-9\.]+)\/?/", $entry[2]) == false){
+										$error[] = array(
+											'EL' => $key,
+											'CS' => '.item-input',
+											'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
+										);
+									}
+								}
+
+								if($entry[0] == 'instagrampost'){
+									if(preg_match("/(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/(?:p|tv|reel)\/([A-Za-z0-9-_\.]+)/", $entry[2]) == false){
+										$error[] = array(
+											'EL' => $key,
+											'CS' => '.item-input',
+											'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
+										);
+									}
+								}
+
+								if($entry[0] == 'tweet'){
+									if(preg_match('/^https?:\/\/(mobile.|)twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/', $entry[2]) == false){
+										$error[] = array(
+											'EL' => $key,
+											'CS' => '.item-input',
+											'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
+										);
+									}
+								}
+
+								if($entry[0] == 'tiktok'){
+									$tiktok_url = preg_match("/(?:http(?:s)?:\/\/)?(?:(?:www)\.(?:tiktok\.com)(?:\/)(?!foryou)(@[a-zA-z0-9]+)(?:\/)(?:video)(?:\/)([\d]+)|(?:m)\.(?:tiktok\.com)(?:\/)(?!foryou)(?:v)(?:\/)?(?=([\d]+)\.html))/", $entry[2], $tk_video_url);
+									$tiktok_param = preg_match("/#\/(?P<username>@[a-zA-z0-9]*|.*)(?:\/)?(?:v|video)(?:\/)?(?P<id>[\d]+)/", $entry[2], $tk_video_param);
+
+									if($tiktok_param == true || ($tiktok_param == true && Specific::ValidateUrl($entry[2]))){
+										$tiktok_url = true;
+										$entries[$key][2] = "https://www.tiktok.com/{$tk_video_param['username']}/video/{$tk_video_param['id']}";
+									}
+
+									if($tiktok_url == false){
+										$error[] = array(
+											'EL' => $key,
+											'CS' => '.item-input',
+											'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
+										);
+									}
+								}
+
+								if($entry[0] == 'soundcloud'){
+									if(preg_match('/^(?:(https?):\/\/)?(?:(?:www|m)\.)?(soundcloud\.com|snd\.sc)\/[a-z0-9](?!.*?(-|_){2})[\w-]{1,23}[a-z0-9](?:\/.+)?$/', $entry[2]) == false){
+										$error[] = array(
+											'EL' => $key,
+											'CS' => '.item-input',
+											'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
+										);
+									}
+								}
+
+								if($entry[0] == 'spotify'){
+									if(preg_match('/https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:(track|artist|album|playlist|episode)|user\/([a-zA-Z0-9]+)\/playlist)\/([a-zA-Z0-9]+)|spotify:((track|artist|album|playlist|episode):([a-zA-Z0-9]+)|user:([a-zA-Z0-9]+):playlist:([a-zA-Z0-9]+))/', $entry[2]) == false){
+										$error[] = array(
+											'EL' => $key,
+											'CS' => '.item-input',
+											'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
+										);
+									}
+								}
+							}
+						}
+
+						if(!in_array($type, array('normal', 'video'))){
+							$error[] = array(
+								'EL' => '#type',
+								'TX' => "*{$TEMP['#word']['oops_error_has_occurred']}"
+							);
+						}
+
+						if(!empty($post_sources)){
+							$error_positions = array();
+							if(count($post_sources) < $TEMP['#settings']['number_of_fonts']){
+								foreach($post_sources as $key => $source) {
+									if(!empty($source['name']) && !empty($source['source'])){
+										if(!Specific::ValidateUrl($source['source'])){
+											$error_positions[] = $key;
+										}
+									}
+								}
+								if(!empty($error_positions)){
+									$error[] = array(
+										'EL' => '.post_sources',
+										'PS' => $error_positions,
+										'CT' => 0,
+										'FD' => 2,
+										'SW' => 0,
+										'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
+									);
+								}
+							} else {
+								$error[] = array(
+									'EL' => '.post_sources',
+									'CT' => 0,
+									'SW' => 0,
+									'TX' => "*{$TEMP['#word']['oops_error_has_occurred']}"
+								);
+							}	
+						}
+
+						if(!empty($thumb_sources)){
+							$error_positions = array();
+							if(count($thumb_sources) < $TEMP['#settings']['number_of_fonts']){
+								foreach($thumb_sources as $key => $source) {
+									if(!empty($source['name']) && !empty($source['source'])){
+										if(!Specific::ValidateUrl($source['source'])){
+											$error_positions[] = $key;
+										}
+									}
+								}
+								if(!empty($error_positions)){
+									$error[] = array(
+										'EL' => '.post_sources',
+										'PS' => $error_positions,
+										'CT' => 1,
+										'FD' => 2,
+										'SW' => 0,
+										'TX' => "*{$TEMP['#word']['enter_a_valid_url']}"
+									);
+								}
+							} else {
+								$error[] = array(
+									'EL' => '.post_sources',
+									'CT' => 1,
+									'SW' => 0,
+									'TX' => "*{$TEMP['#word']['oops_error_has_occurred']}"
+								);
+							}	
+						}
+
+						$tags = explode(',', $tags);
+						if(count($tags) > $TEMP['#settings']['number_labels']){
+							$error[] = array(
+								'EL' => '#content-tags',
+								'TX' => "*{$TEMP['#word']['oops_error_has_occurred']}"
+							);
+						}
+
+						if(empty($error)){
+							if(!empty($thumbnail) && !preg_match("/{$TEMP['#site_domain']}/i", $thumbnail)){
+								if(!empty($_FILES['thumbnail'])){
+									$thumbnail = Specific::UploadImage(array(
+										'name' => $_FILES['thumbnail']['name'],
+										'tmp_name' => $_FILES['thumbnail']['tmp_name'],
+										'size' => $_FILES['thumbnail']['size'],
+										'type' => $_FILES['thumbnail']['type'],
+										'folder' => 'posts',
+									));
+								} else {
+									$thumbnail = Specific::UploadThumbnail(array(
+										'media' => $thumbnail,
+										'folder' => 'posts'
+									));
+								}
+								if($thumbnail['return']){
+									unlink("uploads/posts/{$post['thumbnail']}-s.jpeg");
+									unlink("uploads/posts/{$post['thumbnail']}-b.jpeg");
+								}
+							} else {
+								$thumbnail = array(
+									'return' => true,
+									'image' => $post['thumbnail']
+								);
+							}
+							if(!empty($post_sources)){
+								$post_sources = json_encode(array_values($post_sources));
+							} else {
+								$post_sources = NULL;
+							}
+							if(!empty($thumb_sources)){
+								$thumb_sources = json_encode(array_values($thumb_sources));
+							} else {
+								$thumb_sources = NULL;
+							}
+							if($thumbnail['return']){
+								$st_regex = '/<(?:script|style)[^>]*>(.*?)<\/(?:script|style)>/is';
+								$slug = $post['slug'];
+								$updated_at = $created_at = time();
+
+								$status = $post['status'];
+								$published_at = $post['published_at'];
+								if($action == 'post' && $post['published_at'] == 0){
+									if($TEMP['#settings']['approve_posts'] == 'off' || $TEMP['#moderator'] == true){
+										$status = 'approved';
+									}
+									$published_at = $updated_at;
+								}
+
+								if($dba->query('UPDATE '.T_POST.' SET category_id = ?, title = ?, description = ?, thumbnail = ?, post_sources = ?, thumb_sources = ?, type = ?, status = ?, updated_at = ?, published_at = ? WHERE id = ?', $category, $title, $description, $thumbnail['image'], $post_sources, $thumb_sources, $type, $status, $updated_at, $published_at, $post_id)->returnStatus()){
+
+
+									$entries_ids = $dba->query('SELECT id FROM '.T_ENTRY.' WHERE post_id = ?', $post_id)->fetchAll(false);
+
+									$del_entries = array_diff($entries_ids, $ids);
+
+									$carousel_accept = false;
+									$arr_trues = array();
+									foreach ($entries as $key => $entry) {
+										$entry_id = (int)end($entry);
+										$entry_exists = $dba->query('SELECT eorder, frame FROM '.T_ENTRY.' WHERE id = ? AND post_id = ?', $entry_id, $post_id)->fetchArray();
 										
-									$content_text = NULL;
-									$content_frame = NULL;
-									if($entry[0] == 'text'){
-										$content_text = preg_replace($st_regex, '', $entry[2]);
-									} else {
-										if($entry[0] == 'image'){
-											if(!strpos($entry[2], $entry_exists['frame'])){
-												$thumbnail_id = 'thumbnail_'.$key;
-												if(!empty($_FILES[$thumbnail_id])){
-													$thumbnail = $_FILES[$thumbnail_id];
-													$image = Specific::UploadImage(array(
-														'name' => $thumbnail['name'],
-														'tmp_name' => $thumbnail['tmp_name'],
-														'size' => $thumbnail['size'],
-														'type' => $thumbnail['type'],
-														'post_id' => $post_id,
-														'eorder' => $key,
-														'folder' => 'entries'
-													));
-													$content_frame = $image['image_ext'];
-												} else if(!empty($entry[2])){
-													$image = Specific::UploadThumbnail(array(
-														'media' => $entry[2],
-														'post_id' => $post_id,
-														'eorder' => $key,
-														'folder' => 'entries'
-													));
-													$content_frame = $image['image_ext'];
-												}
+										$entry_title = NULL;
+										if(!empty($entry[1])){
+											$entry_title = $entry[1];
+										}
+										$entry_source = NULL;
 
-												if($content_frame['return']){
-													if(!empty($entry_id) && in_array($entry_id, $entries_ids)){
-														$entry_frame = $dba->query('SELECT frame FROM '.T_ENTRY.' WHERE id = ? AND post_id = ?', $entry_id, $post_id)->fetchArray(true);
-														unlink("uploads/entries/{$entry_frame}");
-														if($dba->query('UPDATE '.T_ENTRY.' SET frame = ? WHERE id = ?', $content_frame, $entry_id)->returnStatus()){
-															$arr_trues[] = true;
+										if(in_array($entry[0], array('text', 'image', 'carousel'))){
+											if($entry[0] == 'text'){
+												if(isset($entry[3])){
+													$entry_source = $entry[3];
+												}
+											} else if($entry[0] == 'image'){
+												if(isset($entry[4])){
+													$entry_source = $entry[4];
+												}
+											} else {
+												if(isset($entry[5])){
+													$entry_source = $entry[5];
+												}
+											}
+										}
+
+										$entry_source = preg_replace($st_regex, '', $entry_source);
+											
+										$content_text = NULL;
+										$content_frame = NULL;
+										if($entry[0] == 'text'){
+											$content_text = preg_replace($st_regex, '', $entry[2]);
+										} else {
+											if($entry[0] == 'image'){
+												if(!strpos($entry[2], $entry_exists['frame'])){
+													$thumbnail_id = 'thumbnail_'.$key;
+													if(!empty($_FILES[$thumbnail_id])){
+														$thumbnail = $_FILES[$thumbnail_id];
+														$image = Specific::UploadImage(array(
+															'name' => $thumbnail['name'],
+															'tmp_name' => $thumbnail['tmp_name'],
+															'size' => $thumbnail['size'],
+															'type' => $thumbnail['type'],
+															'post_id' => $post_id,
+															'eorder' => $key,
+															'folder' => 'entries'
+														));
+														$content_frame = $image['image_ext'];
+													} else if(!empty($entry[2])){
+														$image = Specific::UploadThumbnail(array(
+															'media' => $entry[2],
+															'post_id' => $post_id,
+															'eorder' => $key,
+															'folder' => 'entries'
+														));
+														$content_frame = $image['image_ext'];
+													}
+
+													if($content_frame['return']){
+														if(!empty($entry_id) && in_array($entry_id, $entries_ids)){
+															$entry_frame = $dba->query('SELECT frame FROM '.T_ENTRY.' WHERE id = ? AND post_id = ?', $entry_id, $post_id)->fetchArray(true);
+															unlink("uploads/entries/{$entry_frame}");
+															if($dba->query('UPDATE '.T_ENTRY.' SET frame = ? WHERE id = ?', $content_frame, $entry_id)->returnStatus()){
+																$arr_trues[] = true;
+															} else {
+																$arr_trues[] = false;
+															}
 														} else {
-															$arr_trues[] = false;
+															if($dba->query('INSERT INTO '.T_ENTRY.' (post_id, type, title, frame, esource, eorder, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)', $post_id, $entry[0], $entry_title, $content_frame, $entry_source, $key, $created_at)->returnStatus()){
+																$arr_trues[] = true;
+															} else {
+																$arr_trues[] = false;
+															}
 														}
-													} else {
+													}
+												}
+											} else if($entry[0] == 'carousel'){
+												$captions = Specific::Filter($_POST['carousel_captions_'.$key]);
+												$captions = html_entity_decode($captions);
+												$captions = json_decode($captions, true);
+												$carousel = array();
+
+												for ($i=0; $i < (int)$entry[2]; $i++) {
+													$carousel_id = 'carousel_'.$key.'_'.$i;
+
+													if(!empty($_FILES[$carousel_id])){
+														$thumbnail = $_FILES[$carousel_id];
+														$image = Specific::UploadImage(array(
+															'name' => $thumbnail['name'],
+															'tmp_name' => $thumbnail['tmp_name'],
+															'size' => $thumbnail['size'],
+															'type' => $thumbnail['type'],
+															'post_id' => $post_id,
+															'eorder' => $key,
+															'folder' => 'entries'
+														));
+														if($image['return']){
+															$carousel[] = array(
+																'image' => $image['image_ext'],
+																'caption' => $captions[$i]
+															);
+														}
+													} else if(!empty($_POST[$carousel_id])){
+														$image = Specific::UploadThumbnail(array(
+															'media' => Specific::Filter($_POST[$carousel_id]),
+															'post_id' => $post_id,
+															'eorder' => $key,
+															'folder' => 'entries'
+														));
+														if($image['return']){
+															$carousel[] = array(
+																'image' => $image['image_ext'],
+																'caption' => $captions[$i]
+															);
+														}
+													}
+												}
+												if(!empty($carousel)){
+													$carousel_accept = true;
+													$content_frame = json_encode($carousel);
+													if(empty($entry_id)){
 														if($dba->query('INSERT INTO '.T_ENTRY.' (post_id, type, title, frame, esource, eorder, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)', $post_id, $entry[0], $entry_title, $content_frame, $entry_source, $key, $created_at)->returnStatus()){
 															$arr_trues[] = true;
 														} else {
@@ -1141,52 +1206,52 @@ if ($TEMP['#publisher'] === true) {
 														}
 													}
 												}
-											}
-										} else if($entry[0] == 'carousel'){
-											$captions = Specific::Filter($_POST['carousel_captions_'.$key]);
-											$captions = html_entity_decode($captions);
-											$captions = json_decode($captions, true);
-											$carousel = array();
+											} else {
+												if($entry[0] == 'embed'){
+													$attrs = Specific::Filter($_POST["embed_{$key}"]);
+													$frame = Specific::MaketFrame($entry[2], $attrs);
+													$frame = array(
+														'url' => $entry[2],
+														'attrs' => $frame['attrs']
+													);
 
-											for ($i=0; $i < (int)$entry[2]; $i++) {
-												$carousel_id = 'carousel_'.$key.'_'.$i;
+													$content_frame = json_encode($frame);
+												} else if(empty($entry_id)){
+													if(in_array($entry[0], array('tweet', 'soundcloud', 'spotify', 'tiktok'))){
+														if($entry[0] == 'tweet'){
+															$api = 'https://api.twitter.com/1/statuses/oembed.json?omit_script=1&url=';
+														} else if($entry[0] == 'soundcloud'){
+															$api = 'https://soundcloud.com/oembed?format=json&url=';
+														} else if($entry[0] == 'spotify'){
+															$api = 'https://open.spotify.com/oembed?url=';
+														} else if($entry[0] == 'tiktok'){
+															$api = 'https://www.tiktok.com/oembed?format=json&url=';
+														}
+														$json = Specific::getContentUrl("{$api}{$entry[2]}");
+														$json = json_decode($json, true);
 
-												if(!empty($_FILES[$carousel_id])){
-													$thumbnail = $_FILES[$carousel_id];
-													$image = Specific::UploadImage(array(
-														'name' => $thumbnail['name'],
-														'tmp_name' => $thumbnail['tmp_name'],
-														'size' => $thumbnail['size'],
-														'type' => $thumbnail['type'],
-														'post_id' => $post_id,
-														'eorder' => $key,
-														'folder' => 'entries'
-													));
-													if($image['return']){
-														$carousel[] = array(
-															'image' => $image['image_ext'],
-															'caption' => $captions[$i]
-														);
+														if(!isset($json['error']) && !isset($json['errors']) && !isset($json['status_msg'])){
+															if(!empty($json)){
+																$content_frame = $json['html'];
+																if($entry[0] == 'tiktok'){
+																	$content_frame = preg_replace('/(\s+)?(?:<script [^>]*><\/script>)/', '', $content_frame);
+																} else if($entry[0] == 'soundcloud'){
+																	$src = preg_match('/(?<=src=").*?(?=[\*"])/', $content_frame, $src_frame);
+																	if($src){
+																		$content_frame = $src_frame[0];
+																	}
+																}
+																$arr_trues[] = true;
+															} else {
+																$arr_trues[] = false;
+															}
+														} else {
+															$arr_trues[] = false;
+														}
+													} else {
+														$content_frame = $entry[2];
 													}
-												} else if(!empty($_POST[$carousel_id])){
-													$image = Specific::UploadThumbnail(array(
-														'media' => Specific::Filter($_POST[$carousel_id]),
-														'post_id' => $post_id,
-														'eorder' => $key,
-														'folder' => 'entries'
-													));
-													if($image['return']){
-														$carousel[] = array(
-															'image' => $image['image_ext'],
-															'caption' => $captions[$i]
-														);
-													}
-												}
-											}
-											if(!empty($carousel)){
-												$carousel_accept = true;
-												$content_frame = json_encode($carousel);
-												if(empty($entry_id)){
+
 													if($dba->query('INSERT INTO '.T_ENTRY.' (post_id, type, title, frame, esource, eorder, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)', $post_id, $entry[0], $entry_title, $content_frame, $entry_source, $key, $created_at)->returnStatus()){
 														$arr_trues[] = true;
 													} else {
@@ -1194,230 +1259,192 @@ if ($TEMP['#publisher'] === true) {
 													}
 												}
 											}
+										}
+
+										if(in_array($entry[0], array('text', 'embed'))){
+											if(!empty($entry_id) && in_array($entry_id, $entries_ids)){
+												if($dba->query('UPDATE '.T_ENTRY.' SET title = ?, body = ?, frame = ?, esource = ?, eorder = ?, updated_at = ? WHERE id = ?', $entry_title, $content_text, $content_frame, $entry_source, $key, $updated_at, $entry_id)->returnStatus()){
+													$arr_trues[] = true;
+												} else {
+													$arr_trues[] = false;
+												}
+											} else {
+												if($dba->query('INSERT INTO '.T_ENTRY.' (post_id, type, title, body, frame, esource, eorder, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', $post_id, $entry[0], $entry_title, $content_text, $content_frame, $entry_source, $key, $created_at)->returnStatus()){
+													$arr_trues[] = true;
+												} else {
+													$arr_trues[] = false;
+												}
+											}
 										} else {
-											if($entry[0] == 'embed'){
-												$attrs = Specific::Filter($_POST["embed_{$key}"]);
-												$frame = Specific::MaketFrame($entry[2], $attrs);
-												$frame = array(
-													'url' => $entry[2],
-													'attrs' => $frame['attrs']
-												);
-
-												$content_frame = json_encode($frame);
-											} else if(empty($entry_id)){
-												if(in_array($entry[0], array('tweet', 'soundcloud', 'spotify', 'tiktok'))){
-													if($entry[0] == 'tweet'){
-														$api = 'https://api.twitter.com/1/statuses/oembed.json?omit_script=1&url=';
-													} else if($entry[0] == 'soundcloud'){
-														$api = 'https://soundcloud.com/oembed?format=json&url=';
-													} else if($entry[0] == 'spotify'){
-														$api = 'https://open.spotify.com/oembed?url=';
-													} else if($entry[0] == 'tiktok'){
-														$api = 'https://www.tiktok.com/oembed?format=json&url=';
-													}
-													$json = Specific::getContentUrl("{$api}{$entry[2]}");
-													$json = json_decode($json, true);
-
-													if(!isset($json['error']) && !isset($json['errors']) && !isset($json['status_msg'])){
-														if(!empty($json)){
-															$content_frame = $json['html'];
-															if($entry[0] == 'tiktok'){
-																$content_frame = preg_replace('/(\s+)?(?:<script [^>]*><\/script>)/', '', $content_frame);
-															} else if($entry[0] == 'soundcloud'){
-																$src = preg_match('/(?<=src=").*?(?=[\*"])/', $content_frame, $src_frame);
-																if($src){
-																	$content_frame = $src_frame[0];
+											if(($entry[0] == 'carousel' && $carousel_accept) || $entry[0] != 'carousel'){
+												if(!empty($entry_id) && in_array($entry_id, $entries_ids)){
+													if($dba->query('UPDATE '.T_ENTRY.' SET title = ?, esource = ?, eorder = ?, updated_at = ? WHERE id = ?', $entry_title, $entry_source, $key, $updated_at, $entry_id)->returnStatus()){
+														if($entry[0] == 'carousel'){
+															if($dba->query('UPDATE '.T_ENTRY.' SET frame = ? WHERE id = ?', $content_frame, $entry_id)->returnStatus()){
+																$carousel = json_decode($entry_exists['frame'], true);
+																foreach ($carousel as $car) {
+																	unlink("uploads/entries/{$car['image']}");
 																}
 															}
-															$arr_trues[] = true;
-														} else {
-															$arr_trues[] = false;
+														} else if($entry[0] == 'image' && $key != $entry_exists['eorder']){
+															$ext_frame = "uploads/entries/";
+															$old_frame = $entry_exists['frame'];
+															$new_frame = str_replace("{$post_id}-{$entry_exists['eorder']}-", "{$post_id}-{$key}-", $old_frame);
+															if($dba->query('UPDATE '.T_ENTRY.' SET frame = ? WHERE id = ?', $new_frame, $entry_id)->returnStatus()){
+																rename("{$ext_frame}{$old_frame}", "{$ext_frame}{$new_frame}");
+															}
 														}
+														$arr_trues[] = true;
 													} else {
 														$arr_trues[] = false;
 													}
-												} else {
-													$content_frame = $entry[2];
 												}
+											}
+										}
 
-												if($dba->query('INSERT INTO '.T_ENTRY.' (post_id, type, title, frame, esource, eorder, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)', $post_id, $entry[0], $entry_title, $content_frame, $entry_source, $key, $created_at)->returnStatus()){
+									}
+
+									if(!empty($del_entries)){
+										$del_entries = array_values($del_entries);
+										foreach ($del_entries as $delid) {
+											$entry = $dba->query('SELECT type, frame FROM '.T_ENTRY.' WHERE id = ? AND post_id = ?', $delid, $post_id)->fetchArray();
+											$dba->query('DELETE FROM '.T_ENTRY.' WHERE id = ? AND post_id = ?', $delid, $post_id);
+											if($entry['type'] == 'image'){
+												unlink("uploads/entries/{$entry['frame']}");
+											} else if($entry['type'] == 'carousel'){
+												$carousel = json_decode($entry['frame'], true);
+												foreach ($carousel as $car) {
+													unlink("uploads/entries/{$car['image']}");
+												}
+											}
+										}
+									}
+
+									$tags_names = $dba->query('SELECT name FROM '.T_LABEL.' l WHERE (SELECT label_id FROM '.T_TAG.' WHERE post_id = ? AND label_id = l.id) = id', $post_id)->fetchAll(false);
+
+
+									$del_tags = array_diff($tags_names, $tags);
+									$add_tags = array_diff($tags, $tags_names);
+
+									if(!empty($add_tags)){
+										foreach ($add_tags as $key => $tag) {
+											$label = $dba->query('SELECT id, COUNT(*) as count FROM '.T_LABEL.' WHERE name = ?', $tag)->fetchArray();
+											if($label['count'] > 0){
+												$label_id = $label['id'];
+											} else {
+												$label_id = $dba->query('INSERT INTO '.T_LABEL.' (name, slug, created_at) VALUES (?, ?, ?)', $tag, Specific::CreateSlug($tag), time())->insertId();
+												if($label_id){
 													$arr_trues[] = true;
 												} else {
 													$arr_trues[] = false;
 												}
 											}
+											if($dba->query('INSERT INTO '.T_TAG.' (post_id, label_id, created_at) VALUES (?, ?, ?)', $post_id, $label_id, time())->returnStatus()){
+												$arr_trues[] = true;
+											} else {
+												$arr_trues[] = false;
+											}
 										}
 									}
 
-									if(in_array($entry[0], array('text', 'embed'))){
-										if(!empty($entry_id) && in_array($entry_id, $entries_ids)){
-											if($dba->query('UPDATE '.T_ENTRY.' SET title = ?, body = ?, frame = ?, esource = ?, eorder = ?, updated_at = ? WHERE id = ?', $entry_title, $content_text, $content_frame, $entry_source, $key, $updated_at, $entry_id)->returnStatus()){
-												$arr_trues[] = true;
-											} else {
-												$arr_trues[] = false;
-											}
-										} else {
-											if($dba->query('INSERT INTO '.T_ENTRY.' (post_id, type, title, body, frame, esource, eorder, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', $post_id, $entry[0], $entry_title, $content_text, $content_frame, $entry_source, $key, $created_at)->returnStatus()){
-												$arr_trues[] = true;
-											} else {
-												$arr_trues[] = false;
+									if(!empty($del_tags)){
+										foreach ($del_tags as $tag) {
+											$dba->query('DELETE FROM '.T_TAG.' WHERE post_id = ? AND (SELECT id FROM '.T_LABEL.' WHERE name = ?) = label_id', $post_id, $tag);
+										}
+									}
+									
+									$recobo_ids = $dba->query('SELECT recommended_id FROM '.T_RECOBO.' WHERE post_id = ?', $post_id)->fetchAll(false);
+
+									$add_recobo = array_diff($recobo, $recobo_ids);
+									$del_recobo = array_diff($recobo_ids, $recobo);
+
+									if(!empty($add_recobo)){
+										foreach ($add_recobo as $addre) {
+											if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE id = ? AND status = "approved"', $addre)->fetchArray(true) > 0){
+												$dba->query('INSERT INTO '.T_RECOBO.' (post_id, recommended_id, created_at) VALUES (?, ?, ?)', $post_id, $addre, time());
 											}
 										}
-									} else {
-										if(($entry[0] == 'carousel' && $carousel_accept) || $entry[0] != 'carousel'){
-											if(!empty($entry_id) && in_array($entry_id, $entries_ids)){
-												if($dba->query('UPDATE '.T_ENTRY.' SET title = ?, esource = ?, eorder = ?, updated_at = ? WHERE id = ?', $entry_title, $entry_source, $key, $updated_at, $entry_id)->returnStatus()){
-													if($entry[0] == 'carousel'){
-														if($dba->query('UPDATE '.T_ENTRY.' SET frame = ? WHERE id = ?', $content_frame, $entry_id)->returnStatus()){
-															$carousel = json_decode($entry_exists['frame'], true);
-															foreach ($carousel as $car) {
-																unlink("uploads/entries/{$car['image']}");
-															}
-														}
-													} else if($entry[0] == 'image' && $key != $entry_exists['eorder']){
-														$ext_frame = "uploads/entries/";
-														$old_frame = $entry_exists['frame'];
-														$new_frame = str_replace("{$post_id}-{$entry_exists['eorder']}-", "{$post_id}-{$key}-", $old_frame);
-														if($dba->query('UPDATE '.T_ENTRY.' SET frame = ? WHERE id = ?', $new_frame, $entry_id)->returnStatus()){
-															rename("{$ext_frame}{$old_frame}", "{$ext_frame}{$new_frame}");
-														}
-													}
-													$arr_trues[] = true;
-												} else {
-													$arr_trues[] = false;
+									}
+
+									if(!empty($del_recobo)){
+										foreach ($del_recobo as $delre) {
+											$dba->query('DELETE FROM '.T_RECOBO.' WHERE post_id = ? AND recommended_id = ?', $post_id, $delre);
+										}
+									}
+
+									foreach ($recobo as $key => $re) {
+										$dba->query('UPDATE '.T_RECOBO.' SET rorder = ? WHERE recommended_id = ?', $key, $re);
+									}
+
+									$collaborators_ids = $dba->query('SELECT user_id FROM '.T_COLLABORATOR.' WHERE post_id = ?', $post_id)->fetchAll(false);
+
+									$add_collaborators = array_diff($collaborators, $collaborators_ids);
+									$del_collaborators = array_diff($collaborators_ids, $collaborators);
+
+									if(!empty($add_collaborators)){
+										foreach ($add_collaborators as $addco) {
+											$user = $dba->query('SELECT about, facebook, twitter, instagram, main_sonet, COUNT(*) as count FROM '.T_USER.' WHERE id = ? AND id NOT IN ('.$TEMP['#blocked_users'].') AND status = "active"', $addco)->fetchArray();
+											if($user['count'] > 0 && !empty($user['about']) && !empty($user[$user['main_sonet']])){
+												$insert_id = $dba->query('INSERT INTO '.T_COLLABORATOR.' (user_id, post_id, created_at) VALUES (?, ?, ?)', $addco, $post_id, time())->insertId();
+
+												if($insert_id){
+													Specific::SetNotify(array(
+														'user_id' => $addco,
+														'notified_id' => $insert_id,
+														'type' => 'collab',
+													));
 												}
 											}
 										}
 									}
 
-								}
-
-								if(!empty($del_entries)){
-									$del_entries = array_values($del_entries);
-									foreach ($del_entries as $delid) {
-										$entry = $dba->query('SELECT type, frame FROM '.T_ENTRY.' WHERE id = ? AND post_id = ?', $delid, $post_id)->fetchArray();
-										$dba->query('DELETE FROM '.T_ENTRY.' WHERE id = ? AND post_id = ?', $delid, $post_id);
-										if($entry['type'] == 'image'){
-											unlink("uploads/entries/{$entry['frame']}");
-										} else if($entry['type'] == 'carousel'){
-											$carousel = json_decode($entry['frame'], true);
-											foreach ($carousel as $car) {
-												unlink("uploads/entries/{$car['image']}");
+									if(!empty($del_collaborators)){
+										foreach ($del_collaborators as $delco) {
+											$collab_id = $dba->query('SELECT id FROM '.T_COLLABORATOR.' WHERE user_id = ? AND post_id = ?', $delco, $post_id)->fetchArray(true);
+											if($dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id = ? AND type = "n_collab"', $collab_id)->returnStatus()){
+												$dba->query('DELETE FROM '.T_COLLABORATOR.' WHERE id = ?', $collab_id);
 											}
 										}
 									}
-								}
 
-								$tags_names = $dba->query('SELECT name FROM '.T_LABEL.' l WHERE (SELECT label_id FROM '.T_TAG.' WHERE post_id = ? AND label_id = l.id) = id', $post_id)->fetchAll(false);
+									foreach ($collaborators as $key => $co) {
+										$dba->query('UPDATE '.T_COLLABORATOR.' SET aorder = ? WHERE user_id = ?', $key, $co);
+									}
 
-
-								$del_tags = array_diff($tags_names, $tags);
-								$add_tags = array_diff($tags, $tags_names);
-
-								if(!empty($add_tags)){
-									foreach ($add_tags as $key => $tag) {
-										$label = $dba->query('SELECT id, COUNT(*) as count FROM '.T_LABEL.' WHERE name = ?', $tag)->fetchArray();
-										if($label['count'] > 0){
-											$label_id = $label['id'];
-										} else {
-											$label_id = $dba->query('INSERT INTO '.T_LABEL.' (name, slug, created_at) VALUES (?, ?, ?)', $tag, Specific::CreateSlug($tag), time())->insertId();
-											if($label_id){
-												$arr_trues[] = true;
-											} else {
-												$arr_trues[] = false;
+									if(!in_array(false, $arr_trues)){
+										if($action == 'post' && $post['published_at'] == 0 && ($TEMP['#settings']['approve_posts'] == 'off' || $TEMP['#moderator'] == true)){
+											$followers = $dba->query('SELECT user_id FROM '.T_FOLLOWER.' WHERE profile_id = ?', $TEMP['#user']['id'])->fetchAll();
+											foreach($followers as $follow){
+												$user = Specific::Data($follow['user_id']);
+												if(in_array($category, $user['notifications'])){
+													Specific::SetNotify(array(
+														'user_id' => $user['id'],
+														'notified_id' => $post_id,
+														'type' => 'post',
+													));
+												}
 											}
 										}
-										if($dba->query('INSERT INTO '.T_TAG.' (post_id, label_id, created_at) VALUES (?, ?, ?)', $post_id, $label_id, time())->returnStatus()){
-											$arr_trues[] = true;
-										} else {
-											$arr_trues[] = false;
-										}
+
+										$deliver = array(
+											'S' => 200,
+											'LK' => Specific::Url($slug)
+										);
 									}
-								}
-
-								if(!empty($del_tags)){
-									foreach ($del_tags as $tag) {
-										$dba->query('DELETE FROM '.T_TAG.' WHERE post_id = ? AND (SELECT id FROM '.T_LABEL.' WHERE name = ?) = label_id', $post_id, $tag);
-									}
-								}
-								
-								$recobo_ids = $dba->query('SELECT recommended_id FROM '.T_RECOBO.' WHERE post_id = ?', $post_id)->fetchAll(false);
-
-								$add_recobo = array_diff($recobo, $recobo_ids);
-								$del_recobo = array_diff($recobo_ids, $recobo);
-
-								if(!empty($add_recobo)){
-									foreach ($add_recobo as $addre) {
-										if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE id = ? AND status = "approved"', $addre)->fetchArray(true) > 0){
-											$dba->query('INSERT INTO '.T_RECOBO.' (post_id, recommended_id, created_at) VALUES (?, ?, ?)', $post_id, $addre, time());
-										}
-									}
-								}
-
-								if(!empty($del_recobo)){
-									foreach ($del_recobo as $delre) {
-										$dba->query('DELETE FROM '.T_RECOBO.' WHERE post_id = ? AND recommended_id = ?', $post_id, $delre);
-									}
-								}
-
-								foreach ($recobo as $key => $re) {
-									$dba->query('UPDATE '.T_RECOBO.' SET rorder = ? WHERE recommended_id = ?', $key, $re);
-								}
-
-								$collaborators_ids = $dba->query('SELECT user_id FROM '.T_COLLABORATOR.' WHERE post_id = ?', $post_id)->fetchAll(false);
-
-								$add_collaborators = array_diff($collaborators, $collaborators_ids);
-								$del_collaborators = array_diff($collaborators_ids, $collaborators);
-
-								if(!empty($add_collaborators)){
-									foreach ($add_collaborators as $addco) {
-										$user = $dba->query('SELECT about, facebook, twitter, instagram, main_sonet, COUNT(*) as count FROM '.T_USER.' WHERE id = ? AND id NOT IN ('.$TEMP['#blocked_users'].') AND status = "active"', $addco)->fetchArray();
-										if($user['count'] > 0 && !empty($user['about']) && !empty($user[$user['main_sonet']])){
-											$insert_id = $dba->query('INSERT INTO '.T_COLLABORATOR.' (user_id, post_id, created_at) VALUES (?, ?, ?)', $addco, $post_id, time())->insertId();
-
-											if($insert_id){
-												Specific::SetNotify(array(
-													'user_id' => $addco,
-													'notified_id' => $insert_id,
-													'type' => 'collab',
-												));
-											}
-										}
-									}
-								}
-
-								if(!empty($del_collaborators)){
-									foreach ($del_collaborators as $delco) {
-										$collab_id = $dba->query('SELECT id FROM '.T_COLLABORATOR.' WHERE user_id = ? AND post_id = ?', $delco, $post_id)->fetchArray(true);
-										if($dba->query('DELETE FROM '.T_NOTIFICATION.' WHERE notified_id = ? AND type = "n_collab"', $collab_id)->returnStatus()){
-											$dba->query('DELETE FROM '.T_COLLABORATOR.' WHERE id = ?', $collab_id);
-										}
-									}
-								}
-
-								foreach ($collaborators as $key => $co) {
-									$dba->query('UPDATE '.T_COLLABORATOR.' SET aorder = ? WHERE user_id = ?', $key, $co);
-								}
-
-								if(!in_array(false, $arr_trues)){
-									$deliver = array(
-										'S' => 200,
-										'LK' => Specific::Url($slug)
-									);
 								}
 							}
+						} else {
+							$deliver = array(
+								'S' => 400,
+								'E' => $error
+							);
 						}
 					} else {
 						$deliver = array(
 							'S' => 400,
-							'E' => $error
+							'E' => $empty
 						);
 					}
-				} else {
-					$deliver = array(
-						'S' => 400,
-						'E' => $empty
-					);
 				}
 			}
 		}

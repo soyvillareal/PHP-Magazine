@@ -8,7 +8,7 @@ if(empty($post)){
 }
 
 if(!Specific::IsOwner($post['user_id'])){
-	if($TEMP['#moderator'] == false && $post['status'] != 'approved'){
+	if($TEMP['#moderator'] == false && ($post['status'] != 'approved' || $post['published_at'] == 0)){
 		header("Location: " . Specific::Url('404'));
 		exit();
 	}

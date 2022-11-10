@@ -218,6 +218,7 @@ class Load {
 			$TEMP['#dislikes_active'] = $dba->query('SELECT COUNT(*) FROM '.T_REACTION.' WHERE user_id = ? AND reacted_id = ? AND type = "dislike" AND place = "post"', $TEMP['#user']['id'], $post['id'])->fetchArray(true);
 			$TEMP['#is_owner'] = Specific::IsOwner($post['user_id']);
 			$TEMP['#is_loaded'] = $is_loaded;
+			$TEMP['#published_at'] = $post['published_at'];
 			$TEMP['#status'] = $post['status'];
 			$TEMP['#type'] = $post['type'];
 

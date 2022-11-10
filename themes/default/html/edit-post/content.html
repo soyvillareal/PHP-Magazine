@@ -409,8 +409,16 @@
           </div>
         </div>
         <div class="margin-t15">
-          <button id="btn-post" class="btn-noway w-100 h-36 background-blue font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s boxshadow-grey" type="submit">
+          <?php if($TEMP['#published_at'] == 0){ ?>
+          <button class="btn_post btn-noway w-100 h-36 background-blue font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s boxshadow-grey" type="submit" data-action="post">
             <span class="color-wwhite">{$word->post}</span>
+            <div class="content-spinner-circle position-absolute">
+              <div class="spinner-circle"></div>
+            </div>
+          </button>
+          <?php } ?>
+          <button class="btn_post btn-noway w-100 h-36<?php echo($TEMP['#published_at'] == 0) ? ' background-redly ' : ' background-blue ' ?>font-franklin font-medium font-bold margin-b10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s boxshadow-grey" data-action="save">
+            <span class="color-wwhite">{$word->save}</span>
             <div class="content-spinner-circle position-absolute">
               <div class="spinner-circle"></div>
             </div>

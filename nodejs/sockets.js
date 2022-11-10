@@ -1250,7 +1250,7 @@ module.exports = async function(socket){
                                 }
 
                                 var status = 'approved';
-                                if(SETTINGS.approve_posts == 'on' && specific.Admin(socket) == false){
+                                if(SETTINGS.approve_posts == 'on' && specific.Moderator(socket) == false){
                                     status = 'pending';
                                 }
 
@@ -1268,6 +1268,7 @@ module.exports = async function(socket){
                                     })
 
                                     if(action == 'eraser'){
+                                        status = 'pending';
                                         published_at = 0;
                                     }
 
@@ -1574,7 +1575,7 @@ module.exports = async function(socket){
                                             }
 
                                             if(arr_trues.indexOf(!1) === -1){
-                                                if(action == 'post' && (SETTINGS.approve_posts == 'off' || specific.Admin(socket) == !0)){
+                                                if(action == 'post' && (SETTINGS.approve_posts == 'off' || specific.Moderator(socket) == !0)){
                                                     await query(`SELECT user_id FROM ${T.FOLLOWER} WHERE profile_id = ?`, [USER.id]).then(async function(res){
                                                         if(res.length > 0){
                                                             await forEachAsync(res, function(item, index, arr){
@@ -1600,8 +1601,6 @@ module.exports = async function(socket){
                                                     }).catch(function(err){
                                                         arr_trues.push(!1);
                                                     });
-                                                } else {
-
                                                 }
 
                                                 response.send({
@@ -1675,7 +1674,6 @@ module.exports = async function(socket){
                         id: specific.Filter(fields.socket_id)
                     },
                     TEMP = global.TEMP[socket.id],
-                    USER = TEMP.user,
                     WORD = TEMP.word,
                     SETTINGS = specific.Settings(),
                     blocked_inusers = TEMP.blocked_inusers;
@@ -1704,7 +1702,8 @@ module.exports = async function(socket){
                         thumb_sources = specific.htmlEntityDecode(thumb_sources),
                         thumb_sources = JSON.parse(thumb_sources),
                         thumbnail = Object.keys(files).indexOf('thumbnail') !== -1 ? files.thumbnail : specific.Filter(fields.thumbnail),
-                        tags = specific.Filter(fields.tags);
+                        tags = specific.Filter(fields.tags),
+                        action = specific.Filter(fields.action);
 
                     if(title == ''){
                         empty.push({
@@ -1796,761 +1795,761 @@ module.exports = async function(socket){
                     }
 
                     if(post_id != ''){
-                        connection.query(`SELECT slug, thumbnail, COUNT(*) as count FROM ${T.POST} WHERE id = ? AND user_id = ?`, [post_id, USER.id], async function(qerror, result, field){
+                        connection.query(`SELECT user_id, slug, thumbnail, status, published_at, COUNT(*) as count FROM ${T.POST} WHERE id = ?`, [post_id], async function(qerror, result, field){
                             if(qerror){
                                 return response.send(ERR);
                             }
-                            var post = result[0];
+                            var post = result[0],
+                                is_owner = !1;
+                            
+                            await specific.IsOwner(socket, post.user_id).then(function(res){
+                                is_owner = res;
+                            }).catch(function(err){
+                                console.log(err);
+                            });
 
-                            if(post.count > 0){
-                                if(empty.length == 0){
+                            if(post.count > 0 || (is_owner || specific.Moderator(socket))){
+                                if(['post', 'save'].indexOf(action) !== -1){
+                                    if(empty.length == 0){
 
-                                    if(Object.keys(files).indexOf('thumbnail') !== -1){
-                                        if(files.thumbnail.size > SETTINGS.file_size_limit){
-                                            error.push({
-                                                EL: '#post-right .item-placeholder',
-                                                TX: _.replace(WORD.file_too_big_maximum_size, '{$file_size_limit}', specific.SizeFormat(SETTINGS.file_size_limit))
-                                            })
+                                        if(Object.keys(files).indexOf('thumbnail') !== -1){
+                                            if(files.thumbnail.size > SETTINGS.file_size_limit){
+                                                error.push({
+                                                    EL: '#post-right .item-placeholder',
+                                                    TX: _.replace(WORD.file_too_big_maximum_size, '{$file_size_limit}', specific.SizeFormat(SETTINGS.file_size_limit))
+                                                })
+                                            }
                                         }
-                                    }
 
-                                    await specific.AllCategories().then(function(res){
-                                        if(res.indexOf(category) === -1){
+                                        await specific.AllCategories().then(function(res){
+                                            if(res.indexOf(category) === -1){
+                                                error.push({
+                                                    EL: '#category',
+                                                    TX: `*${WORD.oops_error_has_occurred}`
+                                                });
+                                            }
+                                        }).catch(function(err){
                                             error.push({
                                                 EL: '#category',
                                                 TX: `*${WORD.oops_error_has_occurred}`
                                             });
-                                        }
-                                    }).catch(function(err){
-                                        error.push({
-                                            EL: '#category',
-                                            TX: `*${WORD.oops_error_has_occurred}`
                                         });
-                                    });
-                                    
-                                    await forEachAsync(entries, function(item, index, arr){;
-                                        if(item[item.length-1] != null){
-                                            ids.push(parseInt(item[item.length-1]));
-                                        }
-            
-                                        if(item[0] == 'image'){
-                                            if(Object.keys(files).indexOf(`thumbnail_${index}`) !== -1){
-                                                if(files[`thumbnail_${index}`].size > SETTINGS.file_size_limit){
-                                                    error.push({
-                                                        EL: index,
-                                                        CS: '.item-placeholder',
-                                                        TX: _.replace(WORD.file_too_big_maximum_size, '{$file_size_limit}', specific.SizeFormat(SETTINGS.file_size_limit))
-                                                    })
-                                                }
-                                            } else {
-                                                if(item[2] != ''){
-                                                    var validate_url = specific.ValidateUrl(item[2], true),
-                                                        image = validate_url.url;
-        
-                                                    arr[index][2] = image;
-                                                    if(!validate_url.return){
+                                        
+                                        await forEachAsync(entries, function(item, index, arr){;
+                                            if(item[item.length-1] != null){
+                                                ids.push(parseInt(item[item.length-1]));
+                                            }
+                
+                                            if(item[0] == 'image'){
+                                                if(Object.keys(files).indexOf(`thumbnail_${index}`) !== -1){
+                                                    if(files[`thumbnail_${index}`].size > SETTINGS.file_size_limit){
                                                         error.push({
                                                             EL: index,
                                                             CS: '.item-placeholder',
-                                                            TX: `*${WORD.enter_a_valid_url}`
+                                                            TX: _.replace(WORD.file_too_big_maximum_size, '{$file_size_limit}', specific.SizeFormat(SETTINGS.file_size_limit))
                                                         })
-                                                    } else {
-                                                        var done = this.async(),
-                                                            deliver = {
+                                                    }
+                                                } else {
+                                                    if(item[2] != ''){
+                                                        var validate_url = specific.ValidateUrl(item[2], true),
+                                                            image = validate_url.url;
+            
+                                                        arr[index][2] = image;
+                                                        if(!validate_url.return){
+                                                            error.push({
                                                                 EL: index,
                                                                 CS: '.item-placeholder',
-                                                                TX: `*${WORD.download_could_not_completed}`
-                                                            };
-                                                        fetch(image).then(function(res){
-                                                            if(['image/jpeg', 'image/png'].indexOf(res.headers.get('content-type')) == -1){
-                                                                done();
+                                                                TX: `*${WORD.enter_a_valid_url}`
+                                                            })
+                                                        } else {
+                                                            var done = this.async(),
+                                                                deliver = {
+                                                                    EL: index,
+                                                                    CS: '.item-placeholder',
+                                                                    TX: `*${WORD.download_could_not_completed}`
+                                                                };
+                                                            fetch(image).then(function(res){
+                                                                if(['image/jpeg', 'image/png'].indexOf(res.headers.get('content-type')) == -1){
+                                                                    done();
+                                                                    error.push(deliver);
+                                                                } else {
+                                                                    done();
+                                                                }
+                                                            }).catch(function(err) {
                                                                 error.push(deliver);
-                                                            } else {
                                                                 done();
-                                                            }
-                                                        }).catch(function(err) {
-                                                            error.push(deliver);
-                                                            done();
-                                                        });
+                                                            });
+                                                        }
                                                     }
                                                 }
                                             }
-                                        }
-        
-        
-                                        if(item[0] == 'carousel'){
-                                            var carousel_id = `carousel_${index}_1`;
-        
-                                            if(Object.keys(files).indexOf(carousel_id) === -1 && fields[carousel_id] == undefined){
-                                                error.push({
-                                                    EL: index,
-                                                    CS: '.content-carrusel',
-                                                    TX: `*${WORD.must_insert_more_one_image}`
-                                                })
-                                            } else {
-                                                for (let i = 0; i < item[0]; i++) {
-                                                    var carousel_id = `carousel_${index}_${i}`;
-                                                    if(files[carousel_id].size > SETTINGS.file_size_limit){
+            
+            
+                                            if(item[0] == 'carousel'){
+                                                var carousel_id = `carousel_${index}_1`;
+            
+                                                if(Object.keys(files).indexOf(carousel_id) === -1 && fields[carousel_id] == undefined){
+                                                    error.push({
+                                                        EL: index,
+                                                        CS: '.content-carrusel',
+                                                        TX: `*${WORD.must_insert_more_one_image}`
+                                                    })
+                                                } else {
+                                                    for (let i = 0; i < item[0]; i++) {
+                                                        var carousel_id = `carousel_${index}_${i}`;
+                                                        if(files[carousel_id].size > SETTINGS.file_size_limit){
+                                                            error.push({
+                                                                EL: index,
+                                                                CS: '.content-carrusel',
+                                                                TX: _.replace(WORD.one_file_too_big_maximum_size, '{$file_size_limit}', specific.SizeFormat(SETTINGS.file_size_limit))
+                                                            });
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                
+                                            if(item[0] == 'embed'){
+                                                if(!specific.ValidateUrl(item[2])){
+                                                    error.push({
+                                                        EL: index,
+                                                        CS: '.item_url',
+                                                        TX: `*${WORD.enter_a_valid_url}`
+                                                    })
+                                                }
+                                            }
+
+                                            if(!Boolean(item[3])){
+                                                if(item[0] == 'video'){
+                                                    if(!item[2].match(/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?(?:youtu\.be|youtube\.com)\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/)([^\?&\"'>]+)/) && !item[2].match(/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?vimeo\.com\/([0-9]+)$/) && !item[2].match(/^.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/)){
                                                         error.push({
                                                             EL: index,
-                                                            CS: '.content-carrusel',
-                                                            TX: _.replace(WORD.one_file_too_big_maximum_size, '{$file_size_limit}', specific.SizeFormat(SETTINGS.file_size_limit))
+                                                            CS: '.item-input',
+                                                            TX: `*${WORD.enter_a_valid_url}`
+                                                        })
+                                                    }
+                                                }
+                
+                                                if(item[0] == 'facebookpost'){
+                                                    if(!item[2].match(/(?:(?:http|https):\/\/)?(?:www\.)?(?:facebook\.com)\/(\d+|[A-Za-z0-9\.]+)\/?/)){
+                                                        error.push({
+                                                            EL: index,
+                                                            CS: '.item-input',
+                                                            TX: `${WORD.enter_a_valid_url}`
                                                         });
-                                                        break;
+                                                    }
+                                                }
+                
+                                                if(item[0] == 'instagrampost'){
+                                                    if(!item[2].match(/(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/(?:p|tv|reel)\/([A-Za-z0-9-_\.]+)/)){
+                                                        error.push({
+                                                            EL: index,
+                                                            CS: '.item-input',
+                                                            TX: `${WORD.enter_a_valid_url}`
+                                                        });
+                                                    }
+                                                }
+                
+                                                if(item[0] == 'tweet'){
+                                                    if(!item[2].match(/^https?:\/\/(mobile.|)twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/)){
+                                                        error.push({
+                                                            EL: index,
+                                                            CS: '.item-input',
+                                                            TX: `${WORD.enter_a_valid_url}`
+                                                        });
+                                                    }
+                                                }
+                
+                                                if(item[0] == 'tiktok'){
+                                                    var tiktok_url = item[2].match(/(?:http(?:s)?:\/\/)?(?:(?:www)\.(?:tiktok\.com)(?:\/)(?!foryou)(@[a-zA-z0-9]+)(?:\/)(?:video)(?:\/)([\d]+)|(?:m)\.(?:tiktok\.com)(?:\/)(?!foryou)(?:v)(?:\/)?(?=([\d]+)\.html))/),
+                                                        tiktok_param = item[2].match(/#\/(@[a-zA-z0-9]*|.*)(?:\/)?(?:v|video)(?:\/)?([\d]+)/);
+                
+                                                    if(tiktok_param || (tiktok_param && specific.ValidateUrl(item[2]))){
+                                                        tiktok_url = !0;
+                                                        arr[index][2] = `https://www.tiktok.com/${tiktok_param[1]}/video/${tiktok_param[2]}`;
+                                                    }
+                            
+                                                    if(!tiktok_url){
+                                                        error.push({
+                                                            EL: index,
+                                                            CS: '.item-input',
+                                                            TX: `*${WORD.enter_a_valid_url}`
+                                                        })
+                                                    }
+                                                }
+                
+                                                if(item[0] == 'soundcloud'){
+                                                    if(!item[2].match(/^(?:(https?):\/\/)?(?:(?:www|m)\.)?(soundcloud\.com|snd\.sc)\/[a-z0-9](?!.*?(-|_){2})[\w-]{1,23}[a-z0-9](?:\/.+)?$/)){
+                                                        error.push({
+                                                            EL: index,
+                                                            CS: '.item-input',
+                                                            TX: `${WORD.enter_a_valid_url}`
+                                                        });
+                                                    }
+                                                }
+                
+                                                if(item[0] == 'spotify'){
+                                                    if(!item[2].match(/https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:(track|artist|album|playlist|episode)|user\/([a-zA-Z0-9]+)\/playlist)\/([a-zA-Z0-9]+)|spotify:((track|artist|album|playlist|episode):([a-zA-Z0-9]+)|user:([a-zA-Z0-9]+):playlist:([a-zA-Z0-9]+))/)){
+                                                        error.push({
+                                                            EL: index,
+                                                            CS: '.item-input',
+                                                            TX: `${WORD.enter_a_valid_url}`
+                                                        });
                                                     }
                                                 }
                                             }
-                                        }
-            
-                                        if(item[0] == 'embed'){
-                                            if(!specific.ValidateUrl(item[2])){
-                                                error.push({
-                                                    EL: index,
-                                                    CS: '.item_url',
-                                                    TX: `*${WORD.enter_a_valid_url}`
-                                                })
-                                            }
-                                        }
-
-                                        if(!Boolean(item[3])){
-                                            if(item[0] == 'video'){
-                                                if(!item[2].match(/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?(?:youtu\.be|youtube\.com)\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/)([^\?&\"'>]+)/) && !item[2].match(/^(?:http(?:s)?:\/\/)?(?:[a-z0-9.]+\.)?vimeo\.com\/([0-9]+)$/) && !item[2].match(/^.+dailymotion.com\/(video|hub)\/([^_]+)[^#]*(#video=([^_&]+))?/)){
-                                                    error.push({
-                                                        EL: index,
-                                                        CS: '.item-input',
-                                                        TX: `*${WORD.enter_a_valid_url}`
-                                                    })
-                                                }
-                                            }
-            
-                                            if(item[0] == 'facebookpost'){
-                                                if(!item[2].match(/(?:(?:http|https):\/\/)?(?:www\.)?(?:facebook\.com)\/(\d+|[A-Za-z0-9\.]+)\/?/)){
-                                                    error.push({
-                                                        EL: index,
-                                                        CS: '.item-input',
-                                                        TX: `${WORD.enter_a_valid_url}`
-                                                    });
-                                                }
-                                            }
-            
-                                            if(item[0] == 'instagrampost'){
-                                                if(!item[2].match(/(?:(?:http|https):\/\/)?(?:www\.)?(?:instagram\.com|instagr\.am)\/(?:p|tv|reel)\/([A-Za-z0-9-_\.]+)/)){
-                                                    error.push({
-                                                        EL: index,
-                                                        CS: '.item-input',
-                                                        TX: `${WORD.enter_a_valid_url}`
-                                                    });
-                                                }
-                                            }
-            
-                                            if(item[0] == 'tweet'){
-                                                if(!item[2].match(/^https?:\/\/(mobile.|)twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/)){
-                                                    error.push({
-                                                        EL: index,
-                                                        CS: '.item-input',
-                                                        TX: `${WORD.enter_a_valid_url}`
-                                                    });
-                                                }
-                                            }
-            
-                                            if(item[0] == 'tiktok'){
-                                                var tiktok_url = item[2].match(/(?:http(?:s)?:\/\/)?(?:(?:www)\.(?:tiktok\.com)(?:\/)(?!foryou)(@[a-zA-z0-9]+)(?:\/)(?:video)(?:\/)([\d]+)|(?:m)\.(?:tiktok\.com)(?:\/)(?!foryou)(?:v)(?:\/)?(?=([\d]+)\.html))/),
-                                                    tiktok_param = item[2].match(/#\/(@[a-zA-z0-9]*|.*)(?:\/)?(?:v|video)(?:\/)?([\d]+)/);
-            
-                                                if(tiktok_param || (tiktok_param && specific.ValidateUrl(item[2]))){
-                                                    tiktok_url = !0;
-                                                    arr[index][2] = `https://www.tiktok.com/${tiktok_param[1]}/video/${tiktok_param[2]}`;
-                                                }
-                        
-                                                if(!tiktok_url){
-                                                    error.push({
-                                                        EL: index,
-                                                        CS: '.item-input',
-                                                        TX: `*${WORD.enter_a_valid_url}`
-                                                    })
-                                                }
-                                            }
-            
-                                            if(item[0] == 'soundcloud'){
-                                                if(!item[2].match(/^(?:(https?):\/\/)?(?:(?:www|m)\.)?(soundcloud\.com|snd\.sc)\/[a-z0-9](?!.*?(-|_){2})[\w-]{1,23}[a-z0-9](?:\/.+)?$/)){
-                                                    error.push({
-                                                        EL: index,
-                                                        CS: '.item-input',
-                                                        TX: `${WORD.enter_a_valid_url}`
-                                                    });
-                                                }
-                                            }
-            
-                                            if(item[0] == 'spotify'){
-                                                if(!item[2].match(/https?:\/\/(?:embed\.|open\.)(?:spotify\.com\/)(?:(track|artist|album|playlist|episode)|user\/([a-zA-Z0-9]+)\/playlist)\/([a-zA-Z0-9]+)|spotify:((track|artist|album|playlist|episode):([a-zA-Z0-9]+)|user:([a-zA-Z0-9]+):playlist:([a-zA-Z0-9]+))/)){
-                                                    error.push({
-                                                        EL: index,
-                                                        CS: '.item-input',
-                                                        TX: `${WORD.enter_a_valid_url}`
-                                                    });
-                                                }
-                                            }
-                                        }
-                                    }).catch(function(err){});
-                                    
-                                    if(['normal', 'video'].indexOf(type) === -1){
-                                        error.push({
-                                            EL: '#type',
-                                            TX: `*${WORD.oops_error_has_occurred}`
-                                        })
-                                    }
-        
-                                    if(post_sources.length > 0){
-                                        var error_positions = [];
-        
-                                        if(post_sources.length < SETTINGS.number_of_fonts){
-                                            await forEachAsync(post_sources, function(item, index, arr){
-                                                if(item.name != '' && item.source != ''){
-                                                    if(!specific.ValidateUrl(item.source)){
-                                                        error_positions.push(index);
-                                                    }
-                                                }
-                                            }).catch(function(err){});
-                                            if(error_positions.length > 0){
-                                                error.push({
-                                                    EL: '.post_sources',
-                                                    PS: error_positions,
-                                                    CT: 0,
-                                                    FD: 2,
-                                                    SW: 0,
-                                                    TX: `*${WORD.enter_a_valid_url}`
-                                                });
-                                            }
-                                        } else {
-                                            error.push({
-                                                EL: '.post_sources',
-                                                CT: 0,
-                                                SW: 0,
-                                                TX: `*${WORD.oops_error_has_occurred}`
-                                            });
-                                        }
-                                    }
-        
-        
-                                    if(thumb_sources.length > 0){
-                                        var error_positions = [];
-        
-                                        if(thumb_sources.length < SETTINGS.number_of_fonts){
-                                            await forEachAsync(thumb_sources, function(item, index, arr){
-                                                if(item.name != '' && item.source != ''){
-                                                    if(!specific.ValidateUrl(item.source)){
-                                                        error_positions.push(index);
-                                                    }
-                                                }
-                                            }).catch(function(err){});
-                                            if(error_positions.length > 0){
-                                                error.push({
-                                                    EL: '.post_sources',
-                                                    PS: error_positions,
-                                                    CT: 1,
-                                                    FD: 2,
-                                                    SW: 0,
-                                                    TX: `*${WORD.enter_a_valid_url}`
-                                                });
-                                            }
-                                        } else {
-                                            error.push({
-                                                EL: '.post_sources',
-                                                CT: 1,
-                                                SW: 0,
-                                                TX: `*${WORD.oops_error_has_occurred}`
-                                            });
-                                        }
-                                    }
-                    
-                                    tags = tags.split(',');
-                                    if(tags.length > SETTINGS.number_labels){
-                                        error.push({
-                                            EL: '#content-tags',
-                                            TX: `*${WORD.oops_error_has_occurred}`
-                                        });
-                                    }
-        
-                                    if(error.length == 0){
-                                        var desthumb = Object.keys(files).indexOf('thumbnail');
-                                        if(Object.keys(thumbnail).length > 0 && (desthumb !== -1 || (desthumb === -1 && thumbnail.indexOf(info.domain)) === -1)){
-                                            var thmbFn = function(){
-                                                fs.unlink(`uploads/posts/${post.thumbnail}-s.jpeg`, function(err) {
-                                                    if(err && err.code == 'ENOENT') {
-                                                        // file doens't exist
-                                                        console.info("File doesn't exist, won't remove it.");
-                                                    } else if (err) {
-                                                        // other errors, e.g. maybe we don't have enough permission
-                                                        console.error("Error occurred while trying to remove file");
-                                                    } else {
-                                                        console.info(`removed`);
-                                                    }
-                                                });
-                                                fs.unlink(`uploads/posts/${post.thumbnail}-b.jpeg`, function(err) {
-                                                    if(err && err.code == 'ENOENT') {
-                                                        // file doens't exist
-                                                        console.info("File doesn't exist, won't remove it.");
-                                                    } else if (err) {
-                                                        // other errors, e.g. maybe we don't have enough permission
-                                                        console.error("Error occurred while trying to remove file");
-                                                    } else {
-                                                        console.info(`removed`);
-                                                    }
-                                                });
-                                            }
-                                            if(desthumb !== -1){
-                                                await specific.UploadImage({
-                                                    name: files.thumbnail.originalFilename,
-                                                    tmp_name: files.thumbnail.filepath,
-                                                    size: files.thumbnail.size,
-                                                    type: files.thumbnail.mimetype,
-                                                    folder: 'posts',
-                                                }).then(function(res){
-                                                    thumbnail = res;
-                                                    thmbFn();
-                                                }).catch(function(err){
-                                                    arr_trues.push(!1);
-                                                });
-                                            } else {
-                                                await specific.UploadThumbnail({
-                                                    media: thumbnail,
-                                                    folder: 'posts'
-                                                }).then(function(res){
-                                                    thumbnail = res;
-                                                    thmbFn();
-                                                }).catch(function(err){
-                                                    arr_trues.push(!1);
-                                                });
-                                            }
-                                        } else {
-                                            thumbnail = {
-                                                return: true,
-								                image: post.thumbnail
-                                            };
-                                        }
+                                        }).catch(function(err){});
                                         
+                                        if(['normal', 'video'].indexOf(type) === -1){
+                                            error.push({
+                                                EL: '#type',
+                                                TX: `*${WORD.oops_error_has_occurred}`
+                                            })
+                                        }
+            
                                         if(post_sources.length > 0){
-                                            post_sources = JSON.stringify(Object.values(post_sources));
-                                        } else {
-                                            post_sources = null;
-                                        }
-                                        if(thumb_sources.length > 0){
-                                            thumb_sources = JSON.stringify(Object.values(thumb_sources));
-                                        } else {
-                                            thumb_sources = null;
-                                        }
-        
-                                        if(thumbnail.return){
-                                            var st_regex = '/<(?:script|style)[^>]*>(.*?)<\/(?:script|style)>/is',
-                                                updated_at = created_at = specific.Time(),
-                                                slug = post.slug;
-
-                                            await query(`UPDATE ${T.POST} SET category_id = ?, title = ?, description = ?, thumbnail = ?, post_sources = ?, thumb_sources = ?, type = ?, updated_at = ? WHERE id = ?`, [category, title, description, thumbnail.image, post_sources, thumb_sources, type, updated_at, post_id]).then(async function(qres){
-                                                if(qres.affectedRows > 0){
-                                                    var arr_trues = [],
-                                                        del_entries = [],
-                                                        entries_ids = [];
-
-                                                    await query(`SELECT id FROM ${T.ENTRY} WHERE post_id = ?`, post_id).then(async function(res){
-                                                        if(res.length > 0){
-                                                            await forEachAsync(res, function(item, index, arr) {
-                                                                entries_ids.push(item.id);
-                                                            }).catch(function(err){});
-
-                                                            del_entries = specific.ArrayDiff(entries_ids, ids);
-                                                        } else {
-                                                            arr_trues.push(!1);
+                                            var error_positions = [];
+            
+                                            if(post_sources.length < SETTINGS.number_of_fonts){
+                                                await forEachAsync(post_sources, function(item, index, arr){
+                                                    if(item.name != '' && item.source != ''){
+                                                        if(!specific.ValidateUrl(item.source)){
+                                                            error_positions.push(index);
                                                         }
+                                                    }
+                                                }).catch(function(err){});
+                                                if(error_positions.length > 0){
+                                                    error.push({
+                                                        EL: '.post_sources',
+                                                        PS: error_positions,
+                                                        CT: 0,
+                                                        FD: 2,
+                                                        SW: 0,
+                                                        TX: `*${WORD.enter_a_valid_url}`
+                                                    });
+                                                }
+                                            } else {
+                                                error.push({
+                                                    EL: '.post_sources',
+                                                    CT: 0,
+                                                    SW: 0,
+                                                    TX: `*${WORD.oops_error_has_occurred}`
+                                                });
+                                            }
+                                        }
+            
+            
+                                        if(thumb_sources.length > 0){
+                                            var error_positions = [];
+            
+                                            if(thumb_sources.length < SETTINGS.number_of_fonts){
+                                                await forEachAsync(thumb_sources, function(item, index, arr){
+                                                    if(item.name != '' && item.source != ''){
+                                                        if(!specific.ValidateUrl(item.source)){
+                                                            error_positions.push(index);
+                                                        }
+                                                    }
+                                                }).catch(function(err){});
+                                                if(error_positions.length > 0){
+                                                    error.push({
+                                                        EL: '.post_sources',
+                                                        PS: error_positions,
+                                                        CT: 1,
+                                                        FD: 2,
+                                                        SW: 0,
+                                                        TX: `*${WORD.enter_a_valid_url}`
+                                                    });
+                                                }
+                                            } else {
+                                                error.push({
+                                                    EL: '.post_sources',
+                                                    CT: 1,
+                                                    SW: 0,
+                                                    TX: `*${WORD.oops_error_has_occurred}`
+                                                });
+                                            }
+                                        }
+                        
+                                        tags = tags.split(',');
+                                        if(tags.length > SETTINGS.number_labels){
+                                            error.push({
+                                                EL: '#content-tags',
+                                                TX: `*${WORD.oops_error_has_occurred}`
+                                            });
+                                        }
+            
+                                        if(error.length == 0){
+                                            var desthumb = Object.keys(files).indexOf('thumbnail');
+                                            if(Object.keys(thumbnail).length > 0 && (desthumb !== -1 || (desthumb === -1 && thumbnail.indexOf(info.domain)) === -1)){
+                                                var thmbFn = function(){
+                                                    fs.unlink(`uploads/posts/${post.thumbnail}-s.jpeg`, function(err) {
+                                                        if(err && err.code == 'ENOENT') {
+                                                            // file doens't exist
+                                                            console.info("File doesn't exist, won't remove it.");
+                                                        } else if (err) {
+                                                            // other errors, e.g. maybe we don't have enough permission
+                                                            console.error("Error occurred while trying to remove file");
+                                                        } else {
+                                                            console.info(`removed`);
+                                                        }
+                                                    });
+                                                    fs.unlink(`uploads/posts/${post.thumbnail}-b.jpeg`, function(err) {
+                                                        if(err && err.code == 'ENOENT') {
+                                                            // file doens't exist
+                                                            console.info("File doesn't exist, won't remove it.");
+                                                        } else if (err) {
+                                                            // other errors, e.g. maybe we don't have enough permission
+                                                            console.error("Error occurred while trying to remove file");
+                                                        } else {
+                                                            console.info(`removed`);
+                                                        }
+                                                    });
+                                                }
+                                                if(desthumb !== -1){
+                                                    await specific.UploadImage({
+                                                        name: files.thumbnail.originalFilename,
+                                                        tmp_name: files.thumbnail.filepath,
+                                                        size: files.thumbnail.size,
+                                                        type: files.thumbnail.mimetype,
+                                                        folder: 'posts',
+                                                    }).then(function(res){
+                                                        thumbnail = res;
+                                                        thmbFn();
                                                     }).catch(function(err){
                                                         arr_trues.push(!1);
                                                     });
-        
-                                                    await forEachAsync(entries, function(item, index, arr){
-                                                        var done = this.async(),
-                                                            entry_id = item[item.length-1],
-                                                            entry_id = entry_id == null ? entry_id : parseInt(entry_id),
-                                                            entry_title = null,
-                                                            entry_source = null,
-                                                            entFn = async function(entry_exists = [], content_frame = null, content_text = null, carousel_accept = !1){
+                                                } else {
+                                                    await specific.UploadThumbnail({
+                                                        media: thumbnail,
+                                                        folder: 'posts'
+                                                    }).then(function(res){
+                                                        thumbnail = res;
+                                                        thmbFn();
+                                                    }).catch(function(err){
+                                                        arr_trues.push(!1);
+                                                    });
+                                                }
+                                            } else {
+                                                thumbnail = {
+                                                    return: true,
+                                                    image: post.thumbnail
+                                                };
+                                            }
+                                            
+                                            if(post_sources.length > 0){
+                                                post_sources = JSON.stringify(Object.values(post_sources));
+                                            } else {
+                                                post_sources = null;
+                                            }
+                                            if(thumb_sources.length > 0){
+                                                thumb_sources = JSON.stringify(Object.values(thumb_sources));
+                                            } else {
+                                                thumb_sources = null;
+                                            }
+            
+                                            if(thumbnail.return){
+                                                var st_regex = '/<(?:script|style)[^>]*>(.*?)<\/(?:script|style)>/is',
+                                                    updated_at = created_at = specific.Time(),
+                                                    slug = post.slug,
+                                                    status = post.status,
+                                                    published_at = post.published_at;
 
-                                                                if(['text', 'embed'].indexOf(item[0]) !== -1){
+                                                if(action == 'post' && post.published_at == 0){
+                                                    if(SETTINGS.approve_posts == 'off' || specific.Moderator(socket) == !0){
+                                                        status = 'approved'; 
+                                                    }
+                                                    published_at = updated_at;
+                                                }
 
-                                                                    if(entry_id != null && entries_ids.indexOf(entry_id) !== -1){
-                                                                        await query(`UPDATE ${T.ENTRY} SET title = ?, body = ?, frame = ?, esource = ?, eorder = ?, updated_at = ? WHERE id = ?`, [entry_title, content_text, content_frame, entry_source, index, updated_at, entry_id]).then(function(res){
-                                                                            if(res.affectedRows > 0){
-                                                                                arr_trues.push(!0);
-                                                                            } else {
-                                                                                arr_trues.push(!1);
-                                                                            }
-                                                                            done();
-                                                                        }).catch(function(err){
-                                                                            arr_trues.push(!1);
-                                                                            done();
-                                                                        })
-                                                                    } else {
-                                                                        await query(`INSERT INTO ${T.ENTRY} (post_id, type, title, body, frame, esource, eorder, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [post_id, item[0], entry_title, content_text, content_frame, entry_source, index, created_at]).then(function(res){
-                                                                            if(res.insertId > 0){
-                                                                                arr_trues.push(!0);
-                                                                            } else {
-                                                                                arr_trues.push(!1);
-                                                                            }
-                                                                            done();
-                                                                        }).catch(function(err){
-                                                                            arr_trues.push(!1);
-                                                                            done();
-                                                                        })
-                                                                    }
-                                                                } else {
-                                                                    if((item[0] == 'carousel' && carousel_accept) || item[0] != 'carousel'){
+                                                await query(`UPDATE ${T.POST} SET category_id = ?, title = ?, description = ?, thumbnail = ?, post_sources = ?, thumb_sources = ?, type = ?, status = ?, updated_at = ?, published_at = ? WHERE id = ?`, [category, title, description, thumbnail.image, post_sources, thumb_sources, type, status, updated_at, published_at, post_id]).then(async function(qres){
+                                                    if(qres.affectedRows > 0){
+                                                        var arr_trues = [],
+                                                            del_entries = [],
+                                                            entries_ids = [];
+
+                                                        await query(`SELECT id FROM ${T.ENTRY} WHERE post_id = ?`, post_id).then(async function(res){
+                                                            if(res.length > 0){
+                                                                await forEachAsync(res, function(item, index, arr) {
+                                                                    entries_ids.push(item.id);
+                                                                }).catch(function(err){});
+
+                                                                del_entries = specific.ArrayDiff(entries_ids, ids);
+                                                            } else {
+                                                                arr_trues.push(!1);
+                                                            }
+                                                        }).catch(function(err){
+                                                            arr_trues.push(!1);
+                                                        });
+            
+                                                        await forEachAsync(entries, function(item, index, arr){
+                                                            var done = this.async(),
+                                                                entry_id = item[item.length-1],
+                                                                entry_id = entry_id == null ? entry_id : parseInt(entry_id),
+                                                                entry_title = null,
+                                                                entry_source = null,
+                                                                entFn = async function(entry_exists = [], content_frame = null, content_text = null, carousel_accept = !1){
+
+                                                                    if(['text', 'embed'].indexOf(item[0]) !== -1){
+
                                                                         if(entry_id != null && entries_ids.indexOf(entry_id) !== -1){
-                                                                            await query(`UPDATE ${T.ENTRY} SET title = ?, esource = ?, eorder = ?, updated_at = ? WHERE id = ?`, [entry_title, entry_source, index, updated_at, entry_id]).then(async function(res){
-                                                                                // Aqui esta el error, entra pero parece que se duplican las imagenes ¿? pq?
+                                                                            await query(`UPDATE ${T.ENTRY} SET title = ?, body = ?, frame = ?, esource = ?, eorder = ?, updated_at = ? WHERE id = ?`, [entry_title, content_text, content_frame, entry_source, index, updated_at, entry_id]).then(function(res){
                                                                                 if(res.affectedRows > 0){
-                                                                                    if(item[0] == 'carousel'){
-                                                                                        await query(`UPDATE ${T.ENTRY} SET frame = ? WHERE id = ?`, [content_frame, entry_id]).then(async function(res){
-                                                                                            if(res.affectedRows > 0){
-                                                                                                var carousel = JSON.parse(entry_exists.frame);
-                                                                                                await forEachAsync(carousel, function(m, i, a){
-                                                                                                    var done3 = this.async();
-                                                                                                    fs.unlink(`uploads/entries/${m.image}`, function(err){
-                                                                                                        done3();
-                                                                                                    });
-                                                                                                    if(i == (a.length-1)){
-                                                                                                        done();
-                                                                                                    } 
-                                                                                                }).catch(function(err){});
-
-                                                                                                arr_trues.push(!0);
-                                                                                            } else {
-                                                                                                arr_trues.push(!1);
-                                                                                                done();
-                                                                                            }
-                                                                                        }).catch(function(err){
-                                                                                            arr_trues.push(!1);
-                                                                                            done();
-                                                                                        })
-                                                                                    } else if(item[0] == 'image' && index != entry_exists.eorder){
-                                                                                        var ext_frame = "uploads/entries/",
-                                                                                            old_frame = entry_exists.frame,
-                                                                                            new_frame = _.replace(old_frame, `${post_id}-${entry_exists.eorder}-`, `${post_id}-${index}-`);
-
-                                                                                        await query(`UPDATE ${T.ENTRY} SET frame = ? WHERE id = ?`, [new_frame, entry_id]).then(function(res){
-                                                                                            if(res.affectedRows > 0){
-                                                                                                fs.rename(`${ext_frame}${old_frame}`, `${ext_frame}${new_frame}`, function() {
-                                                                                                    done();
-                                                                                                });
-
-                                                                                                arr_trues.push(!0);
-                                                                                            } else {
-                                                                                                arr_trues.push(!1);
-                                                                                                done();
-                                                                                            }
-                                                                                        }).catch(function(err){
-                                                                                            arr_trues.push(!1);
-                                                                                            done();
-                                                                                        })
-                                                                                    } else {
-                                                                                        done();
-                                                                                    }
-
                                                                                     arr_trues.push(!0);
                                                                                 } else {
                                                                                     arr_trues.push(!1);
-                                                                                    done();
                                                                                 }
+                                                                                done();
                                                                             }).catch(function(err){
                                                                                 arr_trues.push(!1);
                                                                                 done();
                                                                             })
-                                                                        } else done();
-                                                                    } else done();
-                                                                }
-                                                            },
-                                                            goentFn = async function(){
-
-                                                                var entry_exists = [];
-                                                                
-                                                                if(entry_id != null){
-                                                                    await query(`SELECT eorder, frame FROM ${T.ENTRY} WHERE id = ? AND post_id = ?`, [entry_id, post_id]).then(function(res){
-                                                                        entry_exists = res[0];
-                                                                    }).catch(function(err){
-                                                                        arr_trues.push(!1);
-                                                                        done();
-                                                                    });
-                                                                }
-
-                                                                var insrenFn = async function(content_frame = null, carousel_accept = !1){
-                                                                        await query(`INSERT INTO ${T.ENTRY} (post_id, type, title, frame, esource, eorder, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)`, [post_id, item[0], entry_title, content_frame, entry_source, index, created_at]).then(function(res){
-                                                                            if(res.insertId > 0){
-                                                                                arr_trues.push(!0);
-                                                                            } else {
+                                                                        } else {
+                                                                            await query(`INSERT INTO ${T.ENTRY} (post_id, type, title, body, frame, esource, eorder, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [post_id, item[0], entry_title, content_text, content_frame, entry_source, index, created_at]).then(function(res){
+                                                                                if(res.insertId > 0){
+                                                                                    arr_trues.push(!0);
+                                                                                } else {
+                                                                                    arr_trues.push(!1);
+                                                                                }
+                                                                                done();
+                                                                            }).catch(function(err){
                                                                                 arr_trues.push(!1);
-                                                                            }
-                                                                        }).catch(function(err){
-                                                                            arr_trues.push(!1);
-                                                                        })
-                                                                        entFn(entry_exists, content_frame, null, carousel_accept);
-                                                                    };
-
-                                                                if(item[1] != ''){
-                                                                    entry_title = item[1];
-                                                                }
-
-                                                                if(['text', 'image', 'carousel'].indexOf(item[0]) !== -1){
-                                                                    if(item[0] == 'text'){
-                                                                        if(item[3] != ''){
-                                                                            entry_source = item[3];
-                                                                        }
-                                                                    } else if(item[0] == 'image'){
-                                                                        if(item[4] != ''){
-                                                                            entry_source = item[4];
+                                                                                done();
+                                                                            })
                                                                         }
                                                                     } else {
-                                                                        if(item[5] != ''){
-                                                                            entry_source = item[5];
-                                                                        }
-                                                                    }
-                                                                }
-                
-                                                                if(entry_source != null){
-                                                                    entry_source = entry_source.replace(st_regex, '');
-                                                                }
-                
-                                                                if(item[0] == 'text'){
-                                                                    entFn(entry_exists, null, item[2].replace(st_regex, ''));
-                                                                } else {
-                                                                    if(item[0] == 'image'){
-                                                                        if(item[2].indexOf(entry_exists.frame) === -1){
-                                                                            var thumbnail_id = `thumbnail_${index}`,
-                                                                                updtenFn = async function(content_frame = null){
-                                                                                    if(entry_id != null && entries_ids.indexOf(entry_id) !== -1){
-                                                                                        await query(`SELECT frame FROM ${T.ENTRY} WHERE id = ? AND post_id = ?`, [entry_id, post_id]).then(async function(res){
-                                                                                            fs.unlink(`uploads/entries/${res[0].frame}`, function(err) {
-                                                                                                if(err && err.code == 'ENOENT') {
-                                                                                                    // file doens't exist
-                                                                                                    console.info("File doesn't exist, won't remove it.");
-                                                                                                } else if (err) {
-                                                                                                    // other errors, e.g. maybe we don't have enough permission
-                                                                                                    console.error("Error occurred while trying to remove file");
-                                                                                                } else {
-                                                                                                    console.info(`removed`);
-                                                                                                }
-                                                                                            });
-
-                                                                                            await query(`UPDATE ${T.ENTRY} SET frame = ? WHERE id = ?`, [content_frame, entry_id]).then(function(res){
+                                                                        if((item[0] == 'carousel' && carousel_accept) || item[0] != 'carousel'){
+                                                                            if(entry_id != null && entries_ids.indexOf(entry_id) !== -1){
+                                                                                await query(`UPDATE ${T.ENTRY} SET title = ?, esource = ?, eorder = ?, updated_at = ? WHERE id = ?`, [entry_title, entry_source, index, updated_at, entry_id]).then(async function(res){
+                                                                                    // Aqui esta el error, entra pero parece que se duplican las imagenes ¿? pq?
+                                                                                    if(res.affectedRows > 0){
+                                                                                        if(item[0] == 'carousel'){
+                                                                                            await query(`UPDATE ${T.ENTRY} SET frame = ? WHERE id = ?`, [content_frame, entry_id]).then(async function(res){
                                                                                                 if(res.affectedRows > 0){
+                                                                                                    var carousel = JSON.parse(entry_exists.frame);
+                                                                                                    await forEachAsync(carousel, function(m, i, a){
+                                                                                                        var done3 = this.async();
+                                                                                                        fs.unlink(`uploads/entries/${m.image}`, function(err){
+                                                                                                            done3();
+                                                                                                        });
+                                                                                                        if(i == (a.length-1)){
+                                                                                                            done();
+                                                                                                        } 
+                                                                                                    }).catch(function(err){});
+
                                                                                                     arr_trues.push(!0);
                                                                                                 } else {
                                                                                                     arr_trues.push(!1);
+                                                                                                    done();
                                                                                                 }
-                                                                                                done();
                                                                                             }).catch(function(err){
                                                                                                 arr_trues.push(!1);
                                                                                                 done();
-                                                                                            });
-                                                                                        }).catch(function(err){
-                                                                                            arr_trues.push(!1);
-                                                                                            done();
-                                                                                        });
-                                                                                    } else {
-                                                                                        insrenFn(content_frame);
-                                                                                    }
-                                                                                };
-                                                                            if(Object.keys(files).indexOf(thumbnail_id) !== -1){
-                                                                                var thumbnail = files[thumbnail_id];
-                    
-                                                                                specific.UploadImage({
-                                                                                    name: thumbnail.originalFilename,
-                                                                                    tmp_name: thumbnail.filepath,
-                                                                                    size: thumbnail.size,
-                                                                                    type: thumbnail.mimetype,
-                                                                                    post_id: post_id,
-                                                                                    eorder: index,
-                                                                                    folder: 'entries',
-                                                                                }).then(function(res){
-                                                                                    updtenFn(res.image_ext);
-                                                                                }).catch(function(err){
-                                                                                    arr_trues.push(!1);
-                                                                                    done();
-                                                                                });
-                                                                            } else if(item[2] != ''){
-                                                                                specific.UploadThumbnail({
-                                                                                    media: item[2],
-                                                                                    post_id: post_id,
-                                                                                    eorder: index,
-                                                                                    folder: 'entries'
-                                                                                }).then(function(res){
-                                                                                    updtenFn(res.image_ext);
-                                                                                }).catch(function(err){
-                                                                                    arr_trues.push(!1);
-                                                                                    done();
-                                                                                });
-                                                                            }
-                                                                        } else {
-                                                                            entFn(entry_exists, null);
-                                                                        }
-                                                                    } else if(item[0] == 'carousel'){
-                                                                        var captions = specific.Filter(fields[`carousel_captions_${index}`]),
-                                                                            carousel = [],
-                                                                            car_size = Array(item[2]).fill(0);
-                
-                                                                        captions = specific.htmlEntityDecode(captions);
-                                                                        captions = JSON.parse(captions);
-                
-                                                                        forEachAsync(car_size, function(m, i, a){
-                                                                            var done2 = this.async(),
-                                                                                carousel_id = `carousel_${index}_${i}`;
-                
-                                                                            if(Object.keys(files).indexOf(carousel_id) !== -1){
-                                                                                var thumbnail = files[carousel_id];
-                
-                                                                                specific.UploadImage({
-                                                                                    name: thumbnail.originalFilename,
-                                                                                    tmp_name: thumbnail.filepath,
-                                                                                    size: thumbnail.size,
-                                                                                    type: thumbnail.mimetype,
-                                                                                    post_id: post_id,
-                                                                                    eorder: index,
-                                                                                    folder: 'entries',
-                                                                                }).then(function(res){
-                                                                                    if(res.return){
-                                                                                        carousel.push({
-                                                                                            image: res.image_ext,
-                                                                                            caption: captions[i]
-                                                                                        });
-                                                                                    }
-                                                                                    if(i == (item[2]-1)){
-                                                                                        if(entry_id == null){
-                                                                                            insrenFn(JSON.stringify(carousel), !0);
-                                                                                        } else {
-                                                                                            entFn(entry_exists, JSON.stringify(carousel), null, !0);
-                                                                                        }
-                                                                                    }
-                                                                                    done2();
-                                                                                }).catch(function(err){
-                                                                                    arr_trues.push(!1);
-                                                                                    if(i == (item[2]-1)){
-                                                                                        done();
-                                                                                    }
-                                                                                    done2();
-                                                                                });
-                                                                            } else if(fields[carousel_id] != undefined){
-                                                                                specific.UploadThumbnail({
-                                                                                    media: specific.Filter(fields[carousel_id]),
-                                                                                    post_id: post_id,
-                                                                                    eorder: index,
-                                                                                    folder: 'entries'
-                                                                                }).then(function(res){
-                                                                                    if(res.return){
-                                                                                        carousel.push({
-                                                                                            image: res.image_ext,
-                                                                                            caption: captions[i]
-                                                                                        });
-                                                                                    }
-                                                                                    if(i == (item[2]-1)){
-                                                                                        if(entry_id == null){
-                                                                                            insrenFn(JSON.stringify(carousel), !0);
-                                                                                        } else {
-                                                                                            entFn(entry_exists, JSON.stringify(carousel), null, !0);
-                                                                                        }
-                                                                                    }
-                                                                                    done2();
-                                                                                }).catch(function(err){
-                                                                                    arr_trues.push(!1);
-                                                                                    if(i == (item[2]-1)){
-                                                                                        done();
-                                                                                    }
-                                                                                    done2();
-                                                                                });
-                                                                            }
-                                                                        }).catch(function(err){});
-                                                                    } else {
-                                                                        if(item[0] == 'embed'){
-                                                                            var attrs = specific.Filter(fields[`embed_${index}`]),
-                                                                                frame = specific.MaketFrame(item[2], attrs);
-                    
-                                                                            frame = {
-                                                                                url: item[2],
-                                                                                attrs: frame.attrs
-                                                                            };
-                                    
-                                                                            entFn(entry_exists, JSON.stringify(frame));
-                                                                        } else if(entry_id == null){
-                                                                            if(['tweet', 'soundcloud', 'spotify', 'tiktok'].indexOf(item[0]) !== -1){
-                                                                                oembed.extract(item[2], {omit_script: !0}).then((json) => {
-                                                                                    if(json.error === undefined && json.errors === undefined && json.status_msg === undefined){
-                                                                                        if(json != ''){
-                                                                                            var content_frame = json.html;
-                                                                                            if(item[0] == 'tiktok'){
-                                                                                                content_frame = content_frame.replace(/(\s+)?(?:<script [^>]*><\/script>)/, '');
-                                                                                            } else if(item[0] == 'soundcloud'){
-                                                                                                var src = content_frame.match(/(?<=src=").*?(?=[\*"])/);
-                                                                                                if(src){
-                                                                                                    content_frame = src[0];
+                                                                                            })
+                                                                                        } else if(item[0] == 'image' && index != entry_exists.eorder){
+                                                                                            var ext_frame = "uploads/entries/",
+                                                                                                old_frame = entry_exists.frame,
+                                                                                                new_frame = _.replace(old_frame, `${post_id}-${entry_exists.eorder}-`, `${post_id}-${index}-`);
+
+                                                                                            await query(`UPDATE ${T.ENTRY} SET frame = ? WHERE id = ?`, [new_frame, entry_id]).then(function(res){
+                                                                                                if(res.affectedRows > 0){
+                                                                                                    fs.rename(`${ext_frame}${old_frame}`, `${ext_frame}${new_frame}`, function() {
+                                                                                                        done();
+                                                                                                    });
+
+                                                                                                    arr_trues.push(!0);
+                                                                                                } else {
+                                                                                                    arr_trues.push(!1);
+                                                                                                    done();
                                                                                                 }
-                                                                                            }
-                                                                                            arr_trues.push(!0);
-                                                                                            insrenFn(content_frame);
+                                                                                            }).catch(function(err){
+                                                                                                arr_trues.push(!1);
+                                                                                                done();
+                                                                                            })
                                                                                         } else {
-                                                                                            arr_trues.push(!1);
                                                                                             done();
                                                                                         }
+
+                                                                                        arr_trues.push(!0);
                                                                                     } else {
                                                                                         arr_trues.push(!1);
                                                                                         done();
                                                                                     }
-                                                                                }).catch((err) => {
-                                                                                    console.trace(err);
+                                                                                }).catch(function(err){
+                                                                                    arr_trues.push(!1);
                                                                                     done();
                                                                                 })
-                                                                            } else {
-                                                                                insrenFn(item[2]);
+                                                                            } else done();
+                                                                        } else done();
+                                                                    }
+                                                                },
+                                                                goentFn = async function(){
+
+                                                                    var entry_exists = [];
+                                                                    
+                                                                    if(entry_id != null){
+                                                                        await query(`SELECT eorder, frame FROM ${T.ENTRY} WHERE id = ? AND post_id = ?`, [entry_id, post_id]).then(function(res){
+                                                                            entry_exists = res[0];
+                                                                        }).catch(function(err){
+                                                                            arr_trues.push(!1);
+                                                                            done();
+                                                                        });
+                                                                    }
+
+                                                                    var insrenFn = async function(content_frame = null, carousel_accept = !1){
+                                                                            await query(`INSERT INTO ${T.ENTRY} (post_id, type, title, frame, esource, eorder, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)`, [post_id, item[0], entry_title, content_frame, entry_source, index, created_at]).then(function(res){
+                                                                                if(res.insertId > 0){
+                                                                                    arr_trues.push(!0);
+                                                                                } else {
+                                                                                    arr_trues.push(!1);
+                                                                                }
+                                                                            }).catch(function(err){
+                                                                                arr_trues.push(!1);
+                                                                            })
+                                                                            entFn(entry_exists, content_frame, null, carousel_accept);
+                                                                        };
+
+                                                                    if(item[1] != ''){
+                                                                        entry_title = item[1];
+                                                                    }
+
+                                                                    if(['text', 'image', 'carousel'].indexOf(item[0]) !== -1){
+                                                                        if(item[0] == 'text'){
+                                                                            if(item[3] != ''){
+                                                                                entry_source = item[3];
+                                                                            }
+                                                                        } else if(item[0] == 'image'){
+                                                                            if(item[4] != ''){
+                                                                                entry_source = item[4];
                                                                             }
                                                                         } else {
-                                                                            entFn(entry_exists);
+                                                                            if(item[5] != ''){
+                                                                                entry_source = item[5];
+                                                                            }
                                                                         }
                                                                     }
-                                                                }
-                                                            };
+                    
+                                                                    if(entry_source != null){
+                                                                        entry_source = entry_source.replace(st_regex, '');
+                                                                    }
+                    
+                                                                    if(item[0] == 'text'){
+                                                                        entFn(entry_exists, null, item[2].replace(st_regex, ''));
+                                                                    } else {
+                                                                        if(item[0] == 'image'){
+                                                                            if(item[2].indexOf(entry_exists.frame) === -1){
+                                                                                var thumbnail_id = `thumbnail_${index}`,
+                                                                                    updtenFn = async function(content_frame = null){
+                                                                                        if(entry_id != null && entries_ids.indexOf(entry_id) !== -1){
+                                                                                            await query(`SELECT frame FROM ${T.ENTRY} WHERE id = ? AND post_id = ?`, [entry_id, post_id]).then(async function(res){
+                                                                                                fs.unlink(`uploads/entries/${res[0].frame}`, function(err) {
+                                                                                                    if(err && err.code == 'ENOENT') {
+                                                                                                        // file doens't exist
+                                                                                                        console.info("File doesn't exist, won't remove it.");
+                                                                                                    } else if (err) {
+                                                                                                        // other errors, e.g. maybe we don't have enough permission
+                                                                                                        console.error("Error occurred while trying to remove file");
+                                                                                                    } else {
+                                                                                                        console.info(`removed`);
+                                                                                                    }
+                                                                                                });
 
-                                                        goentFn();
-                                                    }).catch(function(err){});
-
-                                                    if(del_entries.length > 0){
-                                                        await forEachAsync(del_entries, function(item, index, arr){
-                                                            var done = this.async();
-                                                            connection.query(`SELECT type, frame FROM ${T.ENTRY} WHERE id = ? AND post_id = ?`, [item, post_id], function(error, result, field){
-                                                                if(error){
-                                                                    done();
-                                                                    return arr_trues.push(!1);
-                                                                }
-                                                                if(result.length > 0){
-                                                                    var entry = result[0];
-                                                                    connection.query(`DELETE FROM ${T.ENTRY} WHERE id = ? AND post_id = ?`, [item, post_id], async function(error, result, field){
-                                                                        if(error){
-                                                                            done();
-                                                                            return arr_trues.push(!1);
+                                                                                                await query(`UPDATE ${T.ENTRY} SET frame = ? WHERE id = ?`, [content_frame, entry_id]).then(function(res){
+                                                                                                    if(res.affectedRows > 0){
+                                                                                                        arr_trues.push(!0);
+                                                                                                    } else {
+                                                                                                        arr_trues.push(!1);
+                                                                                                    }
+                                                                                                    done();
+                                                                                                }).catch(function(err){
+                                                                                                    arr_trues.push(!1);
+                                                                                                    done();
+                                                                                                });
+                                                                                            }).catch(function(err){
+                                                                                                arr_trues.push(!1);
+                                                                                                done();
+                                                                                            });
+                                                                                        } else {
+                                                                                            insrenFn(content_frame);
+                                                                                        }
+                                                                                    };
+                                                                                if(Object.keys(files).indexOf(thumbnail_id) !== -1){
+                                                                                    var thumbnail = files[thumbnail_id];
+                        
+                                                                                    specific.UploadImage({
+                                                                                        name: thumbnail.originalFilename,
+                                                                                        tmp_name: thumbnail.filepath,
+                                                                                        size: thumbnail.size,
+                                                                                        type: thumbnail.mimetype,
+                                                                                        post_id: post_id,
+                                                                                        eorder: index,
+                                                                                        folder: 'entries',
+                                                                                    }).then(function(res){
+                                                                                        updtenFn(res.image_ext);
+                                                                                    }).catch(function(err){
+                                                                                        arr_trues.push(!1);
+                                                                                        done();
+                                                                                    });
+                                                                                } else if(item[2] != ''){
+                                                                                    specific.UploadThumbnail({
+                                                                                        media: item[2],
+                                                                                        post_id: post_id,
+                                                                                        eorder: index,
+                                                                                        folder: 'entries'
+                                                                                    }).then(function(res){
+                                                                                        updtenFn(res.image_ext);
+                                                                                    }).catch(function(err){
+                                                                                        arr_trues.push(!1);
+                                                                                        done();
+                                                                                    });
+                                                                                }
+                                                                            } else {
+                                                                                entFn(entry_exists, null);
+                                                                            }
+                                                                        } else if(item[0] == 'carousel'){
+                                                                            var captions = specific.Filter(fields[`carousel_captions_${index}`]),
+                                                                                carousel = [],
+                                                                                car_size = Array(item[2]).fill(0);
+                    
+                                                                            captions = specific.htmlEntityDecode(captions);
+                                                                            captions = JSON.parse(captions);
+                    
+                                                                            forEachAsync(car_size, function(m, i, a){
+                                                                                var done2 = this.async(),
+                                                                                    carousel_id = `carousel_${index}_${i}`;
+                    
+                                                                                if(Object.keys(files).indexOf(carousel_id) !== -1){
+                                                                                    var thumbnail = files[carousel_id];
+                    
+                                                                                    specific.UploadImage({
+                                                                                        name: thumbnail.originalFilename,
+                                                                                        tmp_name: thumbnail.filepath,
+                                                                                        size: thumbnail.size,
+                                                                                        type: thumbnail.mimetype,
+                                                                                        post_id: post_id,
+                                                                                        eorder: index,
+                                                                                        folder: 'entries',
+                                                                                    }).then(function(res){
+                                                                                        if(res.return){
+                                                                                            carousel.push({
+                                                                                                image: res.image_ext,
+                                                                                                caption: captions[i]
+                                                                                            });
+                                                                                        }
+                                                                                        if(i == (item[2]-1)){
+                                                                                            if(entry_id == null){
+                                                                                                insrenFn(JSON.stringify(carousel), !0);
+                                                                                            } else {
+                                                                                                entFn(entry_exists, JSON.stringify(carousel), null, !0);
+                                                                                            }
+                                                                                        }
+                                                                                        done2();
+                                                                                    }).catch(function(err){
+                                                                                        arr_trues.push(!1);
+                                                                                        if(i == (item[2]-1)){
+                                                                                            done();
+                                                                                        }
+                                                                                        done2();
+                                                                                    });
+                                                                                } else if(fields[carousel_id] != undefined){
+                                                                                    specific.UploadThumbnail({
+                                                                                        media: specific.Filter(fields[carousel_id]),
+                                                                                        post_id: post_id,
+                                                                                        eorder: index,
+                                                                                        folder: 'entries'
+                                                                                    }).then(function(res){
+                                                                                        if(res.return){
+                                                                                            carousel.push({
+                                                                                                image: res.image_ext,
+                                                                                                caption: captions[i]
+                                                                                            });
+                                                                                        }
+                                                                                        if(i == (item[2]-1)){
+                                                                                            if(entry_id == null){
+                                                                                                insrenFn(JSON.stringify(carousel), !0);
+                                                                                            } else {
+                                                                                                entFn(entry_exists, JSON.stringify(carousel), null, !0);
+                                                                                            }
+                                                                                        }
+                                                                                        done2();
+                                                                                    }).catch(function(err){
+                                                                                        arr_trues.push(!1);
+                                                                                        if(i == (item[2]-1)){
+                                                                                            done();
+                                                                                        }
+                                                                                        done2();
+                                                                                    });
+                                                                                }
+                                                                            }).catch(function(err){});
+                                                                        } else {
+                                                                            if(item[0] == 'embed'){
+                                                                                var attrs = specific.Filter(fields[`embed_${index}`]),
+                                                                                    frame = specific.MaketFrame(item[2], attrs);
+                        
+                                                                                frame = {
+                                                                                    url: item[2],
+                                                                                    attrs: frame.attrs
+                                                                                };
+                                        
+                                                                                entFn(entry_exists, JSON.stringify(frame));
+                                                                            } else if(entry_id == null){
+                                                                                if(['tweet', 'soundcloud', 'spotify', 'tiktok'].indexOf(item[0]) !== -1){
+                                                                                    oembed.extract(item[2], {omit_script: !0}).then((json) => {
+                                                                                        if(json.error === undefined && json.errors === undefined && json.status_msg === undefined){
+                                                                                            if(json != ''){
+                                                                                                var content_frame = json.html;
+                                                                                                if(item[0] == 'tiktok'){
+                                                                                                    content_frame = content_frame.replace(/(\s+)?(?:<script [^>]*><\/script>)/, '');
+                                                                                                } else if(item[0] == 'soundcloud'){
+                                                                                                    var src = content_frame.match(/(?<=src=").*?(?=[\*"])/);
+                                                                                                    if(src){
+                                                                                                        content_frame = src[0];
+                                                                                                    }
+                                                                                                }
+                                                                                                arr_trues.push(!0);
+                                                                                                insrenFn(content_frame);
+                                                                                            } else {
+                                                                                                arr_trues.push(!1);
+                                                                                                done();
+                                                                                            }
+                                                                                        } else {
+                                                                                            arr_trues.push(!1);
+                                                                                            done();
+                                                                                        }
+                                                                                    }).catch((err) => {
+                                                                                        console.trace(err);
+                                                                                        done();
+                                                                                    })
+                                                                                } else {
+                                                                                    insrenFn(item[2]);
+                                                                                }
+                                                                            } else {
+                                                                                entFn(entry_exists);
+                                                                            }
                                                                         }
-                                                                        if(result.affectedRows > 0){
-                                                                            if(entry.type == 'image'){
-                                                                                fs.unlink(`uploads/entries/${entry.frame}`, function(err) {
-                                                                                    if(err && err.code == 'ENOENT') {
-                                                                                        // file doens't exist
-                                                                                        console.info("File doesn't exist, won't remove it.");
-                                                                                    } else if (err) {
-                                                                                        // other errors, e.g. maybe we don't have enough permission
-                                                                                        console.error("Error occurred while trying to remove file");
-                                                                                    } else {
-                                                                                        console.info(`removed`);
-                                                                                    }
-                                                                                });
-                                                                                done();
-                                                                            } else if(entry.type == 'carousel'){
-                                                                                var carousel = JSON.parse(entry.frame);
+                                                                    }
+                                                                };
 
-                                                                                await forEachAsync(carousel, function(m, i, a){
-                                                                                    var done2 = this.async();
-                                                                                    fs.unlink(`uploads/entries/${m.image}`, function(err) {
+                                                            goentFn();
+                                                        }).catch(function(err){});
+
+                                                        if(del_entries.length > 0){
+                                                            await forEachAsync(del_entries, function(item, index, arr){
+                                                                var done = this.async();
+                                                                connection.query(`SELECT type, frame FROM ${T.ENTRY} WHERE id = ? AND post_id = ?`, [item, post_id], function(error, result, field){
+                                                                    if(error){
+                                                                        done();
+                                                                        return arr_trues.push(!1);
+                                                                    }
+                                                                    if(result.length > 0){
+                                                                        var entry = result[0];
+                                                                        connection.query(`DELETE FROM ${T.ENTRY} WHERE id = ? AND post_id = ?`, [item, post_id], async function(error, result, field){
+                                                                            if(error){
+                                                                                done();
+                                                                                return arr_trues.push(!1);
+                                                                            }
+                                                                            if(result.affectedRows > 0){
+                                                                                if(entry.type == 'image'){
+                                                                                    fs.unlink(`uploads/entries/${entry.frame}`, function(err) {
                                                                                         if(err && err.code == 'ENOENT') {
                                                                                             // file doens't exist
                                                                                             console.info("File doesn't exist, won't remove it.");
@@ -2560,80 +2559,152 @@ module.exports = async function(socket){
                                                                                         } else {
                                                                                             console.info(`removed`);
                                                                                         }
-                                                                                        done2();
                                                                                     });
-                                                                                    if(i == (a.length-1)){
-                                                                                        done();
-                                                                                    }
-                                                                                }).catch(function(err){});
+                                                                                    done();
+                                                                                } else if(entry.type == 'carousel'){
+                                                                                    var carousel = JSON.parse(entry.frame);
+
+                                                                                    await forEachAsync(carousel, function(m, i, a){
+                                                                                        var done2 = this.async();
+                                                                                        fs.unlink(`uploads/entries/${m.image}`, function(err) {
+                                                                                            if(err && err.code == 'ENOENT') {
+                                                                                                // file doens't exist
+                                                                                                console.info("File doesn't exist, won't remove it.");
+                                                                                            } else if (err) {
+                                                                                                // other errors, e.g. maybe we don't have enough permission
+                                                                                                console.error("Error occurred while trying to remove file");
+                                                                                            } else {
+                                                                                                console.info(`removed`);
+                                                                                            }
+                                                                                            done2();
+                                                                                        });
+                                                                                        if(i == (a.length-1)){
+                                                                                            done();
+                                                                                        }
+                                                                                    }).catch(function(err){});
+                                                                                } else done();
                                                                             } else done();
-                                                                        } else done();
-                                                                    })
-                                                                } else done();
-                                                            })
+                                                                        })
+                                                                    } else done();
+                                                                })
 
-                                                        }).catch(function(err){});
-                                                    }
-
-                                                    
-                                                    await query(`SELECT name FROM ${T.LABEL} l WHERE (SELECT label_id FROM ${T.TAG} WHERE post_id = ? AND label_id = l.id) = id`, post_id).then(async function(res){
-                                                        if(res.length > 0){
-                                                            var tags_names = [];
-
-                                                            await forEachAsync(res, function(item, index, arr) {
-                                                                tags_names.push(item.name);
                                                             }).catch(function(err){});
+                                                        }
 
-                                                            var del_tags = specific.ArrayDiff(tags_names, tags),
-                                                                add_tags = specific.ArrayDiff(tags, tags_names);
+                                                        
+                                                        await query(`SELECT name FROM ${T.LABEL} l WHERE (SELECT label_id FROM ${T.TAG} WHERE post_id = ? AND label_id = l.id) = id`, post_id).then(async function(res){
+                                                            if(res.length > 0){
+                                                                var tags_names = [];
 
-                                                                if(add_tags.length > 0){
-                                                                    await forEachAsync(add_tags, function(item, index, arr){
+                                                                await forEachAsync(res, function(item, index, arr) {
+                                                                    tags_names.push(item.name);
+                                                                }).catch(function(err){});
+
+                                                                var del_tags = specific.ArrayDiff(tags_names, tags),
+                                                                    add_tags = specific.ArrayDiff(tags, tags_names);
+
+                                                                    if(add_tags.length > 0){
+                                                                        await forEachAsync(add_tags, function(item, index, arr){
+                                                                            var done = this.async();
+                                                                            connection.query(`SELECT id, COUNT(*) as count FROM ${T.LABEL} WHERE name = ?`, [item], async function(error, result, field){
+                                                                                if(error){
+                                                                                    return arr_trues.push(!1);
+                                                                                }
+                                                                                var fnTag = function(label_id){
+                                                                                    connection.query(`INSERT INTO ${T.TAG} (post_id, label_id, created_at) VALUES (?, ?, ?)`, [post_id, label_id, specific.Time()], function(error, result, field){
+                                                                                        if(error){
+                                                                                            done();
+                                                                                            return arr_trues.push(!1);
+                                                                                        }
+                                                                                        if(result.insertId > 0){
+                                                                                            arr_trues.push(!0);
+                                                                                        } else {
+                                                                                            arr_trues.push(!1);
+                                                                                        }
+                                                                                        done();
+                                                                                    });
+                                                                                };
+                            
+                                                                                if(result[0].count > 0){
+                                                                                    fnTag(result[0].id);
+                                                                                } else {
+                                                                                    connection.query(`INSERT INTO ${T.LABEL} (name, slug, created_at) VALUES (?, ?, ?)`, [item, specific.CreateSlug(item), specific.Time()], function(error, result, field){
+                                                                                        if(error){
+                                                                                            done();
+                                                                                            return arr_trues.push(!1);
+                                                                                        }
+                                                                                        if(result.insertId > 0){
+                                                                                            fnTag(result.insertId);
+                                                                                            arr_trues.push(!0);
+                                                                                        } else {
+                                                                                            arr_trues.push(!1);
+                                                                                            done();
+                                                                                        }
+                                                                                    });
+                                                                                }
+                                                                            });
+                                                                        }).catch(function(err){});
+                                                                    }
+
+                                                                    if(del_tags.length > 0){
+                                                                        await forEachAsync(del_tags, function(item, index, arr){
+                                                                            var done = this.async();
+                                                                            connection.query(`DELETE FROM ${T.TAG} WHERE post_id = ? AND (SELECT id FROM ${T.LABEL} WHERE name = ?) = label_id`, [post_id, item], function(error, result, field){
+                                                                                if(error){
+                                                                                    done();
+                                                                                    return arr_trues.push(!1);
+                                                                                }
+                                                                                if(result.affectedRows > 0){
+                                                                                    arr_trues.push(!0);
+                                                                                } else {
+                                                                                    arr_trues.push(!1);
+                                                                                }
+                                                                                done();
+                                                                            })
+                                                                        }).catch(function(err){});
+                                                                    }
+                                                            } else {
+                                                                arr_trues.push(!1);
+                                                            }
+                                                        }).catch(function(err){
+                                                            arr_trues.push(!1);
+                                                        });
+
+                                                        await query(`SELECT recommended_id FROM ${T.RECOBO} WHERE post_id = ?`, post_id).then(async function(res){
+                                                            if(res.length > 0){
+                                                                var recobo_ids = [];
+
+                                                                await forEachAsync(res, function(item, index, arr) {
+                                                                    recobo_ids.push(item.recommended_id);
+                                                                }).catch(function(err){});
+
+                                                                var add_recobo = specific.ArrayDiff(recobo, recobo_ids),
+                                                                    del_recobo = specific.ArrayDiff(recobo_ids, recobo);
+
+                                                                if(add_recobo.length > 0){
+                                                                    await forEachAsync(recobo, function(item, index, arr){
                                                                         var done = this.async();
-                                                                        connection.query(`SELECT id, COUNT(*) as count FROM ${T.LABEL} WHERE name = ?`, [item], async function(error, result, field){
+                                                                        connection.query(`SELECT COUNT(*) as count FROM ${T.POST} WHERE id = ? AND status = "approved"`, item, function(error, result, field){
                                                                             if(error){
+                                                                                done();
                                                                                 return arr_trues.push(!1);
                                                                             }
-                                                                            var fnTag = function(label_id){
-                                                                                connection.query(`INSERT INTO ${T.TAG} (post_id, label_id, created_at) VALUES (?, ?, ?)`, [post_id, label_id, specific.Time()], function(error, result, field){
+                                                                            if(result[0].count > 0){
+                                                                                connection.query(`INSERT INTO ${T.RECOBO} (post_id, recommended_id, created_at) VALUES (?, ?, ?)`, [post_id, item, specific.Time()], function(error, result, field){
                                                                                     if(error){
-                                                                                        done();
                                                                                         return arr_trues.push(!1);
-                                                                                    }
-                                                                                    if(result.insertId > 0){
-                                                                                        arr_trues.push(!0);
-                                                                                    } else {
-                                                                                        arr_trues.push(!1);
                                                                                     }
                                                                                     done();
-                                                                                });
-                                                                            };
-                        
-                                                                            if(result[0].count > 0){
-                                                                                fnTag(result[0].id);
-                                                                            } else {
-                                                                                connection.query(`INSERT INTO ${T.LABEL} (name, slug, created_at) VALUES (?, ?, ?)`, [item, specific.CreateSlug(item), specific.Time()], function(error, result, field){
-                                                                                    if(error){
-                                                                                        done();
-                                                                                        return arr_trues.push(!1);
-                                                                                    }
-                                                                                    if(result.insertId > 0){
-                                                                                        fnTag(result.insertId);
-                                                                                        arr_trues.push(!0);
-                                                                                    } else {
-                                                                                        arr_trues.push(!1);
-                                                                                        done();
-                                                                                    }
-                                                                                });
-                                                                            }
-                                                                        });
+                                                                                })
+                                                                            } else done();
+                                                                        })
                                                                     }).catch(function(err){});
                                                                 }
 
-                                                                if(del_tags.length > 0){
-                                                                    await forEachAsync(del_tags, function(item, index, arr){
+                                                                if(del_recobo.length > 0){
+                                                                    await forEachAsync(del_recobo, function(item, index, arr){
                                                                         var done = this.async();
-                                                                        connection.query(`DELETE FROM ${T.TAG} WHERE post_id = ? AND (SELECT id FROM ${T.LABEL} WHERE name = ?) = label_id`, [post_id, item], function(error, result, field){
+                                                                        connection.query(`DELETE FROM ${T.RECOBO} WHERE post_id = ? AND recommended_id = ?`, [post_id, item], function(error, result, field){
                                                                             if(error){
                                                                                 done();
                                                                                 return arr_trues.push(!1);
@@ -2642,53 +2713,16 @@ module.exports = async function(socket){
                                                                                 arr_trues.push(!0);
                                                                             } else {
                                                                                 arr_trues.push(!1);
-                                                                            }
+                                                                            };
                                                                             done();
                                                                         })
                                                                     }).catch(function(err){});
                                                                 }
-                                                        } else {
-                                                            arr_trues.push(!1);
-                                                        }
-                                                    }).catch(function(err){
-                                                        arr_trues.push(!1);
-                                                    });
-
-                                                    await query(`SELECT recommended_id FROM ${T.RECOBO} WHERE post_id = ?`, post_id).then(async function(res){
-                                                        if(res.length > 0){
-                                                            var recobo_ids = [];
-
-                                                            await forEachAsync(res, function(item, index, arr) {
-                                                                recobo_ids.push(item.recommended_id);
-                                                            }).catch(function(err){});
-
-                                                            var add_recobo = specific.ArrayDiff(recobo, recobo_ids),
-                                                                del_recobo = specific.ArrayDiff(recobo_ids, recobo);
-
-                                                            if(add_recobo.length > 0){
+                                
                                                                 await forEachAsync(recobo, function(item, index, arr){
                                                                     var done = this.async();
-                                                                    connection.query(`SELECT COUNT(*) as count FROM ${T.POST} WHERE id = ? AND status = "approved"`, item, function(error, result, field){
-                                                                        if(error){
-                                                                            done();
-                                                                            return arr_trues.push(!1);
-                                                                        }
-                                                                        if(result[0].count > 0){
-                                                                            connection.query(`INSERT INTO ${T.RECOBO} (post_id, recommended_id, created_at) VALUES (?, ?, ?)`, [post_id, item, specific.Time()], function(error, result, field){
-                                                                                if(error){
-                                                                                    return arr_trues.push(!1);
-                                                                                }
-                                                                                done();
-                                                                            })
-                                                                        } else done();
-                                                                    })
-                                                                }).catch(function(err){});
-                                                            }
 
-                                                            if(del_recobo.length > 0){
-                                                                await forEachAsync(del_recobo, function(item, index, arr){
-                                                                    var done = this.async();
-                                                                    connection.query(`DELETE FROM ${T.RECOBO} WHERE post_id = ? AND recommended_id = ?`, [post_id, item], function(error, result, field){
+                                                                    connection.query(`UPDATE ${T.RECOBO} SET rorder = ? WHERE recommended_id = ?`, [index, item], function(error, result, field){
                                                                         if(error){
                                                                             done();
                                                                             return arr_trues.push(!1);
@@ -2700,168 +2734,185 @@ module.exports = async function(socket){
                                                                         };
                                                                         done();
                                                                     })
+
                                                                 }).catch(function(err){});
+
                                                             }
-                            
-                                                            await forEachAsync(recobo, function(item, index, arr){
-                                                                var done = this.async();
-
-                                                                connection.query(`UPDATE ${T.RECOBO} SET rorder = ? WHERE recommended_id = ?`, [index, item], function(error, result, field){
-                                                                    if(error){
-                                                                        done();
-                                                                        return arr_trues.push(!1);
-                                                                    }
-                                                                    if(result.affectedRows > 0){
-                                                                        arr_trues.push(!0);
-                                                                    } else {
-                                                                        arr_trues.push(!1);
-                                                                    };
-                                                                    done();
-                                                                })
-
-                                                            }).catch(function(err){});
-
-                                                        }
-                                                    }).catch(function(err){
-                                                        arr_trues.push(!1);
-                                                    });
+                                                        }).catch(function(err){
+                                                            arr_trues.push(!1);
+                                                        });
 
 
-                                                    await query(`SELECT user_id FROM ${T.COLLABORATOR} WHERE post_id = ?`, [post_id]).then(async function(res){
-                                                        if(res.length > 0){
-                                                            var collaborators_ids = [];
+                                                        await query(`SELECT user_id FROM ${T.COLLABORATOR} WHERE post_id = ?`, [post_id]).then(async function(res){
+                                                            if(res.length > 0){
+                                                                var collaborators_ids = [];
 
-                                                            await forEachAsync(res, function(item, index, arr) {
-                                                                collaborators_ids.push(item.user_id);
-                                                            }).catch(function(err){});
+                                                                await forEachAsync(res, function(item, index, arr) {
+                                                                    collaborators_ids.push(item.user_id);
+                                                                }).catch(function(err){});
 
 
-                                                            var add_collaborators = specific.ArrayDiff(collaborators, collaborators_ids),
-                                                                del_collaborators = specific.ArrayDiff(collaborators_ids, collaborators);
+                                                                var add_collaborators = specific.ArrayDiff(collaborators, collaborators_ids),
+                                                                    del_collaborators = specific.ArrayDiff(collaborators_ids, collaborators);
 
-                                                            if(add_collaborators.length > 0){
+                                                                if(add_collaborators.length > 0){
+                                                                    await forEachAsync(add_collaborators, function(item, index, arr){
+                                                                        var done = this.async();
+                                                                        connection.query(`SELECT about, facebook, twitter, instagram, main_sonet, COUNT(*) as count FROM ${T.USER} WHERE id = ? AND id NOT IN (${blocked_inusers}) AND status = "active"`, item, function(error, result, field){
+                                                                            if(error){
+                                                                                done();
+                                                                                return arr_trues.push(!1);
+                                                                            }
+                                                                            if(result[0].count > 0 && result[0].about != '' && result[0][result[0].main_sonet] != ''){
+                                                                                connection.query(`INSERT INTO ${T.COLLABORATOR} (user_id, post_id, created_at) VALUES (?, ?, ?)`, [item, post_id, specific.Time()], async function(error, result, field){
+                                                                                    if(error){
+                                                                                        done();
+                                                                                        return arr_trues.push(!1);
+                                                                                    }
+                                                                                    if(result.insertId > 0){
+                                                                                        await specific.SetNotify(socket, {
+                                                                                            user_id: item,
+                                                                                            notified_id: result.insertId,
+                                                                                            type: 'collab',
+                                                                                        }).then(function(res){
+                                                                                            done();
+                                                                                        }).catch(function(err){
+                                                                                            done();
+                                                                                        });
+                                                                                    } else {
+                                                                                        done();
+                                                                                    }
+                                                                                });
+                                                                            } else done();
+                                                                        });
+                                                                    }).catch(function(err){});
+                                                                }
+
+                                                                if(del_collaborators.length > 0){
+                                                                    await forEachAsync(del_collaborators, function(item, index, arr){
+                                                                        var done = this.async();
+                                                                        
+                                                                        connection.query(`SELECT id FROM ${T.COLLABORATOR} WHERE user_id = ? AND post_id = ?`, [item, post_id], function(error, result, field){
+                                                                            if(error){
+                                                                                done();
+                                                                                return arr_trues.push(!1);
+                                                                            }
+                                                                            if(result.length > 0){
+                                                                                var collab_id = result[0].id;
+                                                                                connection.query(`DELETE FROM ${T.NOTIFICATION} WHERE notified_id = ? AND type = "n_collab"`, collab_id, function(error, result, field){
+                                                                                    if(error){
+                                                                                        done();
+                                                                                        return arr_trues.push(!1);
+                                                                                    }
+                                                                                    if(result.affectedRows > 0){
+                                                                                        connection.query(`DELETE FROM ${T.COLLABORATOR} WHERE id = ?`, collab_id, function(error, result, field){
+                                                                                            if(error){
+                                                                                                done();
+                                                                                                return arr_trues.push(!1);
+                                                                                            }
+                                                                                            if(result.affectedRows > 0){
+                                                                                                arr_trues.push(!0);
+                                                                                            } else {
+                                                                                                arr_trues.push(!1);
+                                                                                            }
+                                                                                            done();
+                                                                                        })
+                                                                                    } else done();
+                                                                                })
+                                                                            } else done();
+                                                                        })
+
+                                                                    }).catch(function(err){});
+                                                                }
+                                
                                                                 await forEachAsync(add_collaborators, function(item, index, arr){
                                                                     var done = this.async();
-                                                                    connection.query(`SELECT about, facebook, twitter, instagram, main_sonet, COUNT(*) as count FROM ${T.USER} WHERE id = ? AND id NOT IN (${blocked_inusers}) AND status = "active"`, item, function(error, result, field){
+                                                                    connection.query(`UPDATE ${T.COLLABORATOR} SET aorder = ? WHERE user_id = ?`, [index, item], function(error, result, field){
                                                                         if(error){
                                                                             done();
                                                                             return arr_trues.push(!1);
                                                                         }
-                                                                        if(result[0].count > 0 && result[0].about != '' && result[0][result[0].main_sonet] != ''){
-                                                                            connection.query(`INSERT INTO ${T.COLLABORATOR} (user_id, post_id, created_at) VALUES (?, ?, ?)`, [item, post_id, specific.Time()], async function(error, result, field){
-                                                                                if(error){
-                                                                                    done();
-                                                                                    return arr_trues.push(!1);
-                                                                                }
-                                                                                if(result.insertId > 0){
-                                                                                    await specific.SetNotify(socket, {
-                                                                                        user_id: item,
-                                                                                        notified_id: result.insertId,
-                                                                                        type: 'collab',
+                                                                        if(result.affectedRows > 0){
+                                                                            arr_trues.push(!0);
+                                                                        } else {
+                                                                            arr_trues.push(!1);
+                                                                        }
+                                                                        done();
+                                                                    })
+                                                                }).catch(function(err){})
+                                                            }
+                                                        }).catch(function(err){
+                                                            arr_trues.push(!1);
+                                                        });
+            
+                                                        if(arr_trues.indexOf(!1) === -1){
+                                                            if(action == 'post' && post.published_at == 0 && (SETTINGS.approve_posts == 'off' || specific.Moderator(socket) == !0)){
+                                                                await query(`SELECT user_id FROM ${T.FOLLOWER} WHERE profile_id = ?`, [USER.id]).then(async function(res){
+                                                                    if(res.length > 0){
+                                                                        await forEachAsync(res, function(item, index, arr){
+                                                                            var done = this.async();
+                                                                            specific.Data(socket, item.user_id).then(function(res){
+                                                                                if(res.notifications.indexOf(category) !== -1){
+                                                                                    specific.SetNotify(socket, {
+                                                                                        user_id: res.id,
+                                                                                        notified_id: post_id,
+                                                                                        type: 'post',
                                                                                     }).then(function(res){
                                                                                         done();
                                                                                     }).catch(function(err){
                                                                                         done();
                                                                                     });
-                                                                                } else {
-                                                                                    done();
-                                                                                }
-                                                                            });
-                                                                        } else done();
-                                                                    });
-                                                                }).catch(function(err){});
-                                                            }
 
-                                                            if(del_collaborators.length > 0){
-                                                                await forEachAsync(del_collaborators, function(item, index, arr){
-                                                                    var done = this.async();
-                                                                    
-                                                                    connection.query(`SELECT id FROM ${T.COLLABORATOR} WHERE user_id = ? AND post_id = ?`, [item, post_id], function(error, result, field){
-                                                                        if(error){
-                                                                            done();
-                                                                            return arr_trues.push(!1);
-                                                                        }
-                                                                        if(result.length > 0){
-                                                                            var collab_id = result[0].id;
-                                                                            connection.query(`DELETE FROM ${T.NOTIFICATION} WHERE notified_id = ? AND type = "n_collab"`, collab_id, function(error, result, field){
-                                                                                if(error){
-                                                                                    done();
-                                                                                    return arr_trues.push(!1);
-                                                                                }
-                                                                                if(result.affectedRows > 0){
-                                                                                    connection.query(`DELETE FROM ${T.COLLABORATOR} WHERE id = ?`, collab_id, function(error, result, field){
-                                                                                        if(error){
-                                                                                            done();
-                                                                                            return arr_trues.push(!1);
-                                                                                        }
-                                                                                        if(result.affectedRows > 0){
-                                                                                            arr_trues.push(!0);
-                                                                                        } else {
-                                                                                            arr_trues.push(!1);
-                                                                                        }
-                                                                                        done();
-                                                                                    })
                                                                                 } else done();
+                                                                            }).catch(function(err){
+                                                                                done();
                                                                             })
-                                                                        } else done();
-                                                                    })
-
-                                                                }).catch(function(err){});
+                                                                        }).catch(function(err){});
+                                                                    }
+                                                                }).catch(function(err){
+                                                                    arr_trues.push(!1);
+                                                                });
                                                             }
-                            
-                                                            await forEachAsync(add_collaborators, function(item, index, arr){
-                                                                var done = this.async();
-                                                                connection.query(`UPDATE ${T.COLLABORATOR} SET aorder = ? WHERE user_id = ?`, [index, item], function(error, result, field){
-                                                                    if(error){
-                                                                        done();
-                                                                        return arr_trues.push(!1);
-                                                                    }
-                                                                    if(result.affectedRows > 0){
-                                                                        arr_trues.push(!0);
-                                                                    } else {
-                                                                        arr_trues.push(!1);
-                                                                    }
-                                                                    done();
-                                                                })
-                                                            }).catch(function(err){})
+
+                                                            response.send({
+                                                                S: 200,
+                                                                LK: specific.Url(slug)
+                                                            });
                                                         }
-                                                    }).catch(function(err){
-                                                        arr_trues.push(!1);
-                                                    });
-        
-                                                    if(arr_trues.indexOf(!1) === -1){
-                                                        response.send({
-                                                            S: 200,
-                                                            LK: specific.Url(slug)
-                                                        });
+                                                        
                                                     }
-                                                    
-                                                }
-                                            }).catch(function(err){
-                                                response.send(ERR);
-                                            })
-                                            
+                                                }).catch(function(err){
+                                                    response.send(ERR);
+                                                })
+                                                
+                                            }
+            
+                                        } else {
+                                            response.send({
+                                                S: 400,
+                                                E: error
+                                            });
                                         }
-        
+            
                                     } else {
                                         response.send({
                                             S: 400,
-                                            E: error
+                                            E: empty
                                         });
                                     }
-        
                                 } else {
-                                    response.send({
-                                        S: 400,
-                                        E: empty
-                                    });
+                                    response.send(ERR);
                                 }
 
                                 
+                            } else {
+                                response.send(ERR);
                             }
                         })
 
                         
+                    } else {
+                        response.send(ERR);
                     }
 
                 } else {

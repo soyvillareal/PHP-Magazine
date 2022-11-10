@@ -114,9 +114,9 @@
             </div>
             <?php } ?>
 
-            <?php if($TEMP['#is_owner'] == true || ($TEMP['#admin'] == true && !in_array($TEMP['#status'], array('approved', 'deleted')))) { ?>
+            <?php if($TEMP['#is_owner'] == true || ($TEMP['#moderator'] == true && !in_array($TEMP['#status'], array('approved', 'deleted')))) { ?>
             <div class="display-flex w-100 h-30">
-               <?php if($TEMP['#is_owner'] == true) { ?>
+               <?php if($TEMP['#is_owner'] == true || ($TEMP['#moderator'] == true && !in_array($TEMP['#status'], array('approved', 'deleted')))) { ?>
                <a class="display-flex direction-row align-center h-30 background-blue margin-r10 padding-l10 padding-r10 border-rlow boxshadow-grey hover-button animation-ease3s" href="{$url->{{#r_edit_post}}}/{$post_id}" target="_self">
                   <svg class="color-wwhite icon-x vertical-sub margin-r5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2">
                      <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
@@ -134,14 +134,20 @@
                 </div>
                </button>
                <?php } ?>
+               <?php if($TEMP['#published_at'] == 0){ ?>
+               <div class="display-flex direction-row align-center justify-center w-100px h-30 background-redly color-wwhite padding-l10 padding-r10 border-rlow boxshadow-grey sizing-box">
+                  {$word->eraser}
+               </div>
+               <?php } else { ?>
                <?php if($TEMP['#status'] == 'pending'){ ?>
-               <div class="display-flex direction-row align-center justify-center w-100px h-30 background-black color-white padding-l10 padding-r10 border-rlow boxshadow-grey sizing-box">
+               <div class="display-flex direction-row align-center justify-center w-100px h-30 background-black color-wwhite padding-l10 padding-r10 border-rlow boxshadow-grey sizing-box">
                   {$word->pending}
                </div>
                <?php } if($TEMP['#status'] == 'rejected'){ ?>
-               <div class="display-flex direction-row align-center justify-center w-100px h-30 background-blackly color-white padding-l10 padding-r10 border-rlow boxshadow-grey sizing-box">
+               <div class="display-flex direction-row align-center justify-center w-100px h-30 background-blackly color-wwhite padding-l10 padding-r10 border-rlow boxshadow-grey sizing-box">
                   {$word->rejected}
                </div>
+               <?php } ?>
                <?php } ?>
             </div>
             <?php } ?>

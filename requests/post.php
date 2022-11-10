@@ -31,7 +31,7 @@ if($one == 'load'){
 
 	if(!empty($post_id) && is_numeric($post_id)){
 		$post = $dba->query('SELECT user_id, COUNT(*) as count FROM '.T_POST.' WHERE id = ? AND status <> "deleted"', $post_id)->fetchArray();
-		if($post['count'] > 0 && Specific::IsOwner($post['user_id'])){
+		if($post['count'] > 0 && (Specific::IsOwner($post['user_id']) || $TEMP['#moderator'] == true)){
 			if($dba->query('UPDATE '.T_POST.' SET status = "deleted", deleted_at = ? WHERE id = ?', time(), $post_id)->returnStatus()){
 				$deliver = array(
 					'S' => 200,

@@ -1,7 +1,7 @@
 <?php
 
 $slug = Specific::Filter($_GET['slug']);
-$post = $dba->query('SELECT * FROM '.T_POST.' WHERE slug = ? AND status = "approved"', $slug)->fetchArray();
+$post = $dba->query('SELECT * FROM '.T_POST.' WHERE slug = ? AND status = "approved" AND published_at <> 0', $slug)->fetchArray();
 if(empty($post)){
 	header("Location: " . Specific::Url('404'));
 	exit();
