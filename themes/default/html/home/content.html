@@ -14,12 +14,12 @@
 </section>
 <?php } ?>
 <?php if(count($TEMP['#main']) >= $TEMP['#limit_main']){ ?>
-<div class="content-main padding-t25">
+<div class="content-main padding-t25 border-grely">
    <div class="items-main display-flex vertical-slots">
-      <div class="main-one">
+      <div class="main-one border-grely">
          <div class="content-posts-left display-flex vertical-slots">
             <?php if($TEMP['#has_main_left'] == true){ ?>
-            <div class="left-posts-left">
+            <div class="left-posts-left border-grely">
                <div id="content-left-posts" class="content-left-posts">
                   {$main_left_one}
                </div>
@@ -52,7 +52,7 @@
                <section class="main-posts-wrapper position-relative" data-id="{$main_right_id}">
                   <a class="<?php echo($TEMP['#main_right_type'] == 'video') ? 'content-video-animate ' : '';?>hover-all" href="{$main_right_url}">
                      <div class="content-posts-right no-hover">
-                        <figure class="content-gradient position-relative margin-none no-hover">
+                        <figure class="content-preloader-image content-gradient position-relative margin-none no-hover">
                            <?php if($TEMP['#main_right_type'] == 'video'){ ?>
                            <div class="content-vanimate display-flex direction-row align-center position-absolute no-hover">
                               <svg class="icon-video no-hover" viewBox="0 0 40 40">
@@ -86,7 +86,7 @@
          </div>
       </div>
       <?php if($TEMP['#has_main_two'] == true){ ?>
-      <div id="content-slider" class="main-two">
+      <div id="content-slider" class="main-two border-grely">
          {$main_two}
       </div>
       <?php } ?>

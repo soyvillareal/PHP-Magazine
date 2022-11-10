@@ -433,7 +433,7 @@ class Specific {
 			if(!empty($user['notifications'])){
 				$user['notifications'] = json_decode($user['notifications'], true);
 			} else {
-				$user['notifications'] = array(
+				$user['notifications'] = array_merge(array(
 					'followers',
 					'post',
 					'followed',
@@ -443,7 +443,7 @@ class Specific {
 					'preply',
 					'ucomment',
 					'ureply'
-				);
+				), $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false));
 			}
 			if(!empty($user['shows'])){
 				$user['shows'] = json_decode($user['shows'], true);

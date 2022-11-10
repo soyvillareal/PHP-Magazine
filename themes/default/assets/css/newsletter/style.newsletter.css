@@ -28,7 +28,6 @@ textarea.item-input:focus ~ .item-label {
     color: #326891;
 }
 .container-newsletter {
-    background-color: #f1f1f1;
     margin: 75px auto;
     max-width: 420px;
     box-shadow: 0 1px 3px 0 rgb(0, 0, 0, .3);

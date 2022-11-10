@@ -13,7 +13,7 @@
 .main-one .main-posts-wrapper:not(:last-child) {
     margin-bottom: 25px;
     padding-bottom: 25px;
-    border-bottom: 1px solid #cdcdcd;
+    border-bottom: 1px solid;
 }
 .left-posts-left::-webkit-scrollbar {
     width: 8px;
@@ -23,7 +23,7 @@
         width: 100%;
         margin-bottom: 15px;
         padding-bottom: 25px;
-        border-bottom: 1px solid #cdcdcd;
+        border-bottom: 1px solid;
     }
     .figure-posts-left .icon-video {
         width: 24px;
@@ -92,7 +92,7 @@
         overflow-x: hidden;
         margin-right: 15px;
         padding-right: 15px;
-        border-right: 1px solid #cdcdcd;
+        border-right: 1px solid;
     }
     .left-posts-left .main-posts-wrapper {
         margin-right: -8px;
@@ -105,7 +105,7 @@
     .main-one {
         margin-bottom: 15px;
         padding-bottom: 15px;
-        border-bottom: 1px solid #cdcdcd;
+        border-bottom: 1px solid;
     }
     .main-two {  
         display: -webkit-box;
@@ -116,12 +116,12 @@
         overflow-x: auto;
         margin-bottom: 15px;
         padding-bottom: 15px;
-        border-bottom: 1px solid #cdcdcd;
+        border-bottom: 1px solid;
     }
     .main-two .main-posts-wrapper:not(:last-child) {
         margin-right: 25px;
         padding-right: 25px;
-        border-right: 1px solid #cdcdcd;
+        border-right: 1px solid;
     }
     .main-two .main-two-title {
         width: 380px;
@@ -144,7 +144,7 @@
         overflow: hidden;
         margin-bottom: 15px;
         padding-bottom: 15px;
-        border-bottom: 1px solid #cdcdcd;
+        border-bottom: 1px solid;
     }
     .main-one {
         width: calc(67% - 31px);
@@ -155,7 +155,7 @@
         overflow-y: auto;
         margin-left: 15px;
         padding-left: 15px;
-        border-left: 1px solid #cdcdcd;
+        border-left: 1px solid;
     }
     .main-two::-webkit-scrollbar,
     .recommended-posts::-webkit-scrollbar {
@@ -164,7 +164,7 @@
     .main-two .main-posts-wrapper:not(:last-child) {
         margin-bottom: 25px;
         padding-bottom: 25px;
-        border-bottom: 1px solid #cdcdcd;
+        border-bottom: 1px solid;
     }
     .left-posts-left {
         height: 440px;

@@ -607,14 +607,17 @@ if ($TEMP['#publisher'] === true) {
 							}
 
 							if(!in_array(false, $arr_trues)){
-								if($TEMP['#settings']['approve_posts'] == 'off' || $TEMP['#admin'] == true){
+								if($action == 'post' && ($TEMP['#settings']['approve_posts'] == 'off' || $TEMP['#admin'] == true)){
 									$followers = $dba->query('SELECT user_id FROM '.T_FOLLOWER.' WHERE profile_id = ?', $TEMP['#user']['id'])->fetchAll();
 									foreach($followers as $follow){
-										Specific::SetNotify(array(
-											'user_id' => $follow['user_id'],
-											'notified_id' => $post_id,
-											'type' => 'post',
-										));
+										$user = Specific::Data($follow['user_id']);
+										if(in_array($category, $user['notifications'])){
+											Specific::SetNotify(array(
+												'user_id' => $user['id'],
+												'notified_id' => $post_id,
+												'type' => 'post',
+											));
+										}
 									}
 								}
 

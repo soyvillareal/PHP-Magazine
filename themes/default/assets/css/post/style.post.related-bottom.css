@@ -11,7 +11,7 @@
 .content-related .item-related:not(:last-child) {
     margin-right: 15px;
     padding-right: 15px;
-    border-right: 1px solid #cdcdcd;
+    border-right: 1px solid;
 }
 .related-posts::-webkit-scrollbar {
     height: 5px;

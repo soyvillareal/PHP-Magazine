@@ -30,7 +30,7 @@ if($TEMP['#type'] == $RUTE['#r_user']){
 } else if($TEMP['#type'] == $RUTE['#r_category']){
     $TEMP['title'] = "{$TEMP['#settings']['title']} - {$get}";
     $TEMP['description'] = $TEMP['#settings']['description'];
-    $TEMP['rss_image'] = Specific::GetFile('images/logo.png', 2);
+    $TEMP['rss_image'] = Specific::GetFile('images/logo-light.png', 2);
     $TEMP['link'] = $TEMP['#site_url'];
 
     $category_name = $dba->query('SELECT word FROM '.T_WORD." WHERE {$TEMP['#language']} = '{$TEMP['#get']}'")->fetchArray(true);

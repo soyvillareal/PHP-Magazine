@@ -67,10 +67,10 @@ textarea.item-input:focus ~ .item-label {
 .item-placeholder.active,
 .btn_popup:focus ~ .item-placeholder,
 .item-file:focus ~ .item-placeholder {
-    border-color: #326891;
+    border-color: #326891 !important;
 }
 .item-placeholder {
-    border: 2px dashed #e8e8e8;
+    border: 2px dashed;
 }
 .item-placeholder,
 .item-file {
@@ -476,7 +476,7 @@ li.content-cpost figure {
 @media(pointer: fine){
     .btn_popup:not([disabled]):hover ~ .item-placeholder,
     .item-file:not([disabled]):hover ~ .item-placeholder {
-        border-color: #326891;
+        border-color: #326891 !important;
     }
     ul.content-tags li.item_tag:hover {
         background-color: #bbcef1;

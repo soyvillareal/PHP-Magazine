@@ -9,7 +9,7 @@ body[dir=rtl] .content-recommended .item-recommended:not(:last-child) {
     border-right: unset;
     margin-left: 15px;
     padding-left: 15px;
-    border-left: 1px solid #cdcdcd;
+    border-left: 1px solid;
 }
 
 body[dir=rtl] .container-category {
@@ -61,7 +61,7 @@ body[dir=rtl] .content-related .item-related:not(:last-child) {
     border-right: unset;
     margin-left: 15px;
     padding-left: 15px;
-    border-left: 1px solid #cdcdcd;
+    border-left: 1px solid;
 }
 
 body[dir=rtl] .caret-down {
@@ -255,7 +255,7 @@ body[dir=rtl] .btn-upmsend svg {
         border-right: unset;
         margin-left: 15px;
         padding-left: 15px;
-        border-left: 1px solid #cdcdcd;
+        border-left: 1px solid;
     }
     body[dir=rtl] .content-more-posts .item-recommended:not(:nth-child(4n)) {
         margin-right: unset;
@@ -320,7 +320,7 @@ body[dir=rtl] .btn-upmsend svg {
         border-left: unset;
         margin-right: 15px;
         padding-right: 15px;
-        border-right: 1px solid #cdcdcd;
+        border-right: 1px solid;
     }
 }
 

@@ -19,7 +19,7 @@ if(!empty($type) && in_array($type, array('save', 'darkmode', 'reaction', 'next-
 
 	if($type == 'darkmode'){
 		$darkmode = Specific::Filter($_POST['darkmode']);
-		if(!empty($darkmode) && in_array($darkmode, array('true', 'false'))){
+		if(!empty($darkmode) && in_array($darkmode, array('true', 'false')) && $TEMP['#settings']['switch_mode'] == 'on'){
 			$darkmodes = array(
 				'false' => 1,
 				'true' => 0

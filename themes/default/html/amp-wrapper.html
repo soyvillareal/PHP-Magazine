@@ -45,7 +45,7 @@
             "@id":"#organization",
             "logo": {
                 "@type": "ImageObject",
-                "url": "{$theme->{images/logo.png}}"
+                "url": "{$theme->{images/logo-light.png}}"
             },
             "url": "{$url->{{#r_home}}}",
             "name": "{#settings->title}",
@@ -170,34 +170,6 @@
                 </nav>
             </div>
         </div>
-
-        <!--
-        <?php if(!empty($TEMP['#settings']['facebook_page']) || !empty($TEMP['#settings']['twitter_page']) || !empty($TEMP['#settings']['instagram_page'])){ ?>
-        <ul class="social-net">{$word->social_media}</li>
-            <?php if(!empty($TEMP['#settings']['facebook_page'])){ ?>
-            <li class="social-item-side facebook">
-                <a href="{$settings->facebook_page}" title="{$word->follow_us_on} {$word->facebook_}" target="_blank">
-                    <i class="fa fa-facebook"></i>
-                </a>
-            </li>
-            <?php } ?>
-            <?php if(!empty($TEMP['#settings']['twitter_page'])){ ?>
-            <li class="social-item-side google-plus">
-                <a href="{$settings->twitter_page}" title="{$word->follow_us_on} {$word->twitter_}" target="_blank">
-                    <i class="fa fa-google-plus"></i>
-                </a>
-            </li>
-            <?php } ?>
-            <?php if(!empty($TEMP['#settings']['instagram_page'])){ ?>
-            <li class="social-item-side instagram">
-                <a href="{$settings->instagram_page}" title="{$word->follow_us_on} {$word->instagram_}" target="_blank">
-                    <i class="fa fa-instagram"></i>
-                </a>
-            </li>
-            <?php } ?>
-        </ul>
-        <?php } ?>
-        -->
     </amp-sidebar>
     
     <div class="amp-wrapper margin-auto">
@@ -327,7 +299,6 @@
           {$content}
         </div>
         <footer class="content-footer w-100" next-page-hide>
-
             <?php if($TEMP['#page'] == 'amp-post' && !empty($TEMP['#next_page'])){ ?>
             <amp-next-page>
                 <script type = "application/json">
@@ -335,9 +306,7 @@
                 </script>
             </amp-next-page>
             <?php } ?>
-
             <div class="items-footer margin-b10 margin-left-auto padding-t15 padding-r15 padding-l15 margin-right-auto border-top border-grey">
-                <!-- footer widget about-->
                 <div class="margin-auto padding-r15 padding-l15">
                     <div class="footer-logo text-center">
                        <div class="site-logo display-inline-block w-100 h-45 position-relative vertical-middle"></div>
@@ -389,7 +358,6 @@
                 </script>
             </amp-analytics>
             <?php } ?>
-
             <amp-lightbox id="container-lightbox" layout="nodisplay">
                 <div class="content-aoverlay position-fixed" tabindex="0" role="button" on="tap:container-lightbox.close"></div>
                 <div class="content-lightbox w-100 background-white position-absolute overflow-hidden text-center padding-t15 padding-b15 padding-l15 padding-r15 border-rlow" role="button" tabindex="0">
@@ -440,12 +408,10 @@
                                     </div>
                                 </button>
                             </form>
-
                             <button on="tap:container-llightbox.close, container-lalightbox" class="btn-noway inhover-button margin-b15 margin-r10">
                                 <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-wwhite font-lowly font-bold text-uppercase">{#language}</span>
                             </button>
                         </div>
-                        
                         <a class="display-inline-block inhover-button margin-b15 margin-r10" href="{$url->{{#r_register}}}" target="_self" title="{$word->register}" role="button">
                             <span class="button-general display-inline-block vertical-middle background-blue border-rlow border-all border-blue color-wwhite font-lowly font-bold text-uppercase">{$word->register}</span>
                         </a>
@@ -477,7 +443,6 @@
                 </div>
             </amp-lightbox>
         </footer>
-
     </div>
 </body>
 </html>

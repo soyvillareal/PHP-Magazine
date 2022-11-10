@@ -50,7 +50,7 @@
       </div>
       <div class="mobile-center display-flex display-none-desk">
          <a href="{$url->{{#r_home}}}" target="_self" title="{$settings->title}" aria-label="{$settings->title}">
-            <div class="site-logo w-100 h-100 position-relative vertical-middle margin-auto"></div>
+            <div class="site-logo w-100 h-100 position-relative vertical-middle margin-auto" style="background-image: {$global_logo};"></div>
          </a>
       </div>
       <div class="mobile-right display-flex direction-row h-0 padding-t5">
@@ -304,7 +304,7 @@
                                  <span class="slider-nsettings position-absolute background-grely"></span>
                               </label>
                            </div>
-                           <span class="color-grey">{$word->every_time_new_post_category}</span>
+                           <span class="color-grey">{$word->every_time_follow_publication_category}</span>
                         </li>
                         <?php } ?>
                      </form>
@@ -828,12 +828,12 @@
       </div>
    </div>
    <?php } ?>
-   <?php if(empty($_COOKIE['dismiss_cookies'])){ ?>
-   <div id="container-ccookies" class="content-ccookies display-flex direction-row align-center justify-center w-100 position-fixed background-grely color-black padding-t10 padding-b10 padding-l15 padding-r15 pointer-events-none animation-ease3s" role="dialog" aria-live="polite" aria-label="{$word->cookie_consent}" aria-describedby="alert-dcookieconsent" style="opacity:0;">
-      <span id="alert-dcookieconsent" class="font-mediumly">
+   <?php if(empty($_COOKIE['dismiss_cookie']) && $TEMP['#settings']['dismiss_cookie'] == 'on'){ ?>
+   <div id="content-ccookies" class="content-ccookies display-flex direction-row align-center justify-center w-80 position-fixed background-grely color-black padding-t10 padding-b10 padding-l15 padding-r15 pointer-events-none animation-ease3s" role="dialog" aria-live="polite" aria-label="{$word->cookie_consent}" aria-describedby="alert-dcookieconsent" style="opacity:0;">
+      <span id="alert-dcookieconsent" class="alert-dcookieconsent font-mediumly margin-r15">
          {$word->website_uses_cookies_ensure} <a class="color-grey hover-blue hover-underline animation-ease3s" aria-label="{$word->learn_more_about_cookies}" role="button" tabindex="0" href="{$url->{{#r_page}/{#r_habeas_data}}}" target="_blank">{$word->know_more}</a>
       </span>
-      <button id="btn-cdismiss" class="btn-cdismiss btn-noway display-block background-blue color-wwhite margin-left-auto padding-r15 padding-l15 hover-button animation-ease3s" aria-label="{$word->dismiss_cookie_message}" tabindex="0">{$word->i_have_it}</button>
+      <button id="btn-cdismiss" class="btn-cdismiss btn-noway w-100px display-block background-blue color-wwhite margin-left-auto padding-r15 padding-l15 hover-button animation-ease3s" aria-label="{$word->dismiss_cookie_message}" tabindex="0">{$word->i_have_it}</button>
    </div>
    <?php } ?>
 
@@ -896,13 +896,13 @@
          })<?php } ?>
       }), $(window).on('load', function(){
          var x = $('#page-loader'),
-             v = $('#container-ccookies');
+             v = $('#content-ccookies');
          x.removeClass("show"), $('body').removeAttr('style'), setTimeout(function(){
             x.remove();
-         }, 1000)<?php if(empty($_COOKIE['dismiss_cookies'])){ ?>, setTimeout(function(){
+         }, 1000)<?php if(empty($_COOKIE['dismiss_cookie']) && $TEMP['#settings']['dismiss_cookie'] == 'on'){ ?>, setTimeout(function(){
             v.removeClass('pointer-events-none').css('opacity', 1);
          }, 3000), $('#btn-cdismiss').click(function(){
-            document.cookie = 'dismiss_cookies=true;max-age='+((new Date().getTime()) + 31536000000)+';path=/', v.addClass('pointer-events-none').css('opacity', 0);
+            document.cookie = 'dismiss_cookie=true;max-age='+((new Date().getTime()) + 31536000000)+';path=/', v.addClass('pointer-events-none').css('opacity', 0);
          })<?php } ?>;
       }), paper_g = {
          token: '{#token_session}',

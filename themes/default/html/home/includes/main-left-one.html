@@ -1,4 +1,4 @@
-<section class="main-posts-wrapper position-relative" data-id="{!id}">
+<section class="main-posts-wrapper position-relative border-grely" data-id="{!id}">
    <a class="<?php echo($TEMP['!type'] == 'video') ? 'content-video-animate ' : '';?>hover-all" href="{!url}" target="_self" title="{!title}">
       <div class="content-posts-left no-hover">
          <figure class="figure-posts-left content-preloader-image content-gradient position-relative margin-none no-hover">
@@ -11,7 +11,7 @@
             </div>
             <?php } ?>
             <picture class="picture-posts-left no-hover">
-               <img class="blur-up border-rlow lazyload" src="{!thumbnail}" alt="{!title}" role="presentation">
+               <img class="blur-up lazyload" src="{!thumbnail}" alt="{!title}" role="presentation">
             </picture>
             <figcaption class="content-hpublished position-absolute no-hover">
                <time class="color-wwhite font-lowly ellipsis-horizontal no-hover" datetime="{!published_date}">{!published_at}</time>

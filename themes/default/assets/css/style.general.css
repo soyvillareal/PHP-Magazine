@@ -216,17 +216,10 @@ ul {
     text-transform: uppercase;
 }
 
-.content-categories .item-categories::-webkit-scrollbar-thumb {
-    background: #909090;
-    border-radius: 2px;
-}
-.content-categories .item-categories::-webkit-scrollbar {
-    height: 5px;
-}
-
 .btn_darkmode {
     height: 32px;
 }
+
 .content-ccookies {
     max-width: 900px;
     z-index: 9999;
@@ -239,7 +232,7 @@ ul {
 }
 
 .content-ccookies .btn-cdismiss {
-    cursor: pointer;
+    min-width: 100px;
     line-height: 34px;
     border-radius: 8px;
 }
@@ -1077,6 +1070,19 @@ body.backdrop-active-as .content-backdrop-as:before {
 @media(max-width: 380px){
     .content-noscript {
         width: 240px;
+    }
+    .content-ccookies {
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+    }
+    .content-ccookies .alert-dcookieconsent {
+        text-align: center;
+        margin: 0;
+    }
+    .btn-cdismiss {
+        margin-top: 10px;
+        margin-right: auto;
     }
 }
 @media(pointer: fine){

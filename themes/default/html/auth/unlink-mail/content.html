@@ -1,5 +1,5 @@
 <main>
-   <div class="content-signup border-rlow">
+   <div class="content-signup background-grely border-rlow">
       <h1 id="unlink-title" class="font-big font-bold text-center margin-t15 margin-b15 padding-t25">{$title}</h1>
       <div class="content-form">
          <div id="unlink-pending" class="unlink-mail-pending<?php echo($TEMP['#user']['status'] == 'deactivated') ? ' hidden' : '';?>">
@@ -21,7 +21,7 @@
                </div>
             </div>
             <div class="helper-text color-blackly font-medium border-bottom border-grely margin-t15 margin-b15 text-center">
-               <span class="padding-l10 padding-r10">{$word->or}</span>
+               <span class="background-grely padding-l10 padding-r10">{$word->or}</span>
             </div>
             <a href="{$url->{{#r_verify_email}/{$verify_email}}}" target="_blank">
                <button class="button-access btn-noway w-100 h-36 background-blue color-wwhite font-franklin font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="button">

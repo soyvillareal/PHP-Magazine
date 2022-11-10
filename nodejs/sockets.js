@@ -958,21 +958,12 @@ module.exports = async function(socket){
                                 }
                             }
 
-                            await query(`SELECT id FROM ${T.CATEGORY}`).then(async function(res){
-                                if(res.length > 0){
-
-                                    var categories = [];
-
-                                    await forEachAsync(res, function(item, index, arr) {
-                                        categories.push(item.id);
-                                    }).catch(function(err){});
-
-                                    if(categories.indexOf(parseInt(category)) == -1){
-                                        error.push({
-                                            EL: '#category',
-                                            TX: `*${WORD.oops_error_has_occurred}`
-                                        });
-                                    }
+                            await specific.AllCategories().then(function(res){
+                                if(res.indexOf(category) === -1){
+                                    error.push({
+                                        EL: '#category',
+                                        TX: `*${WORD.oops_error_has_occurred}`
+                                    });
                                 }
                             }).catch(function(err){
                                 error.push({
@@ -1583,20 +1574,27 @@ module.exports = async function(socket){
                                             }
 
                                             if(arr_trues.indexOf(!1) === -1){
-                                                if(SETTINGS.approve_posts == 'off' || specific.Admin(socket) == true){
+                                                if(action == 'post' && (SETTINGS.approve_posts == 'off' || specific.Admin(socket) == !0)){
                                                     await query(`SELECT user_id FROM ${T.FOLLOWER} WHERE profile_id = ?`, [USER.id]).then(async function(res){
                                                         if(res.length > 0){
                                                             await forEachAsync(res, function(item, index, arr){
                                                                 var done = this.async();
-                                                                specific.SetNotify(socket, {
-                                                                    user_id: item.user_id,
-                                                                    notified_id: post_id,
-                                                                    type: 'post',
-                                                                }).then(function(res){
-                                                                    done();
+                                                                specific.Data(socket, item.user_id).then(function(res){
+                                                                    if(res.notifications.indexOf(category) !== -1){
+                                                                        specific.SetNotify(socket, {
+                                                                            user_id: res.id,
+                                                                            notified_id: post_id,
+                                                                            type: 'post',
+                                                                        }).then(function(res){
+                                                                            done();
+                                                                        }).catch(function(err){
+                                                                            done();
+                                                                        });
+
+                                                                    } else done();
                                                                 }).catch(function(err){
                                                                     done();
-                                                                });
+                                                                })
                                                             }).catch(function(err){});
                                                         }
                                                     }).catch(function(err){
@@ -1815,22 +1813,13 @@ module.exports = async function(socket){
                                             })
                                         }
                                     }
-        
-                                    await query(`SELECT id FROM ${T.CATEGORY}`).then(async function(res){
-                                        if(res.length > 0){
-        
-                                            var categories = [];
-        
-                                            await forEachAsync(res, function(item, index, arr) {
-                                                categories.push(item.id);
-                                            }).catch(function(err){});
-        
-                                            if(categories.indexOf(parseInt(category)) == -1){
-                                                error.push({
-                                                    EL: '#category',
-                                                    TX: `*${WORD.oops_error_has_occurred}`
-                                                });
-                                            }
+
+                                    await specific.AllCategories().then(function(res){
+                                        if(res.indexOf(category) === -1){
+                                            error.push({
+                                                EL: '#category',
+                                                TX: `*${WORD.oops_error_has_occurred}`
+                                            });
                                         }
                                     }).catch(function(err){
                                         error.push({
@@ -3241,20 +3230,14 @@ module.exports = async function(socket){
                                                 } else {
                                                     response.send(ERR);
                                                 }
-
-
-
                                             } else {
                                                 response.send(ERR);
                                             }
                                         });
-
-
                                     } else {
                                         response.send(ERR);
                                     }
                                 }).catch(function(err){
-                                    console.log(err);
                                     response.send(ERR);
                                 })
                             } else {
