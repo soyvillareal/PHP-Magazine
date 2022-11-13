@@ -91,8 +91,8 @@ module.exports = function(socket, temp){
                         </span>
                     </button>`+(
                         global.TEMP[socket.id].loggedin == !0 ?
-                            `<button class="btn_reply btn-noway font-mediumly font-bold text-uppercase background-blue color-white padding-t5 padding-b5 padding-l10 padding-r10 border-rlow boxshadow-grey hover-button animate-tab-button animation-ease3s" data-id="{!comment_id}">
-                                <span class="color-white">
+                            `<button class="btn_reply btn-noway font-mediumly font-bold text-uppercase background-blue padding-t5 padding-b5 padding-l10 padding-r10 border-rlow boxshadow-grey hover-button animate-tab-button animation-ease3s" data-id="{!comment_id}">
+                                <span class="color-wwhite">
                                     <span class="item-cbtext">{$word->answer}</span>
                                     <span class="item-cbicon">
                                         <svg class="icon-y vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

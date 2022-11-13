@@ -36,13 +36,6 @@ textarea.item-input.active ~ .item-label,
 textarea.item-input:focus ~ .item-label {
     font-size: .7rem;
 }
-.tag-label.focus,
-.item-input:focus ~ .item-label {
-    color: #326891;
-}
-.tag-label.focus ~ .content-tags {
-    border-color: #326891;
-}
 .entry {
     min-height: 110px;
     padding: 10px 50px 10px 12px;
@@ -63,11 +56,6 @@ textarea.item-input:focus ~ .item-label {
 }
 .content-placeholder {
     padding: 40px 0 26px;
-}
-.item-placeholder.active,
-.btn_popup:focus ~ .item-placeholder,
-.item-file:focus ~ .item-placeholder {
-    border-color: #326891 !important;
 }
 .item-placeholder {
     border: 2px dashed;
@@ -260,7 +248,6 @@ li.content-cpost figure {
     background-size: cover;
 }
 .content-carrusel .item-pbcarousel.selected {
-    border-color: #326891 !important;
     opacity: 1;
 }
 .item-pbcarousel:not(:last-child):not(.btn-ciadd) {
@@ -474,10 +461,6 @@ li.content-cpost figure {
     }
 }
 @media(pointer: fine){
-    .btn_popup:not([disabled]):hover ~ .item-placeholder,
-    .item-file:not([disabled]):hover ~ .item-placeholder {
-        border-color: #326891 !important;
-    }
     ul.content-tags li.item_tag:hover {
         background-color: #bbcef1;
         border-color: #6d95e0;

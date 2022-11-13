@@ -18,17 +18,11 @@
 .item_input:focus ~ .item-label {
     transform: translateY(-.1rem) translateY(-.2rem) scale(.8);
 }
-.item_input:focus ~ .item-label {
-    color: #326891;
-}
 .helper-text {
     line-height: .08em;
 }
 .accept-icon {
     display: none;
-}
-.staylogged-checkbox:checked {
-    background-color: #000;
 }
 .staylogged-checkbox:checked ~ .accept-icon {
     display: block;

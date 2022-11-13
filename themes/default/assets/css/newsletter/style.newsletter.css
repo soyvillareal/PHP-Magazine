@@ -24,9 +24,6 @@ textarea.item-input.active ~ .item-label,
 textarea.item-input:focus ~ .item-label {
     font-size: .7rem;
 }
-.item-input:focus ~ .item-label {
-    color: #326891;
-}
 .container-newsletter {
     margin: 75px auto;
     max-width: 420px;

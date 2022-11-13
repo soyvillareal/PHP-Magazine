@@ -25,9 +25,6 @@
 .content-pages {
     min-width: 700px;
 }
-.content-row-table:nth-child(odd) {
-    background-color: #f5f5f5
-}
 .content-row-table:last-child {
     border-bottom: 0;
 }
@@ -68,12 +65,10 @@
     transform: translate(-50%, -50%) scale(0);
 }
 .item-wspinner::before {
-    background: #326891;
     -webkit-animation: palp 2s ease-in-out infinite;
     animation: palp 2s ease-in-out infinite;
 }
 .item-wspinner::after {
-    background: #326891;
     -webkit-animation: palp 2s 1s ease-in-out infinite;
     animation: palp 2s 1s ease-in-out infinite;
 }

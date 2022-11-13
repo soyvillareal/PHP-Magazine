@@ -5,7 +5,7 @@
 				<img class="content-preloader-image position-relative blur-up lazyload" src="{$me->avatar_s}" alt="{$me->username}">
 			</div>
 			<span class="font-medium font-bold margin-auto">{$word->chats}</span>
-			<button id="btn-pmnew" class="w-36px h-36 btn-noway padding-5 background-hover border-rall animation-ease3s animate-tab-button">
+			<button id="btn-pmnew" class="w-36px h-36 btn-noway padding-5 hover-background border-rall animation-ease3s animate-tab-button">
 				<svg class="icon-y vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<title>{$word->search}</title>
 					<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
@@ -31,7 +31,7 @@
 			<div id="content-norefor" class="content-norefor hidden"></div>
 			<ul id="content-pnchats" class="content-pnchats w-100<?php echo($TEMP['#users_exists'] == false) ? ' h-100' : '';?>">
 				<li id="content-pnnew" class="position-relative margin-l5 margin-r5 padding-l5 padding-r5 hidden">
-					<div class="content-pnmessage background-hover display-flex direction-row align-center color-black padding-t10 padding-b10 padding-l10 padding-r10 active">
+					<div class="content-pnmessage hover-background display-flex direction-row align-center color-black padding-t10 padding-b10 padding-l10 padding-r10 active">
 						<div class="item-pnmessage overflow-hidden border-rall margin-r10">
 							<img class="content-preloader-image position-relative blur-up lazyload" src="{$theme->{images/users/default-holder-s.jpeg}}" alt="{$word->new_message}">
 						</div>
@@ -40,7 +40,7 @@
 						</div>
 					</div>
 					<div class="content_pnmoptions position-absolute margin-left-auto animation-ease3s">
-						<button id="btn-pnnclose" class="btn_pnmoptions btn-noway background-white color-blue w-36px h-36 btn-noway padding-5 background-hover opacity-0 boxshadow-grey border-rall animation-ease3s animate-tab-button" aria-label="{$word->close}">
+						<button id="btn-pnnclose" class="btn_pnmoptions btn-noway background-white color-blue w-36px h-36 btn-noway padding-5 hover-background opacity-0 boxshadow-grey border-rall animation-ease3s animate-tab-button" aria-label="{$word->close}">
 							<svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 								<title>{$word->close}</title>
 							 	<path fill="none" stroke="currentColor" stroke-width="2" d="M3,3 L21,21 M3,21 L21,3"/>
@@ -61,20 +61,20 @@
 		<?php if(!empty($TEMP['#username'])){ ?>
 		<div id="container-pmhead-one" class="container-pmhead padding-5 border-bottom border-grely">
 			<div class="display-flex direction-row align-center">
-				<button class="btn_mback hide-desktop w-36px h-36 btn-noway padding-5 background-hover border-rall animation-ease3s animate-tab-button">
+				<button class="btn_mback hide-desktop w-36px h-36 btn-noway padding-5 hover-background border-rall animation-ease3s animate-tab-button">
 					<svg class="icon-y vertical-middle" viewBox="0 0 24 24" id="magicoon-Filled" xmlns="http://www.w3.org/2000/svg">
 						<title>{$word->back}</title>
 						<path fill="currentColor" d="M3.481 13.169c-0.316 -0.311 -0.481 -0.745 -0.45 -1.187c-0.032 -0.427 0.134 -0.844 0.45 -1.133l7.317 -7.343c0.608 -0.608 1.594 -0.608 2.202 0s0.608 1.594 0 2.202L8.254 10.453h11.164c0.854 -0.005 1.551 0.683 1.555 1.537c0 0.003 0 0.005 0 0.009c-0.005 0.857 -0.698 1.551 -1.555 1.555H8.254l4.746 4.737c0.608 0.608 0.608 1.594 0 2.202s-1.594 0.608 -2.202 0l0 0L3.481 13.169z"/>
 					</svg>
 				</button>
-				<a class="display-flex direction-row align-center padding-t5 padding-b5 padding-l10 padding-r10 color-black background-hover" href="{$slug}" title="{$username}">
+				<a class="display-flex direction-row align-center padding-t5 padding-b5 padding-l10 padding-r10 color-black hover-background" href="{$slug}" title="{$username}">
 					<div class="w-36px h-36 margin-r5 overflow-hidden border-rall">
 						<img class="content-preloader-image position-relative blur-up lazyload" src="{$avatar_s}" alt="{$username}">
 					</div>
 					<span class="font-medium">{$username}</span>
 				</a>
 				<div class="content_pnmoptions position-relative margin-left-auto">
-					<button class="btn_pnmoptions btn-noway color-blue w-36px h-36 btn-noway padding-5 background-hover border-rall animation-ease3s animate-tab-button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->options}">
+					<button class="btn_pnmoptions btn-noway color-blue w-36px h-36 btn-noway padding-5 hover-background border-rall animation-ease3s animate-tab-button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->options}">
 						<svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 							<title>{$word->options}</title>
 							<path fill="currentColor" d="M7 12c0 1.104-.896 2-2 2s-2-.896-2-2 .896-2 2-2 2 .896 2 2zm12-2c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-7 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2z"/>
@@ -92,7 +92,7 @@
 		<?php } ?>
 		<div id="container-pmhead-two" class="padding-5 border-bottom border-grely hidden">
 			<div class="display-flex direction-row align-center position-relative">
-				<button class="btn_mback hide-desktop w-36px h-36 btn-noway padding-5 background-hover border-rall animation-ease3s animate-tab-button">
+				<button class="btn_mback hide-desktop w-36px h-36 btn-noway padding-5 hover-background border-rall animation-ease3s animate-tab-button">
 					<svg class="icon-y vertical-middle" viewBox="0 0 24 24" id="magicoon-Filled" xmlns="http://www.w3.org/2000/svg">
 						<title>{$word->back}</title>
 						<path fill="currentColor" d="M3.481 13.169c-0.316 -0.311 -0.481 -0.745 -0.45 -1.187c-0.032 -0.427 0.134 -0.844 0.45 -1.133l7.317 -7.343c0.608 -0.608 1.594 -0.608 2.202 0s0.608 1.594 0 2.202L8.254 10.453h11.164c0.854 -0.005 1.551 0.683 1.555 1.537c0 0.003 0 0.005 0 0.009c-0.005 0.857 -0.698 1.551 -1.555 1.555H8.254l4.746 4.737c0.608 0.608 0.608 1.594 0 2.202s-1.594 0.608 -2.202 0l0 0L3.481 13.169z"/>
@@ -140,7 +140,7 @@
 							<span id="item-mfrtuser" class="color-grey break-all ellipsis-horizontal hidden">{$word->replying_own_message}</span>
 							<span id="item-mfrmessage" class="color-grey break-all ellipsis-horizontal"></span>
 						</div>
-						<button id="btn-mfrclose" class="disable_before btn-noway w-30px h-30 background-hover color-black margin-top-auto margin-bottom-auto margin-left-auto margin-r5 padding-5 border-rall animation-ease3s animate-tab-button" type="button">
+						<button id="btn-mfrclose" class="disable_before btn-noway w-30px h-30 hover-background color-black margin-top-auto margin-bottom-auto margin-left-auto margin-r5 padding-5 border-rall animation-ease3s animate-tab-button" type="button">
 							<svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<title>{$word->close}</title>
 								<path fill="none" stroke="currentColor" stroke-width="2" d="M3,3 L21,21 M3,21 L21,3"></path>
@@ -152,7 +152,7 @@
 							<div class="item_mfimage w-100 h-100 overflow-hidden">
 								<img class="content-preloader-image position-relative blur-up lazyload" src="" alt="">
 							</div>
-							<button class="btn_mffile disable_before icon-z btn-noway position-absolute background-white border-all border-grely border-rall background-hover animation-ease3s animate-tab-button" type="button">
+							<button class="btn_mffile disable_before icon-z btn-noway position-absolute background-white border-all border-grely border-rall hover-background animation-ease3s animate-tab-button" type="button">
 								<svg class="icon-c vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 									<title>{$word->close}</title>
 									<path fill="none" stroke="currentColor" stroke-width="2" d="M3,3 L21,21 M3,21 L21,3"></path>
@@ -167,7 +167,7 @@
 								</svg>
 							</div>
 							<span class="w-50 font-bold color-black ellipsis-vertical ellipsis-v2"></span>
-							<button class="btn_mffile disable_before icon-z btn-noway position-absolute background-white border-all border-grely border-rall background-hover animation-ease3s animate-tab-button" type="button">
+							<button class="btn_mffile disable_before icon-z btn-noway position-absolute background-white border-all border-grely border-rall hover-background animation-ease3s animate-tab-button" type="button">
 								<svg class="icon-c vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 									<title>{$word->close}</title>
 									<path fill="none" stroke="currentColor" stroke-width="2" d="M3,3 L21,21 M3,21 L21,3"></path>
@@ -189,7 +189,7 @@
 				</div>
 				<?php } ?>
 				<div class="display-flex direction-row align-center padding-t10 padding-b10 margin-l10 margin-r10">
-					<button id="btn-mffile" class="btn-mffile btn-noway position-relative background-hover margin-r5 padding-5 border-rall animation-ease3s animate-tab-button" type="button"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>>
+					<button id="btn-mffile" class="btn-mffile btn-noway position-relative hover-background margin-r5 padding-5 border-rall animation-ease3s animate-tab-button" type="button"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>>
 						<span class="color-blue">
 							<svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 								<path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
@@ -203,7 +203,7 @@
 					<div class="content-pmarea display-flex item-pnbackground w-100 border-r25px overflow-hidden">
 						<textarea id="text-message" class="disable_before w-100 background-trans color-black padding-t5 padding-b5 padding-l10 padding-r10 resize-none border-none" rows="1" placeholder="{$word->write_your_message}"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>></textarea>
 					</div>
-					<button id="btn-pmsend" class="disable_before btn-noway background-hover margin-top-auto margin-l5 padding-5 border-rall animation-ease3s animate-tab-button" type="submit"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>>
+					<button id="btn-pmsend" class="disable_before btn-noway hover-background margin-top-auto margin-l5 padding-5 border-rall animation-ease3s animate-tab-button" type="submit"<?php echo(empty($TEMP['#username']) || $TEMP['#enable_messages'] == false) ? ' disabled' : '';?>>
 						<span class="color-blue">
 							<svg class="icon-z vertical-middle" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 24" xml:space="preserve">
 								<title>{$word->send_message}</title>

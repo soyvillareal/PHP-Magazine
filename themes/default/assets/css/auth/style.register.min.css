@@ -18,9 +18,6 @@
 .item_input:focus ~ .item-label {
     transform: translateY(-.1rem) translateY(-.2rem) scale(.8);
 }
-.item_input:focus ~ .item-label {
-    color: #326891;
-}
 .item-valid-password {
     border-color: #cdcdcd !important;
 }
@@ -59,9 +56,6 @@
 }
 .accept-icon {
     display: none;
-}
-.accept-checkbox:checked {
-    background-color: #000;
 }
 .accept-checkbox:checked ~ .accept-icon {
     display: block;

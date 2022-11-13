@@ -61,10 +61,10 @@
 
 
     /* Hover and focus */
-    html.is_dark .background-hover:not([disabled]).active,
-    html.is_dark .background-hover:not([disabled]):active,
-    html.is_dark .background-hover:not([disabled]):focus,
-    html.is_dark .background-hover[aria-hidden=true] {
+    html.is_dark .hover-background:not([disabled]).active,
+    html.is_dark .hover-background:not([disabled]):active,
+    html.is_dark .hover-background:not([disabled]):focus,
+    html.is_dark .hover-background[aria-hidden=true] {
         background-color: #222222;
     }
 
@@ -89,7 +89,7 @@
 
 
     @media(pointer: fine){
-        html.is_dark .background-hover:not([disabled]):hover {
+        html.is_dark .hover-background:not([disabled]):hover {
             background-color: #222222;
         }
         html.is_dark .item-share:not(:last-child) amp-social-share:hover {

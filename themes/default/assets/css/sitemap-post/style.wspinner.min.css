@@ -38,12 +38,10 @@
     transform: translate(-50%, -50%) scale(0);
 }
 .item-wspinner::before {
-    background: #326891;
     -webkit-animation: palp 2s ease-in-out infinite;
     animation: palp 2s ease-in-out infinite;
 }
 .item-wspinner::after {
-    background: #326891;
     -webkit-animation: palp 2s 1s ease-in-out infinite;
     animation: palp 2s 1s ease-in-out infinite;
 }

@@ -26,9 +26,6 @@ textarea.item_input.active ~ .item-label,
 textarea.item_input:focus ~ .item-label {
     font-size: .7rem;
 }
-.item_input:focus ~ .item-label {
-    color: #326891;
-}
 .content-birthday .item-one {
 	width: 60px;
 }

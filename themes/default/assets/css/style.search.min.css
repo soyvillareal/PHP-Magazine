@@ -49,20 +49,6 @@
     pointer-events: auto;
     box-shadow: 0px 4px 8px 0 rgb(0, 0, 0, .2);
 }
-.btn-ddown:focus,
-.btn-ddown:active {
-    border-color: #326891 !important;
-}
-.btn-ddown:focus span,
-.btn-ddown:active span,
-.btn-ddown:focus svg,
-.btn-ddown:active svg,
-.btn-dfilter:not(.selected):focus svg,
-.btn-dfilter:not(.selected):active svg,
-.btn-dfilter:not(.selected):focus span,
-.btn-dfilter:not(.selected):active span {
-    color: #326891;
-}
 .btn-dfilter:not(.selected) svg {
     transform: scale(0);
 }
@@ -147,16 +133,7 @@
         height: 89px;
     }
 }
-@media (pointer: fine){  
-    .btn-ddown:hover {
-        border-color: #326891 !important;
-    }
-    .btn-ddown:hover span,
-    .btn-ddown:hover svg,
-    .btn-dfilter:not(.selected):hover svg,
-    .btn-dfilter:not(.selected):hover span {
-        color: #326891;
-    }
+@media (pointer: fine){
     .btn-dfilter:hover svg {
         transform: scale(1);
     }

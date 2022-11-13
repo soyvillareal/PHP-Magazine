@@ -1464,7 +1464,7 @@ if ($TEMP['#publisher'] === true) {
 
 			$tags = $dba->query('SELECT * FROM '.T_LABEL.' WHERE name LIKE "%'.$search.'%" '.$query.' LIMIT 5')->fetchAll();
 			foreach ($tags as $tag) {
-				$html .= '<li class="border-bottom border-grely"><button class="btn_tag btn-noway w-100 padding-l10 padding-5 text-left background-hover animation-ease3s ellipsis-horizontal" type="button">'.$tag['name'].'</button></li>';
+				$html .= '<li class="border-bottom border-grely"><button class="btn_tag btn-noway w-100 padding-l10 padding-5 text-left hover-background animation-ease3s ellipsis-horizontal" type="button">'.$tag['name'].'</button></li>';
 			}
 			if(!empty($html)){
 				$deliver = array(

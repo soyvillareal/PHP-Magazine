@@ -175,19 +175,13 @@
 .share-icon.email {
     color: #8bc34a;
 }
-.share-icon.copied {
-    color: #fff;
-    background-color: #326891 !important;
-}
 
 .item-share:not(:last-child) a:focus .share-icon,
 .item-share:not(:last-child) button:focus .share-icon {
-    background-color: #fff;
-    border: 1px solid #ccc;
+    border: 1px solid;
 }
 .item-share:last-child button:focus .share-icon g,
 .item-share:last-child a:focus .share-icon g {
-    stroke: #000;
     opacity: 0.4;
 }
 .content-article {
@@ -203,19 +197,9 @@
     -webkit-text-decoration-thickness: 1px;
     text-decoration-thickness: 1px;
 }
-.content-article a:not(.no-style) { 
-    -webkit-text-decoration-color: #326891;
-    text-decoration-color: #326891;
-}
 .content-article a:not(.no-style):focus {
     -webkit-text-decoration: none;
     text-decoration: none;
-}
-.content-article a:not(.no-style) {
-    color: #326891;
-}
-.content-article a:not(.no-style):visited {
-    color: #326891;
 }
 .entry p {
     margin-bottom: 15px;
@@ -300,7 +284,6 @@
     background-size: cover;
 }
 .content-carrusel .item-pbcarousel.selected {
-    border-color: #326891 !important;
     opacity: 1;
 }
 .item-pbcarousel:not(:last-child) {
@@ -472,15 +455,6 @@
     }
 }
 @media(pointer: fine){
-    .item-share:not(:last-child) .share-icon:hover {
-        background-color: #fff;
-        border: 1px solid #ccc;
-    }
-    .item-share:last-child button:hover .share-icon g,
-    .item-share:last-child a:hover .share-icon g {
-        stroke: #000;
-        opacity: 0.4;
-    }
     .content-article a:not(.no-style):hover {
         -webkit-text-decoration: none;
         text-decoration: none;

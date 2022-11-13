@@ -97,7 +97,16 @@ if (file_exists("./sources/{$page}")) {
         require_once("./sources/404/content.php");
     }
 }
-    
+
+$TEMP['#show_index_palette'] = false;
+if($TEMP['#admin'] == true && $TEMP['#settings']['show_palette'] == 'on'){
+    $TEMP['#show_index_palette'] = true;
+    $show_palette = Specific::Filter($_GET[$RUTE['#r_show_palette']]);
+    $TEMP['#show_palette'] = json_decode($show_palette);
+
+    Specific::BuildIndexPalette();
+    Specific::BuildIndexPalette('dark');
+}
 
 $TEMP['global_title'] = $TEMP['#title'];
 $TEMP['global_description'] = $TEMP['#description'];
@@ -105,6 +114,7 @@ $TEMP['global_keywords'] = $TEMP['#keyword'];
 $TEMP['year_now'] = date('Y');
 $TEMP['time'] = Specific::DateFormat(time(), 'complete');
 $TEMP['content'] = $TEMP['#content'];
+
 
 $maket = 'wrapper';
 if($one == 'amp'){

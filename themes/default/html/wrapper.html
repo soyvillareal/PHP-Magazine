@@ -13,7 +13,48 @@
 </head>
 <body class="position-relative w-100 mw-1170 h-100 background-white color-black margin-auto" dir="{#dir}" style="overflow:hidden;">
    <style type="text/css">
-      html[dark=true] .page-loader{background-color:#181818}html[dark=true] .page-loader .spin{border:3px solid hsla(205,48%,25%,.2);border-top-color:#214560}.page-loader{position:fixed;top:0;left:0;right:0;bottom:0;background-color:#fff;display:flex;justify-content:center;align-items:center;z-index:9999;transition:1s all;opacity:0}.page-loader.show{opacity:1}.page-loader .spin{border:3px solid hsla(205,48%,38%,.2);border-top-color:#326891;border-radius:50%;width:3em;height:3em;animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}           
+      html[dark=true] .page-loader {
+         background-color: {$dark_palette->background->white};
+      }
+
+      html[dark=true] .page-loader .spin {
+         border: 3px solid hsla(205, 48%, 25%, .2);
+         border-top-color: {$dark_palette->border->blue};
+      }
+
+      .page-loader {
+         position: fixed;
+         top: 0;
+         left: 0;
+         right: 0;
+         bottom: 0;
+         background-color: {$light_palette->background->white};
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         z-index: 9999;
+         transition: 1s all;
+         opacity: 0
+      }
+
+      .page-loader.show {
+         opacity: 1
+      }
+
+      .page-loader .spin {
+         border: 3px solid hsla(205, 48%, 38%, .2);
+         border-top-color: {$light_palette->border->blue};
+         border-radius: 50%;
+         width: 3em;
+         height: 3em;
+         animation: spin 1s linear infinite
+      }
+
+      @keyframes spin {
+         to {
+            transform: rotate(360deg)
+         }
+      }      
    </style>
    <div id="page-loader" class="page-loader show">
       <div class="spin"></div>
@@ -40,7 +81,7 @@
   <header id="header" class="content-header w-100 h-100 background-white margin-none animation-ease3s">
     <section class="section-one position-relative">
       <div class="mobile-left display-flex justify-around position-absolute">
-         <button class="btn_drawer btn-noway button-menu display-inline-block background-hover color-black border-rlow animate-tab-button animation-ease3s" aria-haspopup="true" aria-expanded="false" aria-label="{$word->sections_navigation}">
+         <button class="btn_drawer btn-noway button-menu display-inline-block hover-background color-black border-rlow animate-tab-button animation-ease3s" aria-haspopup="true" aria-expanded="false" aria-label="{$word->sections_navigation}">
             <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="currentColor">
                <rect x="1" y="3" width="14" height="2"></rect>
                <rect x="1" y="7" width="14" height="2"></rect>
@@ -74,7 +115,7 @@
          </button>
          <?php } ?>
          <div class="content-dropdown-account content-backdrop-ac">
-            <button class="btn_account button-general display-flex direction-row align-center h-30 btn-noway display-none-mob background-hover border-rlow vertical-middle animate-tab-button animation-ease3s" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
+            <button class="btn_account button-general display-flex direction-row align-center h-30 btn-noway display-none-mob hover-background border-rlow vertical-middle animate-tab-button animation-ease3s" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
                <div class="item_caccount display-flex direction-colum align-center icon-c position-relative background-red font-lowly color-wwhite border-rlow margin-r5">{$notifications}</div>
                <span class="display-inline-block vertical-middle color-black margin-r5 font-low">{$word->account}</span>
                <svg class="icon-c animation-ease3s" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -354,7 +395,7 @@
          <?php } ?>
          <div class="button-modal-login display-inline position-absolute">
             <?php if($TEMP['#loggedin'] == true){ ?>
-            <button class="btn_account btn-noway button-login border-rlow animation-ease3s display-inline-block display-none-desk background-hover color-black" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
+            <button class="btn_account btn-noway button-login border-rlow animation-ease3s display-inline-block display-none-desk hover-background color-black" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
                <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="currentColor">
                   <path d="M8,10c-2.5,0-7,1.1-7,3.5V16h14v-2.5C15,11.1,10.5,10,8,10z"></path>
                   <circle cx="8" cy="4" r="4"></circle>
@@ -362,7 +403,7 @@
                <div class="item_caccount display-flex direction-colum align-center icon-c position-absolute background-red font-lowly color-wwhite border-r25px">{$notifications}</div>
             </button>
             <?php } else { ?>
-            <button id="btn-modal-login" class="btn-noway button-login border-rlow animation-ease3s display-inline-block display-none-desk background-hover color-black" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
+            <button id="btn-modal-login" class="btn-noway button-login border-rlow animation-ease3s display-inline-block display-none-desk hover-background color-black" type="button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->account}">
                <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="currentColor">
                   <path d="M8,10c-2.5,0-7,1.1-7,3.5V16h14v-2.5C15,11.1,10.5,10,8,10z"></path>
                   <circle cx="8" cy="4" r="4"></circle>
@@ -406,7 +447,7 @@
       <div class="content-drawer background-white h-100">
          <div class="container-sposts padding-t25 padding-b25 padding-l20 padding-r20">
             <div class="container-slogo display-flex display-none-mob position-relative margin-b15">
-               <button class="btn_drawer btn-noway button-menu position-absolute border-rlow background-hover color-black animate-tab-button animation-ease3s" type="button" aria-label="{$word->close_menu}">
+               <button class="btn_drawer btn-noway button-menu position-absolute border-rlow hover-background color-black animate-tab-button animation-ease3s" type="button" aria-label="{$word->close_menu}">
                   <svg class="icon-x vertical-sub" viewBox="0 0 16 16" fill="currentColor">
                      <rect x="1" y="3" width="14" height="2"></rect>
                      <rect x="1" y="7" width="14" height="2"></rect>
@@ -836,8 +877,395 @@
       <button id="btn-cdismiss" class="btn-cdismiss btn-noway w-100px display-block background-blue color-wwhite margin-left-auto padding-r15 padding-l15 hover-button animation-ease3s" aria-label="{$word->dismiss_cookie_message}" tabindex="0">{$word->i_have_it}</button>
    </div>
    <?php } ?>
-
+   <?php if($TEMP['#show_index_palette'] == true){ ?>
+   <div id="container-palette" class="container-palette display-flex direction-colum w-25 background-grely border-left border-grely position-fixed animation-ease3s"<?php echo($TEMP['#show_palette'] == false) ? ' style="min-width: 0px; width: 0px;"' : '';?>>
+      <button id="btn-apalette" class="btn-apalette btn-noway position-absolute background-grely border-top border-bottom border-left border-grely">
+         <svg class="icon-t vertical-sub animation-ease3s<?php echo($TEMP['#show_palette'] == false) ? ' rotate-180' : '';?>" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <?php if($TEMP['#show_palette'] == true){ ?>
+            <title>{$word->hide}</title>
+            <?php } else { ?>
+            <title>{$word->show}</title>
+            <?php } ?>
+            <path fill="currentColor" d="M 15.7 12 C 15.7 12.105 15.658 12.196 15.573 12.277 L 9.648 17.88 C 9.563 17.96 9.466 18 9.355 18 C 9.245 18 9.148 17.96 9.063 17.88 L 8.427 17.278 C 8.342 17.199 8.3 17.106 8.3 17.002 C 8.3 16.898 8.342 16.806 8.427 16.725 L 13.424 12 L 8.427 7.275 C 8.342 7.194 8.3 7.102 8.3 6.998 C 8.3 6.894 8.342 6.801 8.427 6.722 L 9.063 6.12 C 9.148 6.04 9.245 6 9.355 6 C 9.466 6 9.563 6.04 9.648 6.12 L 15.573 11.723 C 15.658 11.804 15.7 11.895 15.7 12 Z"></path>
+        </svg>
+      </button>
+      <div class="display-flex direction-colum overflow-autoy padding-t10 padding-b10 padding-l10 padding-r10">
+         <button class="btn_cpalette btn-noway w-100 color-black font-big font-bold margin-b15 padding-l15 padding-r15 hover-button animation-ease3s" data-type="light">
+            <div class="display-flex direction-row align-center border-bottom border-black padding-b10">
+                <span class="item-ctitle w-100 text-left">{$word->light_mode}</span>
+                <svg class="icon-s<?php echo($TEMP['#darkmode'] == false) ? ' rotate-180' : '';?>" viewBox="0 0 13 8">
+                    <polygon fill="currentColor" points="6.5,8 0,1.4 1.4,0 6.5,5.2 11.6,0 13,1.4"></polygon>
+                </svg>
+            </div>
+         </button>
+         <form id="light-fpalette" class="display-block<?php echo($TEMP['#darkmode'] == true) ? ' hidden' : '';?>" novalidate>
+            {$light_palettes}
+         </form>
+         <button class="btn_cpalette btn-noway w-100 color-black font-big font-bold margin-b15 padding-l15 padding-r15 hover-button animation-ease3s" data-type="dark">
+            <div class="display-flex direction-row align-center border-bottom border-black padding-b10">
+                <span class="item-ctitle w-100 text-left">{$word->dark_mode}</span>
+                <svg class="icon-s<?php echo($TEMP['#darkmode'] == true) ? ' rotate-180' : '';?>" viewBox="0 0 13 8">
+                    <polygon fill="currentColor" points="6.5,8 0,1.4 1.4,0 6.5,5.2 11.6,0 13,1.4"></polygon>
+                </svg>
+            </div>
+         </button>
+         <form id="dark-fpalette" class="display-block<?php echo($TEMP['#darkmode'] == false) ? ' hidden' : '';?>" novalidate>
+            {$dark_palettes}
+         </form>
+      </div>
+      <div class="display-flex direction-row align-center justify-center margin-top-auto padding-t10 padding-b15 padding-l10 padding-r10">
+         <div class="overflow-hidden">
+            <button id="btn-preset" class="btn_presave btn-noway w-100px h-36 background-red font-franklin font-medium font-bold margin-r10 padding-l10 padding-r10 border-rlow inhover-button animation-ease3s" data-type="<?php echo($TEMP['#darkmode'] == true) ? 'dark' : 'light';?>">
+               <span class="color-wwhite">
+                  <span class="hide-mobile">{$word->reset}</span>
+                  <svg class="icon-z hide-desktop vertical-sub" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                     <path fill="currentColor" d="M3 12H1.594A10.406 10.406 0 0 1 20.156 5.538V3.984h1.406V8.906H16.641V7.5h3.153A9.01 9.01 0 0 0 12 3C7.037 3 3 7.037 3 12Zm18 0c0 4.963 -4.037 9 -9 9A9.01 9.01 0 0 1 4.206 16.5H7.359V15.094H2.438V20.016H3.844V18.462A10.406 10.406 0 0 0 22.406 12Z"/>
+                  </svg>
+               </span>
+               <div class="content-spinner-circle position-absolute">
+                  <div class="spinner-circle"></div>
+               </div>
+            </button>
+            <button id="btn-psave" class="btn_presave btn-noway w-100px h-36 background-blue font-franklin font-medium font-bold padding-l10 padding-r10 border-rlow inhover-button animation-ease3s">
+               <span class="color-wwhite">
+                  <span class="hide-mobile">{$word->save}</span>
+                  <svg class="icon-z vertical-sub hide-desktop" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                     <path fill="currentColor" d="M18 21v-8H6v8H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h13l4 4v13a1 1 0 0 1-1 1h-2zm-2 0H8v-6h8v6z"/>
+                  </svg>
+               </span>
+               <div class="content-spinner-circle position-absolute">
+                  <div class="spinner-circle"></div>
+               </div>
+            </button>
+         </div>
+      </div>
+   </div>
+   {%%<script src="{$theme->{assets/js/plugins/spectrum.min.js}}"></script>%%}
+   {%%<script type="text/javascript">
+      paper_gp = {
+         token: '{#token_session}',
+         url: {
+            change_palette: '{$url->{req/rol-admin/change-palette}}',
+            reset_palette: '{$url->{req/rol-admin/reset-palette}}'
+         },
+         word: {
+            show: '{$word->show}',
+            hide: '{$word->hide}',
+            cancel: '{$word->cancel}',
+            choose: '{$word->choose}',
+            leave_page_changes_will_saved: '{$word->leave_page_changes_will_saved}'
+         }
+      };
+   </script>%%}
+   {%%<script src="{$theme->{assets/js/jquery.palette.min.js}}"></script>%%}
+   {%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/plugins/spectrum.min.css}}" />%%}
+   <?php } ?>
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.fonts.css}}" />
+   
+   <style id="light-palette" type="text/css">
+      html .content-article a:not(.no-style) { 
+         -webkit-text-decoration-color: {$light_palette->color->blue};
+         text-decoration-color: {$light_palette->color->blue};
+      }
+      
+      html .item-share:last-child button:focus .share-icon g,
+      html .item-share:last-child a:focus .share-icon g {
+         stroke: {$light_palette->color->black};
+      }
+
+      html .share-icon.copied {
+         color: {$light_palette->color->white};
+         background-color: {$light_palette->background->blue} !important;
+      }
+
+      /* Background color */
+      html .item-share:not(:last-child) a:focus .share-icon,
+      html .item-share:not(:last-child) button:focus .share-icon,
+      html .simditor .simditor-wrapper,
+      html .simditor .simditor-toolbar,
+      html .background-wwhite,
+      html .background-white {
+         background-color: {$light_palette->background->white};
+      }
+
+      html .item-wspinner::before,
+      html .item-wspinner::after,
+      html .background-blue {
+         background-color: {$light_palette->background->blue};
+      }
+      html .content-row-table:nth-child(odd),
+      html .background-grely {
+         background-color: {$light_palette->background->grely};
+      }
+      html .background-redly {
+         background-color: {$light_palette->background->redly};
+      }
+      html .background-red {
+         background-color: {$light_palette->background->red};
+      }
+      html .staylogged-checkbox:checked,
+      html .accept-checkbox:checked,
+      html .background-black {
+         background-color: {$light_palette->background->black};
+      }
+      html .background-blackly {
+         background-color: {$light_palette->background->blackly};
+      }
+      html .background-green {
+         background-color: {$light_palette->background->green};
+      }
+
+      /* Text color */
+      html .color-blackly {
+         color: {$light_palette->color->blackly};
+      }
+      html .color-black {
+         color: {$light_palette->color->black};
+      }
+      html .color-wwhite,
+      html .color-white {
+         color: {$light_palette->color->white};
+      }
+      html .color-grey {
+         color: {$light_palette->color->grey};
+      }
+      html .content-article a:not(.no-style),
+      html .content-article a:not(.no-style):visited,
+      html .item-input:focus ~ .item-label,
+      html .tag-label.focus,
+      html .content-page a,
+      html .btn-ddown:focus span,
+      html .btn-ddown:active span,
+      html .btn-ddown:focus svg,
+      html .btn-ddown:active svg,
+      html .btn-dfilter:not(.selected):focus svg,
+      html .btn-dfilter:not(.selected):active svg,
+      html .btn-dfilter:not(.selected):focus span,
+      html .btn-dfilter:not(.selected):active span,
+      html .item_input:focus ~ .item-label,
+      html .color-blue {
+         color: {$light_palette->color->blue};
+      }
+      html .color-red {
+         color: {$light_palette->color->red};
+      }
+      html .color-green {
+         color: {$light_palette->color->green};
+      }
+      html .color-orange {
+         color: {$light_palette->color->orange};
+      }
+
+      /* Border color */
+      html .item-placeholder.active,
+      html .btn_popup:focus ~ .item-placeholder,
+      html .item-file:focus ~ .item-placeholder,
+      html .content-carrusel .item-pbcarousel.selected,
+      html .tag-label.focus ~ .content-tags,
+      html .btn-ddown:focus,
+      html .btn-ddown:active,
+      html .border-blue {
+         border-color: {$light_palette->border->blue} !important;
+      }
+      html .border-focus-blue:not(.border-red):focus {
+         border-color: {$light_palette->border->focus_blue} !important
+      }
+      html .item-share:not(:last-child) a:focus .share-icon,
+      html .item-share:not(:last-child) button:focus .share-icon,
+      html .border-grely {
+         border-color: {$light_palette->border->grely} !important;
+      }
+      html .border-grey {
+         border-color: {$light_palette->border->grey} !important;
+      }
+      html .border-black {
+         border-color: {$light_palette->border->black} !important;
+      }
+      html .border-red {
+         border-color: {$light_palette->border->red} !important
+      }
+
+      
+      /* Hover and focus */
+      html .hover-blue.active:not([disabled]),
+      html .hover-blue:not([disabled]):active,
+      html .hover-blue:not([disabled]):focus {
+         color: {$light_palette->hover->blue};
+      }
+      html .hover-background:not([disabled]).active,
+      html .hover-background:not([disabled]):active,
+      html .hover-background:not([disabled]):focus {
+         background-color: {$light_palette->hover->background};
+      }
+      @media(pointer: fine){
+         html .item-share:not(:last-child) .share-icon:hover {
+            background-color: {$light_palette->background->white};
+            border: 1px solid {$light_palette->border->grely};
+         }
+         
+         html .item-share:last-child button:hover .share-icon g,
+         html .item-share:last-child a:hover .share-icon g {
+            stroke: {$light_palette->background->black};
+            opacity: 0.4;
+         }
+         
+         html .btn-ddown:hover,
+         html .btn_popup:not([disabled]):hover ~ .item-placeholder,
+         html .item-file:not([disabled]):hover ~ .item-placeholder {
+            border-color: {$light_palette->border->blue} !important;
+         }
+
+         html .btn-ddown:hover span,
+         html .btn-ddown:hover svg,
+         html .btn-dfilter:not(.selected):hover svg,
+         html .btn-dfilter:not(.selected):hover span,
+         html .hover-blue:not([disabled]):hover {
+            color: {$light_palette->hover->blue};
+         }
+         html .hover-background:not([disabled]):hover {
+            background-color: {$light_palette->hover->background};
+         }
+      }
+   </style>
+   <style id="dark-palette" type="text/css">
+      html[dark=true] .content-article a:not(.no-style) {
+         -webkit-text-decoration-color: {$dark_palette->color->blue};
+         text-decoration-color: {$dark_palette->color->blue};
+      }
+      html[dark=true] .item-share:last-child button:focus .share-icon g,
+      html[dark=true] .item-share:last-child a:focus .share-icon g {
+         stroke: {$dark_palette->color->black};
+      }
+
+      
+      html[dark=true] .share-icon.copied {
+         color: {$dark_palette->color->black};
+         background-color: {$dark_palette->background->blue} !important;
+      }
+
+      /* Background color */
+      html[dark=true] .item-share:not(:last-child) a:focus .share-icon,
+      html[dark=true] .item-share:not(:last-child) button:focus .share-icon,
+      html[dark=true] .simditor .simditor-wrapper,
+      html[dark=true] .simditor .simditor-toolbar,
+      html[dark=true] .background-white {
+         background-color: {$dark_palette->background->white};
+      }
+      html[dark=true] .item-wspinner::after,
+      html[dark=true] .item-wspinner::before,
+      html[dark=true] .background-blue {
+         background-color: {$dark_palette->background->blue};
+      }
+      html[dark=true] .content-row-table:nth-child(odd),
+      html[dark=true] .background-grely {
+         background-color: {$dark_palette->background->grely};
+      }
+      html[dark=true] .staylogged-checkbox:checked,
+      html[dark=true] .accept-checkbox:checked,
+      html[dark=true] .background-wwhite,
+      html[dark=true] .background-black {
+         background-color: {$dark_palette->background->black};
+      }
+
+      /* Text color */
+      html[dark=true] .color-blackly {
+         color: {$dark_palette->color->blackly};
+      }
+      html[dark=true] .color-wwhite,
+      html[dark=true] .color-black {
+         color: {$dark_palette->color->black};
+      }
+      html[dark=true] .color-white {
+         color: {$dark_palette->color->white};
+      }
+      html[dark=true] .color-grey {
+         color: {$dark_palette->color->grey};
+      }
+      html[dark=true] .content-article a:not(.no-style),
+      html[dark=true] .content-article a:not(.no-style):visited,
+      html[dark=true] .item-input:focus ~ .item-label,
+      html[dark=true] .tag-label.focus,
+      html[dark=true] .content-page a,
+      html[dark=true] .btn-ddown:focus span,
+      html[dark=true] .btn-ddown:active span,
+      html[dark=true] .btn-ddown:focus svg,
+      html[dark=true] .btn-ddown:active svg,
+      html[dark=true] .btn-dfilter:not(.selected):focus svg,
+      html[dark=true] .btn-dfilter:not(.selected):active svg,
+      html[dark=true] .btn-dfilter:not(.selected):focus span,
+      html[dark=true] .btn-dfilter:not(.selected):active span,
+      html[dark=true] .item_input:focus ~ .item-label,
+      html[dark=true] .color-blue {
+         color: {$dark_palette->color->blue};
+      }
+
+      /* Border color */
+      html[dark=true] .item-placeholder.active,
+      html[dark=true] .btn_popup:focus ~ .item-placeholder,
+      html[dark=true] .item-file:focus ~ .item-placeholder,
+      html[dark=true] .content-carrusel .item-pbcarousel.selected,
+      html[dark=true] .tag-label.focus ~ .content-tags,
+      html[dark=true] .btn-ddown:focus,
+      html[dark=true] .btn-ddown:active,
+      html[dark=true] .border-blue {
+         border-color: {$dark_palette->border->blue} !important;
+      }
+      html[dark=true] .border-focus-blue:not(.border-red):focus {
+         border-color: {$dark_palette->border->focus_blue} !important
+      }
+      html[dark=true] .item-share:not(:last-child) a:focus .share-icon,
+      html[dark=true] .item-share:not(:last-child) button:focus .share-icon,
+      html[dark=true] .border-grely {
+         border-color: {$dark_palette->border->grely} !important;
+      }
+      html[dark=true] .border-grey {
+         border-color: {$dark_palette->border->grey} !important;
+      }
+      html[dark=true] .border-black {
+         border-color: {$dark_palette->border->black} !important;
+      }
+
+
+      /* Hover and focus */
+      html[dark=true] .hover-blue.active:not([disabled]),
+      html[dark=true] .hover-blue:not([disabled]):active,
+      html[dark=true] .hover-blue:not([disabled]):focus {
+         color: {$dark_palette->hover->blue};
+      }
+      html[dark=true] .hover-background:not([disabled]).active,
+      html[dark=true] .hover-background:not([disabled]):active,
+      html[dark=true] .hover-background:not([disabled]):focus {
+         background-color: {$dark_palette->hover->background};
+      }
+      @media(pointer: fine){
+         html[dark=true] .item-share:not(:last-child) .share-icon:hover {
+            background-color: {$dark_palette->background->white};
+            border: 1px solid {$dark_palette->border->grely};
+         }
+
+         html[dark=true] .item-share:last-child button:hover .share-icon g,
+         html[dark=true] .item-share:last-child a:hover .share-icon g {
+            stroke: {$dark_palette->background->black};
+         }
+
+         html[dark=true] .btn-ddown:hover,
+         html[dark=true] .btn_popup:not([disabled]):hover ~ .item-placeholder,
+         html[dark=true] .item-file:not([disabled]):hover ~ .item-placeholder {
+            border-color: {$dark_palette->border->blue} !important;
+         }
+         html[dark=true] .btn-ddown:hover span,
+         html[dark=true] .btn-ddown:hover svg,
+         html[dark=true] .btn-dfilter:not(.selected):hover svg,
+         html[dark=true] .btn-dfilter:not(.selected):hover span,
+         html[dark=true] .hover-blue:not([disabled]):hover {
+            color: {$dark_palette->hover->blue};
+         }
+         html[dark=true] .hover-background:not([disabled]):hover {
+            background-color: {$dark_palette->hover->background};
+         }
+      }
+   </style>
+
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.search.min.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.general.css}}" />
    <?php if($TEMP['#dir'] == 'rtl'){ ?>
@@ -850,7 +1278,9 @@
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.header.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.footer.css}}" />
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.aside.css}}" />
+   <?php if($TEMP['#settings']['nodejs'] == 'on'){ ?>
    <script src="{$theme->{assets/js/socket.io.min.js}}"></script>
+   <?php } ?>
    <script src="{$theme->{assets/js/jquery-3.6.0.min.js}}"></script>
    <script type="text/javascript">
       <?php if($TEMP['#settings']['nodejs'] == 'on'){ ?>

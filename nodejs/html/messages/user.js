@@ -3,7 +3,7 @@ const SETTINGS = specific.Settings();
 
 module.exports = function(socket, temp){
     return `<li class="content_pnuser position-relative margin-l5 margin-r5 padding-l5 padding-r5`+(temp.last_text == '' ? ' is_new' : '')+`" data-id="{!user_id}">
-        <a class="content-pnmessage background-hover display-flex direction-row align-center color-black padding-t10 padding-b10 padding-l10 padding-r10`+(temp.profile_id == temp.user_id || temp.last_text == '' ? ' active' : '')+(temp.last_unseen == !0 ? ' unseen' : '')+`" href="{$url->{{#r_messages}/{!user}}}">
+        <a class="content-pnmessage hover-background display-flex direction-row align-center color-black padding-t10 padding-b10 padding-l10 padding-r10`+(temp.profile_id == temp.user_id || temp.last_text == '' ? ' active' : '')+(temp.last_unseen == !0 ? ' unseen' : '')+`" href="{$url->{{#r_messages}/{!user}}}">
             <div class="item-pnmessage overflow-hidden border-rall margin-r10">
                 <img class="content-preloader-image position-relative blur-up lazyload" src="{!avatar_s}" alt="{!username}">
             </div>
@@ -17,7 +17,7 @@ module.exports = function(socket, temp){
             </div>
         </a>
         <div class="content_pnmoptions position-absolute margin-left-auto animation-ease3s">
-            <button class="btn_pnmoptions btn-noway background-white color-blue w-36px h-36 btn-noway padding-5 background-hover opacity-0 boxshadow-grey border-rall animation-ease3s animate-tab-button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->options}">
+            <button class="btn_pnmoptions btn-noway background-white color-blue w-36px h-36 btn-noway padding-5 hover-background opacity-0 boxshadow-grey border-rall animation-ease3s animate-tab-button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->options}">
                 <svg class="icon-z vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <title>{$word->options}</title>
                     <path fill="currentColor" d="M7 12c0 1.104-.896 2-2 2s-2-.896-2-2 .896-2 2-2 2 .896 2 2zm12-2c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-7 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2z"/>

@@ -31,6 +31,7 @@ module.exports = {
     r_habeas_data: 'habeas-data',
     r_about_us: 'quienes-somos',
     r_contact: 'contactar',
+    r_show_palette: 'mostrar-paleta',
     r_logout: 'salir',
 
 

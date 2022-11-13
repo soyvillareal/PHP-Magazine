@@ -1029,7 +1029,7 @@ class Specific {
 				$last_text = $TEMP['#word']['is_writing'];
 			} else {
 				$query = ' AND deleted_fprofile = 0';
-				if(Specific::IsOwner($last_message['user_id'])){
+				if(self::IsOwner($last_message['user_id'])){
 					$query = ' AND deleted_fuser = 0';
 				}
 				if($dba->query("SELECT COUNT(*) FROM ".T_MESSAFI." WHERE message_id = ?{$query}", $last_message['id'])->fetchArray(true) > 0){
@@ -1308,25 +1308,25 @@ class Specific {
 		}
 
 		if(!empty($user['new_email'])){
-			$change_email = Specific::UserToken('change_email', $user['id'], true);
+			$change_email = self::UserToken('change_email', $user['id'], true);
 			$code = $change_email['code'];
 
 			$TEMP['code'] = $code;
 			$TEMP['username'] = $user['username'];
-			$TEMP['url'] = Specific::Url("{$RUTE['#r_change_email']}/{$change_email['token']}?{$RUTE['#p_insert']}=$code");
+			$TEMP['url'] = self::Url("{$RUTE['#r_change_email']}/{$change_email['token']}?{$RUTE['#p_insert']}=$code");
 			$TEMP['text'] = "{$TEMP['#word']['check_your_email']} {$user['new_email']}";
 			$TEMP['footer'] = $TEMP['#word']['have_been_one_who_has_carried_out'];
 			$TEMP['button'] = $TEMP['#word']['check_your_email'];
 
 			if($change_email['return']){
-				$send = Specific::SendEmail(array(
+				$send = self::SendEmail(array(
 					'from_email' => $TEMP['#settings']['smtp_username'],
 				    'from_name' => $TEMP['#settings']['title'],
 					'to_email' => $user['new_email'],
 					'to_name' => $user['username'],
 					'subject' => $TEMP['#word']['check_your_email'],
 					'charSet' => 'UTF-8',
-			        'text_body' => Specific::Maket('emails/includes/send-code'),
+			        'text_body' => self::Maket('emails/includes/send-code'),
 					'is_html' => true
 				));
 				if($send){
@@ -1778,12 +1778,12 @@ class Specific {
 	public static function Language(){
 		global $dba, $TEMP, $RUTE;
 
-		$lang = Specific::Filter($_GET[$RUTE['#p_language']]);
+		$lang = self::Filter($_GET[$RUTE['#p_language']]);
 
 		$language = $TEMP['#settings']['language'];
 
 		if ($TEMP['#loggedin'] == true) {
-			$user = Specific::Data(null, 4);
+			$user = self::Data(null, 4);
 			if(empty($lang)){
 			    if (in_array($user['language'], $TEMP['#languages'])) {
 			        $language = $user['language'];
@@ -1799,7 +1799,7 @@ class Specific {
 			if(!empty($lang)){
 				$language = $lang;
 			} else if(!empty($_COOKIE['language'])){
-				$language = Specific::Filter($_COOKIE['language']);	
+				$language = self::Filter($_COOKIE['language']);	
 			}
 		}
 		setcookie("language", $language, time() + 315360000, "/");
@@ -1987,6 +1987,77 @@ class Specific {
 	    return $TEMP;
 	}
 
+	public static function BuildIndexPalette($type = 'light'){
+		global $TEMP;
+
+		$palettes = json_decode($TEMP['#settings']["{$type}_palette"], true);
+		$TEMP['!type'] = $type;
+
+		foreach ($palettes as $key => $palette) {
+			$TEMP['!class'] = '';
+			$TEMP['!name'] = '';
+			$TEMP['!value'] = '';
+			$TEMP['!inputs'] = '';
+			$TEMP['!title'] = $TEMP['#word'][$key];
+
+			foreach ($palette as $k => $p) {
+				$class = "{$key}-".str_replace('_', '-', $k);
+				$name = $key;
+				if($key != 'color'){
+					$name = "{$key}-color";
+					if($key == 'hover'){
+						$name = $p['type'];
+						$p = $p['value'];
+					}
+				}
+				$TEMP['!class'] = $class;
+				$TEMP['!name'] = $name;
+				$TEMP['!value'] = $p;
+				$TEMP['!inputs'] .= self::Maket('includes/wrapper/palette');
+			}
+			$TEMP["{$type}_palettes"] .= self::Maket('includes/wrapper/palettes');
+		}
+		self::DestroyMaket();
+	}
+
+	public static function BuildPalette($palette, $type = 'light'){
+		global $TEMP;
+
+		$palette = html_entity_decode($palette);
+        $palette = urldecode($palette);
+        $palette = explode('&', $palette);
+
+        $old_palette = json_decode($TEMP['#settings']["{$type}_palette"], true);
+
+        $new_palette = array();
+        foreach ($palette as $value) {
+            $values = explode('=', $value);
+            $key_0 = explode('-', $values[0])[0];
+            $key_1 = str_replace("{$key_0}-", '', $values[0]);
+
+            if($key_0 != 'hover'){
+                $new_palette[$key_0][$key_1] = $values[1];
+            } else {
+                $new_palette[$key_0][$key_1]['type'] = $old_palette[$key_0][$key_1]['type'];
+                $new_palette[$key_0][$key_1]['value'] = $values[1];
+            }
+        }
+		
+		return json_encode($new_palette);
+	}
+
+	public static function ColorPalette($html, $type = 'light'){
+		global $TEMP;
+	    return preg_replace_callback('/{\$'.$type.'_palette->(.+?)->(.+?)}/i', function($matches) use ($TEMP, $type) {
+			$palette = json_decode($TEMP['#settings']["{$type}_palette"], true);
+			$p = $palette[$matches[1]][str_replace('_', '-', $matches[2])];
+			if($matches[1] == 'hover'){
+				$p = $p['value'];
+			}
+	        return (isset($p) ? $p : "");
+	    }, $html);
+	}
+	
 	public static function Maket($page, $ext = 'html'){
 	    global $TEMP, $RUTE, $site_url;
 
@@ -1998,6 +2069,11 @@ class Specific {
 	    require($file);
 	    $html = ob_get_contents();
 	    ob_end_clean();
+
+
+
+		$html = self::ColorPalette($html);
+		$html = self::ColorPalette($html, 'dark');
 
 	    $page = preg_replace_callback('/{\$word->(.+?)}/i', function($matches) use ($TEMP) {
 	        return (isset($TEMP['#word'][$matches[1]])?$TEMP['#word'][$matches[1]]:"");
