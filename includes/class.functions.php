@@ -2,7 +2,8 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-class Specific {
+
+class Functions {
 
 	public static function GetFile($file, $type = 1, $size = ''){
 	    global $TEMP;
@@ -590,14 +591,14 @@ class Specific {
 			$comment_id = $comment['id'];
 			
 			if(!empty($comment)){
-				$comment = self::CommentMaket($comment, $order, 'featured-comment');	
+				$comment = self::BuildComment($comment, $order, 'featured-comment');	
 			}
 		} else {
 			$comment = $dba->query('SELECT * FROM '.T_COMMENTS.' WHERE (SELECT comment_id FROM '.T_REPLY.' WHERE id = ?) = id', $data_id)->fetchArray();
 			$comment_id = $comment['id'];
 
 			if(!empty($comment)){
-				$comment = self::CommentMaket($comment, $order, 'featured-reply');	
+				$comment = self::BuildComment($comment, $order, 'featured-reply');	
 			}
 		}
 
@@ -641,10 +642,10 @@ class Specific {
 		if(!empty($comments)){
 			$html = '';
 			foreach ($comments as $comment) {
-				$comment = self::CommentMaket($comment, $order);
+				$comment = self::BuildComment($comment, $order);
 				$html .= $comment['html'];
 			}
-			self::DestroyMaket();
+			self::DestroyBuild();
 
 			return array(
 				'return' => true,
@@ -656,7 +657,7 @@ class Specific {
 		);
 	}
 
-	public static function CommentMaket($comment = array(), $order = 'recent', $type = 'normal'){
+	public static function BuildComment($comment = array(), $order = 'recent', $type = 'normal'){
 		global $dba, $TEMP, $RUTE;
 
 		if(!empty($comment)){
@@ -678,7 +679,7 @@ class Specific {
 			$TEMP['!comment_type'] = $type;
 			if($type == 'featured-reply'){
 				$reply = $dba->query('SELECT * FROM '.T_REPLY.' WHERE id = ?', $TEMP['#featured_rid'])->fetchArray();
-				$featured_reply = self::ReplyMaket($reply, 'featured-reply');
+				$featured_reply = self::BuildReply($reply, 'featured-reply');
 
 				if($featured_reply['return']){
 					$TEMP['!featured_reply'] = $featured_reply['html'];
@@ -715,13 +716,13 @@ class Specific {
 			$TEMP['!created_date'] = date('c', $comment['created_at']);
 			$TEMP['!created_at'] = self::DateString($comment['created_at']);
 
-			$maket = 'comment';
+			$build = 'comment';
 			if($comment['pinned'] == 1){
-				$maket = 'pinned-comment';
+				$build = 'pinned-comment';
 			}
 			return array(
 				'return' => true,
-				'html' => self::Maket("post/includes/{$maket}")
+				'html' => self::Build("post/includes/{$build}")
 			);
 		}
 
@@ -730,7 +731,7 @@ class Specific {
 		);
 	}
 
-	public static function ReplyMaket($reply = array(), $type = 'normal'){
+	public static function BuildReply($reply = array(), $type = 'normal'){
 		global $dba, $TEMP, $RUTE;
 
 		if(!empty($reply)){
@@ -771,7 +772,7 @@ class Specific {
 
 			return array(
 				'return' => true,
-				'html' => self::Maket('post/includes/reply')
+				'html' => self::Build('post/includes/reply')
 			);
 		}
 
@@ -800,7 +801,7 @@ class Specific {
 		if(!empty($replies)){
 			$html = '';
 			foreach ($replies as $reply) {
-				$reply = self::ReplyMaket($reply);
+				$reply = self::BuildReply($reply);
 				$html .= $reply['html'];
 			}
 
@@ -1112,7 +1113,7 @@ class Specific {
 
 		
 
-		$data['html'] = self::Maket("messages/includes/user");
+		$data['html'] = self::Build("messages/includes/user");
 
 		return $data;
 	}
@@ -1260,7 +1261,7 @@ class Specific {
 	    if($data['is_html'] == true){
 	    	$TEMP['title'] = $subject;
 		    $TEMP['body'] = $content;
-		    $content = self::Maket('emails/content');
+		    $content = self::Build('emails/content');
 	    }
 	    $mail->IsHTML($data['is_html']);
 	    if(!empty($data['reply_to'])){
@@ -1326,7 +1327,7 @@ class Specific {
 					'to_name' => $user['username'],
 					'subject' => $TEMP['#word']['check_your_email'],
 					'charSet' => 'UTF-8',
-			        'text_body' => self::Maket('emails/includes/send-code'),
+			        'text_body' => self::Build('emails/includes/send-code'),
 					'is_html' => true
 				));
 				if($send){
@@ -1450,19 +1451,19 @@ class Specific {
 						$TEMP['content_widget'] = $widget['content'];
 						
 						if($widget['type'] == 'htop'){
-							$maket = 'home/includes/advertisement-home-top';
+							$build = 'home/includes/advertisement-home-top';
 						} else if($widget['type'] == 'hload'){
-							$maket = 'home/includes/advertisement-home-load';
+							$build = 'home/includes/advertisement-home-load';
 						} else if($widget['type'] == 'horizposts'){
-							$maket = 'includes/search-profile-category-tag/advertisement-horizontal-posts';
+							$build = 'includes/search-profile-category-tag/advertisement-horizontal-posts';
 						} else if($widget['type'] == 'aside'){
-							$maket = 'includes/search-post-profile-category-tag/advertisement-aside';
+							$build = 'includes/search-post-profile-category-tag/advertisement-aside';
 						} else if(in_array($widget['type'], array('pbody', 'ptop'))){
 							$advertisement = 'advertisement-post-top';
 							if($widget['type'] == 'pbody'){
 								$advertisement = 'advertisement-body';
 							}
-							$maket = "post/includes/{$advertisement}";
+							$build = "post/includes/{$advertisement}";
 
 							$image_exists = preg_match('/<img [^>]*src=[\'|"](.+?)[\'|"][^>]*>/is', $widget['content'], $image);
 							if($image_exists > 0){
@@ -1481,7 +1482,7 @@ class Specific {
 									if($height > 0){
 										$TEMP['#height'] = $height[1];
 									}
-									$maket = "amp/includes/advertisement-image";
+									$build = "amp/includes/advertisement-image";
 								}
 							} else {
 								if($root == 'amp'){
@@ -1490,14 +1491,14 @@ class Specific {
 										preg_match('/data-ad-slot=[\'|"]([^\"]+)[\'|"]/is', $widget['content'], $ad_slot);
 										$TEMP['ad_client'] = $ad_client[1];
 										$TEMP['ad_slot'] = $ad_slot[1];
-										$maket = "amp/includes/{$advertisement}";
+										$build = "amp/includes/{$advertisement}";
 									} else {
 										return $data;
 									}
 								}
 							}
 						}
-						$data['html'] = self::Maket($maket);
+						$data['html'] = self::Build($build);
 					} else {
 						$data['return'] = false;
 					}
@@ -1603,7 +1604,7 @@ class Specific {
 		);
 	}
 
-	public static function MaketFrame($url, $attrs = array(), $default = true, $is_amp = false){
+	public static function BuildFrame($url, $attrs = array(), $default = true, $is_amp = false){
 		if(!is_array($attrs)){
 			$attrs = html_entity_decode($attrs);
 			$attrs = json_decode($attrs, true);
@@ -1976,7 +1977,7 @@ class Specific {
 		return str_ireplace(array("<br />", "<br>", "<br/>"), "\r\n", $text);
 	}
 
-	public static function DestroyMaket(){
+	public static function DestroyBuild(){
 	    global $TEMP;
 	    unset($TEMP['!data']);
 	    foreach ($TEMP as $key => $value) {
@@ -2013,11 +2014,11 @@ class Specific {
 				$TEMP['!class'] = $class;
 				$TEMP['!name'] = $name;
 				$TEMP['!value'] = $p;
-				$TEMP['!inputs'] .= self::Maket('includes/wrapper/palette');
+				$TEMP['!inputs'] .= self::Build('includes/wrapper/palette');
 			}
-			$TEMP["{$type}_palettes"] .= self::Maket('includes/wrapper/palettes');
+			$TEMP["{$type}_palettes"] .= self::Build('includes/wrapper/palettes');
 		}
-		self::DestroyMaket();
+		self::DestroyBuild();
 	}
 
 	public static function BuildPalette($palette, $type = 'light'){
@@ -2058,7 +2059,7 @@ class Specific {
 	    }, $html);
 	}
 	
-	public static function Maket($page, $ext = 'html'){
+	public static function Build($page, $ext = 'html'){
 	    global $TEMP, $RUTE, $site_url;
 
 	    $file = "./themes/{$TEMP['#settings']['theme']}/html/{$page}.{$ext}";

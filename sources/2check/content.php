@@ -1,19 +1,19 @@
 <?php 
-$tokenu = Specific::Filter($_GET['tokenu']);
-$TEMP['#descode'] = Specific::Filter($_GET[$RUTE['#p_insert']]);
+$tokenu = Functions::Filter($_GET['tokenu']);
+$TEMP['#descode'] = Functions::Filter($_GET[$RUTE['#p_insert']]);
 if ($TEMP['#loggedin'] === true || $TEMP['#settings']['2check'] == 'off' || empty($tokenu)) {
-	header("Location: " . Specific::Url());
+	header("Location: " . Functions::Url());
 	exit();
 }
 
 $_2check = $dba->query('SELECT expires, COUNT(*) as count FROM '.T_TOKEN.' WHERE 2check = ?', $tokenu)->fetchArray();
 
-$page = Specific::ValidateToken($_2check['expires'], '2check') || $_2check['count'] == 0 || (strlen($TEMP['#descode']) != 6 && !empty($TEMP['#descode'])) ? 'invalid-auth' : 'check-code';
+$page = Functions::ValidateToken($_2check['expires'], '2check') || $_2check['count'] == 0 || (strlen($TEMP['#descode']) != 6 && !empty($TEMP['#descode'])) ? 'invalid-auth' : 'check-code';
 
 $TEMP['title'] = $TEMP['#word']['2check'];
 $TEMP['type'] = '2check';
 $TEMP['token'] = $tokenu;
-$TEMP['url'] = Specific::Url($RUTE['#r_2check']);
+$TEMP['url'] = Functions::Url($RUTE['#r_2check']);
 if(!empty($_GET[$RUTE['#p_insert']])){
 	$TEMP['desone'] = substr($TEMP['#descode'], 0, 1);
 	$TEMP['destwo'] = substr($TEMP['#descode'], 1, 1);
@@ -28,5 +28,5 @@ $TEMP['#title']       = $TEMP['#word']['2check'] . ' - ' . $TEMP['#settings']['t
 $TEMP['#description'] = $TEMP['#settings']['description'];
 $TEMP['#keyword']     = $TEMP['#settings']['keyword'];
 
-$TEMP['#content']     = Specific::Maket("auth/$page/content");
+$TEMP['#content']     = Functions::Build("auth/$page/content");
 ?>

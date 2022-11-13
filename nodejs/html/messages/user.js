@@ -1,5 +1,5 @@
-var specific = require(`${global.TEMP.path}/nodejs/includes/specific`);
-const SETTINGS = specific.Settings();
+var functions = require('../../includes/functions');
+const SETTINGS = functions.Settings();
 
 module.exports = function(socket, temp){
     return `<li class="content_pnuser position-relative margin-l5 margin-r5 padding-l5 padding-r5`+(temp.last_text == '' ? ' is_new' : '')+`" data-id="{!user_id}">

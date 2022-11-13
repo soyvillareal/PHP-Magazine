@@ -22,7 +22,6 @@ app.get('/', function(req, res, next) {
 
 
 global.TEMP = {
-    path: path.join(__dirname, '../'),
     io: require('socket.io')(server),
     app: app
 };

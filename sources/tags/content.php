@@ -1,33 +1,33 @@
 <?php
 
-$label = Specific::Filter($_GET['label']);
+$label = Functions::Filter($_GET['label']);
 
 if(empty($label)){
-	header("Location: " . Specific::Url('404'));
+	header("Location: " . Functions::Url('404'));
 	exit();
 }
 
 $label = $dba->query('SELECT * FROM '.T_LABEL.' WHERE slug = ?', $label)->fetchArray();
 
 if(empty($label)){
-	header("Location: " . Specific::Url('404'));
+	header("Location: " . Functions::Url('404'));
 	exit();
 }
 
 $TEMP['#page'] = 'tags';
 
-$label_load = Load::Tag($label['id']);
+$label_load = Loads::Tag($label['id']);
 
 $TEMP['tag'] = ucwords($label['name']);
 $TEMP['catag_id'] = $label['id'];
 $TEMP['posts_result'] = $label_load['html'];
 
 if($label_load['return']){
-	$widget = Specific::GetWidget('horizposts');
+	$widget = Functions::GetWidget('horizposts');
 	if($widget['return']){
 		$TEMP['posts_result'] .= $widget['html'];
 	}
-	$widget = Specific::GetWidget('aside');
+	$widget = Functions::GetWidget('aside');
 	if($widget['return']){
 		$TEMP['content_aad'] = $widget['html'];
 	}
@@ -48,23 +48,23 @@ if(!empty($TEMP['#related_cat'])){
 		$TEMP['!key'] += 1;
 		$TEMP['!title'] = $rlc['title'];
 		$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-		$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
-		$TEMP['!url'] = Specific::Url($rlc['slug']);
-		$TEMP['!thumbnail'] = Specific::GetFile($rlc['thumbnail'], 1, 's');
+		$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+		$TEMP['!url'] = Functions::Url($rlc['slug']);
+		$TEMP['!thumbnail'] = Functions::GetFile($rlc['thumbnail'], 1, 's');
 		$TEMP['!published_date'] = date('c', $rlc['published_at']);
-		$TEMP['!published_at'] = Specific::DateString($rlc['published_at']);
-		$TEMP['related_aside'] .= Specific::Maket('includes/search-post-profile-category-tag/related-aside');
+		$TEMP['!published_at'] = Functions::DateString($rlc['published_at']);
+		$TEMP['related_aside'] .= Functions::Build('includes/search-post-profile-category-tag/related-aside');
 	}
-	Specific::DestroyMaket();
+	Functions::DestroyBuild();
 }
 
-$TEMP['form_newsletter'] = Specific::Maket('includes/search-post-profile-category-tag/includes/form-newsletter');
-$TEMP['newsletter'] = Specific::Maket('includes/search-post-profile-category-tag/newsletter');
+$TEMP['form_newsletter'] = Functions::Build('includes/search-post-profile-category-tag/includes/form-newsletter');
+$TEMP['newsletter'] = Functions::Build('includes/search-post-profile-category-tag/newsletter');
 
 
 $TEMP['#title']       = $TEMP['tag'] . ' - ' . $TEMP['#settings']['title'];
 $TEMP['#description'] = $TEMP['#settings']['description'];
 $TEMP['#keyword']     = $TEMP['#settings']['keyword'];
 
-$TEMP['#content']     = Specific::Maket("tags/content");
+$TEMP['#content']     = Functions::Build("tags/content");
 ?>

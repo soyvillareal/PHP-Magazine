@@ -2,18 +2,18 @@
 if($TEMP['#loggedin'] == true){
 	$TEMP['#data'] = $TEMP['#user'];
 	if($TEMP['#moderator'] == true){
-		$user_id = Specific::Filter($_POST['user_id']);
+		$user_id = Functions::Filter($_POST['user_id']);
 		if(!empty($user_id) && $TEMP['#user']['id'] != $user_id){
-			$TEMP['#data'] = Specific::Data($user_id);
+			$TEMP['#data'] = Functions::Data($user_id);
 		}
 	}
 	if($one == 'account'){
-		$input = Specific::Filter($_POST['input']);
-		$value = Specific::Filter($_POST['value']);
+		$input = Functions::Filter($_POST['input']);
+		$value = Functions::Filter($_POST['value']);
 
 		if(in_array($input, array('username', 'new_email', 'name', 'surname', 'about', 'birthday', 'gender', 'newsletter', '2check', 'facebook', 'twitter', 'instagram', 'main_sonet', 'contact_email', 'followers', 'messages'))){
 			if(in_array($input, array('followers', 'messages'))){
-				$shows = Specific::Shows($input, $value);
+				$shows = Functions::Shows($input, $value);
 				if($shows['return']){
 					$deliver = $shows['data'];
 				}
@@ -77,7 +77,7 @@ if($TEMP['#loggedin'] == true){
 													if($input == 'username'){
 														$time = strtotime("+3 month, 12:00am", time());
 														$update = ", user_changed = $time";
-														$deliver['EM'] = $TEMP['#word']['have_already_changed_username_change_day'].Specific::DateFormat($time);
+														$deliver['EM'] = $TEMP['#word']['have_already_changed_username_change_day'].Functions::DateFormat($time);
 													} else if($input == 'about'){
 														if(empty($trim_value)){
 															$update = ", about = NULL";
@@ -85,7 +85,7 @@ if($TEMP['#loggedin'] == true){
 													} else if($input == 'birthday'){
 														$time = time();
 														$update = ', birthday_changed = '.$time;
-														$deliver['EM'] = $TEMP['#word']['just_changed_date_birth_day'].Specific::DateFormat($time);
+														$deliver['EM'] = $TEMP['#word']['just_changed_date_birth_day'].Functions::DateFormat($time);
 													} else if($input == 'new_email'){
 														if($TEMP['#settings']['verify_email'] == 'on'){
 															if($TEMP['#data']['email'] == $value){
@@ -129,7 +129,7 @@ if($TEMP['#loggedin'] == true){
 															$deliver['M'] = $TEMP['#word'][$input];
 														} else {
 															if($input == 'birthday'){
-																$date_of_birth = Specific::DateFormat($value);
+																$date_of_birth = Functions::DateFormat($value);
 																$deliver['M'] = "{$TEMP['#word']['date_of_birth']} ({$date_of_birth})";
 															} else if($input == 'gender'){
 																$deliver['M'] = ucfirst($TEMP['#word']['gender'])." ({$TEMP['#word'][$value]})";
@@ -145,7 +145,7 @@ if($TEMP['#loggedin'] == true){
 																$deliver['M'] = "{$TEMP['#word']['main_social_network']} (".$TEMP['#word']["{$value}_"].")";
 															} else if($input == 'new_email'){
 																if($send_email){
-																	Specific::SendChangeEmailToken($TEMP['#data'], $value);
+																	Functions::SendChangeEmailToken($TEMP['#data'], $value);
 																}
 															} else if($input == 'contact_email'){
 																$deliver['M'] = "{$TEMP['#word']['contact_email']} ({$value})";
@@ -202,21 +202,21 @@ if($TEMP['#loggedin'] == true){
 			} else {
 				if(in_array($value, array('disabled', 'enabled'))){
 					if($dba->query('SELECT COUNT(*) FROM '.T_NEWSLETTER.' WHERE email = ?', $TEMP['#data']['email'])->fetchArray(true) == 0){
-						$slug = Specific::RandomKey(12, 16);
+						$slug = Functions::RandomKey(12, 16);
 						if($dba->query('SELECT COUNT(*) FROM '.T_NEWSLETTER.' WHERE slug = ?', $slug)->fetchArray(true) > 0){
-							$slug = Specific::RandomKey(12, 16);
+							$slug = Functions::RandomKey(12, 16);
 						}
 						if($dba->query('INSERT INTO '.T_NEWSLETTER.' (slug, email, created_at) VALUES (?, ?, ?)', $slug, $TEMP['#data']['email'], time())->returnStatus()){
 							$deliver = array(
 								'S' => 200,
 								'M' => "{$TEMP['#word']['newsletter_settings']} ({$TEMP['#word'][$value]})",
-								'HT' => "{$TEMP['#word']['configuration_tells_send_news']} <a class='color-blue hover-button animation-ease3s' href='".Specific::Url("{$RUTE['#r_newsletter']}/{$slug}")."' target='_self'>{$TEMP['#word']['see_detailed_settings']}</a>"
+								'HT' => "{$TEMP['#word']['configuration_tells_send_news']} <a class='color-blue hover-button animation-ease3s' href='".Functions::Url("{$RUTE['#r_newsletter']}/{$slug}")."' target='_self'>{$TEMP['#word']['see_detailed_settings']}</a>"
 							);
 						}
 					} else {
 						if($dba->query('UPDATE '.T_NEWSLETTER.' SET reason = NULL, status = ? WHERE email = ?', $value, $TEMP['#data']['email'])->returnStatus()){
 							$slug = $dba->query('SELECT slug FROM '.T_NEWSLETTER.' WHERE email = ?', $TEMP['#data']['email'])->fetchArray(true);
-							$deliver['HT'] = $value == 'enabled' ? "{$TEMP['#word']['configuration_tells_send_news']} <a class='color-blue hover-button animation-ease3s' href='".Specific::Url("{$RUTE['#r_newsletter']}/{$slug}")."' target='_self'>{$TEMP['#word']['see_detailed_settings']}</a>" : $TEMP['#word']['configuration_tells_send_news'];
+							$deliver['HT'] = $value == 'enabled' ? "{$TEMP['#word']['configuration_tells_send_news']} <a class='color-blue hover-button animation-ease3s' href='".Functions::Url("{$RUTE['#r_newsletter']}/{$slug}")."' target='_self'>{$TEMP['#word']['see_detailed_settings']}</a>" : $TEMP['#word']['configuration_tells_send_news'];
 							$deliver['S'] = 200;
 							$deliver['M'] = "{$TEMP['#word']['newsletter_settings']} ({$TEMP['#word'][$value]})";
 						}
@@ -225,12 +225,12 @@ if($TEMP['#loggedin'] == true){
 			}
 		}
 	} else if($one == 'shows'){
-		$shows = Specific::Shows($_POST['input'], $_POST['show']);
+		$shows = Functions::Shows($_POST['input'], $_POST['show']);
 		if($shows['return']){
 			$deliver = $shows['data'];
 		}
 	} else if($one == 'send-code'){
-		$send_change_email_token = Specific::SendChangeEmailToken($TEMP['#data']);
+		$send_change_email_token = Functions::SendChangeEmailToken($TEMP['#data']);
 
 		if($send_change_email_token['return']){
 			$deliver = array(
@@ -245,11 +245,11 @@ if($TEMP['#loggedin'] == true){
 			);
 		}
 	} else if($one == 'verify-code'){
-		$code = Specific::Filter($_POST['code']);
+		$code = Functions::Filter($_POST['code']);
 		if(!empty($code)){
 			$user_id = $dba->query("SELECT user_id FROM ".T_TOKEN." WHERE change_email = ?", md5($code))->fetchArray(true);
 			if (!empty($user_id)) {
-				$change_email = Specific::UserToken('change_email', $user_id);
+				$change_email = Functions::UserToken('change_email', $user_id);
 				if($change_email['return']){
 					if($dba->query('UPDATE '.T_USER.' SET email = ?, new_email = NULL, type = "normal" WHERE id = ?', $TEMP['#data']['new_email'], $TEMP['#data']['id'])->returnStatus()){
 						$deliver['S'] = 200;
@@ -270,7 +270,7 @@ if($TEMP['#loggedin'] == true){
 	} else if($one == 'upload-avatar'){
         if(!empty($_FILES['avatar'])){
             if(!empty($_FILES['avatar']['tmp_name'])){
-                $upload_avatar = Specific::UploadAvatar($_FILES);
+                $upload_avatar = Functions::UploadAvatar($_FILES);
                 if ($upload_avatar['return']) {
                     if($TEMP['#data']['avatar'] != 'default-holder'){
                         unlink($TEMP['#data']['ex_avatar_b']);
@@ -302,16 +302,16 @@ if($TEMP['#loggedin'] == true){
                 unlink($TEMP['#data']['ex_avatar_s']);
 	        	$deliver = array(
 	        		'S' => 200,
-	        		'AV' => Specific::GetFile('default-holder', 5, 's'),
+	        		'AV' => Functions::GetFile('default-holder', 5, 's'),
 	        		'EM' => $TEMP['#word']['upload_a_picture'],
 	        		'ED' => $TEMP['#word']['delete']
 	        	);
 	        }
 	    }
     } else if($one == 'change-password'){
-		$current_password = Specific::Filter($_POST['current_password']);
-		$password = Specific::Filter($_POST['password']);
-		$re_password = Specific::Filter($_POST['re_password']);
+		$current_password = Functions::Filter($_POST['current_password']);
+		$password = Functions::Filter($_POST['password']);
+		$re_password = Functions::Filter($_POST['re_password']);
 
 		if(!empty($current_password) && !empty($password) && !empty($re_password) && $password == $re_password){
 			if(password_verify($current_password, $TEMP['#data']['password'])){
@@ -319,10 +319,10 @@ if($TEMP['#loggedin'] == true){
 				if ($dba->query('UPDATE '.T_USER.' SET password = ? WHERE id = ?', $password, $TEMP['#data']['id'])->returnStatus()) {
 					$deliver['S'] = 200;
 
-					$return = Specific::Url("{$RUTE['#r_settings']}/{$RUTE['#r_reset_password']}");
+					$return = Functions::Url("{$RUTE['#r_settings']}/{$RUTE['#r_reset_password']}");
 					$return = urlencode($return);
 
-					$deliver['UR'] = Specific::Url("{$RUTE['#r_login']}?{$RUTE['#p_return']}={$return}");
+					$deliver['UR'] = Functions::Url("{$RUTE['#r_login']}?{$RUTE['#p_return']}={$return}");
 					if($TEMP['#user']['id'] == $TEMP['#data']['id']){
 						setcookie('_LOGIN_TOKEN', null, -1, '/');
 						if (isset($_COOKIE['_SAVE_SESSION'])){
@@ -331,7 +331,7 @@ if($TEMP['#loggedin'] == true){
 		                session_destroy();
 					} else {
 						if($TEMP['#moderator'] == true){
-							$deliver['UR'] = Specific::Url("{$RUTE['#r_settings']}/{$RUTE['#r_reset_password']}?{$RUTE['#p_user_id']}={$TEMP['#data']['id']}");
+							$deliver['UR'] = Functions::Url("{$RUTE['#r_settings']}/{$RUTE['#r_reset_password']}?{$RUTE['#p_user_id']}={$TEMP['#data']['id']}");
 						}
 					}
 				}
@@ -344,7 +344,7 @@ if($TEMP['#loggedin'] == true){
 			}
 		}
 	} else if ($one == 'delete-session'){
-    	$session_id = Specific::Filter($_POST['session_id']);
+    	$session_id = Functions::Filter($_POST['session_id']);
         if (!empty($session_id)) {
 	        $session = $dba->query('SELECT user_id, token FROM '.T_SESSION.' WHERE id = ?', $session_id)->fetchArray();
 	        if (!empty($session)) {
@@ -357,28 +357,28 @@ if($TEMP['#loggedin'] == true){
 							    setcookie('_SAVE_SESSION', null, -1, '/');
 							}
 		                    session_destroy();
-		                    $deliver['UR'] = Specific::Url($RUTE['#r_login']);
+		                    $deliver['UR'] = Functions::Url($RUTE['#r_login']);
 		                }
 		            }
 		        }
 	        }
 	    }
     } else if($one == 'table-sessions'){
-        $page = Specific::Filter($_POST['page_id']);
+        $page = Functions::Filter($_POST['page_id']);
         if(!empty($page) && is_numeric($page) && isset($page) && $page > 0){
             $html = "";
             $user_sessions = $dba->query("SELECT * FROM ".T_SESSION." WHERE user_id = {$TEMP['#data']['id']} ORDER BY id DESC LIMIT ? OFFSET ?", 10, $page)->fetchAll();
             if (!empty($user_sessions)) {
                 foreach ($user_sessions as $value) {
                     $TEMP['!id'] = $value['id'];
-                    $session = Specific::GetSessions($value);
+                    $session = Functions::GetSessions($value);
                     $TEMP['!ip'] = $session['ip'];
                     $TEMP['!browser'] = $session['browser'];
                     $TEMP['!platform'] = $session['platform'];
-                    $TEMP['!created_at'] = Specific::DateFormat($value['created_at']);
-                    $html .= Specific::Maket("settings/logins/includes/sessions");
+                    $TEMP['!created_at'] = Functions::DateFormat($value['created_at']);
+                    $html .= Functions::Build("settings/logins/includes/sessions");
                 }
-                Specific::DestroyMaket();
+                Functions::DestroyBuild();
             }
             $deliver = array(
             	'S' => 200,
@@ -386,7 +386,7 @@ if($TEMP['#loggedin'] == true){
             );
         }
     } else if ($one == 'unlock-user'){
-    	$profile_id = Specific::Filter($_POST['profile_id']);
+    	$profile_id = Functions::Filter($_POST['profile_id']);
         if (!empty($profile_id)) {
 	        if ($dba->query('SELECT COUNT(*) FROM '.T_USER.' WHERE id = ? AND status = "active"', $profile_id)->fetchArray(true) > 0) {
 		        if ($dba->query('DELETE FROM '.T_BLOCK.' WHERE user_id = ? AND profile_id = ?', $TEMP['#data']['id'], $profile_id)->returnStatus()) {
@@ -395,13 +395,13 @@ if($TEMP['#loggedin'] == true){
 	        }
 	    }
     } else if($one == 'table-blocked-users'){
-        $page = Specific::Filter($_POST['page_id']);
+        $page = Functions::Filter($_POST['page_id']);
         if(!empty($page) && is_numeric($page) && isset($page) && $page > 0){
             $html = "";
             $blocked_users = $dba->query("SELECT * FROM ".T_BLOCK." b WHERE user_id = {$TEMP['#data']['id']} AND (SELECT status FROM ".T_USER." WHERE id = b.profile_id) = 'active' ORDER BY id DESC LIMIT ? OFFSET ?", 10, $page)->fetchAll();
             if (!empty($blocked_users)) {
                 foreach ($blocked_users as $blocked) {
-                	$user = Specific::Data($blocked['profile_id'], array(
+                	$user = Functions::Data($blocked['profile_id'], array(
 			            'username',
 			            'name',
 			            'surname'
@@ -409,11 +409,11 @@ if($TEMP['#loggedin'] == true){
 
         			$TEMP['!id'] = $blocked['profile_id'];
 			        $TEMP['!name'] = $user['username'];
-			        $TEMP['!created_at'] = Specific::DateFormat($blocked['created_at']);
+			        $TEMP['!created_at'] = Functions::DateFormat($blocked['created_at']);
 
-			        $html .= Specific::Maket("settings/blocked-users/includes/users");
+			        $html .= Functions::Build("settings/blocked-users/includes/users");
                 }
-                Specific::DestroyMaket();
+                Functions::DestroyBuild();
             }
             $deliver = array(
             	'S' => 200,
@@ -421,11 +421,11 @@ if($TEMP['#loggedin'] == true){
             );
         }
     } else if($one == 'delete-account'){
-    	$delete_command = Specific::Filter($_POST['delete_command']);
+    	$delete_command = Functions::Filter($_POST['delete_command']);
 
-    	if(Specific::IsOwner($TEMP['#data']['id']) || $TEMP['#moderator'] == true){
+    	if(Functions::IsOwner($TEMP['#data']['id']) || $TEMP['#moderator'] == true){
 	    	if($delete_command === $TEMP['#word']['DELETE_COMMAND']){
-	    		if(Specific::DeleteUser($TEMP['#data']['id'])){
+	    		if(Functions::DeleteUser($TEMP['#data']['id'])){
 	    			$deliver['S'] = 200;
 	    			if($TEMP['#user']['id'] == $TEMP['#data']['id']){
 			            setcookie('_LOGIN_TOKEN', null, -1, '/');
@@ -433,10 +433,10 @@ if($TEMP['#loggedin'] == true){
 							setcookie('_SAVE_SESSION', null, -1, '/');
 						}
 			            session_destroy();
-			            $deliver['UR'] = Specific::Url($RUTE['#r_login']);
+			            $deliver['UR'] = Functions::Url($RUTE['#r_login']);
 			        } else {
 			        	if($TEMP['#moderator'] == true){
-							$deliver['UR'] = Specific::Url($RUTE['#r_settings']);
+							$deliver['UR'] = Functions::Url($RUTE['#r_settings']);
 						}
 			        }
 	    		}

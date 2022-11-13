@@ -1,9 +1,9 @@
 <?php
-$slug = Specific::Filter($_GET['slug']);
+$slug = Functions::Filter($_GET['slug']);
 if(!empty($slug)){
     $newsletter = $dba->query('SELECT *, COUNT(*) as count FROM '.T_NEWSLETTER.' WHERE slug = ?', $slug)->fetchArray();
     if ($newsletter['count'] == 0 || $newsletter['status'] == 'disabled') {
-        header("Location: ".Specific::Url('404'));
+        header("Location: ".Functions::Url('404'));
         exit();
     }
 }
@@ -37,5 +37,5 @@ $TEMP['#title']       = $TEMP['#word']['newsletter_settings'] . ' - ' . $TEMP['#
 $TEMP['#description'] = $TEMP['#settings']['description'];
 $TEMP['#keyword']     = $TEMP['#settings']['keyword'];
 
-$TEMP['#content']     = Specific::Maket("newsletter/content");
+$TEMP['#content']     = Functions::Build("newsletter/content");
 ?>

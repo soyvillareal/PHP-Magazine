@@ -1,10 +1,10 @@
 <?php
 require_once('./includes/libraries/hybridauth/autoload.php');
-$provider = Specific::Filter($_GET[$RUTE['#p_provider']]);
+$provider = Functions::Filter($_GET[$RUTE['#p_provider']]);
 if ( $TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, array('facebook', 'twitter', 'google')) && !isset($_GET['denied'])) {
     try {
         $hybridauth = new Hybridauth\Hybridauth(array(
-            "callback" => Specific::Url("{$RUTE['#r_social_login']}?{$RUTE['#p_provider']}=$provider"),
+            "callback" => Functions::Url("{$RUTE['#r_social_login']}?{$RUTE['#p_provider']}=$provider"),
             "providers" => array(
                 // openid providers
                 "Facebook" => array(
@@ -43,15 +43,15 @@ if ( $TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arr
             }
             $user = $dba->query('SELECT id, COUNT(*) as count FROM '.T_USER.' WHERE email = ?', $user_email)->fetchArray();
             if ($user['count'] > 0) {
-                $login_token = sha1(Specific::RandomKey().md5(time()));
-                if($dba->query('INSERT INTO '.T_SESSION.' (user_id, token, details, created_at) VALUES (?, ?, ?, ?)', $user['id'], $login_token, json_encode(Specific::BrowserDetails()['details']), time())->returnStatus()){
+                $login_token = sha1(Functions::RandomKey().md5(time()));
+                if($dba->query('INSERT INTO '.T_SESSION.' (user_id, token, details, created_at) VALUES (?, ?, ?, ?)', $user['id'], $login_token, json_encode(Functions::BrowserDetails()['details']), time())->returnStatus()){
                     if($save_session == 'on'){
                         setcookie("_SAVE_SESSION", $login_token, time() + 315360000, "/");
                     }
                     $_SESSION['_LOGIN_TOKEN'] = $login_token;
                     setcookie("_LOGIN_TOKEN", $login_token, time() + 315360000, "/");
-                    $dba->query('UPDATE '.T_USER.' SET ip = ? WHERE id = ?', Specific::GetClientIp(), $user['id']); 
-                    header("Location: " . Specific::Url());
+                    $dba->query('UPDATE '.T_USER.' SET ip = ? WHERE id = ?', Functions::GetClientIp(), $user['id']); 
+                    header("Location: " . Functions::Url());
                     exit();
                 }
             } else {
@@ -71,7 +71,7 @@ if ( $TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arr
                 $twitter_url = '';
                 if ($provider == 'facebook') {
                     $fa_social_url = @explode('/', $profile->profileURL);
-                    $facebook_url = Specific::Filter($fa_social_url[4]);
+                    $facebook_url = Functions::Filter($fa_social_url[4]);
                     if (!empty($profile->gender)) {
                         if ($profile->gender == 'male') {
                             $gender = 'male';
@@ -81,26 +81,26 @@ if ( $TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arr
                     }
                 }
                 if ($provider == 'twitter') {
-                    $twitter_url = Specific::Filter($social_url);
+                    $twitter_url = Functions::Filter($social_url);
                 }
                 if (!empty($profile->description)) {
-                    $about = Specific::Filter($profile->description);
+                    $about = Functions::Filter($profile->description);
                 }
-                $username = Specific::Filter($username);
-                $profile_image = Specific::OAuthImage($profile->photoURL, $username);
-                $email = Specific::Filter($user_email);
-                $password = Specific::Filter($password);
-                $verify_email = Specific::UserToken('verify_email')['token'];
-                $change_email = Specific::UserToken('change_email')['token'];
-                $reset_password = Specific::UserToken('reset_password')['token'];
-                $unlink_email = Specific::UserToken('unlink_email')['token'];
-                $_2check = Specific::UserToken('2check')['token'];
-                $name = Specific::Filter($name);
+                $username = Functions::Filter($username);
+                $profile_image = Functions::OAuthImage($profile->photoURL, $username);
+                $email = Functions::Filter($user_email);
+                $password = Functions::Filter($password);
+                $verify_email = Functions::UserToken('verify_email')['token'];
+                $change_email = Functions::UserToken('change_email')['token'];
+                $reset_password = Functions::UserToken('reset_password')['token'];
+                $unlink_email = Functions::UserToken('unlink_email')['token'];
+                $_2check = Functions::UserToken('2check')['token'];
+                $name = Functions::Filter($name);
                 if(!empty($profile->lastName)){
-                    $surname = Specific::Filter($profile->lastName);
+                    $surname = Functions::Filter($profile->lastName);
                 }
-                $avatar = Specific::Filter($profile_image);
-                $type = Specific::Filter($provider);
+                $avatar = Functions::Filter($profile_image);
+                $type = Functions::Filter($provider);
 
                 if(!empty($profile->email)){
                     $to_name = $name;
@@ -112,14 +112,14 @@ if ( $TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arr
                     $TEMP['provider'] = ucfirst($provider);
                     $TEMP['user'] = $username;
                     $TEMP['code'] = $code;
-                    $send = Specific::SendEmail(array(
+                    $send = Functions::SendEmail(array(
                         'from_email' => $TEMP['#settings']['smtp_username'],
                         'from_name' => $TEMP['#settings']['title'],
                         'to_email' => $profile->email,
                         'to_name' => $to_name,
                         'subject' => $TEMP['#word']['access_credentials'],
                         'charSet' => 'UTF-8',
-                        'text_body' => Specific::Maket('emails/includes/send-credentials'),
+                        'text_body' => Functions::Build('emails/includes/send-credentials'),
                         'is_html' => true
                     ));
                 }
@@ -127,15 +127,15 @@ if ( $TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arr
                 $user_id = $dba->query('INSERT INTO '.T_USER.' (username, email, password, name, surname, gender, about, facebook, twitter, avatar, status, type, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "active", ?, ?)', $username, $email, $password, $name, $surname, $gender, $about, $facebook_url, $twitter_url, $avatar, $type, time())->insertId();
                 if ($user_id) {
                     if($dba->query('INSERT INTO '.T_TOKEN.' (user_id, verify_email, change_email, reset_password, unlink_email, 2check, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)', $user_id, $verify_email, $change_email, $reset_password, $unlink_email, $_2check, time())->returnStatus()){
-                        $login_token = sha1(Specific::RandomKey().md5(time()));
-                        if($dba->query('INSERT INTO '.T_SESSION.' (user_id, token, details, created_at) VALUES (?, ?, ?, ?)', $user_id, $login_token, json_encode(Specific::BrowserDetails()['details']), time())->returnStatus()){
+                        $login_token = sha1(Functions::RandomKey().md5(time()));
+                        if($dba->query('INSERT INTO '.T_SESSION.' (user_id, token, details, created_at) VALUES (?, ?, ?, ?)', $user_id, $login_token, json_encode(Functions::BrowserDetails()['details']), time())->returnStatus()){
                             if($save_session == 'on'){
                                 setcookie("_SAVE_SESSION", $login_token, time() + 315360000, "/");
                             }
                             $_SESSION['_LOGIN_TOKEN'] = $login_token;
                             setcookie("_LOGIN_TOKEN", $login_token, time() + 315360000, "/");
-                            $dba->query('UPDATE '.T_USER.' SET ip = ? WHERE id = ?', Specific::GetClientIp(), $user_id); 
-                            header("Location: " . Specific::Url());
+                            $dba->query('UPDATE '.T_USER.' SET ip = ? WHERE id = ?', Functions::GetClientIp(), $user_id); 
+                            header("Location: " . Functions::Url());
                             exit();
                         }
                     }
@@ -147,14 +147,14 @@ if ( $TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arr
         $json = $authProvider->getHttpClient()->getResponseBody();
         if(json_decode($json, true)['errors'][0]['code'] == 89){
             $authProvider->disconnect();
-            header("Location: " . Specific::Url("{$RUTE['#r_social_login']}?{$RUTE['#p_provider']}=$provider"));
+            header("Location: " . Functions::Url("{$RUTE['#r_social_login']}?{$RUTE['#p_provider']}=$provider"));
             exit();
         }
     }*/
     catch (Exception $e) {
         if(isset($_SESSION['HYBRIDAUTH::STORAGE'])){
             unset($_SESSION['HYBRIDAUTH::STORAGE']);
-            header("Location: " . Specific::Url("{$RUTE['#r_social_login']}?{$RUTE['#p_provider']}=$provider"));
+            header("Location: " . Functions::Url("{$RUTE['#r_social_login']}?{$RUTE['#p_provider']}=$provider"));
             exit();
         }
         exit($e->getMessage());
@@ -187,11 +187,11 @@ if ( $TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arr
                 print("Provider does not support this feature.");
                 break;
         }
-        print("an error found while processing your request! <b><a href='" . Specific::Url() . "'>Try again<a></b>");
+        print("an error found while processing your request! <b><a href='" . Functions::Url() . "'>Try again<a></b>");
         */
     }
 } else {
-    header("Location: " . Specific::Url());
+    header("Location: " . Functions::Url());
     exit();
 }
 ?>

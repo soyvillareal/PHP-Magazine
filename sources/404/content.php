@@ -11,16 +11,16 @@ if(!empty($TEMP['#random_posts'])){
 
 		$TEMP['!title'] = $post['title'];
 		$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-		$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
-		$TEMP['!url'] = Specific::Url($post['slug']);
-		$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
+		$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+		$TEMP['!url'] = Functions::Url($post['slug']);
+		$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 		$TEMP['!published_date'] = date('c', $post['published_at']);
-		$TEMP['!published_at'] = Specific::DateString($post['published_at']);
+		$TEMP['!published_at'] = Functions::DateString($post['published_at']);
 
-		$TEMP['random_posts'] .= Specific::Maket('404/includes/random-posts');
+		$TEMP['random_posts'] .= Functions::Build('404/includes/random-posts');
 		$home_ids[] = $post['id'];
 	}
-	Specific::DestroyMaket();
+	Functions::DestroyBuild();
 }
 
 $TEMP['#page'] = '404';
@@ -28,5 +28,5 @@ $TEMP['#title'] = '404 - ' . $TEMP['#settings']['title'];
 $TEMP['#description'] = $TEMP['#settings']['description'];
 $TEMP['#keyword'] = $TEMP['#settings']['keyword'];
 
-$TEMP['#content'] = Specific::Maket('404/content');
+$TEMP['#content'] = Functions::Build('404/content');
 ?>

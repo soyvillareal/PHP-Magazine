@@ -1,11 +1,11 @@
 <?php 
-$input = Specific::Filter($_POST['input']);
-$type = Specific::Filter($_POST['type']);
-$page = Specific::Filter($_POST['page']);
+$input = Functions::Filter($_POST['input']);
+$type = Functions::Filter($_POST['type']);
+$page = Functions::Filter($_POST['page']);
 $dates = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
-$re_password = Specific::Filter($_POST['re-password']);
+$re_password = Functions::Filter($_POST['re-password']);
 if($type == 're-password'){
-	$re_password = Specific::Filter($_POST['password']);
+	$re_password = Functions::Filter($_POST['password']);
 }
 if(!empty($input) && !empty($type)){
 	if ($dba->query('SELECT COUNT(*) FROM user WHERE dni = "'.$input.'"')->fetchArray() > 0 && $type == 'dni') {

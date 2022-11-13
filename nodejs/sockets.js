@@ -1,5 +1,5 @@
 const connection = require('./mysql/DB'),
-      specific = require('./includes/specific'),
+      functions = require('./includes/functions'),
       info = require('./info'),
       T = require('./includes/tables'),
       R = require('./includes/rutes'),
@@ -18,7 +18,7 @@ module.exports = async function(socket){
     const TEMP = global.TEMP[socket.id],
           USER = TEMP.user,
           WORD = TEMP.word,
-          SETTINGS = specific.Settings(),
+          SETTINGS = functions.Settings(),
           PAGE = socket.handshake.query.page,
           blocked_inusers = TEMP.blocked_inusers,
           blocked_arrusers = TEMP.blocked_arrusers,
@@ -36,8 +36,8 @@ module.exports = async function(socket){
     }));
     
     socket.on('setInpreaction', async function(e, x){
-        var post_id = specific.Filter(e.post_id),
-            type = specific.Filter(e.type);
+        var post_id = functions.Filter(e.post_id),
+            type = functions.Filter(e.type);
 
         if(post_id != '' && !isNaN(post_id) && ['like', 'dislike'].indexOf(type) != -1){
 			connection.query(`SELECT *, COUNT(*) as count FROM ${T.POST} WHERE id = ? AND status = "approved"`, [post_id], function(error, result, field){
@@ -73,7 +73,7 @@ module.exports = async function(socket){
                                                     CR: likes
                                                 };
                                                 if(result.affectedRows > 0){
-                                                    specific.emitChangesOffme(socket, 'setOutpreaction', deliver);
+                                                    functions.emitChangesOffme(socket, 'setOutpreaction', deliver);
                                                     x(deliver);
                                                 } else {
                                                     x(ERR)
@@ -120,12 +120,12 @@ module.exports = async function(socket){
                                 var likes = (post.likes+1);
                                 await query(`UPDATE ${T.POST} SET likes = ? WHERE id = ?`, [likes, post_id]).then(async function(res){
                                     if(res.affectedRows > 0){
-                                        await query(`INSERT INTO ${T.REACTION} (user_id, reacted_id, type, place, created_at) VALUES (?, ?, "like", "post", ?)`, [USER.id, post_id, specific.Time()]).then(function(res){
+                                        await query(`INSERT INTO ${T.REACTION} (user_id, reacted_id, type, place, created_at) VALUES (?, ?, "like", "post", ?)`, [USER.id, post_id, functions.Time()]).then(function(res){
                                             if(res.insertId > 0){
                                                 deliver.S = 200;
                                                 deliver.AB = `.btn_plike[data-id=${post.id}]`;
                                                 deliver.CR = likes;
-                                                specific.SetNotify(socket, {
+                                                functions.SetNotify(socket, {
                                                     user_id: post.user_id,
                                                     notified_id: res.insertId,
                                                     type: 'preact',
@@ -140,7 +140,7 @@ module.exports = async function(socket){
                                 }).catch(function(err){
                                     x(ERR)
                                 })
-                                specific.emitChangesOffme(socket, 'setOutpreaction', deliver);
+                                functions.emitChangesOffme(socket, 'setOutpreaction', deliver);
                                 x(deliver);
                             }
                         })
@@ -172,7 +172,7 @@ module.exports = async function(socket){
                                                     CR: dislikes
                                                 };
                                                 if(result.affectedRows > 0){
-                                                    specific.emitChangesOffme(socket, 'setOutpreaction', deliver);
+                                                    functions.emitChangesOffme(socket, 'setOutpreaction', deliver);
                                                     x(deliver);
                                                 } else {
                                                     x(ERR)
@@ -220,12 +220,12 @@ module.exports = async function(socket){
                                 var dislikes = (post.dislikes+1);
                                 await query(`UPDATE ${T.POST} SET dislikes = ? WHERE id = ?`, [dislikes, post_id]).then(async function(res){
                                     if(res.affectedRows > 0){
-                                        await query(`INSERT INTO ${T.REACTION} (user_id, reacted_id, type, place, created_at) VALUES (?, ?, "dislike", "post", ?)`, [USER.id, post_id, specific.Time()]).then(function(res){
+                                        await query(`INSERT INTO ${T.REACTION} (user_id, reacted_id, type, place, created_at) VALUES (?, ?, "dislike", "post", ?)`, [USER.id, post_id, functions.Time()]).then(function(res){
                                             if(res.insertId > 0){
                                                 deliver.S = 200;
                                                 deliver.AB = `.btn_pdislike[data-id=${post.id}]`;
                                                 deliver.CR = dislikes;
-                                                specific.SetNotify(socket, {
+                                                functions.SetNotify(socket, {
                                                     user_id: post.user_id,
                                                     notified_id: res.insertId,
                                                     type: 'preact',
@@ -242,7 +242,7 @@ module.exports = async function(socket){
                                 }).catch(function(err){
                                     x(ERR)
                                 })
-                                specific.emitChangesOffme(socket, 'setOutpreaction', deliver);
+                                functions.emitChangesOffme(socket, 'setOutpreaction', deliver);
                                 x(deliver);
                             }
                         })
@@ -254,9 +254,9 @@ module.exports = async function(socket){
     
 
     socket.on('setIncrection', async function(e, x){
-        var comment_id = specific.Filter(e.comment_id),
-            type = specific.Filter(e.type),
-		    treact = specific.Filter(e.treact);
+        var comment_id = functions.Filter(e.comment_id),
+            type = functions.Filter(e.type),
+		    treact = functions.Filter(e.treact);
         
         if(comment_id != '' && !isNaN(comment_id) && ['like', 'dislike'].indexOf(type) != -1 && ['comment', 'reply'].indexOf(treact) != -1){
 
@@ -307,7 +307,7 @@ module.exports = async function(socket){
                                             CR: likes > 0 ? (likes-1) : 0
                                         };
                                         if(result.affectedRows > 0){
-                                            specific.emitChangesOffme(socket, 'setOutcreaction', deliver);
+                                            functions.emitChangesOffme(socket, 'setOutcreaction', deliver);
                                             x(deliver);
                                         } else {
                                             x(ERR)
@@ -337,7 +337,7 @@ module.exports = async function(socket){
                                     x(ERR)
                                 })
 
-                                await query(`INSERT INTO ${T.REACTION} (user_id, reacted_id, type, place, created_at) VALUES (?, ?, "like", ?, ?)`, [USER.id, comment_id, treact, specific.Time()]).then(function(res){
+                                await query(`INSERT INTO ${T.REACTION} (user_id, reacted_id, type, place, created_at) VALUES (?, ?, "like", ?, ?)`, [USER.id, comment_id, treact, functions.Time()]).then(function(res){
                                     if(res.insertId > 0){
                                         deliver.S = 200;
                                         deliver.AB = `.btn_clike[data-id=${comment_id}]`;
@@ -347,7 +347,7 @@ module.exports = async function(socket){
                                                 return x(ERR);
                                             }
                                             if(result.length > 0){
-                                                specific.SetNotify(socket, {
+                                                functions.SetNotify(socket, {
                                                     user_id: result[0].user_id,
                                                     notified_id: res.insertId,
                                                     type: n_react,
@@ -359,7 +359,7 @@ module.exports = async function(socket){
                                     x(ERR)
                                 })
     
-                                specific.emitChangesOffme(socket, 'setOutcreaction', deliver);
+                                functions.emitChangesOffme(socket, 'setOutcreaction', deliver);
                                 x(deliver);
                             }
                         })
@@ -383,7 +383,7 @@ module.exports = async function(socket){
                                             CR: dislikes > 0 ? (dislikes-1) : 0
                                         };
                                         if(result.affectedRows > 0){
-                                            specific.emitChangesOffme(socket, 'setOutcreaction', deliver);
+                                            functions.emitChangesOffme(socket, 'setOutcreaction', deliver);
                                             x(deliver);
                                         } else {
                                             x(ERR)
@@ -414,7 +414,7 @@ module.exports = async function(socket){
                                     x(ERR)
                                 })
 
-                                await query(`INSERT INTO ${T.REACTION} (user_id, reacted_id, type, place, created_at) VALUES (?, ?, "dislike", ?, ?)`, [USER.id, comment_id, treact, specific.Time()]).then(function(res){
+                                await query(`INSERT INTO ${T.REACTION} (user_id, reacted_id, type, place, created_at) VALUES (?, ?, "dislike", ?, ?)`, [USER.id, comment_id, treact, functions.Time()]).then(function(res){
                                     if(res.insertId > 0){
                                         deliver.S = 200;
                                         deliver.AB = `.btn_cdislike[data-id=${comment_id}]`;
@@ -424,7 +424,7 @@ module.exports = async function(socket){
                                                 return x(ERR);
                                             }
                                             if(result.length > 0){
-                                                specific.SetNotify(socket, {
+                                                functions.SetNotify(socket, {
                                                     user_id: result[0].user_id,
                                                     notified_id: res.insertId,
                                                     type: n_react,
@@ -436,7 +436,7 @@ module.exports = async function(socket){
                                     x(ERR)
                                 })
 
-                                specific.emitChangesOffme(socket, 'setOutcreaction', deliver);
+                                functions.emitChangesOffme(socket, 'setOutcreaction', deliver);
                                 x(deliver);
                             }
                         })
@@ -448,7 +448,7 @@ module.exports = async function(socket){
     });
 
     socket.on('setInfollow', function(e, x){
-        var user_id = specific.Filter(e.user_id);
+        var user_id = functions.Filter(e.user_id);
 
 
         if(user_id != '' && !isNaN(user_id) && blocked_arrusers.indexOf(user_id) == -1){
@@ -457,7 +457,7 @@ module.exports = async function(socket){
                 if(error){
                     return x(ERR);
                 }
-                specific.IsOwner(socket, user_id).then(function(res){
+                functions.IsOwner(socket, user_id).then(function(res){
                     if(!res && result[0].count > 0){
                         connection.query(`SELECT COUNT(*) as count FROM ${T.FOLLOWER} WHERE user_id = ? AND profile_id = ?`, [USER.id, user_id], function(error, result, field){
                             if(error){
@@ -479,12 +479,12 @@ module.exports = async function(socket){
                                                     T: 'follow',
                                                     L: WORD.follow
                                                 };
-                                            await specific.Data(socket, user_id).then(async function(res){
+                                            await functions.Data(socket, user_id).then(async function(res){
                                                 if(res['shows']['followers'] == 'on'){
-                                                    await specific.Followers(socket, user_id).then(function(res){
+                                                    await functions.Followers(socket, user_id).then(function(res){
                                                         if(res.number > 0){
                                                             deliver.TX = res.text;
-                                                            specific.emitChangesOffme(socket, 'setOutfollow', {
+                                                            functions.emitChangesOffme(socket, 'setOutfollow', {
                                                                 TX: res.text
                                                             });
                                                         }
@@ -500,7 +500,7 @@ module.exports = async function(socket){
                                     })
                                 })
                             } else {
-                                connection.query(`INSERT INTO ${T.FOLLOWER} (user_id, profile_id, created_at) VALUES (?, ?, ?)`, [USER.id, user_id, specific.Time()], async function(error, result, field){
+                                connection.query(`INSERT INTO ${T.FOLLOWER} (user_id, profile_id, created_at) VALUES (?, ?, ?)`, [USER.id, user_id, functions.Time()], async function(error, result, field){
                                     if(error){
                                         return x(ERR);
                                     }
@@ -510,12 +510,12 @@ module.exports = async function(socket){
                                                 T: 'following',
                                                 L: WORD.following
                                             };
-                                        await specific.Data(socket, user_id).then(async function(res){
+                                        await functions.Data(socket, user_id).then(async function(res){
                                             if(res['shows']['followers'] == 'on'){
-                                                await specific.Followers(socket, user_id).then(function(res){
+                                                await functions.Followers(socket, user_id).then(function(res){
                                                     if(res.number > 0){
                                                         deliver.TX = res.text;
-                                                        specific.emitChangesOffme(socket, 'setOutfollow', {
+                                                        functions.emitChangesOffme(socket, 'setOutfollow', {
                                                             TX: res.text
                                                         });
                                                     }
@@ -526,7 +526,7 @@ module.exports = async function(socket){
                                         }).catch(function(err){
                                             console.log(err)
                                         });
-                                        specific.SetNotify(socket, {
+                                        functions.SetNotify(socket, {
                                             user_id: user_id,
                                             notified_id: result.insertId,
                                             type: 'followers',
@@ -547,17 +547,17 @@ module.exports = async function(socket){
     });
 
     socket.on('setIncomment', function(e, x){
-        var post_id = specific.Filter(e.post_id),
-            text = specific.Filter(e.text);
+        var post_id = functions.Filter(e.post_id),
+            text = functions.Filter(e.text);
         
-        if(post_id != '' && !isNaN(post_id) && text.trim() != '' && striptags(specific.htmlEntityDecode(text)).length <= SETTINGS.max_words_comments){
+        if(post_id != '' && !isNaN(post_id) && text.trim() != '' && striptags(functions.htmlEntityDecode(text)).length <= SETTINGS.max_words_comments){
             connection.query(`SELECT user_id, COUNT(*) as count FROM ${T.POST} WHERE id = ? AND user_id NOT IN (${blocked_inusers}) AND status = "approved"`, post_id, function(error, result, field){
                 if(error){
                     return x(ERR);
                 }
                 var post = result[0];
                 if(post.count > 0){
-                    var created_at = specific.Time(),
+                    var created_at = functions.Time(),
                         count_comment = 0;
                     
                     connection.query(`INSERT INTO ${T.COMMENTS} (user_id, post_id, text, created_at) VALUES (?, ?, ? ,?)`, [USER.id, post_id, text, created_at], function(error, result, field){
@@ -565,7 +565,7 @@ module.exports = async function(socket){
                             return x(ERR);
                         }
                         if(result.insertId > 0){
-                            specific.CommentMaket(socket, {
+                            functions.BuildComment(socket, {
                                 id: result.insertId,
                                 user_id: USER.id,
                                 post_id: post_id,
@@ -579,7 +579,7 @@ module.exports = async function(socket){
                                         console.log(err);
                                     });
 
-                                    await specific.SetNotify(socket, {
+                                    await functions.SetNotify(socket, {
                                         user_id: post.user_id,
                                         notified_id: result.insertId,
                                         type: 'pcomment',
@@ -587,7 +587,7 @@ module.exports = async function(socket){
                                         console.log(err);
                                     });
 
-                                    await specific.ToMention(socket, {
+                                    await functions.ToMention(socket, {
                                         text: text,
                                         user_id: post.user_id,
                                         insert_id: result.insertId
@@ -613,16 +613,16 @@ module.exports = async function(socket){
 
 
     socket.on('setInreply', function(e, x){
-		var comment_id = specific.Filter(e.comment_id),
-            text = specific.Filter(e.text);
+		var comment_id = functions.Filter(e.comment_id),
+            text = functions.Filter(e.text);
             
-        if(comment_id != '' && !isNaN(comment_id) && text.trim() != '' && striptags(specific.htmlEntityDecode(text)).length <= SETTINGS.max_words_comments){
+        if(comment_id != '' && !isNaN(comment_id) && text.trim() != '' && striptags(functions.htmlEntityDecode(text)).length <= SETTINGS.max_words_comments){
             connection.query(`SELECT COUNT(*) as count FROM ${T.POST} p WHERE (SELECT post_id FROM ${T.COMMENTS} WHERE id = ? AND post_id = p.id) = id AND user_id NOT IN (${blocked_inusers}) AND status = "approved"`, comment_id, function(error, result, field){
                 if(error){
                     return x(ERR);
                 }
                 if(result[0].count > 0){
-                    var created_at = specific.Time(),
+                    var created_at = functions.Time(),
                         count_replies = 0;
 
                     connection.query(`INSERT INTO ${T.REPLY} (user_id, comment_id, text, created_at) VALUES (?, ?, ? ,?)`, [USER.id, comment_id, text, created_at], function(error, result, field){
@@ -630,7 +630,7 @@ module.exports = async function(socket){
                             return x(ERR);
                         }
                         if(result.insertId > 0){
-                            specific.ReplyMaket(socket, {
+                            functions.BuildReply(socket, {
                                 id: result.insertId,
                                 user_id: USER.id,
                                 comment_id: comment_id,
@@ -646,7 +646,7 @@ module.exports = async function(socket){
 
                                     await query(`SELECT user_id FROM ${T.COMMENTS} WHERE id = ?`, comment_id).then(async function(res){
                                         if(res.length > 0){
-                                            await specific.SetNotify(socket, {
+                                            await functions.SetNotify(socket, {
                                                 user_id: res[0].user_id,
                                                 notified_id: result.insertId,
                                                 type: 'preply',
@@ -654,7 +654,7 @@ module.exports = async function(socket){
                                                 console.log(err);
                                             });
 
-                                            await specific.ToMention(socket, {
+                                            await functions.ToMention(socket, {
                                                 text: text,
                                                 user_id: res[0].user_id,
                                                 insert_id: result.insertId
@@ -684,9 +684,9 @@ module.exports = async function(socket){
     });
 
     socket.on('setIntyping', function(e){
-        var profile_id = specific.Filter(e.profile_id),
-            typing = specific.Filter(e.typing),
-            sockets = specific.getSockets(profile_id);
+        var profile_id = functions.Filter(e.profile_id),
+            typing = functions.Filter(e.typing),
+            sockets = functions.getSockets(profile_id);
 
 
         if(profile_id != '' && !isNaN(profile_id) && [true, false].indexOf(e.typing) !== -1){
@@ -697,24 +697,24 @@ module.exports = async function(socket){
                         return console.log(error);
                     }
                     if(result[0].count == 0){
-                        connection.query(`INSERT INTO ${T.TYPING} (user_id, profile_id, created_at) VALUES (?, ?, ?)`, [USER.id, profile_id, specific.Time()]);
+                        connection.query(`INSERT INTO ${T.TYPING} (user_id, profile_id, created_at) VALUES (?, ?, ?)`, [USER.id, profile_id, functions.Time()]);
                     }
 
-                    specific.Data(socket, USER.id, ['username', 'name', 'surname', 'avatar']).then(function(res){
+                    functions.Data(socket, USER.id, ['username', 'name', 'surname', 'avatar']).then(function(res){
                         var temp = {
                             username: res.username,
                             avatar_s: res.avatar_s
                         };
 
-                        specific.emitChamgesTo(profile_id, 'setOuttyping', {
+                        functions.emitChamgesTo(profile_id, 'setOuttyping', {
                             S: 200,
                             DL: !1,
                             PID: USER.id,
-                            HTT: specific.Maket(socket, "messages/dot", temp)
+                            HTT: functions.Build(socket, "messages/dot", temp)
                         });
 
                         if(sockets.length > 0){
-                            specific.emitChamgesTo(profile_id, 'setOutttyping', {
+                            functions.emitChamgesTo(profile_id, 'setOutttyping', {
                                 S: 200,
                                 TX: global.TEMP[sockets[0]].word.is_writing,
                                 EL: `.content_pnuser[data-id=${USER.id}]`
@@ -731,15 +731,15 @@ module.exports = async function(socket){
                         return console.log(error);
                     }
                     if(result.affectedRows > 0){
-                        specific.emitChamgesTo(profile_id, 'setOuttyping', {
+                        functions.emitChamgesTo(profile_id, 'setOuttyping', {
                             S: 200,
                             DL: !0,
                             PID: USER.id
                         });
 
                         if(sockets.length > 0){
-                            specific.LastMessage({id: sockets[0]}, USER.id, !0).then(function(res){
-                                specific.emitChamgesTo(profile_id, 'setOutttyping', {
+                            functions.LastMessage({id: sockets[0]}, USER.id, !0).then(function(res){
+                                functions.emitChamgesTo(profile_id, 'setOutttyping', {
                                     S: 200,
                                     TX: res.text,
                                     EL: `.content_pnuser[data-id=${USER.id}]`
@@ -770,7 +770,7 @@ module.exports = async function(socket){
     });
 
     PAGE == 'messages' && (global.TEMP[socket.id].interval = setInterval(function(){
-        var profile_id = specific.Filter(socket.handshake.query.profile_id);
+        var profile_id = functions.Filter(socket.handshake.query.profile_id);
 
         if(profile_id != '' && !isNaN(profile_id)){
             var qury = ``;
@@ -797,7 +797,7 @@ module.exports = async function(socket){
                                         delete_dot = !0;
                                     }
                                 }
-                                await specific.LastMessage(socket, item.user_id).then(function(res){
+                                await functions.LastMessage(socket, item.user_id).then(function(res){
                                     typings.push({
                                         TX: res.text,
                                         EL: `.content_pnuser[data-id=${item.user_id}]`
@@ -810,7 +810,7 @@ module.exports = async function(socket){
                         })
                     }).catch(function(err){});
                     
-                    specific.emitChamgesTo(USER.id, 'setOutdMytyping', {
+                    functions.emitChamgesTo(USER.id, 'setOutdMytyping', {
                         S: 200,
                         DL: delete_dot,
                         TPS: typings
@@ -824,38 +824,38 @@ module.exports = async function(socket){
         formidable({ multiples: true }).parse(request, async function(err, fields, files){
             if(fields.socket_id !== undefined){
                 var socket = {
-                        id: specific.Filter(fields.socket_id)
+                        id: functions.Filter(fields.socket_id)
                     },
                     TEMP = global.TEMP[socket.id],
                     USER = TEMP.user,
                     WORD = TEMP.word,
-                    SETTINGS = specific.Settings(),
+                    SETTINGS = functions.Settings(),
                     blocked_inusers = TEMP.blocked_inusers;
-                if(specific.Publisher(socket) == !0){
+                if(functions.Publisher(socket) == !0){
                     var empty = [],
                         error = [],
-                        title = specific.Filter(fields.title),
-                        category = specific.Filter(fields.category),
-                        type = specific.Filter(fields.type),
-                        description = specific.Filter(fields.description),
-                        entries = specific.Filter(fields.entries),
-                        entries = specific.htmlEntityDecode(entries),
+                        title = functions.Filter(fields.title),
+                        category = functions.Filter(fields.category),
+                        type = functions.Filter(fields.type),
+                        description = functions.Filter(fields.description),
+                        entries = functions.Filter(fields.entries),
+                        entries = functions.htmlEntityDecode(entries),
                         entries = JSON.parse(entries),
-                        recobo = specific.Filter(fields.recobo),
-                        recobo = specific.htmlEntityDecode(recobo),
+                        recobo = functions.Filter(fields.recobo),
+                        recobo = functions.htmlEntityDecode(recobo),
                         recobo = JSON.parse(recobo),
-                        collaborators = specific.Filter(fields.collaborators),
-                        collaborators = specific.htmlEntityDecode(collaborators),
+                        collaborators = functions.Filter(fields.collaborators),
+                        collaborators = functions.htmlEntityDecode(collaborators),
                         collaborators = JSON.parse(collaborators),
-                        post_sources = specific.Filter(fields.post_sources),
-                        post_sources = specific.htmlEntityDecode(post_sources),
+                        post_sources = functions.Filter(fields.post_sources),
+                        post_sources = functions.htmlEntityDecode(post_sources),
                         post_sources = JSON.parse(post_sources),
-                        thumb_sources = specific.Filter(fields.thumb_sources),
-                        thumb_sources = specific.htmlEntityDecode(thumb_sources),
+                        thumb_sources = functions.Filter(fields.thumb_sources),
+                        thumb_sources = functions.htmlEntityDecode(thumb_sources),
                         thumb_sources = JSON.parse(thumb_sources),
-                        thumbnail = Object.keys(files).indexOf('thumbnail') !== -1 ? files.thumbnail : specific.Filter(fields.thumbnail),
-                        tags = specific.Filter(fields.tags),
-                        action = specific.Filter(fields.action);
+                        thumbnail = Object.keys(files).indexOf('thumbnail') !== -1 ? files.thumbnail : functions.Filter(fields.thumbnail),
+                        tags = functions.Filter(fields.tags),
+                        action = functions.Filter(fields.action);
 
                     if(title == ''){
                         empty.push({
@@ -953,12 +953,12 @@ module.exports = async function(socket){
                                 if(files.thumbnail.size > SETTINGS.file_size_limit){
                                     error.push({
                                         EL: '#post-right .item-placeholder',
-                                        TX: _.replace(WORD.file_too_big_maximum_size, '{$file_size_limit}', specific.SizeFormat(SETTINGS.file_size_limit))
+                                        TX: _.replace(WORD.file_too_big_maximum_size, '{$file_size_limit}', functions.SizeFormat(SETTINGS.file_size_limit))
                                     })
                                 }
                             }
 
-                            await specific.AllCategories().then(function(res){
+                            await functions.AllCategories().then(function(res){
                                 if(res.indexOf(category) === -1){
                                     error.push({
                                         EL: '#category',
@@ -984,7 +984,7 @@ module.exports = async function(socket){
                                 }
 
                                 if(item[0] == 'embed'){
-                                    if(!specific.ValidateUrl(item[2])){
+                                    if(!functions.ValidateUrl(item[2])){
                                         error.push({
                                             EL: index,
                                             CS: '.item_url',
@@ -999,12 +999,12 @@ module.exports = async function(socket){
                                             error.push({
                                                 EL: index,
                                                 CS: '.item-placeholder',
-                                                TX: _.replace(WORD.file_too_big_maximum_size, '{$file_size_limit}', specific.SizeFormat(SETTINGS.file_size_limit))
+                                                TX: _.replace(WORD.file_too_big_maximum_size, '{$file_size_limit}', functions.SizeFormat(SETTINGS.file_size_limit))
                                             })
                                         }
                                     } else {
                                         if(item[2] != ''){
-                                            var validate_url = specific.ValidateUrl(item[2], true),
+                                            var validate_url = functions.ValidateUrl(item[2], true),
                                                 image = validate_url.url;
 
                                             arr[index][2] = image;
@@ -1055,7 +1055,7 @@ module.exports = async function(socket){
                                                 error.push({
                                                     EL: index,
                                                     CS: '.content-carrusel',
-                                                    TX: _.replace(WORD.one_file_too_big_maximum_size, '{$file_size_limit}', specific.SizeFormat(SETTINGS.file_size_limit))
+                                                    TX: _.replace(WORD.one_file_too_big_maximum_size, '{$file_size_limit}', functions.SizeFormat(SETTINGS.file_size_limit))
                                                 });
                                                 break;
                                             }
@@ -1097,7 +1097,7 @@ module.exports = async function(socket){
                                     var tiktok_url = item[2].match(/(?:http(?:s)?:\/\/)?(?:(?:www)\.(?:tiktok\.com)(?:\/)(?!foryou)(@[a-zA-z0-9]+)(?:\/)(?:video)(?:\/)([\d]+)|(?:m)\.(?:tiktok\.com)(?:\/)(?!foryou)(?:v)(?:\/)?(?=([\d]+)\.html))/),
                                         tiktok_param = item[2].match(/#\/(@[a-zA-z0-9]*|.*)(?:\/)?(?:v|video)(?:\/)?([\d]+)/);
 
-                                    if(tiktok_param || (tiktok_param && specific.ValidateUrl(item[2]))){
+                                    if(tiktok_param || (tiktok_param && functions.ValidateUrl(item[2]))){
                                         tiktok_url = !0;
                                         arr[index][2] = `https://www.tiktok.com/${tiktok_param[1]}/video/${tiktok_param[2]}`;
                                     }
@@ -1145,7 +1145,7 @@ module.exports = async function(socket){
                                 if(post_sources.length < SETTINGS.number_of_fonts){
                                     await forEachAsync(post_sources, function(item, index, arr){
                                         if(item.name != '' && item.source != ''){
-                                            if(!specific.ValidateUrl(item.source)){
+                                            if(!functions.ValidateUrl(item.source)){
                                                 error_positions.push(index);
                                             }
                                         }
@@ -1177,7 +1177,7 @@ module.exports = async function(socket){
                                 if(thumb_sources.length < SETTINGS.number_of_fonts){
                                     await forEachAsync(thumb_sources, function(item, index, arr){
                                         if(item.name != '' && item.source != ''){
-                                            if(!specific.ValidateUrl(item.source)){
+                                            if(!functions.ValidateUrl(item.source)){
                                                 error_positions.push(index);
                                             }
                                         }
@@ -1213,7 +1213,7 @@ module.exports = async function(socket){
                             if(error.length == 0){
                                 var fils = [];
                                 if(Object.keys(files).indexOf('thumbnail') !== -1){
-                                    await specific.UploadImage({
+                                    await functions.UploadImage({
                                         name: files.thumbnail.originalFilename,
                                         tmp_name: files.thumbnail.filepath,
                                         size: files.thumbnail.size,
@@ -1226,7 +1226,7 @@ module.exports = async function(socket){
                                         arr_trues.push(!1);
                                     });
                                 } else {
-                                    await specific.UploadThumbnail({
+                                    await functions.UploadThumbnail({
                                         media: thumbnail,
                                         folder: 'posts'
                                     }).then(function(res){
@@ -1250,14 +1250,14 @@ module.exports = async function(socket){
                                 }
 
                                 var status = 'approved';
-                                if(SETTINGS.approve_posts == 'on' && specific.Moderator(socket) == false){
+                                if(SETTINGS.approve_posts == 'on' && functions.Moderator(socket) == false){
                                     status = 'pending';
                                 }
 
                                 if(thumbnail.return){
                                     var st_regex = '/<(?:script|style)[^>]*>(.*?)<\/(?:script|style)>/is',
-                                        published_at = created_at = specific.Time(),
-                                        slug = specific.CreateSlug(title);
+                                        published_at = created_at = functions.Time(),
+                                        slug = functions.CreateSlug(title);
 
                                     await query(`SELECT COUNT(*) as count FROM ${T.POST} WHERE slug = ?`, [slug]).then(function(res){
                                         if(res[0].count > 0){
@@ -1330,7 +1330,7 @@ module.exports = async function(socket){
                                                         if(Object.keys(files).indexOf(thumbnail_id) !== -1){
                                                             var thumbnail = files[thumbnail_id];
 
-                                                            specific.UploadImage({
+                                                            functions.UploadImage({
                                                                 name: thumbnail.originalFilename,
                                                                 tmp_name: thumbnail.filepath,
                                                                 size: thumbnail.size,
@@ -1346,7 +1346,7 @@ module.exports = async function(socket){
                                                                 done();
                                                             });
                                                         } else if(item[2] != ''){
-                                                            specific.UploadThumbnail({
+                                                            functions.UploadThumbnail({
                                                                 media: item[2],
                                                                 post_id: post_id,
                                                                 eorder: index,
@@ -1360,11 +1360,11 @@ module.exports = async function(socket){
                                                             });
                                                         }
                                                     } else if(item[0] == 'carousel'){
-                                                        var captions = specific.Filter(fields[`carousel_captions_${index}`]),
+                                                        var captions = functions.Filter(fields[`carousel_captions_${index}`]),
                                                             carousel = [],
                                                             car_size = Array(item[2]).fill(0);
 
-                                                        captions = specific.htmlEntityDecode(captions);
+                                                        captions = functions.htmlEntityDecode(captions);
                                                         captions = JSON.parse(captions);
 
                                                         forEachAsync(car_size, function(m, i, a){
@@ -1374,7 +1374,7 @@ module.exports = async function(socket){
                                                             if(Object.keys(files).indexOf(carousel_id) !== -1){
                                                                 var thumbnail = files[carousel_id];
 
-                                                                specific.UploadImage({
+                                                                functions.UploadImage({
                                                                     name: thumbnail.originalFilename,
                                                                     tmp_name: thumbnail.filepath,
                                                                     size: thumbnail.size,
@@ -1402,8 +1402,8 @@ module.exports = async function(socket){
                                                                     done2();
                                                                 });
                                                             } else if(fields[carousel_id] != undefined){
-                                                                specific.UploadThumbnail({
-                                                                    media: specific.Filter(fields[carousel_id]),
+                                                                functions.UploadThumbnail({
+                                                                    media: functions.Filter(fields[carousel_id]),
                                                                     post_id: post_id,
                                                                     eorder: index,
                                                                     folder: 'entries'
@@ -1457,8 +1457,8 @@ module.exports = async function(socket){
                                                         })
                                                     } else if(item[0] == 'embed'){
 
-                                                        var attrs = specific.Filter(fields[`embed_${index}`]),
-                                                            frame = specific.MaketFrame(item[2], attrs);
+                                                        var attrs = functions.Filter(fields[`embed_${index}`]),
+                                                            frame = functions.BuildFrame(item[2], attrs);
 
                                                         frame = {
                                                             url: item[2],
@@ -1479,7 +1479,7 @@ module.exports = async function(socket){
                                                         return arr_trues.push(!1);
                                                     }
                                                     var fnTag = function(label_id){
-                                                            connection.query(`INSERT INTO ${T.TAG} (post_id, label_id, created_at) VALUES (?, ?, ?)`, [post_id, label_id, specific.Time()], function(error, result, field){
+                                                            connection.query(`INSERT INTO ${T.TAG} (post_id, label_id, created_at) VALUES (?, ?, ?)`, [post_id, label_id, functions.Time()], function(error, result, field){
                                                                 if(error){
                                                                     done();
                                                                     return arr_trues.push(!1);
@@ -1496,7 +1496,7 @@ module.exports = async function(socket){
                                                     if(result[0].count > 0){
                                                         fnTag(result[0].id);
                                                     } else {
-                                                        connection.query(`INSERT INTO ${T.LABEL} (name, slug, created_at) VALUES (?, ?, ?)`, [item, specific.CreateSlug(item), specific.Time()], function(error, result, field){
+                                                        connection.query(`INSERT INTO ${T.LABEL} (name, slug, created_at) VALUES (?, ?, ?)`, [item, functions.CreateSlug(item), functions.Time()], function(error, result, field){
                                                             if(error){
                                                                 done();
                                                                 return arr_trues.push(!1);
@@ -1523,7 +1523,7 @@ module.exports = async function(socket){
                                                             return arr_trues.push(!1);
                                                         }
                                                         if(result[0].count > 0){
-                                                            connection.query(`INSERT INTO ${T.RECOBO} (post_id, recommended_id, rorder, created_at) VALUES (?, ?, ?, ?)`, [post_id, item, recount, specific.Time()], function(error, result, field){
+                                                            connection.query(`INSERT INTO ${T.RECOBO} (post_id, recommended_id, rorder, created_at) VALUES (?, ?, ?, ?)`, [post_id, item, recount, functions.Time()], function(error, result, field){
                                                                 if(error){
                                                                     return arr_trues.push(!1);
                                                                 }
@@ -1549,13 +1549,13 @@ module.exports = async function(socket){
                                                             return arr_trues.push(!1);
                                                         }
                                                         if(result[0].count > 0 && result[0].about != '' && result[0][result[0].main_sonet] != ''){
-                                                            connection.query(`INSERT INTO ${T.COLLABORATOR} (user_id, post_id, aorder, created_at) VALUES (?, ?, ?, ?)`, [item, post_id, cocount, specific.Time()], async function(error, result, field){
+                                                            connection.query(`INSERT INTO ${T.COLLABORATOR} (user_id, post_id, aorder, created_at) VALUES (?, ?, ?, ?)`, [item, post_id, cocount, functions.Time()], async function(error, result, field){
                                                                 if(error){
                                                                     done();
                                                                     return arr_trues.push(!1);
                                                                 }
                                                                 if(result.insertId > 0){
-                                                                    await specific.SetNotify(socket, {
+                                                                    await functions.SetNotify(socket, {
                                                                         user_id: item,
                                                                         notified_id: result.insertId,
                                                                         type: 'collab',
@@ -1575,14 +1575,14 @@ module.exports = async function(socket){
                                             }
 
                                             if(arr_trues.indexOf(!1) === -1){
-                                                if(action == 'post' && (SETTINGS.approve_posts == 'off' || specific.Moderator(socket) == !0)){
+                                                if(action == 'post' && (SETTINGS.approve_posts == 'off' || functions.Moderator(socket) == !0)){
                                                     await query(`SELECT user_id FROM ${T.FOLLOWER} WHERE profile_id = ?`, [USER.id]).then(async function(res){
                                                         if(res.length > 0){
                                                             await forEachAsync(res, function(item, index, arr){
                                                                 var done = this.async();
-                                                                specific.Data(socket, item.user_id).then(function(res){
+                                                                functions.Data(socket, item.user_id).then(function(res){
                                                                     if(res.notifications.indexOf(category) !== -1){
-                                                                        specific.SetNotify(socket, {
+                                                                        functions.SetNotify(socket, {
                                                                             user_id: res.id,
                                                                             notified_id: post_id,
                                                                             type: 'post',
@@ -1605,7 +1605,7 @@ module.exports = async function(socket){
 
                                                 response.send({
                                                     S: 200,
-                                                    LK: specific.Url(slug)
+                                                    LK: functions.Url(slug)
                                                 });
                                             } else {
                                                 await query(`DELETE FROM ${T.POST} WHERE id = ?`, post_id).then(async function(res){
@@ -1671,39 +1671,39 @@ module.exports = async function(socket){
         formidable({ multiples: true }).parse(request, async function(err, fields, files){
             if(fields.socket_id !== undefined){
                 var socket = {
-                        id: specific.Filter(fields.socket_id)
+                        id: functions.Filter(fields.socket_id)
                     },
                     TEMP = global.TEMP[socket.id],
                     WORD = TEMP.word,
-                    SETTINGS = specific.Settings(),
+                    SETTINGS = functions.Settings(),
                     blocked_inusers = TEMP.blocked_inusers;
-                if(specific.Publisher(socket) == !0){
+                if(functions.Publisher(socket) == !0){
                     var ids = [],
                         empty = [],
                         error = [],
-                        post_id = specific.Filter(fields.post_id),
-                        title = specific.Filter(fields.title),
-                        category = specific.Filter(fields.category),
-                        type = specific.Filter(fields.type),
-                        description = specific.Filter(fields.description),
-                        entries = specific.Filter(fields.entries),
-                        entries = specific.htmlEntityDecode(entries),
+                        post_id = functions.Filter(fields.post_id),
+                        title = functions.Filter(fields.title),
+                        category = functions.Filter(fields.category),
+                        type = functions.Filter(fields.type),
+                        description = functions.Filter(fields.description),
+                        entries = functions.Filter(fields.entries),
+                        entries = functions.htmlEntityDecode(entries),
                         entries = JSON.parse(entries),
-                        recobo = specific.Filter(fields.recobo),
-                        recobo = specific.htmlEntityDecode(recobo),
+                        recobo = functions.Filter(fields.recobo),
+                        recobo = functions.htmlEntityDecode(recobo),
                         recobo = JSON.parse(recobo),
-                        collaborators = specific.Filter(fields.collaborators),
-                        collaborators = specific.htmlEntityDecode(collaborators),
+                        collaborators = functions.Filter(fields.collaborators),
+                        collaborators = functions.htmlEntityDecode(collaborators),
                         collaborators = JSON.parse(collaborators),
-                        post_sources = specific.Filter(fields.post_sources),
-                        post_sources = specific.htmlEntityDecode(post_sources),
+                        post_sources = functions.Filter(fields.post_sources),
+                        post_sources = functions.htmlEntityDecode(post_sources),
                         post_sources = JSON.parse(post_sources),
-                        thumb_sources = specific.Filter(fields.thumb_sources),
-                        thumb_sources = specific.htmlEntityDecode(thumb_sources),
+                        thumb_sources = functions.Filter(fields.thumb_sources),
+                        thumb_sources = functions.htmlEntityDecode(thumb_sources),
                         thumb_sources = JSON.parse(thumb_sources),
-                        thumbnail = Object.keys(files).indexOf('thumbnail') !== -1 ? files.thumbnail : specific.Filter(fields.thumbnail),
-                        tags = specific.Filter(fields.tags),
-                        action = specific.Filter(fields.action);
+                        thumbnail = Object.keys(files).indexOf('thumbnail') !== -1 ? files.thumbnail : functions.Filter(fields.thumbnail),
+                        tags = functions.Filter(fields.tags),
+                        action = functions.Filter(fields.action);
 
                     if(title == ''){
                         empty.push({
@@ -1802,13 +1802,13 @@ module.exports = async function(socket){
                             var post = result[0],
                                 is_owner = !1;
                             
-                            await specific.IsOwner(socket, post.user_id).then(function(res){
+                            await functions.IsOwner(socket, post.user_id).then(function(res){
                                 is_owner = res;
                             }).catch(function(err){
                                 console.log(err);
                             });
 
-                            if(post.count > 0 || (is_owner || specific.Moderator(socket))){
+                            if(post.count > 0 || (is_owner || functions.Moderator(socket))){
                                 if(['post', 'save'].indexOf(action) !== -1){
                                     if(empty.length == 0){
 
@@ -1816,12 +1816,12 @@ module.exports = async function(socket){
                                             if(files.thumbnail.size > SETTINGS.file_size_limit){
                                                 error.push({
                                                     EL: '#post-right .item-placeholder',
-                                                    TX: _.replace(WORD.file_too_big_maximum_size, '{$file_size_limit}', specific.SizeFormat(SETTINGS.file_size_limit))
+                                                    TX: _.replace(WORD.file_too_big_maximum_size, '{$file_size_limit}', functions.SizeFormat(SETTINGS.file_size_limit))
                                                 })
                                             }
                                         }
 
-                                        await specific.AllCategories().then(function(res){
+                                        await functions.AllCategories().then(function(res){
                                             if(res.indexOf(category) === -1){
                                                 error.push({
                                                     EL: '#category',
@@ -1846,12 +1846,12 @@ module.exports = async function(socket){
                                                         error.push({
                                                             EL: index,
                                                             CS: '.item-placeholder',
-                                                            TX: _.replace(WORD.file_too_big_maximum_size, '{$file_size_limit}', specific.SizeFormat(SETTINGS.file_size_limit))
+                                                            TX: _.replace(WORD.file_too_big_maximum_size, '{$file_size_limit}', functions.SizeFormat(SETTINGS.file_size_limit))
                                                         })
                                                     }
                                                 } else {
                                                     if(item[2] != ''){
-                                                        var validate_url = specific.ValidateUrl(item[2], true),
+                                                        var validate_url = functions.ValidateUrl(item[2], true),
                                                             image = validate_url.url;
             
                                                         arr[index][2] = image;
@@ -1901,7 +1901,7 @@ module.exports = async function(socket){
                                                             error.push({
                                                                 EL: index,
                                                                 CS: '.content-carrusel',
-                                                                TX: _.replace(WORD.one_file_too_big_maximum_size, '{$file_size_limit}', specific.SizeFormat(SETTINGS.file_size_limit))
+                                                                TX: _.replace(WORD.one_file_too_big_maximum_size, '{$file_size_limit}', functions.SizeFormat(SETTINGS.file_size_limit))
                                                             });
                                                             break;
                                                         }
@@ -1910,7 +1910,7 @@ module.exports = async function(socket){
                                             }
                 
                                             if(item[0] == 'embed'){
-                                                if(!specific.ValidateUrl(item[2])){
+                                                if(!functions.ValidateUrl(item[2])){
                                                     error.push({
                                                         EL: index,
                                                         CS: '.item_url',
@@ -1964,7 +1964,7 @@ module.exports = async function(socket){
                                                     var tiktok_url = item[2].match(/(?:http(?:s)?:\/\/)?(?:(?:www)\.(?:tiktok\.com)(?:\/)(?!foryou)(@[a-zA-z0-9]+)(?:\/)(?:video)(?:\/)([\d]+)|(?:m)\.(?:tiktok\.com)(?:\/)(?!foryou)(?:v)(?:\/)?(?=([\d]+)\.html))/),
                                                         tiktok_param = item[2].match(/#\/(@[a-zA-z0-9]*|.*)(?:\/)?(?:v|video)(?:\/)?([\d]+)/);
                 
-                                                    if(tiktok_param || (tiktok_param && specific.ValidateUrl(item[2]))){
+                                                    if(tiktok_param || (tiktok_param && functions.ValidateUrl(item[2]))){
                                                         tiktok_url = !0;
                                                         arr[index][2] = `https://www.tiktok.com/${tiktok_param[1]}/video/${tiktok_param[2]}`;
                                                     }
@@ -2013,7 +2013,7 @@ module.exports = async function(socket){
                                             if(post_sources.length < SETTINGS.number_of_fonts){
                                                 await forEachAsync(post_sources, function(item, index, arr){
                                                     if(item.name != '' && item.source != ''){
-                                                        if(!specific.ValidateUrl(item.source)){
+                                                        if(!functions.ValidateUrl(item.source)){
                                                             error_positions.push(index);
                                                         }
                                                     }
@@ -2045,7 +2045,7 @@ module.exports = async function(socket){
                                             if(thumb_sources.length < SETTINGS.number_of_fonts){
                                                 await forEachAsync(thumb_sources, function(item, index, arr){
                                                     if(item.name != '' && item.source != ''){
-                                                        if(!specific.ValidateUrl(item.source)){
+                                                        if(!functions.ValidateUrl(item.source)){
                                                             error_positions.push(index);
                                                         }
                                                     }
@@ -2106,7 +2106,7 @@ module.exports = async function(socket){
                                                     });
                                                 }
                                                 if(desthumb !== -1){
-                                                    await specific.UploadImage({
+                                                    await functions.UploadImage({
                                                         name: files.thumbnail.originalFilename,
                                                         tmp_name: files.thumbnail.filepath,
                                                         size: files.thumbnail.size,
@@ -2119,7 +2119,7 @@ module.exports = async function(socket){
                                                         arr_trues.push(!1);
                                                     });
                                                 } else {
-                                                    await specific.UploadThumbnail({
+                                                    await functions.UploadThumbnail({
                                                         media: thumbnail,
                                                         folder: 'posts'
                                                     }).then(function(res){
@@ -2149,13 +2149,13 @@ module.exports = async function(socket){
             
                                             if(thumbnail.return){
                                                 var st_regex = '/<(?:script|style)[^>]*>(.*?)<\/(?:script|style)>/is',
-                                                    updated_at = created_at = specific.Time(),
+                                                    updated_at = created_at = functions.Time(),
                                                     slug = post.slug,
                                                     status = post.status,
                                                     published_at = post.published_at;
 
                                                 if(action == 'post' && post.published_at == 0){
-                                                    if(SETTINGS.approve_posts == 'off' || specific.Moderator(socket) == !0){
+                                                    if(SETTINGS.approve_posts == 'off' || functions.Moderator(socket) == !0){
                                                         status = 'approved'; 
                                                     }
                                                     published_at = updated_at;
@@ -2173,7 +2173,7 @@ module.exports = async function(socket){
                                                                     entries_ids.push(item.id);
                                                                 }).catch(function(err){});
 
-                                                                del_entries = specific.ArrayDiff(entries_ids, ids);
+                                                                del_entries = functions.ArrayDiff(entries_ids, ids);
                                                             } else {
                                                                 arr_trues.push(!1);
                                                             }
@@ -2375,7 +2375,7 @@ module.exports = async function(socket){
                                                                                 if(Object.keys(files).indexOf(thumbnail_id) !== -1){
                                                                                     var thumbnail = files[thumbnail_id];
                         
-                                                                                    specific.UploadImage({
+                                                                                    functions.UploadImage({
                                                                                         name: thumbnail.originalFilename,
                                                                                         tmp_name: thumbnail.filepath,
                                                                                         size: thumbnail.size,
@@ -2390,7 +2390,7 @@ module.exports = async function(socket){
                                                                                         done();
                                                                                     });
                                                                                 } else if(item[2] != ''){
-                                                                                    specific.UploadThumbnail({
+                                                                                    functions.UploadThumbnail({
                                                                                         media: item[2],
                                                                                         post_id: post_id,
                                                                                         eorder: index,
@@ -2406,11 +2406,11 @@ module.exports = async function(socket){
                                                                                 entFn(entry_exists, null);
                                                                             }
                                                                         } else if(item[0] == 'carousel'){
-                                                                            var captions = specific.Filter(fields[`carousel_captions_${index}`]),
+                                                                            var captions = functions.Filter(fields[`carousel_captions_${index}`]),
                                                                                 carousel = [],
                                                                                 car_size = Array(item[2]).fill(0);
                     
-                                                                            captions = specific.htmlEntityDecode(captions);
+                                                                            captions = functions.htmlEntityDecode(captions);
                                                                             captions = JSON.parse(captions);
                     
                                                                             forEachAsync(car_size, function(m, i, a){
@@ -2420,7 +2420,7 @@ module.exports = async function(socket){
                                                                                 if(Object.keys(files).indexOf(carousel_id) !== -1){
                                                                                     var thumbnail = files[carousel_id];
                     
-                                                                                    specific.UploadImage({
+                                                                                    functions.UploadImage({
                                                                                         name: thumbnail.originalFilename,
                                                                                         tmp_name: thumbnail.filepath,
                                                                                         size: thumbnail.size,
@@ -2451,8 +2451,8 @@ module.exports = async function(socket){
                                                                                         done2();
                                                                                     });
                                                                                 } else if(fields[carousel_id] != undefined){
-                                                                                    specific.UploadThumbnail({
-                                                                                        media: specific.Filter(fields[carousel_id]),
+                                                                                    functions.UploadThumbnail({
+                                                                                        media: functions.Filter(fields[carousel_id]),
                                                                                         post_id: post_id,
                                                                                         eorder: index,
                                                                                         folder: 'entries'
@@ -2482,8 +2482,8 @@ module.exports = async function(socket){
                                                                             }).catch(function(err){});
                                                                         } else {
                                                                             if(item[0] == 'embed'){
-                                                                                var attrs = specific.Filter(fields[`embed_${index}`]),
-                                                                                    frame = specific.MaketFrame(item[2], attrs);
+                                                                                var attrs = functions.Filter(fields[`embed_${index}`]),
+                                                                                    frame = functions.BuildFrame(item[2], attrs);
                         
                                                                                 frame = {
                                                                                     url: item[2],
@@ -2600,8 +2600,8 @@ module.exports = async function(socket){
                                                                     tags_names.push(item.name);
                                                                 }).catch(function(err){});
 
-                                                                var del_tags = specific.ArrayDiff(tags_names, tags),
-                                                                    add_tags = specific.ArrayDiff(tags, tags_names);
+                                                                var del_tags = functions.ArrayDiff(tags_names, tags),
+                                                                    add_tags = functions.ArrayDiff(tags, tags_names);
 
                                                                     if(add_tags.length > 0){
                                                                         await forEachAsync(add_tags, function(item, index, arr){
@@ -2611,7 +2611,7 @@ module.exports = async function(socket){
                                                                                     return arr_trues.push(!1);
                                                                                 }
                                                                                 var fnTag = function(label_id){
-                                                                                    connection.query(`INSERT INTO ${T.TAG} (post_id, label_id, created_at) VALUES (?, ?, ?)`, [post_id, label_id, specific.Time()], function(error, result, field){
+                                                                                    connection.query(`INSERT INTO ${T.TAG} (post_id, label_id, created_at) VALUES (?, ?, ?)`, [post_id, label_id, functions.Time()], function(error, result, field){
                                                                                         if(error){
                                                                                             done();
                                                                                             return arr_trues.push(!1);
@@ -2628,7 +2628,7 @@ module.exports = async function(socket){
                                                                                 if(result[0].count > 0){
                                                                                     fnTag(result[0].id);
                                                                                 } else {
-                                                                                    connection.query(`INSERT INTO ${T.LABEL} (name, slug, created_at) VALUES (?, ?, ?)`, [item, specific.CreateSlug(item), specific.Time()], function(error, result, field){
+                                                                                    connection.query(`INSERT INTO ${T.LABEL} (name, slug, created_at) VALUES (?, ?, ?)`, [item, functions.CreateSlug(item), functions.Time()], function(error, result, field){
                                                                                         if(error){
                                                                                             done();
                                                                                             return arr_trues.push(!1);
@@ -2678,8 +2678,8 @@ module.exports = async function(socket){
                                                                     recobo_ids.push(item.recommended_id);
                                                                 }).catch(function(err){});
 
-                                                                var add_recobo = specific.ArrayDiff(recobo, recobo_ids),
-                                                                    del_recobo = specific.ArrayDiff(recobo_ids, recobo);
+                                                                var add_recobo = functions.ArrayDiff(recobo, recobo_ids),
+                                                                    del_recobo = functions.ArrayDiff(recobo_ids, recobo);
 
                                                                 if(add_recobo.length > 0){
                                                                     await forEachAsync(recobo, function(item, index, arr){
@@ -2690,7 +2690,7 @@ module.exports = async function(socket){
                                                                                 return arr_trues.push(!1);
                                                                             }
                                                                             if(result[0].count > 0){
-                                                                                connection.query(`INSERT INTO ${T.RECOBO} (post_id, recommended_id, created_at) VALUES (?, ?, ?)`, [post_id, item, specific.Time()], function(error, result, field){
+                                                                                connection.query(`INSERT INTO ${T.RECOBO} (post_id, recommended_id, created_at) VALUES (?, ?, ?)`, [post_id, item, functions.Time()], function(error, result, field){
                                                                                     if(error){
                                                                                         return arr_trues.push(!1);
                                                                                     }
@@ -2752,8 +2752,8 @@ module.exports = async function(socket){
                                                                 }).catch(function(err){});
 
 
-                                                                var add_collaborators = specific.ArrayDiff(collaborators, collaborators_ids),
-                                                                    del_collaborators = specific.ArrayDiff(collaborators_ids, collaborators);
+                                                                var add_collaborators = functions.ArrayDiff(collaborators, collaborators_ids),
+                                                                    del_collaborators = functions.ArrayDiff(collaborators_ids, collaborators);
 
                                                                 if(add_collaborators.length > 0){
                                                                     await forEachAsync(add_collaborators, function(item, index, arr){
@@ -2764,13 +2764,13 @@ module.exports = async function(socket){
                                                                                 return arr_trues.push(!1);
                                                                             }
                                                                             if(result[0].count > 0 && result[0].about != '' && result[0][result[0].main_sonet] != ''){
-                                                                                connection.query(`INSERT INTO ${T.COLLABORATOR} (user_id, post_id, created_at) VALUES (?, ?, ?)`, [item, post_id, specific.Time()], async function(error, result, field){
+                                                                                connection.query(`INSERT INTO ${T.COLLABORATOR} (user_id, post_id, created_at) VALUES (?, ?, ?)`, [item, post_id, functions.Time()], async function(error, result, field){
                                                                                     if(error){
                                                                                         done();
                                                                                         return arr_trues.push(!1);
                                                                                     }
                                                                                     if(result.insertId > 0){
-                                                                                        await specific.SetNotify(socket, {
+                                                                                        await functions.SetNotify(socket, {
                                                                                             user_id: item,
                                                                                             notified_id: result.insertId,
                                                                                             type: 'collab',
@@ -2846,14 +2846,14 @@ module.exports = async function(socket){
                                                         });
             
                                                         if(arr_trues.indexOf(!1) === -1){
-                                                            if(action == 'post' && post.published_at == 0 && (SETTINGS.approve_posts == 'off' || specific.Moderator(socket) == !0)){
+                                                            if(action == 'post' && post.published_at == 0 && (SETTINGS.approve_posts == 'off' || functions.Moderator(socket) == !0)){
                                                                 await query(`SELECT user_id FROM ${T.FOLLOWER} WHERE profile_id = ?`, [USER.id]).then(async function(res){
                                                                     if(res.length > 0){
                                                                         await forEachAsync(res, function(item, index, arr){
                                                                             var done = this.async();
-                                                                            specific.Data(socket, item.user_id).then(function(res){
+                                                                            functions.Data(socket, item.user_id).then(function(res){
                                                                                 if(res.notifications.indexOf(category) !== -1){
-                                                                                    specific.SetNotify(socket, {
+                                                                                    functions.SetNotify(socket, {
                                                                                         user_id: res.id,
                                                                                         notified_id: post_id,
                                                                                         type: 'post',
@@ -2876,7 +2876,7 @@ module.exports = async function(socket){
 
                                                             response.send({
                                                                 S: 200,
-                                                                LK: specific.Url(slug)
+                                                                LK: functions.Url(slug)
                                                             });
                                                         }
                                                         
@@ -2929,7 +2929,7 @@ module.exports = async function(socket){
         formidable({ multiples: true }).parse(request, async function(err, fields, files){
             if(fields.socket_id !== undefined){
                 var socket = {
-                        id: specific.Filter(fields.socket_id)
+                        id: functions.Filter(fields.socket_id)
                     },
                     TEMP = global.TEMP[socket.id],
                     USER = TEMP.user,
@@ -2937,11 +2937,11 @@ module.exports = async function(socket){
                     blocked_arrusers = TEMP.blocked_arrusers;
 
                 if(TEMP.loggedin == !0){
-                    var profile_id = specific.Filter(fields.profile_id),
-                        answered_id = specific.Filter(fields.answered_id),
-                        count_files = specific.Filter(fields.count_files),
-                        text = specific.Filter(fields.text),
-                        type = specific.Filter(fields.type);
+                    var profile_id = functions.Filter(fields.profile_id),
+                        answered_id = functions.Filter(fields.answered_id),
+                        count_files = functions.Filter(fields.count_files),
+                        text = functions.Filter(fields.text),
+                        type = functions.Filter(fields.type);
 
                     if(profile_id != '' && !isNaN(profile_id) && (text.trim() != '' || count_files > 0) && !isNaN(count_files) && ['text', 'file', 'image'].indexOf(type) !== -1 && blocked_arrusers.indexOf(profile_id) === -1){
 
@@ -2950,7 +2950,7 @@ module.exports = async function(socket){
                                 return response.send(ERR);
                             }
                             if(result[0].count > 0){
-                                specific.Data(socket, result, 3).then(function(res){
+                                functions.Data(socket, result, 3).then(function(res){
                                     if(res.shows.messages == 'on' && USER.shows.messages == 'on'){
                                         var temp = {
                                                 avatar_s: USER.avatar_s,
@@ -2964,7 +2964,7 @@ module.exports = async function(socket){
                                                 deleted_fuser: 0,
                                                 deleted_fprofile: 0
                                             },
-                                            created_at = updated_at = specific.Time();
+                                            created_at = updated_at = functions.Time();
 
                                         temp.messafi = !1;
                                         temp.has_image = !1;
@@ -2986,7 +2986,7 @@ module.exports = async function(socket){
                                                 if(result[0].count > 0){
                                                     await query(`UPDATE ${T.CHAT} SET updated_at = ? WHERE id = ?`, [updated_at, chat_id]).then(function(res){
                                                         if(res.affectedRows > 0){
-                                                            var socks = specific.getSockets(profile_id);
+                                                            var socks = functions.getSockets(profile_id);
                                                             if(socks.length > 0){
                                                                 var last_text = text,
                                                                     seen = 1;
@@ -2998,10 +2998,10 @@ module.exports = async function(socket){
                                                                         return seen = 0, !1;
                                                                     }
                                                                 });
-                                                                specific.emitChamgesTo(profile_id, 'setOutupchat', {
+                                                                functions.emitChamgesTo(profile_id, 'setOutupchat', {
                                                                     S: 200,
                                                                     TX: last_text,
-                                                                    CA: specific.DateString(socket, created_at),
+                                                                    CA: functions.DateString(socket, created_at),
                                                                     LU: seen,
                                                                     EL: `.content_pnuser[data-id=${USER.id}]`
                                                                 });
@@ -3015,7 +3015,7 @@ module.exports = async function(socket){
                                                     await query(`INSERT INTO ${T.CHAT} (user_id, profile_id, updated_at, created_at) VALUES (?, ?, ?, ?)`, [USER.id, profile_id, updated_at, created_at]).then(async function(res){
                                                         var temp2 = {
                                                             id: res.insertId,
-                                                            last_created_at: specific.DateString(socket, created_at),
+                                                            last_created_at: functions.DateString(socket, created_at),
                                                             last_text: text,
                                                             profile_id: profile_id,
                                                             last_unseen: !0,
@@ -3033,15 +3033,15 @@ module.exports = async function(socket){
                                                         if(USER.status == 'deleted'){
                                                             temp2.user_deleted = !1;
                                                             temp2.username = WORD.user;
-                                                            temp2.avatar_s = specific.Url('/themes/default/images/users/default-holder-s.jpeg');
+                                                            temp2.avatar_s = functions.Url('/themes/default/images/users/default-holder-s.jpeg');
                                                         } else {
                                                             temp2.username = USER.username;
                                                             temp2.avatar_s = USER.avatar_s;
                                                         }
                                                         
-                                                        specific.emitChamgesTo(profile_id, 'setOutichat', {
+                                                        functions.emitChamgesTo(profile_id, 'setOutichat', {
                                                             S: 200,
-                                                            HTU: specific.Maket(socket, "messages/user", temp2),
+                                                            HTU: functions.Build(socket, "messages/user", temp2),
                                                             LCU: updated_at,
                                                             UID: res.insertId,
                                                             TX: temp2.last_text,
@@ -3049,9 +3049,9 @@ module.exports = async function(socket){
                                                             EL: `.content_pnuser[data-id=${USER.id}]`
                                                         });
 
-                                                        specific.emitChamgesTo(USER.id, 'setOutochat', {
+                                                        functions.emitChamgesTo(USER.id, 'setOutochat', {
                                                             S: 200,
-                                                            HTU: specific.Maket(socket, "messages/user", temp),
+                                                            HTU: functions.Build(socket, "messages/user", temp),
                                                             LCU: updated_at,
                                                             UID: res.insertId,
                                                             TX: temp2.last_text,
@@ -3095,7 +3095,7 @@ module.exports = async function(socket){
                                                                         messafi = `file_${index}`;
                                                                     if(Object.keys(files).indexOf(messafi) !== -1){
                                                                         var mess = files[messafi];
-                                                                        specific.UploadMessagefi({
+                                                                        functions.UploadMessagefi({
                                                                             name: mess.originalFilename,
                                                                             tmp_name: mess.filepath,
                                                                             size: mess.size,
@@ -3140,7 +3140,7 @@ module.exports = async function(socket){
                                                                                                 await query(`INSERT INTO ${T.MESSAAN} (message_id, answered_id, type, created_at) VALUES (?, ?, ?, ?)`, [insert_id, answered_id, type, created_at]).then(async function(res){
                                                                                                     if(res.insertId > 0){
                                                                                                         var answeredFn = async function(ans_pid, user_id){
-                                                                                                                await specific.Data(socket, user_id, ['username', 'name', 'surname']).then(function(res){
+                                                                                                                await functions.Data(socket, user_id, ['username', 'name', 'surname']).then(function(res){
                                                                                                                     temp.ans_title = `${WORD.you_responded_to} ${res.username}`;
                                                                                                                 }).catch(function(err){
                                                                                                                     console.log(err)
@@ -3160,7 +3160,7 @@ module.exports = async function(socket){
                                                                                                                     ans_pid = answered.profile_id,
                                                                                                                     user_id = answered.user_id;
 
-                                                                                                                temp.ans_text = specific.TextFilter(socket, answered.text, !1);
+                                                                                                                temp.ans_text = functions.TextFilter(socket, answered.text, !1);
                                                                                                                 await answeredFn(ans_pid, user_id);
                                                                                                             }).catch(function(err){
                                                                                                                 console.log(err);
@@ -3172,9 +3172,9 @@ module.exports = async function(socket){
                                                                                                                     user_id = amessafi.user_id;
 
                                                                                                                 temp.fi_aname = amessafi.name;
-                                                                                                                temp.fi_asize = specific.SizeFormat(amessafi.size);
+                                                                                                                temp.fi_asize = functions.SizeFormat(amessafi.size);
                                                                                                                 if(type == 'image'){
-                                                                                                                    temp.fi_aurl = specific.Url(`uploads/messages/${amessafi.file}`);
+                                                                                                                    temp.fi_aurl = functions.Url(`uploads/messages/${amessafi.file}`);
                                                                                                                 }
                                                                                                                 await answeredFn(ans_pid, user_id);
                                                                                                             }).catch(function(err){
@@ -3207,17 +3207,17 @@ module.exports = async function(socket){
                                                                         await forEachAsync(res, function(item, index, arr){
                                                                             temp.fi_id = item.id;
                                                                             temp.fi_name = item.name;
-                                                                            temp.fi_url = specific.Url(`uploads/messages/${item.file}`);
-                                                                            temp.fi_size = specific.SizeFormat(item.size);
+                                                                            temp.fi_url = functions.Url(`uploads/messages/${item.file}`);
+                                                                            temp.fi_size = functions.SizeFormat(item.size);
 
                                                                             if(['.jpeg', '.jpg', '.png', '.gif'].indexOf(path.extname(item.name)) !== -1){
                                                                                 temp.has_image = !0;
-                                                                                temp.outimages += specific.Maket(socket, "messages/outimage", temp);
-                                                                                temp.inimages += specific.Maket(socket, "messages/inimage", temp);
+                                                                                temp.outimages += functions.Build(socket, "messages/outimage", temp);
+                                                                                temp.inimages += functions.Build(socket, "messages/inimage", temp);
                                                                             } else {
                                                                                 temp.has_file = !0;
-                                                                                temp.outfiles += specific.Maket(socket, "messages/outfile", temp);
-                                                                                temp.infiles += specific.Maket(socket, "messages/infile", temp);
+                                                                                temp.outfiles += functions.Build(socket, "messages/outfile", temp);
+                                                                                temp.infiles += functions.Build(socket, "messages/infile", temp);
                                                                             }
                                                                         }).catch(function(err){});
                                                                     }
@@ -3229,12 +3229,12 @@ module.exports = async function(socket){
                                                                 
                                                                 temp.id = insert_id;
                                                                 if(text != null){
-                                                                    temp.text = specific.TextFilter(socket, text);
+                                                                    temp.text = functions.TextFilter(socket, text);
                                                                 }
-                                                                temp.created_at = specific.DateString(socket, created_at);
+                                                                temp.created_at = functions.DateString(socket, created_at);
 
                                                                 if(send_notify){
-                                                                    await specific.Notifies(profile_id).catch(function(err){
+                                                                    await functions.Notifies(profile_id).catch(function(err){
                                                                         console.log(err);
                                                                     });
                                                                 }
@@ -3244,8 +3244,8 @@ module.exports = async function(socket){
                                                                     CID: chat_id,
                                                                     MID: insert_id,
                                                                     CO: message_exists == 0,
-                                                                    HTM: specific.Maket(socket, 'messages/outgoing', temp),
-                                                                    TX: `${WORD.you}: ${specific.TextFilter(socket, text, !1)}`,
+                                                                    HTM: functions.Build(socket, 'messages/outgoing', temp),
+                                                                    TX: `${WORD.you}: ${functions.TextFilter(socket, text, !1)}`,
                                                                     CA: temp.created_at,
                                                                     EL: `.content_pnuser[data-id=${profile_id}]`
                                                                 };
@@ -3255,15 +3255,15 @@ module.exports = async function(socket){
                                                                 }
 
 
-                                                                specific.emitChamgesTo(USER.id, 'setOutomessage', {
+                                                                functions.emitChamgesTo(USER.id, 'setOutomessage', {
                                                                     S: 200,
-                                                                    HTM: specific.Maket(socket, "messages/outgoing", temp),
+                                                                    HTM: functions.Build(socket, "messages/outgoing", temp),
                                                                     MID: insert_id
                                                                 }, socket.id);
                                                                 
-                                                                specific.emitChamgesTo(profile_id, 'setOutimessage', {
+                                                                functions.emitChamgesTo(profile_id, 'setOutimessage', {
                                                                     S: 200,
-                                                                    HTM: specific.Maket(socket, "messages/incoming", temp),
+                                                                    HTM: functions.Build(socket, "messages/incoming", temp),
                                                                     MID: insert_id,
                                                                     PID: USER.id,
                                                                     DLD: !0

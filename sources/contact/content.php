@@ -7,5 +7,5 @@ $TEMP['#title'] = $TEMP['#word']["page_{$page['slug']}"]. ' - ' . $TEMP['#settin
 $TEMP['#description'] = $page['description'];
 $TEMP['#keyword'] = $page['keywords'];
 
-$TEMP['#content'] = Specific::Maket('contact/content');
+$TEMP['#content'] = Functions::Build('contact/content');
 ?>

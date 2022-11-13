@@ -1,12 +1,12 @@
 <?php
 if($one == 'normal-search'){
-	$keyword = Specific::Filter($_POST['keyword']);
-	$date = Specific::Filter($_POST['date']);
-	$category = Specific::Filter($_POST['category']);
-	$author = Specific::Filter($_POST['author']);
-	$sort = Specific::Filter($_POST['sort']);
+	$keyword = Functions::Filter($_POST['keyword']);
+	$date = Functions::Filter($_POST['date']);
+	$category = Functions::Filter($_POST['category']);
+	$author = Functions::Filter($_POST['author']);
+	$sort = Functions::Filter($_POST['sort']);
 
-	$search_load = Load::Search(array(
+	$search_load = Loads::Search(array(
 		'keyword' => $keyword,
 		'date' => $date,
 		'category' => $category,
@@ -14,7 +14,7 @@ if($one == 'normal-search'){
 		'sort' => $sort
 	));
 
-	$url = Specific::Url("{$RUTE['#r_search']}");
+	$url = Functions::Url("{$RUTE['#r_search']}");
 	if(!empty($keyword)){
 		$url .= "?{$RUTE['#p_keyword']}={$keyword}";
 	}
@@ -55,16 +55,16 @@ if($one == 'normal-search'){
 		$deliver['HT'] = $search_load['html'];
 	}
 } else if($one == 'table-search'){
-	$search_ids = Specific::Filter($_POST['search_ids']);
+	$search_ids = Functions::Filter($_POST['search_ids']);
 	$search_ids = html_entity_decode($search_ids);
 	$search_ids = json_decode($search_ids);
-	$keyword = Specific::Filter($_POST['keyword']);
-	$date = Specific::Filter($_POST['date']);
-	$category = Specific::Filter($_POST['category']);
-	$author = Specific::Filter($_POST['author']);
-	$sort = Specific::Filter($_POST['sort']);
+	$keyword = Functions::Filter($_POST['keyword']);
+	$date = Functions::Filter($_POST['date']);
+	$category = Functions::Filter($_POST['category']);
+	$author = Functions::Filter($_POST['author']);
+	$sort = Functions::Filter($_POST['sort']);
 
-	$search_load = Load::Search(array(
+	$search_load = Loads::Search(array(
 		'keyword' => $keyword,
 		'date' => $date,
 		'category' => $category,
@@ -73,7 +73,7 @@ if($one == 'normal-search'){
 	), $search_ids);
 
 	if($search_load['return']){
-		$widget = Specific::GetWidget('horizposts');
+		$widget = Functions::GetWidget('horizposts');
 		if($widget['return']){
 			$search_load['html'] .= $widget['html'];
 		}

@@ -1,13 +1,13 @@
 <?php
 if ($TEMP['#loggedin'] === false) {
-    header("Location: ".Specific::ReturnUrl());
+    header("Location: ".Functions::ReturnUrl());
     exit();
 }
 $TEMP['#profile'] = $TEMP['data'] = $TEMP['#user'];
 if($TEMP['#moderator'] == true){
-    $user_id = Specific::Filter($_GET[$RUTE['#p_user_id']]);
+    $user_id = Functions::Filter($_GET[$RUTE['#p_user_id']]);
     if(!empty($user_id) && $TEMP['#user']['id'] != $user_id){
-        $TEMP['#profile'] = $TEMP['data'] = Specific::Data($user_id);
+        $TEMP['#profile'] = $TEMP['data'] = Functions::Data($user_id);
         $TEMP['#param'] = "?{$RUTE['#p_user_id']}={$user_id}";
     }
 }
@@ -49,12 +49,12 @@ $messages_status = $TEMP['#profile']['shows']['messages'] == 'on' ? 'enabled' : 
 
 $TEMP['messages'] = "{$TEMP['#word']['message_settings']} ({$TEMP['#word'][$messages_status]})";
 
-$TEMP['username_alert'] = time() < $TEMP['#profile']['user_changed'] ? "{$TEMP['#word']['have_already_changed_username_change_day']} ".Specific::DateFormat($TEMP['#profile']['user_changed']) : $TEMP['#word']['when_change_username_will_months'];
+$TEMP['username_alert'] = time() < $TEMP['#profile']['user_changed'] ? "{$TEMP['#word']['have_already_changed_username_change_day']} ".Functions::DateFormat($TEMP['#profile']['user_changed']) : $TEMP['#word']['when_change_username_will_months'];
 $TEMP['email_alert'] = empty($TEMP['#profile']['new_email']) ? $TEMP['#word']['use_email_login_where_will_send'] : $TEMP['#word']['requested_change_email_need_verify'];
-$TEMP['birthday_alert'] = $TEMP['#profile']['birthday_changed'] == 0 ? $TEMP['#word']['can_only_change_date_birth'] : "{$TEMP['#word']['just_changed_date_birth_day']} ".Specific::DateFormat($TEMP['#profile']['birthday_changed']);
+$TEMP['birthday_alert'] = $TEMP['#profile']['birthday_changed'] == 0 ? $TEMP['#word']['can_only_change_date_birth'] : "{$TEMP['#word']['just_changed_date_birth_day']} ".Functions::DateFormat($TEMP['#profile']['birthday_changed']);
 $TEMP['red_social'] = ucfirst($TEMP['#profile']['type']);
 $TEMP['#text_count'] = mb_strlen(strip_tags($TEMP['#profile']['about']), "UTF8");
-$TEMP['about_br2nl'] = Specific::br2nl($TEMP['#profile']['about']);
+$TEMP['about_br2nl'] = Functions::br2nl($TEMP['#profile']['about']);
 
 $TEMP['month'] = ucfirst($TEMP['#word']['month']);
 $TEMP['default_holder'] = $TEMP['#profile']['avatar'] != 'default-holder' ? 1 : 0;
@@ -66,5 +66,5 @@ $TEMP['#title']       = $TEMP['#word']['settings'] . ' - ' . $TEMP['#settings'][
 $TEMP['#description'] = $TEMP['#settings']['description'];
 $TEMP['#keyword']     = $TEMP['#settings']['keyword'];
 
-$TEMP['#content']     = Specific::Maket("settings/account/content");
+$TEMP['#content']     = Functions::Build("settings/account/content");
 ?>

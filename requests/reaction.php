@@ -1,8 +1,8 @@
 <?php
 if($TEMP['#loggedin'] == true){
 	if($one == 'post-reaction'){
-		$post_id = Specific::Filter($_POST['post_id']);
-		$type = Specific::Filter($_POST['type']);
+		$post_id = Functions::Filter($_POST['post_id']);
+		$type = Functions::Filter($_POST['type']);
 
 		if(!empty($post_id) && in_array($type, array('like', 'dislike'))){
 			$post = $dba->query('SELECT *, COUNT(*) as count FROM '.T_POST.' WHERE id = ? AND status = "approved"', $post_id)->fetchArray();
@@ -81,7 +81,7 @@ if($TEMP['#loggedin'] == true){
 					}
 				}
 				if(!empty($insert_id)){
-					Specific::SetNotify(array(
+					Functions::SetNotify(array(
 						'user_id' => $post['user_id'],
 						'notified_id' => $insert_id,
 						'type' => 'preact',
@@ -90,9 +90,9 @@ if($TEMP['#loggedin'] == true){
 			}
 		}
 	} else if($one == 'comment-reaction'){
-		$comment_id = Specific::Filter($_POST['comment_id']);
-		$type = Specific::Filter($_POST['type']);
-		$treact = Specific::Filter($_POST['treact']);
+		$comment_id = Functions::Filter($_POST['comment_id']);
+		$type = Functions::Filter($_POST['type']);
+		$treact = Functions::Filter($_POST['treact']);
 
 		if(!empty($comment_id) && in_array($type, array('like', 'dislike')) && in_array($treact, array('comment', 'reply'))){
 
@@ -167,7 +167,7 @@ if($TEMP['#loggedin'] == true){
 				}
 
 				if(!empty($insert_id)){
-					Specific::SetNotify(array(
+					Functions::SetNotify(array(
 						'user_id' => $dba->query('SELECT user_id FROM '.$t_query.' WHERE (SELECT reacted_id FROM '.T_REACTION.' WHERE id = ?) = id', $insert_id)->fetchArray(true),
 						'notified_id' => $insert_id,
 						'type' => $n_react,

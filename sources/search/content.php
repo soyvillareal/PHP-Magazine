@@ -1,10 +1,10 @@
 <?php
 
-$keyword = Specific::Filter($_GET[$RUTE['#p_keyword']]);
-$date = Specific::Filter($_GET[$RUTE['#p_date']]);
-$category = Specific::Filter($_GET[$RUTE['#p_category']]);
-$author = Specific::Filter($_GET[$RUTE['#p_author']]);
-$sort = Specific::Filter($_GET[$RUTE['#p_sort']]);
+$keyword = Functions::Filter($_GET[$RUTE['#p_keyword']]);
+$date = Functions::Filter($_GET[$RUTE['#p_date']]);
+$category = Functions::Filter($_GET[$RUTE['#p_category']]);
+$author = Functions::Filter($_GET[$RUTE['#p_author']]);
+$sort = Functions::Filter($_GET[$RUTE['#p_sort']]);
 
 $TEMP['#type_date'] = $RUTE['#p_all'];
 $TEMP['type_ndate'] = $TEMP['#word']['all_'];
@@ -43,7 +43,7 @@ if(!empty($author) && is_numeric($author)){
 	if($author != $RUTE['#p_all']){
 		$user_exists = $dba->query('SELECT COUNT(*) FROM '.T_USER.' WHERE id = ? AND (role = "publisher" OR role = "moderator" OR role = "admin")', $author)->fetchArray(true);
 		if($user_exists > 0){
-			$user = Specific::Data($author, array('username', 'name', 'surname'));
+			$user = Functions::Data($author, array('username', 'name', 'surname'));
 			$TEMP['#type_author'] = $author;
 			$TEMP['type_nauthor'] = $user['username'];
 		}
@@ -66,7 +66,7 @@ if(in_array($sort, array($RUTE['#p_newest'], $RUTE['#p_oldest'], $RUTE['#p_views
 }
 
 
-$search_load = Load::Search(array(
+$search_load = Loads::Search(array(
 	'keyword' => $keyword,
 	'date' => $date,
 	'category' => $category,
@@ -77,11 +77,11 @@ $TEMP['posts_result'] = $search_load['html'];
 $TEMP['search_info'] = $search_load['info'];
 
 if($search_load['return']){
-	$widget = Specific::GetWidget('horizposts');
+	$widget = Functions::GetWidget('horizposts');
 	if($widget['return']){
 		$TEMP['posts_result'] .= $widget['html'];
 	}
-	$widget = Specific::GetWidget('aside');
+	$widget = Functions::GetWidget('aside');
 	if($widget['return']){
 		$TEMP['content_aad'] = $widget['html'];
 	}
@@ -102,18 +102,18 @@ if(!empty($TEMP['#related_cat'])){
 		$TEMP['!key'] += 1;
 		$TEMP['!title'] = $rlc['title'];
 		$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-		$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
-		$TEMP['!url'] = Specific::Url($rlc['slug']);
-		$TEMP['!thumbnail'] = Specific::GetFile($rlc['thumbnail'], 1, 's');
+		$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+		$TEMP['!url'] = Functions::Url($rlc['slug']);
+		$TEMP['!thumbnail'] = Functions::GetFile($rlc['thumbnail'], 1, 's');
 		$TEMP['!published_date'] = date('c', $rlc['published_at']);
-		$TEMP['!published_at'] = Specific::DateString($rlc['published_at']);
-		$TEMP['related_aside'] .= Specific::Maket('includes/search-post-profile-category-tag/related-aside');
+		$TEMP['!published_at'] = Functions::DateString($rlc['published_at']);
+		$TEMP['related_aside'] .= Functions::Build('includes/search-post-profile-category-tag/related-aside');
 	}
-	Specific::DestroyMaket();
+	Functions::DestroyBuild();
 }
 
-$TEMP['form_newsletter'] = Specific::Maket('includes/search-post-profile-category-tag/includes/form-newsletter');
-$TEMP['newsletter'] = Specific::Maket('includes/search-post-profile-category-tag/newsletter');
+$TEMP['form_newsletter'] = Functions::Build('includes/search-post-profile-category-tag/includes/form-newsletter');
+$TEMP['newsletter'] = Functions::Build('includes/search-post-profile-category-tag/newsletter');
 
 $TEMP['#keyword_search'] = $keyword;
 
@@ -127,5 +127,5 @@ $TEMP['#title']       = $TEMP['#word']['search'] . ' - ' . $TEMP['#settings']['t
 $TEMP['#description'] = $TEMP['#settings']['description'];
 $TEMP['#keyword']     = $TEMP['#settings']['keyword'];
 
-$TEMP['#content']     = Specific::Maket("search/content");
+$TEMP['#content']     = Functions::Build("search/content");
 ?>

@@ -4,33 +4,33 @@ if ($TEMP['#publisher'] === true) {
     	$empty = array();
 		$error = array();
 
-		$title = Specific::Filter($_POST['title']);
-		$category = Specific::Filter($_POST['category']);
-		$type = Specific::Filter($_POST['type']);
-		$description = Specific::Filter($_POST['description']);
-		$entries = Specific::Filter($_POST['entries']);
+		$title = Functions::Filter($_POST['title']);
+		$category = Functions::Filter($_POST['category']);
+		$type = Functions::Filter($_POST['type']);
+		$description = Functions::Filter($_POST['description']);
+		$entries = Functions::Filter($_POST['entries']);
 		$entries = html_entity_decode($entries);
 		$entries = json_decode($entries, true);
 
-		$recobo = Specific::Filter($_POST['recobo']);
+		$recobo = Functions::Filter($_POST['recobo']);
 		$recobo = html_entity_decode($recobo);
 		$recobo = json_decode($recobo, true);
 
-		$collaborators = Specific::Filter($_POST['collaborators']);
+		$collaborators = Functions::Filter($_POST['collaborators']);
 		$collaborators = html_entity_decode($collaborators);
 		$collaborators = json_decode($collaborators, true);
 
-		$post_sources = Specific::Filter($_POST['post_sources']);
+		$post_sources = Functions::Filter($_POST['post_sources']);
 		$post_sources = html_entity_decode($post_sources);
 		$post_sources = json_decode($post_sources, true);
 
-		$thumb_sources = Specific::Filter($_POST['thumb_sources']);
+		$thumb_sources = Functions::Filter($_POST['thumb_sources']);
 		$thumb_sources = html_entity_decode($thumb_sources);
 		$thumb_sources = json_decode($thumb_sources, true);
 
-		$thumbnail = !empty($_FILES['thumbnail']) ? $_FILES['thumbnail'] : Specific::Filter($_POST['thumbnail']);
-		$tags = Specific::Filter($_POST['tags']);
-		$action = Specific::Filter($_POST['action']);
+		$thumbnail = !empty($_FILES['thumbnail']) ? $_FILES['thumbnail'] : Functions::Filter($_POST['thumbnail']);
+		$tags = Functions::Filter($_POST['tags']);
+		$action = Functions::Filter($_POST['action']);
 
 		if(empty($title)){
 			$empty[] = array(
@@ -124,7 +124,7 @@ if ($TEMP['#publisher'] === true) {
 					if($_FILES['thumbnail']['size'] > $TEMP['#settings']['file_size_limit']){
 						$error[] = array(
 							'EL' => '#post-right .item-placeholder',
-							'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
+							'TX' => str_replace('{$file_size_limit}', Functions::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
 						);
 					}
 				}
@@ -146,7 +146,7 @@ if ($TEMP['#publisher'] === true) {
 					}
 
 					if($entry[0] == 'embed'){
-						if(!Specific::ValidateUrl($entry[2])){
+						if(!Functions::ValidateUrl($entry[2])){
 							$error[] = array(
 								'EL' => $key,
 								'CS' => '.item_url',
@@ -161,13 +161,13 @@ if ($TEMP['#publisher'] === true) {
 								$error[] = array(
 									'EL' => $key,
 									'CS' => '.item-placeholder',
-									'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
+									'TX' => str_replace('{$file_size_limit}', Functions::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
 								);
 							}
 						} else {
 							if(!empty($entry[2])){
 								$image_err = false;
-								$validate_url = Specific::ValidateUrl($entry[2], true);
+								$validate_url = Functions::ValidateUrl($entry[2], true);
 								$entries[$key][2] = $entry[2] = $validate_url['url'];
 								if(!$validate_url['return']){
 									$image_err = true;
@@ -202,7 +202,7 @@ if ($TEMP['#publisher'] === true) {
 									$error[] = array(
 										'EL' => $key,
 										'CS' => '.content-carrusel',
-										'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['one_file_too_big_maximum_size']}")
+										'TX' => str_replace('{$file_size_limit}', Functions::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['one_file_too_big_maximum_size']}")
 									);
 									break;
 								}
@@ -244,7 +244,7 @@ if ($TEMP['#publisher'] === true) {
 						$tiktok_url = preg_match("/(?:http(?:s)?:\/\/)?(?:(?:www)\.(?:tiktok\.com)(?:\/)(?!foryou)(@[a-zA-z0-9]+)(?:\/)(?:video)(?:\/)([\d]+)|(?:m)\.(?:tiktok\.com)(?:\/)(?!foryou)(?:v)(?:\/)?(?=([\d]+)\.html))/", $entry[2], $tk_video_url);
 						$tiktok_param = preg_match("/#\/(?P<username>@[a-zA-z0-9]*|.*)(?:\/)?(?:v|video)(?:\/)?(?P<id>[\d]+)/", $entry[2], $tk_video_param);
 
-						if($tiktok_param == true || ($tiktok_param == true && Specific::ValidateUrl($entry[2]))){
+						if($tiktok_param == true || ($tiktok_param == true && Functions::ValidateUrl($entry[2]))){
 							$tiktok_url = true;
 							$entries[$key][2] = "https://www.tiktok.com/{$tk_video_param['username']}/video/{$tk_video_param['id']}";
 						}
@@ -291,7 +291,7 @@ if ($TEMP['#publisher'] === true) {
 					if(count($post_sources) < $TEMP['#settings']['number_of_fonts']){
 						foreach($post_sources as $key => $source) {
 							if(!empty($source['name']) && !empty($source['source'])){
-								if(!Specific::ValidateUrl($source['source'])){
+								if(!Functions::ValidateUrl($source['source'])){
 									$error_positions[] = $key;
 								}
 							}
@@ -321,7 +321,7 @@ if ($TEMP['#publisher'] === true) {
 					if(count($thumb_sources) < $TEMP['#settings']['number_of_fonts']){
 						foreach($thumb_sources as $key => $source) {
 							if(!empty($source['name']) && !empty($source['source'])){
-								if(!Specific::ValidateUrl($source['source'])){
+								if(!Functions::ValidateUrl($source['source'])){
 									$error_positions[] = $key;
 								}
 							}
@@ -357,7 +357,7 @@ if ($TEMP['#publisher'] === true) {
 				if(empty($error)){
 					$files = array();
 					if(!empty($_FILES['thumbnail'])){
-						$thumbnail = Specific::UploadImage(array(
+						$thumbnail = Functions::UploadImage(array(
 							'name' => $_FILES['thumbnail']['name'],
 							'tmp_name' => $_FILES['thumbnail']['tmp_name'],
 							'size' => $_FILES['thumbnail']['size'],
@@ -366,7 +366,7 @@ if ($TEMP['#publisher'] === true) {
 						));
 						$files['posts'] = $thumbnail['image'];
 					} else {
-						$thumbnail = Specific::UploadThumbnail(array(
+						$thumbnail = Functions::UploadThumbnail(array(
 							'media' => $thumbnail,
 							'folder' => 'posts'
 						));
@@ -392,7 +392,7 @@ if ($TEMP['#publisher'] === true) {
 						$st_regex = '/<(?:script|style)[^>]*>(.*?)<\/(?:script|style)>/is';
 						$published_at = $created_at = time();
 						
-						$slug = Specific::CreateSlug($title);
+						$slug = Functions::CreateSlug($title);
 						$slugs = $dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE slug = ?', $slug)->fetchArray(true);
 						if($slugs > 0){
 							$slug = "{$slug}-{$slugs}";
@@ -440,7 +440,7 @@ if ($TEMP['#publisher'] === true) {
 										$thumbnail_id = 'thumbnail_'.$key;
 										if(!empty($_FILES[$thumbnail_id])){
 											$thumbnail = $_FILES[$thumbnail_id];
-											$image = Specific::UploadImage(array(
+											$image = Functions::UploadImage(array(
 												'name' => $thumbnail['name'],
 												'tmp_name' => $thumbnail['tmp_name'],
 												'size' => $thumbnail['size'],
@@ -452,7 +452,7 @@ if ($TEMP['#publisher'] === true) {
 											$content_frame = $image['image_ext'];
 											$files['entries'][] = $image['image_ext'];
 										} else if(!empty($entry[2])){
-											$image = Specific::UploadThumbnail(array(
+											$image = Functions::UploadThumbnail(array(
 												'media' => $entry[2],
 												'post_id' => $post_id,
 												'eorder' => $key,
@@ -463,7 +463,7 @@ if ($TEMP['#publisher'] === true) {
 										}
 										$thumbnail_accept = $content_frame['return'];
 									} else if($entry[0] == 'carousel'){
-										$captions = Specific::Filter($_POST['carousel_captions_'.$key]);
+										$captions = Functions::Filter($_POST['carousel_captions_'.$key]);
 										$captions = html_entity_decode($captions);
 										$captions = json_decode($captions, true);
 										$carousel = array();
@@ -471,7 +471,7 @@ if ($TEMP['#publisher'] === true) {
 											$carousel_id = 'carousel_'.$key.'_'.$i;
 											if(!empty($_FILES[$carousel_id])){
 												$thumbnail = $_FILES[$carousel_id];
-												$image = Specific::UploadImage(array(
+												$image = Functions::UploadImage(array(
 													'name' => $thumbnail['name'],
 													'tmp_name' => $thumbnail['tmp_name'],
 													'size' => $thumbnail['size'],
@@ -488,8 +488,8 @@ if ($TEMP['#publisher'] === true) {
 													);
 												}
 											} else if(!empty($_POST[$carousel_id])){
-												$image = Specific::UploadThumbnail(array(
-													'media' => Specific::Filter($_POST[$carousel_id]),
+												$image = Functions::UploadThumbnail(array(
+													'media' => Functions::Filter($_POST[$carousel_id]),
 													'post_id' => $post_id,
 													'eorder' => $key,
 													'folder' => 'entries'
@@ -517,7 +517,7 @@ if ($TEMP['#publisher'] === true) {
 										} else if($entry[0] == 'tiktok'){
 											$api = 'https://www.tiktok.com/oembed?format=json&url=';
 										}
-										$json = Specific::getContentUrl("{$api}{$entry[2]}");
+										$json = Functions::getContentUrl("{$api}{$entry[2]}");
 										$json = json_decode($json, true);
 
 										if(!isset($json['error']) && !isset($json['errors']) && !isset($json['status_msg'])){
@@ -539,8 +539,8 @@ if ($TEMP['#publisher'] === true) {
 											$arr_trues[] = false;
 										}
 									} else if($entry[0] == 'embed'){
-										$attrs = Specific::Filter($_POST["embed_{$key}"]);
-										$frame = Specific::MaketFrame($entry[2], $attrs);
+										$attrs = Functions::Filter($_POST["embed_{$key}"]);
+										$frame = Functions::BuildFrame($entry[2], $attrs);
 										$frame = array(
 											'url' => $entry[2],
 											'attrs' => $frame['attrs']
@@ -565,7 +565,7 @@ if ($TEMP['#publisher'] === true) {
 								if($label['count'] > 0){
 									$label_id = $label['id'];
 								} else {
-									$label_id = $dba->query('INSERT INTO '.T_LABEL.' (name, slug, created_at) VALUES (?, ?, ?)', $tag, Specific::CreateSlug($tag), time())->insertId();
+									$label_id = $dba->query('INSERT INTO '.T_LABEL.' (name, slug, created_at) VALUES (?, ?, ?)', $tag, Functions::CreateSlug($tag), time())->insertId();
 									if($label_id){
 										$arr_trues[] = true;
 									} else {
@@ -596,7 +596,7 @@ if ($TEMP['#publisher'] === true) {
 									if($user['count'] > 0 && !empty($user['about']) && !empty($user[$user['main_sonet']]) && $co != $TEMP['#user']['id']){
 										$insert_id = $dba->query('INSERT INTO '.T_COLLABORATOR.' (user_id, post_id, aorder, created_at) VALUES (?, ?, ?, ?)', $co, $post_id, $cocount, time())->insertId();
 										if($insert_id){
-											Specific::SetNotify(array(
+											Functions::SetNotify(array(
 												'user_id' => $co,
 												'notified_id' => $insert_id,
 												'type' => 'collab',
@@ -611,9 +611,9 @@ if ($TEMP['#publisher'] === true) {
 								if($action == 'post' && ($TEMP['#settings']['approve_posts'] == 'off' || $TEMP['#moderator'] == true)){
 									$followers = $dba->query('SELECT user_id FROM '.T_FOLLOWER.' WHERE profile_id = ?', $TEMP['#user']['id'])->fetchAll();
 									foreach($followers as $follow){
-										$user = Specific::Data($follow['user_id']);
+										$user = Functions::Data($follow['user_id']);
 										if(in_array($category, $user['notifications'])){
-											Specific::SetNotify(array(
+											Functions::SetNotify(array(
 												'user_id' => $user['id'],
 												'notified_id' => $post_id,
 												'type' => 'post',
@@ -624,7 +624,7 @@ if ($TEMP['#publisher'] === true) {
 
 								$deliver = array(
 									'S' => 200,
-									'LK' => Specific::Url($slug)
+									'LK' => Functions::Url($slug)
 								);
 							} else {
 								if($dba->query('DELETE FROM '.T_POST.' WHERE id = ?', $post_id)->returnStatus()){
@@ -660,34 +660,34 @@ if ($TEMP['#publisher'] === true) {
 		$empty = array();
 		$error = array();
 
-		$post_id = Specific::Filter($_POST['post_id']);
-		$title = Specific::Filter($_POST['title']);
-		$category = Specific::Filter($_POST['category']);
-		$type = Specific::Filter($_POST['type']);
-		$description = Specific::Filter($_POST['description']);
-		$entries = Specific::Filter($_POST['entries']);
+		$post_id = Functions::Filter($_POST['post_id']);
+		$title = Functions::Filter($_POST['title']);
+		$category = Functions::Filter($_POST['category']);
+		$type = Functions::Filter($_POST['type']);
+		$description = Functions::Filter($_POST['description']);
+		$entries = Functions::Filter($_POST['entries']);
 		$entries = html_entity_decode($entries);
 		$entries = json_decode($entries, true);
 
-		$recobo = Specific::Filter($_POST['recobo']);
+		$recobo = Functions::Filter($_POST['recobo']);
 		$recobo = html_entity_decode($recobo);
 		$recobo = json_decode($recobo, true);
 
-		$collaborators = Specific::Filter($_POST['collaborators']);
+		$collaborators = Functions::Filter($_POST['collaborators']);
 		$collaborators = html_entity_decode($collaborators);
 		$collaborators = json_decode($collaborators, true);
 
-		$post_sources = Specific::Filter($_POST['post_sources']);
+		$post_sources = Functions::Filter($_POST['post_sources']);
 		$post_sources = html_entity_decode($post_sources);
 		$post_sources = json_decode($post_sources, true);
 
-		$thumb_sources = Specific::Filter($_POST['thumb_sources']);
+		$thumb_sources = Functions::Filter($_POST['thumb_sources']);
 		$thumb_sources = html_entity_decode($thumb_sources);
 		$thumb_sources = json_decode($thumb_sources, true);
 
-		$thumbnail = !empty($_FILES['thumbnail']) ? $_FILES['thumbnail'] : Specific::Filter($_POST['thumbnail']);
-		$tags = Specific::Filter($_POST['tags']);
-		$action = Specific::Filter($_POST['action']);
+		$thumbnail = !empty($_FILES['thumbnail']) ? $_FILES['thumbnail'] : Functions::Filter($_POST['thumbnail']);
+		$tags = Functions::Filter($_POST['tags']);
+		$action = Functions::Filter($_POST['action']);
 
 		if(empty($title)){
 			$empty[] = array(
@@ -778,14 +778,14 @@ if ($TEMP['#publisher'] === true) {
 		if(!empty($post_id)){
 			$post = $dba->query('SELECT user_id, slug, thumbnail, status, published_at, COUNT(*) as count FROM '.T_POST.' WHERE id = ?', $post_id)->fetchArray();
 
-			if($post['count'] > 0 && (Specific::IsOwner($post['user_id']) || $TEMP['#moderator'] == true)){
+			if($post['count'] > 0 && (Functions::IsOwner($post['user_id']) || $TEMP['#moderator'] == true)){
 				if(in_array($action, array('post', 'save'))){
 					if(empty($empty)){
 						if(!empty($_FILES['thumbnail'])){
 							if($_FILES['thumbnail']['size'] > $TEMP['#settings']['file_size_limit']){
 								$error[] = array(
 									'EL' => '#post-right .item-placeholder',
-									'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
+									'TX' => str_replace('{$file_size_limit}', Functions::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
 								);
 							}
 						}
@@ -804,13 +804,13 @@ if ($TEMP['#publisher'] === true) {
 										$error[] = array(
 											'EL' => $key,
 											'CS' => '.item-placeholder',
-											'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
+											'TX' => str_replace('{$file_size_limit}', Functions::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['file_too_big_maximum_size']}")
 										);
 									}
 								} else {
 									if(!empty($entry[2])){
 										$image_err = false;
-										$validate_url = Specific::ValidateUrl($entry[2], true);
+										$validate_url = Functions::ValidateUrl($entry[2], true);
 										$entries[$key][2] = $entry[2] = $validate_url['url'];
 										if(!$validate_url['return']){
 											$image_err = true;
@@ -845,7 +845,7 @@ if ($TEMP['#publisher'] === true) {
 											$error[] = array(
 												'EL' => $key,
 												'CS' => '.content-carrusel',
-												'TX' => str_replace('{$file_size_limit}', Specific::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['one_file_too_big_maximum_size']}")
+												'TX' => str_replace('{$file_size_limit}', Functions::SizeFormat($TEMP['#settings']['file_size_limit']), "*{$TEMP['#word']['one_file_too_big_maximum_size']}")
 											);
 											break;
 										}
@@ -854,7 +854,7 @@ if ($TEMP['#publisher'] === true) {
 							}
 
 							if($entry[0] == 'embed'){
-								if(!Specific::ValidateUrl($entry[2])){
+								if(!Functions::ValidateUrl($entry[2])){
 									$error[] = array(
 										'EL' => $key,
 										'CS' => '.item_url',
@@ -908,7 +908,7 @@ if ($TEMP['#publisher'] === true) {
 									$tiktok_url = preg_match("/(?:http(?:s)?:\/\/)?(?:(?:www)\.(?:tiktok\.com)(?:\/)(?!foryou)(@[a-zA-z0-9]+)(?:\/)(?:video)(?:\/)([\d]+)|(?:m)\.(?:tiktok\.com)(?:\/)(?!foryou)(?:v)(?:\/)?(?=([\d]+)\.html))/", $entry[2], $tk_video_url);
 									$tiktok_param = preg_match("/#\/(?P<username>@[a-zA-z0-9]*|.*)(?:\/)?(?:v|video)(?:\/)?(?P<id>[\d]+)/", $entry[2], $tk_video_param);
 
-									if($tiktok_param == true || ($tiktok_param == true && Specific::ValidateUrl($entry[2]))){
+									if($tiktok_param == true || ($tiktok_param == true && Functions::ValidateUrl($entry[2]))){
 										$tiktok_url = true;
 										$entries[$key][2] = "https://www.tiktok.com/{$tk_video_param['username']}/video/{$tk_video_param['id']}";
 									}
@@ -956,7 +956,7 @@ if ($TEMP['#publisher'] === true) {
 							if(count($post_sources) < $TEMP['#settings']['number_of_fonts']){
 								foreach($post_sources as $key => $source) {
 									if(!empty($source['name']) && !empty($source['source'])){
-										if(!Specific::ValidateUrl($source['source'])){
+										if(!Functions::ValidateUrl($source['source'])){
 											$error_positions[] = $key;
 										}
 									}
@@ -986,7 +986,7 @@ if ($TEMP['#publisher'] === true) {
 							if(count($thumb_sources) < $TEMP['#settings']['number_of_fonts']){
 								foreach($thumb_sources as $key => $source) {
 									if(!empty($source['name']) && !empty($source['source'])){
-										if(!Specific::ValidateUrl($source['source'])){
+										if(!Functions::ValidateUrl($source['source'])){
 											$error_positions[] = $key;
 										}
 									}
@@ -1022,7 +1022,7 @@ if ($TEMP['#publisher'] === true) {
 						if(empty($error)){
 							if(!empty($thumbnail) && !preg_match("/{$TEMP['#site_domain']}/i", $thumbnail)){
 								if(!empty($_FILES['thumbnail'])){
-									$thumbnail = Specific::UploadImage(array(
+									$thumbnail = Functions::UploadImage(array(
 										'name' => $_FILES['thumbnail']['name'],
 										'tmp_name' => $_FILES['thumbnail']['tmp_name'],
 										'size' => $_FILES['thumbnail']['size'],
@@ -1030,7 +1030,7 @@ if ($TEMP['#publisher'] === true) {
 										'folder' => 'posts',
 									));
 								} else {
-									$thumbnail = Specific::UploadThumbnail(array(
+									$thumbnail = Functions::UploadThumbnail(array(
 										'media' => $thumbnail,
 										'folder' => 'posts'
 									));
@@ -1116,7 +1116,7 @@ if ($TEMP['#publisher'] === true) {
 													$thumbnail_id = 'thumbnail_'.$key;
 													if(!empty($_FILES[$thumbnail_id])){
 														$thumbnail = $_FILES[$thumbnail_id];
-														$image = Specific::UploadImage(array(
+														$image = Functions::UploadImage(array(
 															'name' => $thumbnail['name'],
 															'tmp_name' => $thumbnail['tmp_name'],
 															'size' => $thumbnail['size'],
@@ -1127,7 +1127,7 @@ if ($TEMP['#publisher'] === true) {
 														));
 														$content_frame = $image['image_ext'];
 													} else if(!empty($entry[2])){
-														$image = Specific::UploadThumbnail(array(
+														$image = Functions::UploadThumbnail(array(
 															'media' => $entry[2],
 															'post_id' => $post_id,
 															'eorder' => $key,
@@ -1155,7 +1155,7 @@ if ($TEMP['#publisher'] === true) {
 													}
 												}
 											} else if($entry[0] == 'carousel'){
-												$captions = Specific::Filter($_POST['carousel_captions_'.$key]);
+												$captions = Functions::Filter($_POST['carousel_captions_'.$key]);
 												$captions = html_entity_decode($captions);
 												$captions = json_decode($captions, true);
 												$carousel = array();
@@ -1165,7 +1165,7 @@ if ($TEMP['#publisher'] === true) {
 
 													if(!empty($_FILES[$carousel_id])){
 														$thumbnail = $_FILES[$carousel_id];
-														$image = Specific::UploadImage(array(
+														$image = Functions::UploadImage(array(
 															'name' => $thumbnail['name'],
 															'tmp_name' => $thumbnail['tmp_name'],
 															'size' => $thumbnail['size'],
@@ -1181,8 +1181,8 @@ if ($TEMP['#publisher'] === true) {
 															);
 														}
 													} else if(!empty($_POST[$carousel_id])){
-														$image = Specific::UploadThumbnail(array(
-															'media' => Specific::Filter($_POST[$carousel_id]),
+														$image = Functions::UploadThumbnail(array(
+															'media' => Functions::Filter($_POST[$carousel_id]),
 															'post_id' => $post_id,
 															'eorder' => $key,
 															'folder' => 'entries'
@@ -1208,8 +1208,8 @@ if ($TEMP['#publisher'] === true) {
 												}
 											} else {
 												if($entry[0] == 'embed'){
-													$attrs = Specific::Filter($_POST["embed_{$key}"]);
-													$frame = Specific::MaketFrame($entry[2], $attrs);
+													$attrs = Functions::Filter($_POST["embed_{$key}"]);
+													$frame = Functions::BuildFrame($entry[2], $attrs);
 													$frame = array(
 														'url' => $entry[2],
 														'attrs' => $frame['attrs']
@@ -1227,7 +1227,7 @@ if ($TEMP['#publisher'] === true) {
 														} else if($entry[0] == 'tiktok'){
 															$api = 'https://www.tiktok.com/oembed?format=json&url=';
 														}
-														$json = Specific::getContentUrl("{$api}{$entry[2]}");
+														$json = Functions::getContentUrl("{$api}{$entry[2]}");
 														$json = json_decode($json, true);
 
 														if(!isset($json['error']) && !isset($json['errors']) && !isset($json['status_msg'])){
@@ -1332,7 +1332,7 @@ if ($TEMP['#publisher'] === true) {
 											if($label['count'] > 0){
 												$label_id = $label['id'];
 											} else {
-												$label_id = $dba->query('INSERT INTO '.T_LABEL.' (name, slug, created_at) VALUES (?, ?, ?)', $tag, Specific::CreateSlug($tag), time())->insertId();
+												$label_id = $dba->query('INSERT INTO '.T_LABEL.' (name, slug, created_at) VALUES (?, ?, ?)', $tag, Functions::CreateSlug($tag), time())->insertId();
 												if($label_id){
 													$arr_trues[] = true;
 												} else {
@@ -1388,7 +1388,7 @@ if ($TEMP['#publisher'] === true) {
 												$insert_id = $dba->query('INSERT INTO '.T_COLLABORATOR.' (user_id, post_id, created_at) VALUES (?, ?, ?)', $addco, $post_id, time())->insertId();
 
 												if($insert_id){
-													Specific::SetNotify(array(
+													Functions::SetNotify(array(
 														'user_id' => $addco,
 														'notified_id' => $insert_id,
 														'type' => 'collab',
@@ -1415,9 +1415,9 @@ if ($TEMP['#publisher'] === true) {
 										if($action == 'post' && $post['published_at'] == 0 && ($TEMP['#settings']['approve_posts'] == 'off' || $TEMP['#moderator'] == true)){
 											$followers = $dba->query('SELECT user_id FROM '.T_FOLLOWER.' WHERE profile_id = ?', $TEMP['#user']['id'])->fetchAll();
 											foreach($followers as $follow){
-												$user = Specific::Data($follow['user_id']);
+												$user = Functions::Data($follow['user_id']);
 												if(in_array($category, $user['notifications'])){
-													Specific::SetNotify(array(
+													Functions::SetNotify(array(
 														'user_id' => $user['id'],
 														'notified_id' => $post_id,
 														'type' => 'post',
@@ -1428,7 +1428,7 @@ if ($TEMP['#publisher'] === true) {
 
 										$deliver = array(
 											'S' => 200,
-											'LK' => Specific::Url($slug)
+											'LK' => Functions::Url($slug)
 										);
 									}
 								}
@@ -1449,8 +1449,8 @@ if ($TEMP['#publisher'] === true) {
 			}
 		}
     } else if($one == 'get-tags'){
-		$search = Specific::Filter($_POST['search']);
-		$tags = Specific::Filter($_POST['tags']);
+		$search = Functions::Filter($_POST['search']);
+		$tags = Functions::Filter($_POST['tags']);
 		$tags = html_entity_decode($tags);
 		$tags = json_decode($tags, true);
 
@@ -1475,14 +1475,14 @@ if ($TEMP['#publisher'] === true) {
 			}
 		}
 	} else if($one == 'get-image'){
-		$url = Specific::Filter($_POST['url']);
+		$url = Functions::Filter($_POST['url']);
 		if(!empty($url)){
-			$validate_url = Specific::ValidateUrl($url, true);
+			$validate_url = Functions::ValidateUrl($url, true);
 			if($validate_url['return']){
 				$url = $validate_url['url'];
 				if(exif_imagetype($url) != false){
 					if(!strpos(strtolower($url), '.gif')){
-						$image = Specific::getContentUrl($url, true);
+						$image = Functions::getContentUrl($url, true);
 						$image = base64_encode($image);
 						if(!empty($image)){
 							$deliver = array(
@@ -1520,10 +1520,10 @@ if ($TEMP['#publisher'] === true) {
 			);
 		}
 	} else if($one == 'get-frame'){
-		$url = Specific::Filter($_POST['url']);
-		$type = Specific::Filter($_POST['type']);
+		$url = Functions::Filter($_POST['url']);
+		$type = Functions::Filter($_POST['type']);
 		if(!empty($url)){
-			$validate_url = Specific::ValidateUrl($url, true);
+			$validate_url = Functions::ValidateUrl($url, true);
 			if($validate_url['return']){
 				$url = $validate_url['url'];
 				if(!empty($type)){
@@ -1534,7 +1534,7 @@ if ($TEMP['#publisher'] === true) {
 								$deliver = array(
 									'S' => 200,
 									'FB' => 1,
-									'HT' => Specific::Maket('includes/load-publisher-edit/facebook-post')
+									'HT' => Functions::Build('includes/load-publisher-edit/facebook-post')
 								);
 							}
 						} else if($type == 'instagrampost'){
@@ -1543,7 +1543,7 @@ if ($TEMP['#publisher'] === true) {
 								$TEMP['!url'] = $url;
 								$deliver = array(
 									'S' => 200,
-									'HT' => Specific::Maket('includes/create-edit-post/instagram-blockquote')
+									'HT' => Functions::Build('includes/create-edit-post/instagram-blockquote')
 								);
 							}
 						} else {
@@ -1571,7 +1571,7 @@ if ($TEMP['#publisher'] === true) {
 								} else if($tiktok_url == true && $type == 'tiktok'){
 									$api = 'https://www.tiktok.com/oembed?format=json&url=';
 								}
-								$json = Specific::getContentUrl("{$api}{$url}");
+								$json = Functions::getContentUrl("{$api}{$url}");
 								$json = json_decode($json, true);
 								
 								if(!isset($json['error']) && !isset($json['errors']) && !isset($json['status_msg'])){
@@ -1591,7 +1591,7 @@ if ($TEMP['#publisher'] === true) {
 							}
 						}
 					} else if($type == 'video'){
-						$frame = Specific::IdentifyFrame($url);
+						$frame = Functions::IdentifyFrame($url);
 						if($frame['return']){
 							$deliver['S'] = 200;
 							$deliver['HT'] = $frame['html'];
@@ -1602,8 +1602,8 @@ if ($TEMP['#publisher'] === true) {
 							);
 						}
 					} else if($type == 'embed'){
-						$attrs = Specific::Filter($_POST['attrs']);
-						$frame = Specific::MaketFrame($url, $attrs);
+						$attrs = Functions::Filter($_POST['attrs']);
+						$frame = Functions::BuildFrame($url, $attrs);
 
 						$deliver['S'] = 200;
 						$deliver['HT'] = $frame['html'];
@@ -1622,7 +1622,7 @@ if ($TEMP['#publisher'] === true) {
 			);
 		}
 	} else if($one == 'entry'){
-		$type = Specific::Filter($_POST['type']);
+		$type = Functions::Filter($_POST['type']);
 		$types = array(
 			'text',
 			'image',
@@ -1645,15 +1645,15 @@ if ($TEMP['#publisher'] === true) {
 			$deliver = array(
 				'S' => 200,
 				'TP' => $TEMP['#type'],
-				'HT' => Specific::Maket('create-post/includes/entry')
+				'HT' => Functions::Build('create-post/includes/entry')
 			);
 		}
 	} else if($one == 'ecp-search'){
-		$post_id = Specific::Filter($_POST['post_id']);
-		$post_ids = Specific::Filter($_POST['post_ids']);
+		$post_id = Functions::Filter($_POST['post_id']);
+		$post_ids = Functions::Filter($_POST['post_ids']);
 		$post_ids = html_entity_decode($post_ids);
 		$post_ids = json_decode($post_ids);
-		$keyword = Specific::Filter($_POST['keyword']);
+		$keyword = Functions::Filter($_POST['keyword']);
 		if(!empty($keyword)){
 			$html = '';
 			$query = '';
@@ -1670,11 +1670,11 @@ if ($TEMP['#publisher'] === true) {
 					$TEMP['!id'] = $post['id'];
 
 					$TEMP['!title'] = $post['title'];
-					$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
+					$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 
-					$html .= Specific::Maket("includes/create-edit-post/ecp-search-result");
+					$html .= Functions::Build("includes/create-edit-post/ecp-search-result");
 				}
-				Specific::DestroyMaket();
+				Functions::DestroyBuild();
 
 				$deliver = array(
 					'S' => 200,
@@ -1682,7 +1682,7 @@ if ($TEMP['#publisher'] === true) {
 				);
 			} else {
 				$TEMP['keyword'] = $keyword;
-				$html = Specific::Maket("not-found/no-result-for");
+				$html = Functions::Build("not-found/no-result-for");
 				$deliver = array(
 					'S' => 400,
 					'HT' => $html
@@ -1690,12 +1690,12 @@ if ($TEMP['#publisher'] === true) {
 			}
 		}
 	} else if($one == 'push-post'){
-		$post_id = Specific::Filter($_POST['post_id']);
-		$push_id = Specific::Filter($_POST['push_id']);
-		$post_ids = Specific::Filter($_POST['post_ids']);
+		$post_id = Functions::Filter($_POST['post_id']);
+		$push_id = Functions::Filter($_POST['push_id']);
+		$post_ids = Functions::Filter($_POST['post_ids']);
 		$post_ids = html_entity_decode($post_ids);
 		$post_ids = json_decode($post_ids);
-		$entry_text = Specific::Filter($_POST['entry_text']);
+		$entry_text = Functions::Filter($_POST['entry_text']);
 		$entry_text = html_entity_decode($entry_text);
 		$entry_text = json_decode($entry_text);
 
@@ -1726,15 +1726,15 @@ if ($TEMP['#publisher'] === true) {
 
 						$TEMP['!title'] = $post['title'];
 						$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-						$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
-						$TEMP['!url'] = Specific::Url($post['slug']);
-						$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
+						$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+						$TEMP['!url'] = Functions::Url($post['slug']);
+						$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 						$TEMP['!published_date'] = date('c', $post['published_at']);
-						$TEMP['!published_at'] = Specific::DateString($post['published_at']);
+						$TEMP['!published_at'] = Functions::DateString($post['published_at']);
 
 						$deliver = array(
 							'S' => 200,
-							'HT' => Specific::Maket("includes/create-edit-post/recommended-body"),
+							'HT' => Functions::Build("includes/create-edit-post/recommended-body"),
 							'ID' => $post['id']
 						);
 					}
@@ -1753,10 +1753,10 @@ if ($TEMP['#publisher'] === true) {
 			}
 		}
 	} else if($one == 'ecu-search'){
-		$user_ids = Specific::Filter($_POST['user_ids']);
+		$user_ids = Functions::Filter($_POST['user_ids']);
 		$user_ids = html_entity_decode($user_ids);
 		$user_ids = json_decode($user_ids);
-		$keyword = Specific::Filter($_POST['keyword']);
+		$keyword = Functions::Filter($_POST['keyword']);
 		if(!empty($keyword)){
 			$html = '';
 			$query = '';
@@ -1770,14 +1770,14 @@ if ($TEMP['#publisher'] === true) {
 
 					$TEMP['!id'] = $user['id'];
 					
-					$user = Specific::Data($user['id'], array('username', 'avatar'));
+					$user = Functions::Data($user['id'], array('username', 'avatar'));
 					$TEMP['!collab_name'] = $user['username'];
-					$TEMP['!collab_url'] = Specific::ProfileUrl($user['username']);
+					$TEMP['!collab_url'] = Functions::ProfileUrl($user['username']);
 					$TEMP['!collab_avatar'] = $user['avatar_s'];
 
-					$html .= Specific::Maket("includes/create-edit-post/ecu-search-result");
+					$html .= Functions::Build("includes/create-edit-post/ecu-search-result");
 				}
-				Specific::DestroyMaket();
+				Functions::DestroyBuild();
 
 				$deliver = array(
 					'S' => 200,
@@ -1785,7 +1785,7 @@ if ($TEMP['#publisher'] === true) {
 				);
 			} else {
 				$TEMP['keyword'] = $keyword;
-				$html = Specific::Maket("not-found/no-result-for");
+				$html = Functions::Build("not-found/no-result-for");
 				$deliver = array(
 					'S' => 400,
 					'HT' => $html
@@ -1793,9 +1793,9 @@ if ($TEMP['#publisher'] === true) {
 			}
 		}
 	} else if($one == 'push-user'){
-		$post_id = Specific::Filter($_POST['post_id']);
-		$push_id = Specific::Filter($_POST['push_id']);
-		$user_ids = Specific::Filter($_POST['user_ids']);
+		$post_id = Functions::Filter($_POST['post_id']);
+		$push_id = Functions::Filter($_POST['push_id']);
+		$user_ids = Functions::Filter($_POST['user_ids']);
 		$user_ids = html_entity_decode($user_ids);
 		$user_ids = json_decode($user_ids);
 
@@ -1808,24 +1808,24 @@ if ($TEMP['#publisher'] === true) {
 					if(!empty($user[$user['main_sonet']])){
 						$TEMP['!id'] = $user_id;
 				
-						$user = Specific::Data($user_id, array('username', 'avatar'));
+						$user = Functions::Data($user_id, array('username', 'avatar'));
 						$TEMP['!collab_name'] = $user['username'];
 						$TEMP['!collab_avatar'] = $user['avatar_s'];
 
 						$deliver = array(
 							'S' => 200,
-							'HT' => Specific::Maket("includes/create-edit-post/collaborator"),
+							'HT' => Functions::Build("includes/create-edit-post/collaborator"),
 							'ID' => $user_id
 						);
 					} else {
-						$username = Specific::Data($user_id, array('username'));
+						$username = Functions::Data($user_id, array('username'));
 						$deliver = array(
 							'S' => 400,
 							'E' => "*{$username} {$TEMP['#word']['you_need_complete_your']} {$TEMP['#word'][$user['main_sonet']]} {$TEMP['#word']['in_settings']}"
 						);
 					}
 				} else {
-					$username = Specific::Data($user_id, array('username'));
+					$username = Functions::Data($user_id, array('username'));
 					$deliver = array(
 						'S' => 400,
 						'E' => "*{$username} {$TEMP['#word']['you_need_fill_profile_description']}"

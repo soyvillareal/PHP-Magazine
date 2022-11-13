@@ -1,35 +1,35 @@
 <?php
 
-$slug = Specific::Filter($_GET['one']);
+$slug = Functions::Filter($_GET['one']);
 $post = $dba->query('SELECT * FROM '.T_POST.' WHERE slug = ?', $slug)->fetchArray();
 if(empty($post)){
-	header("Location: " . Specific::Url('404'));
+	header("Location: " . Functions::Url('404'));
 	exit();
 }
 
-if(!Specific::IsOwner($post['user_id'])){
+if(!Functions::IsOwner($post['user_id'])){
 	if($TEMP['#moderator'] == false && ($post['status'] != 'approved' || $post['published_at'] == 0)){
-		header("Location: " . Specific::Url('404'));
+		header("Location: " . Functions::Url('404'));
 		exit();
 	}
 } else if($post['status'] == 'deleted'){
-	header("Location: " . Specific::Url('404'));
+	header("Location: " . Functions::Url('404'));
 	exit();
 }
 
-if(!in_array($post['user_id'], Specific::BlockedUsers(false)) || Specific::IsOwner($post['user_id'])){
+if(!in_array($post['user_id'], Functions::BlockedUsers(false)) || Functions::IsOwner($post['user_id'])){
 
-	$post_load = Load::Post($post);
+	$post_load = Loads::Post($post);
 	$TEMP['main'] = $post_load['html'];
 
 	$post_load['post_ids'][] = $post['id'];
 
-	$widget = Specific::GetWidget('ptop');
+	$widget = Functions::GetWidget('ptop');
 	if($widget['return']){
 		$TEMP['advertisement_ptad'] = $widget['html'];
 	}
 
-	$widget = Specific::GetWidget('aside');
+	$widget = Functions::GetWidget('aside');
 	if($widget['return']){
 		$TEMP['content_aad'] = $widget['html'];
 	}
@@ -44,23 +44,23 @@ if(!in_array($post['user_id'], Specific::BlockedUsers(false)) || Specific::IsOwn
 			$TEMP['!key'] += 1;
 			$TEMP['!title'] = $rlc['title'];
 			$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-			$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
-			$TEMP['!url'] = Specific::Url($rlc['slug']);
-			$TEMP['!thumbnail'] = Specific::GetFile($rlc['thumbnail'], 1, 's');
+			$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+			$TEMP['!url'] = Functions::Url($rlc['slug']);
+			$TEMP['!thumbnail'] = Functions::GetFile($rlc['thumbnail'], 1, 's');
 			$TEMP['!published_date'] = date('c', $rlc['published_at']);
-			$TEMP['!published_at'] = Specific::DateString($rlc['published_at']);
-			$TEMP['related_aside'] .= Specific::Maket('includes/search-post-profile-category-tag/related-aside');
+			$TEMP['!published_at'] = Functions::DateString($rlc['published_at']);
+			$TEMP['related_aside'] .= Functions::Build('includes/search-post-profile-category-tag/related-aside');
 		}
-		Specific::DestroyMaket();
+		Functions::DestroyBuild();
 	}
 
-	$TEMP['form_newsletter'] = Specific::Maket('includes/search-post-profile-category-tag/includes/form-newsletter');
-	$TEMP['newsletter'] = Specific::Maket('includes/search-post-profile-category-tag/newsletter');
+	$TEMP['form_newsletter'] = Functions::Build('includes/search-post-profile-category-tag/includes/form-newsletter');
+	$TEMP['newsletter'] = Functions::Build('includes/search-post-profile-category-tag/newsletter');
 	$TEMP['#keyword']      = implode(',', $post_load['keywords']);
-	$TEMP['#content']      = Specific::Maket('post/content');
+	$TEMP['#content']      = Functions::Build('post/content');
 
 } else {
-	$TEMP['#content']      = Specific::Maket('includes/post-amp/locked');
+	$TEMP['#content']      = Functions::Build('includes/post-amp/locked');
 }
 
 

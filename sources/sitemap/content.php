@@ -3,15 +3,15 @@
 $page = $dba->query('SELECT * FROM '.T_PAGE.' WHERE slug = "sitemap"')->fetchArray();
 
 if($page['status'] == 'disabled'){
-	header("Location: " . Specific::Url('404'));
+	header("Location: " . Functions::Url('404'));
 	exit();
 }
 
-$date = Specific::Filter($_GET[$RUTE['#p_date']]);
+$date = Functions::Filter($_GET[$RUTE['#p_date']]);
 
-$day = Specific::Filter($_GET[$RUTE['#p_day']]);
-$month = Specific::Filter($_GET[$RUTE['#p_month']]);
-$year = Specific::Filter($_GET[$RUTE['#p_year']]);
+$day = Functions::Filter($_GET[$RUTE['#p_day']]);
+$month = Functions::Filter($_GET[$RUTE['#p_month']]);
+$year = Functions::Filter($_GET[$RUTE['#p_year']]);
 
 $TEMP['#has_link'] = true;
 $TEMP['#has_dates'] = false;
@@ -61,14 +61,14 @@ if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE status = "approved"')->fet
 		if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE status = "approved"'.$query)->fetchArray(true) > 0){
 			$TEMP['#has_dates'] = true;
 			$TEMP['!title'] = $TEMP['#word'][$key];
-			$TEMP['!url'] = Specific::Url("{$RUTE['#r_sitemap']}?{$RUTE['#p_date']}={$RUTE["#p_{$key}"]}");
+			$TEMP['!url'] = Functions::Url("{$RUTE['#r_sitemap']}?{$RUTE['#p_date']}={$RUTE["#p_{$key}"]}");
 
-			$TEMP['dates'] .= Specific::Maket('sitemap/includes/date');
+			$TEMP['dates'] .= Functions::Build('sitemap/includes/date');
 		}
 	}
 
 	if(!empty($date)){
-		$sitemap = Load::Sitemap(array(
+		$sitemap = Loads::Sitemap(array(
 			'date' => $date
 		));
 
@@ -76,7 +76,7 @@ if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE status = "approved"')->fet
 			$TEMP['#has_posts'] = true;
 			$TEMP['content'] = $sitemap['html'];
 		} else {
-	    	header("Location: " . Specific::Url('404'));
+	    	header("Location: " . Functions::Url('404'));
 	    	exit();
 		}
 	} else {
@@ -88,7 +88,7 @@ if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE status = "approved"')->fet
 			$TEMP['#month'] = $month;
 			$TEMP['#day'] = $day;
 
-			$sitemap = Load::Sitemap(array(
+			$sitemap = Loads::Sitemap(array(
 				'date' => 'other',
 				'day' => $day,
 				'month' => $month,
@@ -99,7 +99,7 @@ if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE status = "approved"')->fet
 				$TEMP['#has_posts'] = true;
 				$TEMP['content'] = $sitemap['html'];
 			} else {
-		    	header("Location: " . Specific::Url('404'));
+		    	header("Location: " . Functions::Url('404'));
 		    	exit();
 			}
 
@@ -122,11 +122,11 @@ if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE status = "approved"')->fet
 
 					if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE created_at > ? AND created_at < ? AND status = "approved"', $first_hour, $last_hour)->fetchArray(true) > 0){
 						$TEMP['!day'] = $i;
-						$TEMP['content'] .= Specific::Maket('sitemap/includes/day');
+						$TEMP['content'] .= Functions::Build('sitemap/includes/day');
 					}
 				}
 			} else {
-		    	header("Location: " . Specific::Url('404'));
+		    	header("Location: " . Functions::Url('404'));
 		    	exit();
 			}
 		} else if(!empty($year)){
@@ -145,13 +145,13 @@ if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE status = "approved"')->fet
 
 
 					if($test > 0){
-						$TEMP['!month'] = Specific::DateFormat($first_day, 'month');
+						$TEMP['!month'] = Functions::DateFormat($first_day, 'month');
 						$TEMP['!month_url'] = date('m', $first_day);
-						$TEMP['content'] .= Specific::Maket('sitemap/includes/month');
+						$TEMP['content'] .= Functions::Build('sitemap/includes/month');
 					}
 				}
 			} else {
-		    	header("Location: " . Specific::Url('404'));
+		    	header("Location: " . Functions::Url('404'));
 		    	exit();
 			}
 		} else {
@@ -167,7 +167,7 @@ if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE status = "approved"')->fet
 
 				if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE created_at >= ? AND created_at <= ? AND status = "approved"', $first_month, $last_month)->fetchArray(true) > 0){
 					$TEMP['!year'] = $year;
-					$TEMP['content'] .= Specific::Maket('sitemap/includes/year');
+					$TEMP['content'] .= Functions::Build('sitemap/includes/year');
 				}
 			}
 		}
@@ -181,5 +181,5 @@ $TEMP['#title'] = $TEMP['#word']["page_{$page['slug']}"] . ' - ' . $TEMP['#setti
 $TEMP['#description'] = $page['description'];
 $TEMP['#keyword'] = $page['keywords'];
 
-$TEMP['#content'] = Specific::Maket('sitemap/content');
+$TEMP['#content'] = Functions::Build('sitemap/content');
 ?>

@@ -2,11 +2,11 @@
 if(in_array($_POST['subject'], array('content', 'technical', 'pattern', 'ask', 'suggestions', 'other'))){
 	$emptys = array();
 	$errors = array();
-	$name = Specific::Filter($_POST['name']);
-	$subject = Specific::Filter($_POST['subject']);
-	$text = Specific::Filter($_POST['text']);
-	$email = Specific::Filter($_POST['email']);
-	$query = Specific::Filter($_POST['query']);
+	$name = Functions::Filter($_POST['name']);
+	$subject = Functions::Filter($_POST['subject']);
+	$text = Functions::Filter($_POST['text']);
+	$email = Functions::Filter($_POST['email']);
+	$query = Functions::Filter($_POST['query']);
 	if (empty($name)){
         $emptys[] = 'name';
     }
@@ -42,7 +42,7 @@ if(in_array($_POST['subject'], array('content', 'technical', 'pattern', 'ask', '
     	if(empty($errors)){
 			$recaptcha_success = true;
 			if ($TEMP['#settings']['recaptcha'] == 'on'){
-				$recaptcha = Specific::CheckRecaptcha($_POST['recaptcha']);
+				$recaptcha = Functions::CheckRecaptcha($_POST['recaptcha']);
 				if (!isset($_POST['recaptcha']) || empty($_POST['recaptcha']) || $recaptcha["action"] != 'contact' || $recaptcha["success"] == false || $recaptcha["score"] < 0.5){
 					$recaptcha_success = false;
 				}
@@ -59,7 +59,7 @@ if(in_array($_POST['subject'], array('content', 'technical', 'pattern', 'ask', '
 				    'charSet' => 'UTF-8',
 				    'text_body' => $query
 				);
-				if(Specific::SendEmail($send_email_data)){
+				if(Functions::SendEmail($send_email_data)){
 					$deliver = array(
 						'S' => 200,
 						'M' => $TEMP['#word']['mail_sent_successfully']

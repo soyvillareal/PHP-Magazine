@@ -1,5 +1,5 @@
 <?php
-class Load {
+class Loads {
 	public static function LastPosts($limit, $home_ids = array()){
 		global $dba, $TEMP, $RUTE;
 
@@ -16,7 +16,7 @@ class Load {
 			$query = ' AND id NOT IN ('.implode(',', $home_ids).')';
 		}
 		
-		$widget = Specific::GetWidget('hload');
+		$widget = Functions::GetWidget('hload');
 		if($widget['return']){
 			$TEMP['advertisement_hlad'] = $widget['html'];
 		}
@@ -32,15 +32,15 @@ class Load {
 
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
-				$TEMP['!url'] = Specific::Url($post['slug']);
-				$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
+				$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+				$TEMP['!url'] = Functions::Url($post['slug']);
+				$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
-				$TEMP['!published_at'] = Specific::DateString($post['published_at']);
-				$data['last_posts_one_html'] .= Specific::Maket('home/includes/last-posts-one');
+				$TEMP['!published_at'] = Functions::DateString($post['published_at']);
+				$data['last_posts_one_html'] .= Functions::Build('home/includes/last-posts-one');
 				$home_ids[] = $post['id'];
 			}
-			Specific::DestroyMaket();
+			Functions::DestroyBuild();
 		}
 
 		if(count($last_posts_one_sql) >= 8){
@@ -55,11 +55,11 @@ class Load {
 				$TEMP['title_left'] = $last_posts_two_sql[0]['title'];
 				$TEMP['description_left'] = $last_posts_two_sql[0]['description'];
 				$TEMP['category_left'] = $TEMP['#word']["category_{$category_left['name']}"];
-				$TEMP['category_slug_left'] = Specific::Url("{$RUTE['#r_category']}/{$category_left['slug']}");
-				$TEMP['url_left'] = Specific::Url($last_posts_two_sql[0]['slug']);
-				$TEMP['thumbnail_left'] = Specific::GetFile($last_posts_two_sql[0]['thumbnail'], 1, 's');
+				$TEMP['category_slug_left'] = Functions::Url("{$RUTE['#r_category']}/{$category_left['slug']}");
+				$TEMP['url_left'] = Functions::Url($last_posts_two_sql[0]['slug']);
+				$TEMP['thumbnail_left'] = Functions::GetFile($last_posts_two_sql[0]['thumbnail'], 1, 's');
 				$TEMP['published_date_left'] = date('c', $last_posts_two_sql[0]['published_at']);
-				$TEMP['published_at_left'] = Specific::DateString($last_posts_two_sql[0]['published_at']);
+				$TEMP['published_at_left'] = Functions::DateString($last_posts_two_sql[0]['published_at']);
 				$home_ids[] = $last_posts_two_sql[0]['id'];
 
 				$category_right = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $last_posts_two_sql[1]['category_id'])->fetchArray();
@@ -69,11 +69,11 @@ class Load {
 				$TEMP['title_right'] = $last_posts_two_sql[1]['title'];
 				$TEMP['description_right'] = $last_posts_two_sql[1]['description'];
 				$TEMP['category_right'] = $TEMP['#word']["category_{$category_right['name']}"];
-				$TEMP['category_slug_right'] = Specific::Url("{$RUTE['#r_category']}/{$category_right['slug']}");
-				$TEMP['url_right'] = Specific::Url($last_posts_two_sql[1]['slug']);
-				$TEMP['thumbnail_right'] = Specific::GetFile($last_posts_two_sql[1]['thumbnail'], 1, 's');
+				$TEMP['category_slug_right'] = Functions::Url("{$RUTE['#r_category']}/{$category_right['slug']}");
+				$TEMP['url_right'] = Functions::Url($last_posts_two_sql[1]['slug']);
+				$TEMP['thumbnail_right'] = Functions::GetFile($last_posts_two_sql[1]['thumbnail'], 1, 's');
 				$TEMP['published_date_right'] = date('c', $last_posts_two_sql[1]['published_at']);
-				$TEMP['published_at_right'] = Specific::DateString($last_posts_two_sql[1]['published_at']);
+				$TEMP['published_at_right'] = Functions::DateString($last_posts_two_sql[1]['published_at']);
 				$home_ids[] = $last_posts_two_sql[1]['id'];
 
 				unset($last_posts_two_sql[0]);
@@ -88,17 +88,17 @@ class Load {
 					$TEMP['!title_middle'] = $post['title'];
 					$TEMP['!description_middle'] = $post['description'];
 					$TEMP['!category_middle'] = $TEMP['#word']["category_{$category_middle['name']}"];
-					$TEMP['!category_slug_middle'] = Specific::Url("{$RUTE['#r_category']}/{$category_middle['slug']}");
-					$TEMP['!url_middle'] = Specific::Url($post['slug']);
-					$TEMP['!thumbnail_middle'] = Specific::GetFile($post['thumbnail'], 1, 's');
+					$TEMP['!category_slug_middle'] = Functions::Url("{$RUTE['#r_category']}/{$category_middle['slug']}");
+					$TEMP['!url_middle'] = Functions::Url($post['slug']);
+					$TEMP['!thumbnail_middle'] = Functions::GetFile($post['thumbnail'], 1, 's');
 					$TEMP['!published_date_middle'] = date('c', $post['published_at']);
-					$TEMP['!published_at_middle'] = Specific::DateString($post['published_at']);
+					$TEMP['!published_at_middle'] = Functions::DateString($post['published_at']);
 
-					$TEMP['last_posts_three'] .= Specific::Maket('home/includes/last-posts-middle');
+					$TEMP['last_posts_three'] .= Functions::Build('home/includes/last-posts-middle');
 					$home_ids[] = $post['id'];
 				}
-				Specific::DestroyMaket();
-				$data['last_posts_two_html'] .= Specific::Maket('home/includes/last-posts-two');
+				Functions::DestroyBuild();
+				$data['last_posts_two_html'] .= Functions::Build('home/includes/last-posts-two');
 			}
 			$data['home_ids'] = $home_ids;
 		}
@@ -126,16 +126,16 @@ class Load {
 
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!category'] = $TEMP['#word']["category_{$category_middle['name']}"];
-				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category_middle['slug']}");
-				$TEMP['!url'] = Specific::Url($post['slug']);
-				$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
+				$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category_middle['slug']}");
+				$TEMP['!url'] = Functions::Url($post['slug']);
+				$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
-				$TEMP['!published_at'] = Specific::DateString($post['published_at']);
+				$TEMP['!published_at'] = Functions::DateString($post['published_at']);
 
-				$data['main_recommended_videos_html'] .= Specific::Maket('home/includes/main-recommended-videos');
+				$data['main_recommended_videos_html'] .= Functions::Build('home/includes/main-recommended-videos');
 				$home_ids[] = $post['id'];
 			}
-			Specific::DestroyMaket();
+			Functions::DestroyBuild();
 			$data['home_ids'] = $home_ids;
 		}
 
@@ -156,26 +156,26 @@ class Load {
 					foreach ($nt_posts as $nt_post) {
 						$title = substr($nt_post['title'], 0, 75);
 						$next_page[] = array(
-							'image' => Specific::GetFile($nt_post['thumbnail'], 1, 's'),
+							'image' => Functions::GetFile($nt_post['thumbnail'], 1, 's'),
 							'title' => "{$title}...",
-							'url' => Specific::Url("amp/{$nt_post['slug']}")
+							'url' => Functions::Url("amp/{$nt_post['slug']}")
 						);
 					}
 					$TEMP['#next_page'] = json_encode($next_page);
 				}
 				$root = 'amp';
-				$TEMP['amp_url'] = Specific::Url("amp/{$post['slug']}");
+				$TEMP['amp_url'] = Functions::Url("amp/{$post['slug']}");
 			}
 
 			$title = $post['title'];
-			$url = Specific::Url($post['slug']);
+			$url = Functions::Url($post['slug']);
 			$post_views = $post['views'];
-			$avatar = Specific::Data($post['user_id'], array('avatar'));
+			$avatar = Functions::Data($post['user_id'], array('avatar'));
 			$category = $dba->query('SELECT id, name, slug FROM '.T_CATEGORY.' WHERE id = ?', $post['category_id'])->fetchArray();
 
 
 			$user_id = 0;
-			$fingerprint = Specific::Fingerprint();
+			$fingerprint = Functions::Fingerprint();
 			$view_exists = $dba->query('SELECT COUNT(*) FROM '.T_VIEW.' WHERE fingerprint = ? AND post_id = ?', $fingerprint, $post['id'])->fetchArray(true);
 
 			if($TEMP['#loggedin'] == true){
@@ -193,30 +193,30 @@ class Load {
 
 			$TEMP['title'] = $title;
 			$TEMP['category'] = $TEMP['#word']["category_{$category['name']}"];
-			$TEMP['category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
-			$TEMP['views'] = Specific::NumberShorten($post_views);
-			$TEMP['likes'] = Specific::NumberShorten($post['likes']);
-			$TEMP['dislikes'] = Specific::NumberShorten($post['dislikes']);
+			$TEMP['category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+			$TEMP['views'] = Functions::NumberShorten($post_views);
+			$TEMP['likes'] = Functions::NumberShorten($post['likes']);
+			$TEMP['dislikes'] = Functions::NumberShorten($post['dislikes']);
 			$TEMP['post_id'] = $post['id'];
 			$TEMP['category_id'] = $category['id'];
-			$TEMP['author_name'] = Specific::Data($post['user_id'], array('username'));
-			$TEMP['author_url'] = Specific::ProfileUrl($TEMP['author_name']);
+			$TEMP['author_name'] = Functions::Data($post['user_id'], array('username'));
+			$TEMP['author_url'] = Functions::ProfileUrl($TEMP['author_name']);
 			$TEMP['author_avatar'] = $avatar['avatar_s'];
-			$TEMP['thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 'b');
+			$TEMP['thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 'b');
 			$TEMP['url'] = $url;
 
 			$TEMP['title_encoded'] = urlencode($title);
 			$TEMP['description_encoded'] = urlencode($post['description']);
 			$TEMP['url_encoded'] = urlencode($url);
 			$TEMP['published_date'] = date('c', $post['published_at']);
-			$TEMP['published_at'] = Specific::DateString($post['published_at']);
+			$TEMP['published_at'] = Functions::DateString($post['published_at']);
 			$TEMP['#update_date'] = $post['updated_at'];
 			$TEMP['updated_date'] = date('c', $TEMP['#update_date']);
-			$TEMP['updated_at'] = Specific::DateString($post['updated_at']);
+			$TEMP['updated_at'] = Functions::DateString($post['updated_at']);
 
 			$TEMP['#likes_active'] = $dba->query('SELECT COUNT(*) FROM '.T_REACTION.' WHERE user_id = ? AND reacted_id = ? AND type = "like" AND place = "post"', $TEMP['#user']['id'], $post['id'])->fetchArray(true);
 			$TEMP['#dislikes_active'] = $dba->query('SELECT COUNT(*) FROM '.T_REACTION.' WHERE user_id = ? AND reacted_id = ? AND type = "dislike" AND place = "post"', $TEMP['#user']['id'], $post['id'])->fetchArray(true);
-			$TEMP['#is_owner'] = Specific::IsOwner($post['user_id']);
+			$TEMP['#is_owner'] = Functions::IsOwner($post['user_id']);
 			$TEMP['#is_loaded'] = $is_loaded;
 			$TEMP['#published_at'] = $post['published_at'];
 			$TEMP['#status'] = $post['status'];
@@ -284,10 +284,10 @@ class Load {
 				$keywords[] = $tag['name'];
 
 				$TEMP['!name'] = $tag['name'];
-				$TEMP['!url'] = Specific::Url("{$RUTE['#r_tag']}/{$tag['slug']}");
-				$TEMP['tags'] .= Specific::Maket('includes/post-amp/tags');
+				$TEMP['!url'] = Functions::Url("{$RUTE['#r_tag']}/{$tag['slug']}");
+				$TEMP['tags'] .= Functions::Build('includes/post-amp/tags');
 			}
-			Specific::DestroyMaket();
+			Functions::DestroyBuild();
 
 			$max_cimages = $carousel_json = array();
 			foreach ($entries as $key => $entry) {
@@ -324,17 +324,17 @@ class Load {
 
 		                		$TEMP['!re_title'] = $recommended_bo['title'];
 								$TEMP['!re_category'] = $TEMP['#word']["category_{$category['name']}"];
-								$TEMP['!re_category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
-		                		$TEMP['!re_url'] = Specific::Url($recommended_bo['slug']);
-								$TEMP['!re_thumbnail'] = Specific::GetFile($recommended_bo['thumbnail'], 1, 's');
+								$TEMP['!re_category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+		                		$TEMP['!re_url'] = Functions::Url($recommended_bo['slug']);
+								$TEMP['!re_thumbnail'] = Functions::GetFile($recommended_bo['thumbnail'], 1, 's');
 								$TEMP['!re_published_date'] = date('c', $recommended_bo['published_at']);
-								$TEMP['!re_published_at'] = Specific::DateString($recommended_bo['published_at']);
-		                    	$entry['body'] .= Specific::Maket('includes/post-amp/recommended-body');
+								$TEMP['!re_published_at'] = Functions::DateString($recommended_bo['published_at']);
+		                    	$entry['body'] .= Functions::Build('includes/post-amp/recommended-body');
 		                		$post_ids[] = $recommended_bo['id'];
 		                	}
 			            } else if($i == 2 || $i == ($j+4)){
 			                $j = $i;
-			                $widget = Specific::GetWidget('pbody', $root);
+			                $widget = Functions::GetWidget('pbody', $root);
 			                if($widget['return']){
 			                	$entry['body'] .= $widget['html'];
 			                }
@@ -342,17 +342,17 @@ class Load {
 			            $entry['body'] .= $paragraph[$i];
 			        }
 				} else if($entry['type'] == 'image'){
-					$TEMP['!frame'] = Specific::GetFile($entry['frame'], 3);
+					$TEMP['!frame'] = Functions::GetFile($entry['frame'], 3);
 				} else if($entry['type'] == 'carousel'){
 					if(!empty($entry['frame'])){
 						$carousel = json_decode($entry['frame'], true);
 						foreach ($carousel as $key => $car) {
-							$carousel[$key]['image'] = Specific::GetFile($car['image'], 3);
+							$carousel[$key]['image'] = Functions::GetFile($car['image'], 3);
 						}
 					} else {
 						$carousel = array(
 							array(
-								'image' => Specific::GetFile(NULL, 3),
+								'image' => Functions::GetFile(NULL, 3),
 								'caption' => 'Upss error'
 							)
 						);
@@ -366,26 +366,26 @@ class Load {
 					$max_cimages[] = count($carousel);
 					$carousel_json[] = json_encode($carousel);
 
-					$TEMP['!carousel'] = Specific::Maket("{$root}/includes/carousel");
+					$TEMP['!carousel'] = Functions::Build("{$root}/includes/carousel");
 				} else if($entry['type'] == 'video'){
-					$frame = Specific::IdentifyFrame($entry['frame'], false, $is_amp);
+					$frame = Functions::IdentifyFrame($entry['frame'], false, $is_amp);
 					$TEMP['!frame'] = $frame['html'];
 				} else if($entry['type'] == 'embed'){
 					$frame = json_decode($entry['frame'], true);
-					$frame = Specific::MaketFrame($frame['url'], $frame['attrs'], true, $is_amp);
+					$frame = Functions::BuildFrame($frame['url'], $frame['attrs'], true, $is_amp);
 
 					$TEMP['!frame'] = $frame['html'];
 				} else if($entry['type'] == 'instagrampost'){
 					$TEMP['!omit_script'] = true;
 					$TEMP['!url'] = $entry['frame'];
-                	$TEMP['!frame'] = Specific::Maket('includes/create-edit-post/instagram-blockquote');
+                	$TEMP['!frame'] = Functions::Build('includes/create-edit-post/instagram-blockquote');
 				} else if($entry['type'] == 'soundcloud'){
 					if($is_amp){
 						$soundcloud = preg_match('/tracks\/(.*?)(?:&|$)/s', urldecode($entry['frame']), $sc_frame);
 						$TEMP['!frame'] = '<amp-soundcloud height="300" layout="fixed-height" data-trackid="'.$sc_frame[1].'" data-visual="true"></amp-soundcloud>';
 					} else {
 						$TEMP['!sc_url'] = $entry['frame'];
-						$TEMP['!frame'] = Specific::Maket('includes/load-edit/soundcloud');;
+						$TEMP['!frame'] = Functions::Build('includes/load-edit/soundcloud');;
 					}
 				} else if($entry['type'] == 'facebookpost'){
 					if($is_amp){
@@ -393,7 +393,7 @@ class Load {
 					} else {
 						$TEMP['!margin'] = true;
 						$TEMP['!fb_url'] = $entry['frame'];
-						$TEMP['!frame'] = Specific::Maket('includes/load-publisher-edit/facebook-post');
+						$TEMP['!frame'] = Functions::Build('includes/load-publisher-edit/facebook-post');
 					}
 				}
 
@@ -415,18 +415,18 @@ class Load {
 
 				$TEMP['!body'] = $entry['body'];
 
-				$TEMP['entries'] .= Specific::Maket("includes/post-amp/entries");
+				$TEMP['entries'] .= Functions::Build("includes/post-amp/entries");
 			}
-			Specific::DestroyMaket();
+			Functions::DestroyBuild();
 
 			$TEMP['#collaborators'] = $dba->query('SELECT user_id FROM '.T_COLLABORATOR.' WHERE post_id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') ORDER BY aorder ASC', $post['id'])->fetchAll();
 
 			foreach ($TEMP['#collaborators'] as $au) {
-				$user = Specific::Data($au['user_id'], array('username', 'avatar', 'about', 'facebook', 'twitter', 'instagram', 'main_sonet'));
+				$user = Functions::Data($au['user_id'], array('username', 'avatar', 'about', 'facebook', 'twitter', 'instagram', 'main_sonet'));
 
 				$TEMP['!id'] = $au['user_id'];
 				$TEMP['!collab_name'] = $user['username'];
-				$TEMP['!collab_url'] = Specific::ProfileUrl($user['username']);
+				$TEMP['!collab_url'] = Functions::ProfileUrl($user['username']);
 				$TEMP['!collab_avatar'] = $user['avatar_s'];
 				$TEMP['!about'] = $user['about'];
 				$TEMP['!main_sonet'] = $user['main_sonet'];
@@ -436,9 +436,9 @@ class Load {
 					$TEMP['!url_csocial'] = "https://{$TEMP['!main_sonet']}.com/{$TEMP['!social_media']}";
 				}
 
-				$TEMP['collaborators'] .= Specific::Maket("includes/post-amp/collaborator");
+				$TEMP['collaborators'] .= Functions::Build("includes/post-amp/collaborator");
 			}
-			Specific::DestroyMaket();
+			Functions::DestroyBuild();
 
 			$noin = '';
 			if(!empty($post_ids)){
@@ -451,19 +451,19 @@ class Load {
 
 					$TEMP['!title'] = $rl['title'];
 					$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-					$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
-					$TEMP['!url'] = Specific::Url($rl['slug']);
-					$TEMP['!thumbnail'] = Specific::GetFile($rl['thumbnail'], 1, 's');
+					$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+					$TEMP['!url'] = Functions::Url($rl['slug']);
+					$TEMP['!thumbnail'] = Functions::GetFile($rl['thumbnail'], 1, 's');
 					$TEMP['!published_date'] = date('c', $rl['published_at']);
-					$TEMP['!published_at'] = Specific::DateString($rl['published_at']);
-					$TEMP['related_bottom'] .= Specific::Maket('includes/post-amp/related-bottom');
+					$TEMP['!published_at'] = Functions::DateString($rl['published_at']);
+					$TEMP['related_bottom'] .= Functions::Build('includes/post-amp/related-bottom');
 					$post_ids[] = $rl['id'];
 				}
-				Specific::DestroyMaket();
+				Functions::DestroyBuild();
 			}
 
 			$TEMP['cusername'] = $TEMP['#word']['user_without_login'];
-			$TEMP['avatar_cs'] = Specific::Url('/themes/default/images/users/default-holder-s.jpeg');
+			$TEMP['avatar_cs'] = Functions::Url('/themes/default/images/users/default-holder-s.jpeg');
 			if($TEMP['#loggedin'] == true){
 				$TEMP['cusername'] = $TEMP['#user']['username'];
 				$TEMP['avatar_cs'] = $TEMP['#user']['avatar_s'];
@@ -471,8 +471,8 @@ class Load {
 			$comment_ids = array();
 
 			$TEMP['#has_cfeatured'] = false;
-			$TEMP['#featured_cid'] = Specific::Filter($_GET[$RUTE['#p_comment_id']]);
-			$featured_comment = Specific::FeaturedComment($TEMP['#featured_cid']);
+			$TEMP['#featured_cid'] = Functions::Filter($_GET[$RUTE['#p_comment_id']]);
+			$featured_comment = Functions::FeaturedComment($TEMP['#featured_cid']);
 			if($featured_comment['return']){
 				$TEMP['comments'] .= $featured_comment['html'];
 				$comment_ids[] = $TEMP['#featured_cid'];
@@ -480,15 +480,15 @@ class Load {
 			}
 
 			$TEMP['#has_rfeatured'] = false;
-			$TEMP['#featured_rid'] = Specific::Filter($_GET[$RUTE['#p_reply_id']]);
-			$featured_reply = Specific::FeaturedComment($TEMP['#featured_rid'], 'reply');
+			$TEMP['#featured_rid'] = Functions::Filter($_GET[$RUTE['#p_reply_id']]);
+			$featured_reply = Functions::FeaturedComment($TEMP['#featured_rid'], 'reply');
 			if($featured_reply['return']){
 				$TEMP['comments'] .= $featured_reply['html'];
 				$comment_ids[] = $featured_reply['id'];
 				$TEMP['#has_rfeatured'] = true;
 			}
 
-			$comments = Specific::Comments($post['id'], 'recent', $comment_ids);
+			$comments = Functions::Comments($post['id'], 'recent', $comment_ids);
 			if($comments['return']){
 				$TEMP['comments'] .= $comments['html'];
 			}
@@ -497,7 +497,7 @@ class Load {
 			$TEMP['max_cimages'] = implode(',', $max_cimages);
 			$TEMP['carousel_json'] = implode(',', $carousel_json);
 
-			$html = Specific::Maket("{$root}/includes/main");
+			$html = Functions::Build("{$root}/includes/main");
 
 			return array(
 				'return' => true,
@@ -584,16 +584,16 @@ class Load {
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
 				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
-				$TEMP['!url'] = Specific::Url($post['slug']);
-				$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
+				$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+				$TEMP['!url'] = Functions::Url($post['slug']);
+				$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
-				$TEMP['!published_at'] = Specific::DateString($post['published_at']);
+				$TEMP['!published_at'] = Functions::DateString($post['published_at']);
 
-				$html .= Specific::Maket("includes/search-profile-category-tag/posts");
+				$html .= Functions::Build("includes/search-profile-category-tag/posts");
 				$search_ids[] = $post['id'];
 			}
-			Specific::DestroyMaket();
+			Functions::DestroyBuild();
 
 			$data = array(
 				'return' => true,
@@ -604,7 +604,7 @@ class Load {
 		} else {
 			$TEMP['keyword'] = $keyword;
 			$not_found = !empty($keyword) ? 'no-result-for' : 'no-result';
-			$html = Specific::Maket("not-found/{$not_found}");
+			$html = Functions::Build("not-found/{$not_found}");
 
 			$data = array(
 				'return' => false,
@@ -631,7 +631,7 @@ class Load {
 		}
 
 		if($TEMP['#moderator'] == false){
-			if(!Specific::IsOwner($user_id)){
+			if(!Functions::IsOwner($user_id)){
 				$query .= ' AND status = "approved"';
 			} else {
 				$query .= ' AND status <> "deleted"';
@@ -649,16 +649,16 @@ class Load {
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
 				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
-				$TEMP['!url'] = Specific::Url($post['slug']);
-				$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
+				$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+				$TEMP['!url'] = Functions::Url($post['slug']);
+				$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
-				$TEMP['!published_at'] = Specific::DateString($post['published_at']);
+				$TEMP['!published_at'] = Functions::DateString($post['published_at']);
 
-				$html .= Specific::Maket("includes/search-profile-category-tag/posts");
+				$html .= Functions::Build("includes/search-profile-category-tag/posts");
 				$profile_ids[] = $post['id'];
 			}
-			Specific::DestroyMaket();
+			Functions::DestroyBuild();
 
 			$data = array(
 				'return' => true,
@@ -668,7 +668,7 @@ class Load {
 		} else {
 			$data = array(
 				'return' => false,
-				'html' => Specific::Maket("not-found/no-result")
+				'html' => Functions::Build("not-found/no-result")
 			);
 		}
 		return $data;
@@ -702,18 +702,18 @@ class Load {
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
 				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
-				$TEMP['!author_name'] = Specific::Data($post['user_id'], array('username'));
-				$TEMP['!author_url'] = Specific::ProfileUrl($TEMP['!author_name']);
-				$TEMP['!url'] = Specific::Url($post['slug']);
-				$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
+				$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+				$TEMP['!author_name'] = Functions::Data($post['user_id'], array('username'));
+				$TEMP['!author_url'] = Functions::ProfileUrl($TEMP['!author_name']);
+				$TEMP['!url'] = Functions::Url($post['slug']);
+				$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
-				$TEMP['!published_at'] = Specific::DateString($post['published_at']);
+				$TEMP['!published_at'] = Functions::DateString($post['published_at']);
 
-				$html .= Specific::Maket("includes/search-profile-category-tag/posts");
+				$html .= Functions::Build("includes/search-profile-category-tag/posts");
 				$category_ids[] = $post['id'];
 			}
-			Specific::DestroyMaket();
+			Functions::DestroyBuild();
 
 			$data = array(
 				'return' => true,
@@ -723,7 +723,7 @@ class Load {
 		} else {
 			$data = array(
 				'return' => false,
-				'html' => Specific::Maket("not-found/no-result")
+				'html' => Functions::Build("not-found/no-result")
 			);
 		}
 		return $data;
@@ -757,16 +757,16 @@ class Load {
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
 				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
-				$TEMP['!url'] = Specific::Url($post['slug']);
-				$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
+				$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+				$TEMP['!url'] = Functions::Url($post['slug']);
+				$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
-				$TEMP['!published_at'] = Specific::DateString($post['published_at']);
+				$TEMP['!published_at'] = Functions::DateString($post['published_at']);
 
-				$html .= Specific::Maket("includes/search-profile-category-tag/posts");
+				$html .= Functions::Build("includes/search-profile-category-tag/posts");
 				$label_ids[] = $post['id'];
 			}
-			Specific::DestroyMaket();
+			Functions::DestroyBuild();
 
 			$data = array(
 				'return' => true,
@@ -776,7 +776,7 @@ class Load {
 		} else {
 			$data = array(
 				'return' => false,
-				'html' => Specific::Maket("not-found/no-result")
+				'html' => Functions::Build("not-found/no-result")
 			);
 		}
 		return $data;
@@ -810,22 +810,22 @@ class Load {
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
 				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-				$TEMP['!category_slug'] = Specific::Url("{$RUTE['#r_category']}/{$category['slug']}");
+				$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
 
 
-				$TEMP['!author_name'] = Specific::Data($post['user_id'], array('username'));
-				$TEMP['!author_url'] = Specific::ProfileUrl($TEMP['!author_name']);
+				$TEMP['!author_name'] = Functions::Data($post['user_id'], array('username'));
+				$TEMP['!author_url'] = Functions::ProfileUrl($TEMP['!author_name']);
 
 
-				$TEMP['!url'] = Specific::Url($post['slug']);
-				$TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
+				$TEMP['!url'] = Functions::Url($post['slug']);
+				$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
-				$TEMP['!published_at'] = Specific::DateString($post['published_at']);
+				$TEMP['!published_at'] = Functions::DateString($post['published_at']);
 
-				$html .= Specific::Maket("save/includes/save-posts");
+				$html .= Functions::Build("save/includes/save-posts");
 				$save_ids[] = $post['id'];
 			}
-			Specific::DestroyMaket();
+			Functions::DestroyBuild();
 
 			$data = array(
 				'return' => true,
@@ -835,7 +835,7 @@ class Load {
 		} else {
 			$data = array(
 				'return' => false,
-				'html' => Specific::Maket("not-found/no-result")
+				'html' => Functions::Build("not-found/no-result")
 			);
 		}
 		return $data;
@@ -870,10 +870,10 @@ class Load {
 
 		if(!empty($chats)){
 			foreach ($chats as $key => $chat) {
-				$chats_html = Specific::Chat($chat);
+				$chats_html = Functions::Chat($chat);
 				$html .= $chats_html['html'];
 				$user_id = $chat['user_id'];
-				if(Specific::IsOwner($chat['user_id'])){
+				if(Functions::IsOwner($chat['user_id'])){
 					$user_id = $chat['profile_id'];
 				}
 				if($key == count($chats)-1){
@@ -881,7 +881,7 @@ class Load {
 				}
 				$profiles_ids[] = $user_id;
 			}
-			Specific::DestroyMaket();
+			Functions::DestroyBuild();
 
 
 			$data = array(
@@ -912,7 +912,7 @@ class Load {
 		}
 
 		if(!is_array($user)){
-			$user = Specific::Data($user);
+			$user = Functions::Data($user);
 			if(!empty($messages_ids)){
 				if($type == 'first'){
 					$query .= ' AND id < '.$messages_ids[0];
@@ -938,7 +938,7 @@ class Load {
 				if($message['user_id'] == $user['id']){
 					$TEMP['#msg_out'] = false;
 				}
-				$TEMP['!created_at'] = Specific::DateString($message['created_at']);
+				$TEMP['!created_at'] = Functions::DateString($message['created_at']);
 
 				$messafis = $dba->query('SELECT f.* FROM '.T_MESSAFI.' f INNER JOIN '.T_MESSAGE.' m WHERE f.message_id = ? AND m.id = f.message_id AND ((m.user_id = ? AND f.deleted_fuser = 0) OR (m.profile_id = ? AND f.deleted_fprofile = 0))', $message['id'], $TEMP['#user']['id'], $TEMP['#user']['id'])->fetchAll();
 				if(!empty($messafis)){
@@ -947,38 +947,38 @@ class Load {
 						if($messafi['deleted_at'] == 0){
 							$TEMP['!fi_id'] = $messafi['id'];
 							$TEMP['!fi_name'] = $messafi['name'];
-							$TEMP['!fi_url'] = Specific::Url("uploads/messages/{$messafi['file']}");
-							$TEMP['!fi_size'] = Specific::SizeFormat($messafi['size']);
+							$TEMP['!fi_url'] = Functions::Url("uploads/messages/{$messafi['file']}");
+							$TEMP['!fi_size'] = Functions::SizeFormat($messafi['size']);
 
 							if(in_array(pathinfo($messafi['name'], PATHINFO_EXTENSION), array('jpeg', 'jpg', 'png', 'gif'))){
 								$TEMP['#has_image'] = true;
-								$img_maket = 'outimage';
+								$img_build = 'outimage';
 								if($message['user_id'] == $user['id']){
-									$img_maket = 'inimage';
+									$img_build = 'inimage';
 								}
-								$TEMP['!images'] .= Specific::Maket("messages/includes/{$img_maket}");
+								$TEMP['!images'] .= Functions::Build("messages/includes/{$img_build}");
 							} else {
 								$TEMP['#has_file'] = true;
-								$fi_maket = 'outfile';
+								$fi_build = 'outfile';
 								if($message['user_id'] == $user['id']){
-									$fi_maket = 'infile';
+									$fi_build = 'infile';
 								}
-								$TEMP['!files'] .= Specific::Maket("messages/includes/{$fi_maket}");
+								$TEMP['!files'] .= Functions::Build("messages/includes/{$fi_build}");
 							}
 						} else {
 							$TEMP['!fi_id'] = $messafi['id'];
-							$deleted_maket = 'deleted-outfile';
+							$deleted_build = 'deleted-outfile';
 							if($message['user_id'] == $user['id']){
-								$deleted_maket = 'deleted-infile';
+								$deleted_build = 'deleted-infile';
 							}
 							if(in_array(pathinfo($messafi['name'], PATHINFO_EXTENSION), array('jpeg', 'jpg', 'png', 'gif'))){
 								$TEMP['#has_image'] = true;
 								$TEMP['!fi_type'] = 'image';
-								$TEMP['!images'] .= Specific::Maket("messages/includes/{$deleted_maket}");
+								$TEMP['!images'] .= Functions::Build("messages/includes/{$deleted_build}");
 							} else {
 								$TEMP['#has_file'] = true;
 								$TEMP['!fi_type'] = 'file';
-								$TEMP['!files'] .= Specific::Maket("messages/includes/{$deleted_maket}");
+								$TEMP['!files'] .= Functions::Build("messages/includes/{$deleted_build}");
 							}
 						}
 					}
@@ -986,7 +986,7 @@ class Load {
 
 				if(($message['text'] == NULL && !empty($messafis)) || $message['text'] != NULL){
 					$TEMP['!id'] = $message['id'];
-					$TEMP['!text'] = Specific::TextFilter($message['text']);
+					$TEMP['!text'] = Functions::TextFilter($message['text']);
 					$TEMP['!type'] = 'normal';
 
 					$messaan = $dba->query('SELECT answered_id, type, COUNT(*) as count FROM '.T_MESSAAN.' a WHERE message_id = ?', $message['id'])->fetchArray();
@@ -1000,13 +1000,13 @@ class Load {
 								$has_answer = true;
 								$ans_pid = $answered['profile_id'];
 								$user_id = $ans_uid = $answered['user_id'];
-								if(Specific::IsOwner($answered['user_id'])){
+								if(Functions::IsOwner($answered['user_id'])){
 									$user_id = $answered['profile_id'];
 								}
 
 								if($answered['deleted_at'] == 0){
 									$TEMP['!ans_id'] = $answered['id'];
-									$TEMP['!ans_text'] = Specific::TextFilter($answered['text'], false);
+									$TEMP['!ans_text'] = Functions::TextFilter($answered['text'], false);
 								} else {
 									$TEMP['!ans_deleted'] = true;
 									$TEMP['!ans_deleted_word'] = $TEMP['#word']['message_was_deleted'];
@@ -1019,7 +1019,7 @@ class Load {
 								$has_answer = true;
 								$ans_pid = $amessafi['profile_id'];
 								$user_id = $ans_uid = $amessafi['user_id'];
-								if(Specific::IsOwner($amessafi['user_id'])){
+								if(Functions::IsOwner($amessafi['user_id'])){
 									$user_id = $amessafi['profile_id'];
 								}
 
@@ -1027,9 +1027,9 @@ class Load {
 
 									$TEMP['!fi_aid'] = $amessafi['id'];
 									$TEMP['!fi_aname'] = $amessafi['name'];
-									$TEMP['!fi_asize'] = Specific::SizeFormat($amessafi['size']);
+									$TEMP['!fi_asize'] = Functions::SizeFormat($amessafi['size']);
 									if($messaan['type'] == 'image'){
-										$TEMP['!fi_aurl'] = Specific::Url("uploads/messages/{$amessafi['file']}");
+										$TEMP['!fi_aurl'] = Functions::Url("uploads/messages/{$amessafi['file']}");
 									}
 								} else {
 									$TEMP['!ans_deleted'] = true;
@@ -1039,7 +1039,7 @@ class Load {
 						}
 
 						if($has_answer){
-							$ans_user = Specific::Data($user_id, array('username', 'name', 'surname', 'status'));
+							$ans_user = Functions::Data($user_id, array('username', 'name', 'surname', 'status'));
 							$TEMP['!type'] = 'answered';
 							$TEMP['!ans_type'] = $messaan['type'];
 							$TEMP['!answered_id'] = $messaan['answered_id'];
@@ -1051,7 +1051,7 @@ class Load {
 							$TEMP['!ans_title'] = $you_responded_to;
 
 							if($ans_pid == $message['profile_id']){
-								if(Specific::IsOwner($ans_uid)){
+								if(Functions::IsOwner($ans_uid)){
 									$TEMP['!ans_title'] = $TEMP['#word']['you_replied_own_message'];
 								} else {
 									$TEMP['!ans_title'] = $TEMP['#word']['replied_his_own_message'];
@@ -1063,26 +1063,26 @@ class Load {
 					}
 
 					if($message['deleted_at'] == 0){
-						$maket = 'outgoing';
+						$build = 'outgoing';
 						if($message['user_id'] == $user['id']){
 							$TEMP['!avatar_s'] = $user['avatar_s'];
 							$TEMP['!username'] = $user['username'];
-							$maket = 'incoming';
+							$build = 'incoming';
 						}
-						if(Specific::IsOwner($message['profile_id'])){
+						if(Functions::IsOwner($message['profile_id'])){
 							$update_ids[] = $message['id'];
 						}
 					} else {
-						$maket = 'deleted-outgoing';
+						$build = 'deleted-outgoing';
 						if($message['user_id'] == $user['id']){
-							$maket = 'deleted-incoming';
+							$build = 'deleted-incoming';
 						}
 					}
-					$html .= Specific::Maket("messages/includes/{$maket}");
+					$html .= Functions::Build("messages/includes/{$build}");
 					$messages_ids[] = $message['id'];
 				}
 			}
-			Specific::DestroyMaket();
+			Functions::DestroyBuild();
 			if(!empty($update_ids)){
 				$dba->query('UPDATE '.T_MESSAGE.' SET seen = 1 WHERE id IN ('.implode(',', $update_ids).') AND seen = 0');
 			}
@@ -1152,9 +1152,9 @@ class Load {
 		if(!empty($posts)){
 			foreach ($posts as $post) {
 				$TEMP['!title'] = $post['title'];
-				$TEMP['!url'] = Specific::Url($post['slug']);
+				$TEMP['!url'] = Functions::Url($post['slug']);
 
-				$html .= Specific::Maket('sitemap/includes/post');
+				$html .= Functions::Build('sitemap/includes/post');
 				$sitemap_ids[] = $post['id'];
 			}
 			$data = array(

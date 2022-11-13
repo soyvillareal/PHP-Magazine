@@ -122,7 +122,7 @@
                          <?php foreach($TEMP['#categories'] as $cat){ ?>
                          <?php if($cat['footer'] == 'national'){ ?>
                          <li class="display-flex direction-row align-center w-50 h-36">
-                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
+                            <a class="display-block color-black font-mediumly" href="<?php echo Functions::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
                          </li>
                          <?php } ?>
                          <?php } ?>
@@ -134,7 +134,7 @@
                          <?php foreach($TEMP['#categories'] as $cat){ ?>
                          <?php if($cat['footer'] == 'social'){ ?>
                          <li class="display-flex direction-row align-center w-50 h-36">
-                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
+                            <a class="display-block color-black font-mediumly" href="<?php echo Functions::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
                          </li>
                          <?php } ?>
                          <?php } ?>
@@ -146,7 +146,7 @@
                          <?php foreach($TEMP['#categories'] as $cat){ ?>
                          <?php if($cat['footer'] == 'more'){ ?>
                          <li class="display-flex direction-row align-center w-50 h-36">
-                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
+                            <a class="display-block color-black font-mediumly" href="<?php echo Functions::Url("{$RUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
                          </li>
                          <?php } ?>
                          <?php } ?>
@@ -159,9 +159,9 @@
                          <?php if($page['status'] == 'enabled'){ ?>
                          <li class="display-flex direction-row align-center w-50 h-36">
                             <?php if(!empty($page['text'])){ ?>
-                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url("{$RUTE['#r_page']}/{$RUTE["#r_{$page['slug']}"]}");?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
+                            <a class="display-block color-black font-mediumly" href="<?php echo Functions::Url("{$RUTE['#r_page']}/{$RUTE["#r_{$page['slug']}"]}");?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
                             <?php } else { ?>
-                            <a class="display-block color-black font-mediumly" href="<?php echo Specific::Url($RUTE["#r_{$page['slug']}"]);?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
+                            <a class="display-block color-black font-mediumly" href="<?php echo Functions::Url($RUTE["#r_{$page['slug']}"]);?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
                             <?php } ?>
                          </li>
                          <?php } ?>
@@ -327,9 +327,9 @@
                        <?php if($page['status'] == 'enabled'){ ?>
                        <li class="margin-b5">
                           <?php if(!empty($page['text'])){ ?>
-                          <a class="color-black font-low inhover-button" href="<?php echo Specific::Url("{$RUTE['#r_page']}/{$RUTE["#r_{$page['slug']}"]}");?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
+                          <a class="color-black font-low inhover-button" href="<?php echo Functions::Url("{$RUTE['#r_page']}/{$RUTE["#r_{$page['slug']}"]}");?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
                           <?php } else { ?>
-                          <a class="color-black font-low inhover-button" href="<?php echo Specific::Url($RUTE["#r_{$page['slug']}"]);?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
+                          <a class="color-black font-low inhover-button" href="<?php echo Functions::Url($RUTE["#r_{$page['slug']}"]);?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
                           <?php } ?>
                        </li>
                        <?php } ?>

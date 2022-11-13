@@ -551,9 +551,9 @@ function CreateDirImage(folder){
     var time = new Date(),
         month = time.toLocaleString("en-US", {month: '2-digit'}),
         year = time.getFullYear(),
-        folder_first = `${global.TEMP.path}/uploads/${folder}/${year}-${month}`,
+        folder_first = `../../uploads/${folder}/${year}-${month}`,
         dates = `${year}-${month}/${month}`,
-        folder_last = `${global.TEMP.path}/uploads/${folder}/${dates}`;
+        folder_last = `../../uploads/${folder}/${dates}`;
 
     
     if (!fs.existsSync(folder_first)) {
@@ -771,7 +771,7 @@ function CreateSlug(str, char = "-", tf = "lowercase", max = 120){
     return str;
 }
 
-function MaketFrame(url, attrs = [], defult = !0, is_amp = !1){
+function BuildFrame(url, attrs = [], defult = !0, is_amp = !1){
     if(!Array.isArray(attrs)){
         attrs = htmlEntityDecode(attrs);
         attrs = JSON.parse(attrs);
@@ -924,7 +924,7 @@ async function ToMention(socket, data = {}, type = 'comment'){
 }
 
 
-async function CommentMaket(socket, comment = {}, order = 'recent', type = 'normal'){
+async function BuildComment(socket, comment = {}, order = 'recent', type = 'normal'){
     var retrn = {
             return: !1
         };
@@ -972,7 +972,7 @@ async function CommentMaket(socket, comment = {}, order = 'recent', type = 'norm
                     // To fetch the reply sent by url
                     var featured_rid = global.TEMP[socket.id].featured_rid;
                     await query(`SELECT * FROM ${T.REPLY} WHERE id = ?`, ).then(function(res){
-                        var featured_reply = ReplyMaket(res[0], 'featured-reply');
+                        var featured_reply = BuildReply(res[0], 'featured-reply');
 
                         if(featured_reply.return){
                             temp.featured_reply = featured_reply.html;
@@ -1044,14 +1044,14 @@ async function CommentMaket(socket, comment = {}, order = 'recent', type = 'norm
                 temp.created_date = new Date(comment.created_at).toISOString();
                 temp.created_at = DateString(socket, comment.created_at);
                 
-                var maket = 'comment';
+                var build = 'comment';
                 if(comment.pinned == 1){
-                    maket = 'pinned-comment';
+                    build = 'pinned-comment';
                 }
 
                 retrn = {
                     return: !0,
-                    html: Maket(socket, `comments/${maket}`, temp)
+                    html: Build(socket, `comments/${build}`, temp)
                 };
 
             }).catch(function(err){
@@ -1066,7 +1066,7 @@ async function CommentMaket(socket, comment = {}, order = 'recent', type = 'norm
 }
 
 
-async function ReplyMaket(socket, reply = {}, type = 'normal'){
+async function BuildReply(socket, reply = {}, type = 'normal'){
     var retrn = {
             return: !1
         };
@@ -1092,7 +1092,7 @@ async function ReplyMaket(socket, reply = {}, type = 'normal'){
                     console.log(err);
                 });
                 temp.cusername = global.TEMP[socket.id].word.user_without_login;
-                temp.avatar_cs = Url(`${global.TEMP.path}/themes/default/images/users/default-holder-s.jpeg`);
+                temp.avatar_cs = Url(`../../themes/default/images/users/default-holder-s.jpeg`);
     
                 
                 if(global.TEMP[socket.id].loggedin){
@@ -1150,7 +1150,7 @@ async function ReplyMaket(socket, reply = {}, type = 'normal'){
     
                 retrn = {
                     return: !0,
-                    html: Maket(socket, 'comments/reply', temp)
+                    html: Build(socket, 'comments/reply', temp)
                 };
     
             }).catch(function(err){
@@ -1186,7 +1186,7 @@ async function Replies(comment_id, order = 'recent', reply_ids = []){
         if(res.length > 0){
             await forEachAsync(res, function(item, index, arr){
                 var done = this.async();
-                ReplyMaket(item).then(async function(res){
+                BuildReply(item).then(async function(res){
                     html += res.html;
                     done();
                 }).catch(function(err){
@@ -1346,8 +1346,8 @@ async function LastMessage(socket, profile_id, del_typing = !1){
 
 
 
-function Maket(socket, page, temp){
-    var html = require(`${global.TEMP.path}/nodejs/html/${page}.js`)(socket, temp);
+function Build(socket, page, temp){
+    var html = require(`../html/${page}.js`)(socket, temp);
 
     html = html.replace(/{\$word->(.+?)}/ig, function(match, word){
         var WORD = global.TEMP[socket.id].word;
@@ -1570,16 +1570,16 @@ module.exports = {
     UploadThumbnail,
     UploadImage,
     CreateSlug,
-    MaketFrame,
+    BuildFrame,
     TextFilter,
     CommentFilter,
     ToMention,
-    ReplyMaket,
-    CommentMaket,
+    BuildReply,
+    BuildComment,
     Replies,
     UploadMessagefi,
     LastMessage,
-    Maket,
+    Build,
     Followers,
     NumberShorten,
     SizeFormat,

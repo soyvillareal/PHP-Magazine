@@ -33,18 +33,18 @@ foreach($TEMP['#languages'] as $lang){
 
     $TEMP['!lang_url'] = $lang_url;
 
-    $TEMP['languages'] .= Specific::Maket('includes/wrapper/languages');
+    $TEMP['languages'] .= Functions::Build('includes/wrapper/languages');
 }
 
 $TEMP['#return_url'] = $TEMP['#site_url'];
-$return = Specific::Filter($_GET[$RUTE['#p_return']]);
+$return = Functions::Filter($_GET[$RUTE['#p_return']]);
 if(!empty($return)){
     $TEMP['#return_url'] = $return;
     $TEMP['#return_param'] = "?{$RUTE['#p_return']}=$return";
 }
 
 if (isset($_COOKIE['_SAVE_SESSION'])) {
-    if($dba->query('SELECT COUNT(*) FROM '.T_SESSION.' WHERE token = ?', Specific::Filter($_COOKIE['_SAVE_SESSION']))->fetchArray(true) > 0){
+    if($dba->query('SELECT COUNT(*) FROM '.T_SESSION.' WHERE token = ?', Functions::Filter($_COOKIE['_SAVE_SESSION']))->fetchArray(true) > 0){
         $_COOKIE['_LOGIN_TOKEN'] = $_SESSION['_LOGIN_TOKEN'] = $_COOKIE['_SAVE_SESSION'];
     }
 }
@@ -64,7 +64,7 @@ if($TEMP['#loggedin'] === true){
     if(!empty($_COOKIE['_LOGIN_TOKEN'])){
         if($_COOKIE['_LOGIN_TOKEN'] != $_SESSION['_LOGIN_TOKEN']){
             unset($_COOKIE['_LOGIN_TOKEN']);
-            header("Location: ".Specific::ReturnUrl());
+            header("Location: ".Functions::ReturnUrl());
             exit();
         }
     }
@@ -84,7 +84,7 @@ if($one != 'amp'){
     $users = $dba->query('SELECT * FROM '.T_USER.' WHERE role = "publisher" OR role = "moderator" OR role = "admin"')->fetchAll();
     $TEMP['#users'] = array();
     foreach ($users as $user){
-        $TEMP['#users'][] = Specific::Data($user, 3);
+        $TEMP['#users'][] = Functions::Data($user, 3);
     }
 }
 
@@ -101,42 +101,42 @@ if (file_exists("./sources/{$page}")) {
 $TEMP['#show_index_palette'] = false;
 if($TEMP['#admin'] == true && $TEMP['#settings']['show_palette'] == 'on'){
     $TEMP['#show_index_palette'] = true;
-    $show_palette = Specific::Filter($_GET[$RUTE['#r_show_palette']]);
+    $show_palette = Functions::Filter($_GET[$RUTE['#r_show_palette']]);
     $TEMP['#show_palette'] = json_decode($show_palette);
 
-    Specific::BuildIndexPalette();
-    Specific::BuildIndexPalette('dark');
+    Functions::BuildIndexPalette();
+    Functions::BuildIndexPalette('dark');
 }
 
 $TEMP['global_title'] = $TEMP['#title'];
 $TEMP['global_description'] = $TEMP['#description'];
 $TEMP['global_keywords'] = $TEMP['#keyword'];
 $TEMP['year_now'] = date('Y');
-$TEMP['time'] = Specific::DateFormat(time(), 'complete');
+$TEMP['time'] = Functions::DateFormat(time(), 'complete');
 $TEMP['content'] = $TEMP['#content'];
 
 
-$maket = 'wrapper';
+$build = 'wrapper';
 if($one == 'amp'){
-    $maket = 'amp-wrapper';
-    $TEMP['style_fonts'] = Specific::Maket('amp/styles/style.fonts');
-    $TEMP['style_palette'] = Specific::Maket('amp/styles/style.palette');
-    $TEMP['style_general'] = Specific::Maket('amp/styles/style.general');
+    $build = 'amp-wrapper';
+    $TEMP['style_fonts'] = Functions::Build('amp/styles/style.fonts');
+    $TEMP['style_palette'] = Functions::Build('amp/styles/style.palette');
+    $TEMP['style_general'] = Functions::Build('amp/styles/style.general');
     
     if($TEMP['#dir'] == 'rtl'){
-        $TEMP['style_rtl_general'] = Specific::Maket('amp/styles/style.rtl.general');
+        $TEMP['style_rtl_general'] = Functions::Build('amp/styles/style.rtl.general');
     }
 
     if($TEMP['#settings']['switch_mode'] == 'on' || $TEMP['#settings']['theme_mode'] == 'night'){
-        $TEMP['style_dark_general'] = Specific::Maket('amp/styles/style.dark.general');
+        $TEMP['style_dark_general'] = Functions::Build('amp/styles/style.dark.general');
     }
 
-    $TEMP['style_header'] = Specific::Maket('amp/styles/style.header');
-    $TEMP['style_post'] = Specific::Maket('amp/styles/style.post');
-    $TEMP['style_apostb'] = Specific::Maket('amp/styles/style.post.related-bottom');
-    $TEMP['style_apostc'] = Specific::Maket('amp/styles/style.post.comments');
+    $TEMP['style_header'] = Functions::Build('amp/styles/style.header');
+    $TEMP['style_post'] = Functions::Build('amp/styles/style.post');
+    $TEMP['style_apostb'] = Functions::Build('amp/styles/style.post.related-bottom');
+    $TEMP['style_apostc'] = Functions::Build('amp/styles/style.post.comments');
 } else {
-    $notifies = Specific::Notifies();
+    $notifies = Functions::Notifies();
 
     $TEMP['#wpnotifications'] = $notifies['count_notifications'];
     $TEMP['#wpmessages'] = $notifies['count_messages'];
@@ -146,8 +146,8 @@ if($one == 'amp'){
     }
 }
 
-$content = Specific::Maket($maket);
-echo Specific::HTMLFormatter($content);
+$content = Functions::Build($build);
+echo Functions::HTMLFormatter($content);
 $dba->close();
 unset($TEMP);
 unset($RUTE);

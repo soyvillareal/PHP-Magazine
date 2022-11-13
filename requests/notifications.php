@@ -1,7 +1,7 @@
 <?php
 if($TEMP['#loggedin'] == true){
 	if($one == 'get-count'){
-		$notifies = Specific::Notifies();
+		$notifies = Functions::Notifies();
 
 		if($notifies['return']){
 			$deliver = array(
@@ -12,7 +12,7 @@ if($TEMP['#loggedin'] == true){
 			);
 		}
 	} else if($one == 'get-content'){
-		$notify_ids = Specific::Filter($_POST['notify_ids']);
+		$notify_ids = Functions::Filter($_POST['notify_ids']);
 		$notify_ids = html_entity_decode($notify_ids);
 		$notify_ids = json_decode($notify_ids, true);
 
@@ -34,9 +34,9 @@ if($TEMP['#loggedin'] == true){
 			        if(!empty($post)){
 			        	$has_notification = true;
 				        $TEMP['!title'] = $post['title'];
-				        $TEMP['!username'] = Specific::Data($post['user_id'], array('username'));
+				        $TEMP['!username'] = Functions::Data($post['user_id'], array('username'));
 
-				        $TEMP['!thumbnail'] = Specific::GetFile($post['thumbnail'], 1, 's');
+				        $TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 				    }
 			    } else if(in_array($notify['type'], array('n_collab', 'n_preact', 'n_creact', 'n_rreact'))){
 			    	if($notify['type'] == 'n_collab'){
@@ -44,7 +44,7 @@ if($TEMP['#loggedin'] == true){
 				    	
 				    	if(!empty($post)){
 			        		$has_notification = true;
-					    	$user = Specific::Data($post['user_id']);
+					    	$user = Functions::Data($post['user_id']);
 					       	$TEMP['!username'] = $user['username'];
 					       	$TEMP['!image'] = $user['avatar_s'];
 					        $TEMP['!title'] = $TEMP['#word']['added_collaborator_one_posts'];
@@ -54,7 +54,7 @@ if($TEMP['#loggedin'] == true){
 
 				    	if(!empty($reaction)){
 			        		$has_notification = true;
-					    	$user = Specific::Data($reaction['user_id']);
+					    	$user = Functions::Data($reaction['user_id']);
 					    	$post_id = $reaction['reacted_id'];
 					    	if(in_array($notify['type'], array('n_creact', 'n_rreact'))){
 					    		$t_query = 'SELECT post_id FROM '.T_COMMENTS.' WHERE id = ?';
@@ -89,7 +89,7 @@ if($TEMP['#loggedin'] == true){
 				    if(!empty($comment)){
 			        	$has_notification = true;
 				    	$params = "?{$RUTE['#p_comment_id']}={$notify['notified_id']}";
-					    $user = Specific::Data($comment['user_id']);
+					    $user = Functions::Data($comment['user_id']);
 					    $post = $dba->query('SELECT slug FROM '.T_POST.' WHERE id = ? AND status = "approved"', $comment['post_id'])->fetchArray();
 
 					    $TEMP['!title'] = $TEMP['#word']['commented_one_your_posts'];
@@ -106,7 +106,7 @@ if($TEMP['#loggedin'] == true){
 			    		$params = "?{$RUTE['#p_reply_id']}={$notify['notified_id']}";
 				    	$post_id = $dba->query('SELECT post_id FROM '.T_COMMENTS.' WHERE (SELECT comment_id FROM '.T_REPLY.' WHERE id = ?) = id', $notify['notified_id'])->fetchArray();
 
-					    $user = Specific::Data($user_id);
+					    $user = Functions::Data($user_id);
 					    $post = $dba->query('SELECT slug FROM '.T_POST.' WHERE id = ? AND status = "approved"', $post_id)->fetchArray();
 
 					    $TEMP['!title'] = $TEMP['#word']['has_replied_comment'];
@@ -121,7 +121,7 @@ if($TEMP['#loggedin'] == true){
 					
 			    	if(!empty($user_id)){
 			        	$has_notification = true;
-					    $user = Specific::Data($user_id);
+					    $user = Functions::Data($user_id);
 
 					    $TEMP['!title'] = $TEMP['#word']['has_started_following'];
 				       	$TEMP['!username'] = $user['username'];
@@ -134,13 +134,13 @@ if($TEMP['#loggedin'] == true){
 			    	if(!empty($post)){
 			    		$slug = "{$post['slug']}{$params}";
 			    	}
-				    $TEMP['!url'] = Specific::Url($slug);
+				    $TEMP['!url'] = Functions::Url($slug);
 				    $TEMP['!created_date'] = date('c', $notify['created_at']);
-				    $TEMP['!created_at'] = Specific::DateString($notify['created_at']);
-				    $html .= Specific::Maket('includes/wrapper/notification');
+				    $TEMP['!created_at'] = Functions::DateString($notify['created_at']);
+				    $html .= Functions::Build('includes/wrapper/notification');
 				}
 			}
-			Specific::DestroyMaket();
+			Functions::DestroyBuild();
 			if(!empty($html)){
 				if($dba->query('UPDATE '.T_NOTIFICATION.' SET seen = 1 WHERE user_id = ?', $TEMP['#user']['id'])->returnStatus()){
 					$deliver = array(
@@ -152,7 +152,7 @@ if($TEMP['#loggedin'] == true){
 		}
 
 	} if($one == 'settings'){
-		$values = Specific::Filter($_POST['values']);
+		$values = Functions::Filter($_POST['values']);
 		$values = html_entity_decode($values);
 		$values = json_decode($values, true);
 

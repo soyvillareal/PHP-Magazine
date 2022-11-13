@@ -2,15 +2,15 @@
 require_once('./includes/autoload.php');
 
 if(empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest'){
-	header("Location: " . Specific::Url('home'));
+	header("Location: " . Functions::Url('home'));
 	exit();
 }
 
 $deliver = array();
-$one = Specific::Filter($_GET['one']);
-$token = Specific::Filter($_POST['token']);
+$one = Functions::Filter($_GET['one']);
+$token = Functions::Filter($_POST['token']);
 if (!empty($_GET['token'])) {
-	$token = Specific::Filter($_GET['token']);
+	$token = Functions::Filter($_GET['token']);
 }
 
 if (empty($token) || $token != $_SESSION['_LOGIN_TOKEN']) {
@@ -18,7 +18,7 @@ if (empty($token) || $token != $_SESSION['_LOGIN_TOKEN']) {
 }
 
 if (!empty($_GET['request-name']) && !empty($token) && $token == $_SESSION['_LOGIN_TOKEN']) {
-	$req = Specific::Filter($_GET['request-name']);
+	$req = Functions::Filter($_GET['request-name']);
 	if (file_exists('./requests/'.$req.'.php')) {
 		require_once('./requests/'.$req.'.php');
 	} else {

@@ -1,7 +1,7 @@
 <?php 
-$tokenu = Specific::Filter($_GET['tokenu']);
+$tokenu = Functions::Filter($_GET['tokenu']);
 if ($TEMP['#loggedin'] === true || empty($tokenu)) {
-	header("Location: " . Specific::Url());
+	header("Location: " . Functions::Url());
 	exit();
 }
 
@@ -24,5 +24,5 @@ $TEMP['#page']        = 'unlink-mail';
 $TEMP['#title']       = $TEMP['#word']['didnt_create_this_account'] . ' - ' . $TEMP['#settings']['title'];
 $TEMP['#description'] = $TEMP['#settings']['description'];
 $TEMP['#keyword']     = $TEMP['#settings']['keyword'];
-$TEMP['#content']     = Specific::Maket("auth/$page/content");
+$TEMP['#content']     = Functions::Build("auth/$page/content");
 ?>

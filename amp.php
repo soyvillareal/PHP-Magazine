@@ -1,9 +1,9 @@
 <?php
 require_once('./includes/autoload.php');
 
-$type = Specific::Filter($_POST['type']);
+$type = Functions::Filter($_POST['type']);
 if(empty($type)){
-	$type = Specific::Filter($_GET['type']);
+	$type = Functions::Filter($_GET['type']);
 }
 
 if(!empty($type) && in_array($type, array('save', 'darkmode', 'reaction', 'next-page-config'))){
@@ -18,7 +18,7 @@ if(!empty($type) && in_array($type, array('save', 'darkmode', 'reaction', 'next-
 
 
 	if($type == 'darkmode'){
-		$darkmode = Specific::Filter($_POST['darkmode']);
+		$darkmode = Functions::Filter($_POST['darkmode']);
 		if(!empty($darkmode) && in_array($darkmode, array('true', 'false')) && $TEMP['#settings']['switch_mode'] == 'on'){
 			$darkmodes = array(
 				'false' => 1,
@@ -45,7 +45,7 @@ if(!empty($type) && in_array($type, array('save', 'darkmode', 'reaction', 'next-
 
 	if($TEMP['#loggedin'] == true){
 		if($type == 'save'){
-			$save_post = Specific::SavePost($_POST['post_id'], true);
+			$save_post = Functions::SavePost($_POST['post_id'], true);
 
 			if($save_post['return']){
 				$code = $save_post['data'];
@@ -61,7 +61,7 @@ if(!empty($type) && in_array($type, array('save', 'darkmode', 'reaction', 'next-
 				$reaction = $_GET['reaction'];
 			}
 
-			$reaction_post = Specific::ReactionPost($post_id, $reaction);
+			$reaction_post = Functions::ReactionPost($post_id, $reaction);
 
 			if($reaction_post['return']){
 				$code = $reaction_post['data']['S'];
@@ -77,7 +77,7 @@ if(!empty($type) && in_array($type, array('save', 'darkmode', 'reaction', 'next-
 			// Este codigo esta sin utilizar
 
 			/*
-			$post_ids = Specific::Filter($_GET['post_ids']);
+			$post_ids = Functions::Filter($_GET['post_ids']);
 
 			$post_ids = empty($post_ids) ? array() : explode(',', $post_ids);
 			
@@ -98,15 +98,15 @@ if(!empty($type) && in_array($type, array('save', 'darkmode', 'reaction', 'next-
 				$config = array();
 				foreach ($posts as $post) {
 					$config['pages'][] = array(
-						'image' => Specific::GetFile($post['thumbnail'], 1, 's'),
+						'image' => Functions::GetFile($post['thumbnail'], 1, 's'),
 						'title' => $post['title'],
-						'url' => Specific::Url("amp/{$post['slug']}")
+						'url' => Functions::Url("amp/{$post['slug']}")
 					);
 
 					$post_ids[] = $post['id'];
 				}
 
-				$config['next'] = Specific::Url("amp.php?type=next-page-config&post_ids=".implode(',', $post_ids));
+				$config['next'] = Functions::Url("amp.php?type=next-page-config&post_ids=".implode(',', $post_ids));
 
 				$code = 200;
 				$deliver = $config;

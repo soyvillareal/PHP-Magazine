@@ -3,12 +3,12 @@ if($one == 'subscribe'){
 	$catrues = array();
 	$categories = $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false);
 
-	$email = Specific::Filter($_POST['email']);
-	$type = Specific::Filter($_POST['type']);
-	$frequency = Specific::Filter($_POST['frequency']);
-	$popular = Specific::Filter($_POST['popular']);
+	$email = Functions::Filter($_POST['email']);
+	$type = Functions::Filter($_POST['type']);
+	$frequency = Functions::Filter($_POST['frequency']);
+	$popular = Functions::Filter($_POST['popular']);
 	$popular = json_decode($popular);
-	$cats = Specific::Filter($_POST['cats']);
+	$cats = Functions::Filter($_POST['cats']);
 	$cats = html_entity_decode($cats);
 	$cats = json_decode($cats, true);
 	$populars = array(
@@ -32,9 +32,9 @@ if($one == 'subscribe'){
 				$newsletter = $dba->query('SELECT status, COUNT(*) as count FROM '.T_NEWSLETTER.' WHERE email = ?', $email)->fetchArray(true);
 				if($newsletter['count'] == 0 || ($newsletter['count'] > 0 && $newsletter['status'] == 'disabled')){
 					if(in_array($type, array('all', 'personalized')) && in_array($frequency, array('now', 'daily', 'weekly')) && !in_array(false, $catrues)){
-						$slug = Specific::RandomKey(12, 16);
+						$slug = Functions::RandomKey(12, 16);
 						if($dba->query('SELECT COUNT(*) FROM '.T_NEWSLETTER.' WHERE slug = ?', $slug)->fetchArray(true) > 0){
-							$slug = Specific::RandomKey(12, 16);
+							$slug = Functions::RandomKey(12, 16);
 						}
 						if($newsletter['count'] == 0 || ($newsletter['count'] > 0 && $dba->query('DELETE FROM '.T_NEWSLETTER.' WHERE email = ?', $email)->returnStatus())){
 							if($type == 'all'){
@@ -82,12 +82,12 @@ if($one == 'subscribe'){
 	$catrues = array();
 	$categories = $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false);
 	
-	$slug = Specific::Filter($_POST['slug']);
-	$type = Specific::Filter($_POST['type']);
-	$frequency = Specific::Filter($_POST['frequency']);
-	$popular = Specific::Filter($_POST['popular']);
+	$slug = Functions::Filter($_POST['slug']);
+	$type = Functions::Filter($_POST['type']);
+	$frequency = Functions::Filter($_POST['frequency']);
+	$popular = Functions::Filter($_POST['popular']);
 	$popular = json_decode($popular);
-	$cats = Specific::Filter($_POST['cats']);
+	$cats = Functions::Filter($_POST['cats']);
 	$cats = html_entity_decode($cats);
 	$cats = json_decode($cats, true);
 	$populars = array(
@@ -143,8 +143,8 @@ if($one == 'subscribe'){
 		}
 	}
 } else if($one == 'unsubscribe'){
-	$slug = Specific::Filter($_POST['slug']);
-	$reason = Specific::Filter($_POST['reason']);
+	$slug = Functions::Filter($_POST['slug']);
+	$reason = Functions::Filter($_POST['reason']);
 
 	if(!empty($slug) && mb_strlen(strip_tags($reason), "UTF8") <= $TEMP['#settings']['max_words_unsub_newsletter']){
 		if(empty($reason)){

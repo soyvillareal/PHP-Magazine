@@ -1,9 +1,9 @@
 <?php
 $error = false;
-$reported_id = Specific::Filter($_POST['reported_id']);
-$type = Specific::Filter($_POST['type']);
-$place = Specific::Filter($_POST['place']);
-$description = Specific::Filter($_POST['description']);
+$reported_id = Functions::Filter($_POST['reported_id']);
+$type = Functions::Filter($_POST['type']);
+$place = Functions::Filter($_POST['place']);
+$description = Functions::Filter($_POST['description']);
 
 if(!empty($reported_id) && is_numeric($reported_id) && in_array($place, array('user', 'post', 'comment', 'reply'))){
 	if(mb_strlen(strip_tags($description), "UTF8") > $TEMP['#settings']['max_words_report']){
@@ -16,7 +16,7 @@ if(!empty($reported_id) && is_numeric($reported_id) && in_array($place, array('u
 		if($dba->query('SELECT COUNT(*) FROM '.T_USER.' WHERE id = ? AND status = "active"', $reported_id)->fetchArray(true) == 0){
 			$error = true;
 		}
-		if(Specific::IsOwner($reported_id)){
+		if(Functions::IsOwner($reported_id)){
 			$error = true;
 		}
 
@@ -32,7 +32,7 @@ if(!empty($reported_id) && is_numeric($reported_id) && in_array($place, array('u
 			$error = true;
 		}
 
-		if(Specific::IsOwner($post['user_id'])){
+		if(Functions::IsOwner($post['user_id'])){
 			$error = true;
 		}
 
@@ -52,7 +52,7 @@ if(!empty($reported_id) && is_numeric($reported_id) && in_array($place, array('u
 			$error = true;
 		}
 
-		if(Specific::IsOwner($comment['user_id'])){
+		if(Functions::IsOwner($comment['user_id'])){
 			$error = true;
 		}
 

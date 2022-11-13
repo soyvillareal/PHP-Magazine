@@ -1,6 +1,6 @@
 <?php
 if ($TEMP['#loggedin'] === true) {
-	header("Location: " . Specific::Url());
+	header("Location: " . Functions::Url());
 	exit();
 }
 
@@ -9,5 +9,5 @@ $TEMP['#title']       = $TEMP['#word']['reset_password'] . ' - ' . $TEMP['#setti
 $TEMP['#description'] = $TEMP['#settings']['description'];
 $TEMP['#keyword']     = $TEMP['#settings']['keyword'];
 
-$TEMP['#content']     = Specific::Maket('auth/forgot-password/content');
+$TEMP['#content']     = Functions::Build('auth/forgot-password/content');
 ?>

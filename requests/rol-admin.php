@@ -2,12 +2,12 @@
 if ($TEMP['#loggedin'] === true && $TEMP['#admin'] === true) {
 
     if($one == 'change-palette'){
-        $type = Specific::Filter($_POST['type']);
-        $light_palette = Specific::Filter($_POST['light_palette']);
-        $dark_palette = Specific::Filter($_POST['dark_palette']);
+        $type = Functions::Filter($_POST['type']);
+        $light_palette = Functions::Filter($_POST['light_palette']);
+        $dark_palette = Functions::Filter($_POST['dark_palette']);
         if(!empty($light_palette) && !empty($dark_palette)){
-            $light_palette = Specific::BuildPalette($light_palette);
-            $dark_palette = Specific::BuildPalette($dark_palette, 'dark');
+            $light_palette = Functions::BuildPalette($light_palette);
+            $dark_palette = Functions::BuildPalette($dark_palette, 'dark');
 
             if($dba->query("UPDATE ".T_SETTING." SET value = ? WHERE name = 'light_palette'", $light_palette)->returnStatus()){
                 if($dba->query("UPDATE ".T_SETTING." SET value = ? WHERE name = 'dark_palette'", $dark_palette)->returnStatus()){
@@ -16,7 +16,7 @@ if ($TEMP['#loggedin'] === true && $TEMP['#admin'] === true) {
             }
         }
     } else if($one == 'reset-palette'){
-        $type = Specific::Filter($_POST['type']);
+        $type = Functions::Filter($_POST['type']);
         if(in_array($type, array('light', 'dark'))){
             $light_palette = array(
                 'background' => array(

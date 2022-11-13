@@ -1,4 +1,4 @@
-const specific = require('./includes/specific'),
+const functions = require('./includes/functions'),
       T = require('./includes/tables'),
       connection = require('./mysql/DB'),
       util = require('util'),
@@ -19,7 +19,7 @@ module.exports = function(){
             profile_id: socket.handshake.query.profile_id
         };
 
-        specific.Init(socket).then(async function(res){
+        functions.Init(socket).then(async function(res){
             if(res.blocked_users !== undefined && res.blocked_users.length > 0){
                 global.TEMP[socket.id].blocked_arrusers = res.blocked_users;
                 global.TEMP[socket.id].blocked_inusers = res.blocked_users.join(',');
@@ -40,7 +40,7 @@ module.exports = function(){
                 console.log(err);
             });
 
-            specific.Data(socket, null, 4).then(function(res){
+            functions.Data(socket, null, 4).then(function(res){
                 global.TEMP[socket.id].user = res;
 
                 require('./sockets')(socket);
@@ -50,8 +50,8 @@ module.exports = function(){
         });
 
         socket.on('disconnect', function(data) {
-            specific.pullSocket(socket.id);
-            specific.pullSocket(socket.id, 'chat');
+            functions.pullSocket(socket.id);
+            functions.pullSocket(socket.id, 'chat');
             clearInterval(global.TEMP[socket.id].interval);
             delete global.TEMP[socket.id];
         });

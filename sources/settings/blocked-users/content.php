@@ -1,11 +1,11 @@
 <?php
 if ($TEMP['#loggedin'] == false) {
-    header("Location: ".Specific::ReturnUrl());
+    header("Location: ".Functions::ReturnUrl());
     exit();
 }
 $TEMP['#user_id'] = $TEMP['#user']['id'];
 if($TEMP['#moderator'] == true){
-    $user_id = Specific::Filter($_GET[$RUTE['#p_user_id']]);
+    $user_id = Functions::Filter($_GET[$RUTE['#p_user_id']]);
     if(!empty($user_id)){
         $TEMP['#user_id'] = $user_id;
         $TEMP['#param'] = "?{$RUTE['#p_user_id']}={$user_id}";
@@ -17,7 +17,7 @@ $TEMP['#total_pages'] = $dba->totalPages;
 
 if (!empty($blocked_users)) {
     foreach ($blocked_users as $blocked) {
-        $user = Specific::Data($blocked['profile_id'], array(
+        $user = Functions::Data($blocked['profile_id'], array(
             'username',
             'name',
             'surname'
@@ -25,13 +25,13 @@ if (!empty($blocked_users)) {
 
         $TEMP['!id'] = $blocked['profile_id'];
         $TEMP['!name'] = $user['username'];
-        $TEMP['!created_at'] = Specific::DateFormat($blocked['created_at']);
+        $TEMP['!created_at'] = Functions::DateFormat($blocked['created_at']);
 
-        $TEMP['blocked_users'] .= Specific::Maket("settings/blocked-users/includes/users");
+        $TEMP['blocked_users'] .= Functions::Build("settings/blocked-users/includes/users");
     }
-    Specific::DestroyMaket();
+    Functions::DestroyBuild();
 } else {
-    $TEMP['blocked_users'] = Specific::Maket("not-found/no-result");
+    $TEMP['blocked_users'] = Functions::Build("not-found/no-result");
 }
 
 $TEMP['#page']        = 'blocked-users';
@@ -39,5 +39,5 @@ $TEMP['#title']       = $TEMP['#word']['blocked_users'] . ' - ' . $TEMP['#settin
 $TEMP['#description'] = $TEMP['#settings']['description'];
 $TEMP['#keyword']     = $TEMP['#settings']['keyword'];
 
-$TEMP['#content']     = Specific::Maket("settings/blocked-users/content");
+$TEMP['#content']     = Functions::Build("settings/blocked-users/content");
 ?>
