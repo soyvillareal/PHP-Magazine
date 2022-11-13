@@ -6,10 +6,6 @@
 	width: 35px;
     height: 35px;
 }
-.btn_bvideo:active,
-.btn_bvideo:focus {
-	background-color: rgba(0,0,0,.6);
-}
 .btn-play-video {
 	width: 75px;
 	height: 75px;
@@ -41,7 +37,7 @@
 	min-height: 210px;
 	pointer-events: auto;
 }
-.content-rvideos:last-child {
+.content-more-posts .content-recommended-video .content-rvideos:last-child {
 	margin-right: 0;
 	padding-right: 0;
 	border-right: 0;
@@ -97,10 +93,5 @@
 	}
 	.content-video-posts iframe {
 		height: 280px;
-	}
-}
-@media (pointer: fine){
-	.btn_bvideo:hover {
-		background-color: rgba(0,0,0,.6);
 	}
 }

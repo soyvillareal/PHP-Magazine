@@ -59,7 +59,6 @@
 .btn-dfilter.selected {
     transform: scale(1);
     font-weight: bold;
-    color: #000;
 }
 .info-sload,
 .category-sload,

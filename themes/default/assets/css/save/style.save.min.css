@@ -91,7 +91,7 @@
     .content-sa-posts .item_sapost:not(:last-child) {
         margin-bottom: 15px;
         padding-bottom: 15px;
-        border-bottom: 1px solid #cdcdcd;
+        border-bottom: 1px solid;
     }
     .content-lsaload {
         width: 100%;

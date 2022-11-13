@@ -983,6 +983,7 @@
       html .item-share:not(:last-child) button:focus .share-icon,
       html .simditor .simditor-wrapper,
       html .simditor .simditor-toolbar,
+      html .button-access:disabled,
       html .background-wwhite,
       html .background-white {
          background-color: {$light_palette->background->white};
@@ -994,6 +995,7 @@
          background-color: {$light_palette->background->blue};
       }
       html .content-row-table:nth-child(odd),
+      html .button-social:hover,
       html .background-grely {
          background-color: {$light_palette->background->grely};
       }
@@ -1005,9 +1007,14 @@
       }
       html .staylogged-checkbox:checked,
       html .accept-checkbox:checked,
+      html .btn-follow[type=follow]:not([disabled]):active,
+      html .btn-follow[type=follow]:not([disabled]):focus,
+      html .btn-follow[type=following],
       html .background-black {
          background-color: {$light_palette->background->black};
       }
+      html .btn_bvideo:active,
+      html .btn_bvideo:focus,
       html .background-blackly {
          background-color: {$light_palette->background->blackly};
       }
@@ -1019,13 +1026,16 @@
       html .color-blackly {
          color: {$light_palette->color->blackly};
       }
+      html .btn-dfilter.selected,
       html .color-black {
          color: {$light_palette->color->black};
       }
+      html .btn-follow[type=following],
       html .color-wwhite,
       html .color-white {
          color: {$light_palette->color->white};
       }
+      html .button-access:disabled span,
       html .color-grey {
          color: {$light_palette->color->grey};
       }
@@ -1108,6 +1118,15 @@
             stroke: {$light_palette->background->black};
             opacity: 0.4;
          }
+
+         html .btn_bvideo:hover {
+            background-color: {$light_palette->background->blackly};
+         }
+         
+         html .btn-follow[type=follow]:not([disabled]):hover {
+            background-color: {$light_palette->background->black};
+            color: {$light_palette->color->white};
+         }
          
          html .btn-ddown:hover,
          html .btn_popup:not([disabled]):hover ~ .item-placeholder,
@@ -1148,6 +1167,7 @@
       html[dark=true] .item-share:not(:last-child) button:focus .share-icon,
       html[dark=true] .simditor .simditor-wrapper,
       html[dark=true] .simditor .simditor-toolbar,
+      html[dark=true] .button-access:disabled,
       html[dark=true] .background-white {
          background-color: {$dark_palette->background->white};
       }
@@ -1157,11 +1177,15 @@
          background-color: {$dark_palette->background->blue};
       }
       html[dark=true] .content-row-table:nth-child(odd),
+      html[dark=true] .button-social:hover,
       html[dark=true] .background-grely {
          background-color: {$dark_palette->background->grely};
       }
       html[dark=true] .staylogged-checkbox:checked,
       html[dark=true] .accept-checkbox:checked,
+      html[dark=true] .btn-follow[type=follow]:not([disabled]):active,
+      html[dark=true] .btn-follow[type=follow]:not([disabled]):focus,
+      html[dark=true] .btn-follow[type=following],
       html[dark=true] .background-wwhite,
       html[dark=true] .background-black {
          background-color: {$dark_palette->background->black};
@@ -1172,12 +1196,15 @@
          color: {$dark_palette->color->blackly};
       }
       html[dark=true] .color-wwhite,
+      html[dark=true] .btn-dfilter.selected,
       html[dark=true] .color-black {
          color: {$dark_palette->color->black};
       }
+      html[dark=true] .btn-follow[type=following],
       html[dark=true] .color-white {
          color: {$dark_palette->color->white};
       }
+      html[dark=true] .button-access:disabled span,
       html[dark=true] .color-grey {
          color: {$dark_palette->color->grey};
       }
@@ -1246,6 +1273,12 @@
          html[dark=true] .item-share:last-child button:hover .share-icon g,
          html[dark=true] .item-share:last-child a:hover .share-icon g {
             stroke: {$dark_palette->background->black};
+         }
+
+         
+         html[dark=true] .btn-follow[type=follow]:not([disabled]):hover {
+            background-color: {$dark_palette->background->black};
+            color: {$dark_palette->color->white};
          }
 
          html[dark=true] .btn-ddown:hover,

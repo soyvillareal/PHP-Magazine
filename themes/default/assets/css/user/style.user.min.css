@@ -14,10 +14,6 @@
 .btn-follow[type=follow] #text-unfollow {
     display: none;
 }
-.btn-follow[type=following] {
-    background-color: #000;
-    color: #fff;
-}
 .btn-follow[type=following]:not([disabled]):active,
 .btn-follow[type=following]:not([disabled]):focus {
     background-color: rgb(200, 60, 60, .1);
@@ -27,11 +23,6 @@
 .btn-follow[type=following]:not([disabled]):active #text-following,
 .btn-follow[type=following]:not([disabled]):focus #text-following {
     display: none;
-}
-.btn-follow[type=follow]:not([disabled]):active,
-.btn-follow[type=follow]:not([disabled]):focus {
-    background-color: #000;
-    color: #fff;
 }
 .btn-follow[type=following]:not([disabled]):active #text-unfollow,
 .btn-follow[type=following]:not([disabled]):focus #text-unfollow {
@@ -112,10 +103,6 @@
     }
     .btn-follow[type=following]:not([disabled]):hover #text-following {
         display: none;
-    }
-    .btn-follow[type=follow]:not([disabled]):hover {
-        background-color: #000;
-        color: #fff;
     }
     .btn-follow[type=following]:not([disabled]):hover #text-unfollow {
         display: block;

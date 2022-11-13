@@ -23,10 +23,6 @@ html[dark=true] .item_ctbackground {
     background: rgba(255, 255, 255, 0.08);
 }
 
-html[dark=true] .button-access:disabled {
-    background-color: #242424;
-}
-
 html[dark=true] .content-advertisement::before {
     color: #606060;
 }
@@ -117,9 +113,6 @@ html[dark=true] .simditor .simditor-body, .editor-style {
 }
 
 @media(pointer: fine){
-    html[dark=true] .button-social:hover {
-        background-color: #0f0f0f;
-    }
     html[dark=true] ul.content-tags li.item_tag:hover {
         background-color: #5c6678;
         border-color: #394e76;
