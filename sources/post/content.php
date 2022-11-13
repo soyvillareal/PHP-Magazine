@@ -12,7 +12,7 @@ if(!Functions::IsOwner($post['user_id'])){
 		header("Location: " . Functions::Url('404'));
 		exit();
 	}
-} else if($post['status'] == 'deleted'){
+} else if($TEMP['#moderator'] == false && $post['status'] == 'deleted'){
 	header("Location: " . Functions::Url('404'));
 	exit();
 }

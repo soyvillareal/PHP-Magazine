@@ -46,14 +46,34 @@ if($one == 'follow'){
 
 		}
 	}
+} else if($one == 'filter'){
+	$filter_by = Functions::Filter($_POST['filter_by']);
+	$user_id = Functions::Filter($_POST['user_id']);
+
+	if(!empty($user_id) && is_numeric($user_id) && in_array($filter_by, array('all', 'published', 'eraser', 'deleted'))){
+		$profile_load = Loads::Profile($user_id, $filter_by);
+
+		if($profile_load['return']){
+			$widget = Functions::GetWidget('horizposts');
+		}
+		if($widget['return']){
+			$profile_load['html'] .= $widget['html'];
+		}
+		$deliver = array(
+			'S' => 200,
+			'HT' => $profile_load['html'],
+			'IDS' => $profile_load['profile_ids']
+		);
+	}
 } else if($one == 'load-posts'){
 	$profile_ids = Functions::Filter($_POST['profile_ids']);
 	$profile_ids = html_entity_decode($profile_ids);
 	$profile_ids = json_decode($profile_ids);
+	$filter_by = Functions::Filter($_POST['filter_by']);
 	$user_id = Functions::Filter($_POST['user_id']);
 
 	if(!empty($user_id) && is_numeric($user_id)){
-		$profile_load = Loads::Profile($user_id, $profile_ids);
+		$profile_load = Loads::Profile($user_id, $filter_by, $profile_ids);
 
 		if($profile_load['return']){
 			$widget = Functions::GetWidget('horizposts');

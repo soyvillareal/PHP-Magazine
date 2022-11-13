@@ -73,7 +73,8 @@
     width: 210px;
     height: 140px;
 }
-.content-sresults article:last-child {
+.content-sresults article:last-child,
+.content-sresults .advertisement-horizontal-posts:last-child {
     padding-bottom: 0;
     border-bottom: 0;
 }

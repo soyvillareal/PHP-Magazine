@@ -614,7 +614,7 @@ class Loads {
 		return $data;
 	}
 
-	public static function Profile($user_id, $profile_ids = array()){
+	public static function Profile($user_id, $type = 'all', $profile_ids = array()){
 		global $dba, $TEMP, $RUTE;
 
 		$html = '';
@@ -630,9 +630,20 @@ class Loads {
 			$query = ' AND id NOT IN ('.implode(',', $profile_ids).')';
 		}
 
+		if($TEMP['#moderator'] == true || Functions::IsOwner($user_id)){
+			if($type == 'eraser'){
+				$query .= ' AND published_at = 0';
+			} else if($type == 'published'){
+				$query .= ' AND status = "approved" AND published_at <> 0';
+			}
+			if($TEMP['#moderator'] == true && $type == 'deleted'){
+				$query .= ' AND status = "deleted"';
+			}
+		}
+
 		if($TEMP['#moderator'] == false){
 			if(!Functions::IsOwner($user_id)){
-				$query .= ' AND status = "approved"';
+				$query .= ' AND status = "approved" AND published_at <> 0';
 			} else {
 				$query .= ' AND status <> "deleted"';
 			}

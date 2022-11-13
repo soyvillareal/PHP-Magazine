@@ -73,6 +73,7 @@ $TEMP['#instagram'] = $user['instagram'];
 $TEMP['#facebook'] = $user['facebook'];
 $TEMP['#about'] = $user['about'];
 $TEMP['#profile_blocked'] = in_array($user['id'], Functions::BlockedUsers(false));
+$TEMP['#profile_ids'] = $profile_load['profile_ids'];
 
 $followers = Functions::Followers($user['id']);
 

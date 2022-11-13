@@ -14,7 +14,7 @@
                 <?php if($TEMP['#profile_blocked'] == false){ ?>
                 <div class="item-piname display-flex direction-row align-center position-relative">
                     <h1 class="font-bold font-supraly font-postoni-gara">{$username}</h1>
-                    <?php if(!Specific::IsOwner($TEMP['#user_id'])){ ?>
+                    <?php if(!Functions::IsOwner($TEMP['#user_id'])){ ?>
                     <div id="container-poptions" class="margin-l15">
                         <button id="btn-poptions" class="btn-noway color-blackly btn-noway animation-ease3s animate-tab-button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->options}">
                             <svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
@@ -38,8 +38,8 @@
                     </div>
                     <?php } ?>
                 </div>
-                <?php if($TEMP['#followers'] > 0 && ($TEMP['#profile']['shows']['followers'] == 'on' || Specific::IsOwner($TEMP['#user_id']))) { ?>
-                <span id="item-followers" class="font-medium font-postoni-gara<?php echo($TEMP['#profile']['shows']['followers'] == 'off' && Specific::IsOwner($TEMP['#user_id'])) ? ' color-grey ' : ' color-blackly ';?>margin-b10">{$followers}</span>
+                <?php if($TEMP['#followers'] > 0 && ($TEMP['#profile']['shows']['followers'] == 'on' || Functions::IsOwner($TEMP['#user_id']))) { ?>
+                <span id="item-followers" class="font-medium font-postoni-gara<?php echo($TEMP['#profile']['shows']['followers'] == 'off' && Functions::IsOwner($TEMP['#user_id'])) ? ' color-grey ' : ' color-blackly ';?>margin-b10">{$followers}</span>
                 <?php } ?>
                 <?php if($TEMP['#profile']['shows']['birthday'] == 'on' || $TEMP['#profile']['shows']['gender'] == 'on') { ?>
                 <div class="margin-b10">
@@ -57,7 +57,7 @@
                 <?php } else { ?>
                 <div class="item-piname display-flex direction-row align-center position-relative">
                     <h1 class="font-bold font-supraly font-postoni-gara">{$word->user}</h1>
-                    <?php if(!Specific::IsOwner($TEMP['#user_id'])){ ?>
+                    <?php if(!Functions::IsOwner($TEMP['#user_id'])){ ?>
                     <div id="container-poptions" class="margin-l15">
                         <button id="btn-poptions" class="btn-noway color-blackly btn-noway animation-ease3s animate-tab-button" aria-haspopup="true" aria-expanded="false" aria-label="{$word->options}">
                             <svg class="icon-x vertical-middle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
@@ -81,7 +81,7 @@
                 </div>
                 <?php } ?>
             </div>
-            <?php if(!Specific::IsOwner($TEMP['#user_id'])){ ?>
+            <?php if(!Functions::IsOwner($TEMP['#user_id'])){ ?>
             <div class="display-flex direction-row align-center margin-l15 margin-r15">
                 <?php if($TEMP['#loggedin'] == true){ ?>
                 <?php if($TEMP['#profile_blocked'] == false){ ?>
@@ -153,7 +153,7 @@
             </nav>
             <?php } ?>
             <?php if($TEMP['#profile']['shows']['messages'] == 'on'){ ?>
-            <?php if(!Specific::IsOwner($TEMP['#user_id']) && $TEMP['#profile_blocked'] == false){ ?>
+            <?php if(!Functions::IsOwner($TEMP['#user_id']) && $TEMP['#profile_blocked'] == false){ ?>
             <a class="btn-upmsend display-inline-block padding-t10 padding-b10 padding-l10 padding-r10 color-black border-all border-grely hover-button animation-ease3s" href="{$url->{{#r_messages}/{$user}}}" target="_self">
                 <span class="color-black">{$word->send_message}</span>
                 <svg class="icon-y vertical-sub" viewBox="-1.5 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" role="img">
@@ -175,13 +175,30 @@
     </div>
     <div id="container-sposts" class="container-sposts display-flex">
         <div class="content-sposts display-flex direction-colum">
+            <?php if(!empty($TEMP['#profile_ids']) && ($TEMP['#moderator'] == true || Functions::IsOwner($TEMP['#user_id']))){ ?>
+            <div class="display-flex direction-row align-center">
+                <h2 class="font-bigly font-bold">{$word->latest_from} {$username}</h2>
+                <div class="item_ctsort display-flex direction-row align-center margin-left-auto">
+                    <span class="item-csort color-blackly font-mediumly margin-r5">{$word->show}</span>
+                    <select id="pfilter" class="w-auto color-black padding-l10 border-focus-blue border-rlow border-all border-grely caret-down background-grely animation-ease3s">
+                       <option value="all" selected>{$word->all_}</option>
+                       <option value="published">{$word->published}</option>
+                       <option value="eraser">{$word->eraser}</option>
+                       <?php if($TEMP['#moderator'] == true){ ?>
+                        <option value="deleted">{$word->removed_}</option>
+                       <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <?php } else { ?>
             <h2 class="font-bigly font-bold">{$word->latest_from} {$username}</h2>
+            <?php } ?>
             <section id="content-sresults" class="content-sresults">
                 {$posts_result}
             </section>
             <div id="content-load-sc" class="content-load-sc hidden">
-               <div class="padding-b15">
-                  <div class="display-flex direction-colum margin-t15 padding-t15 border-top border-grely">
+               <div class="margin-t15 padding-t15 padding-b15 border-top border-grely"> 
+                  <div class="display-flex direction-colum">
                      <div class="display-flex">
                         <div class="display-flex direction-colum w-100 padding-r10">
                            <div class="category-sload animate-content-load w-50px margin-b5 hidden"></div>
@@ -370,6 +387,7 @@
             load_posts: '{$url->{req/profile/load-posts}}',
             follow: '{$url->{req/profile/follow}}',
             block: '{$url->{req/profile/block}}',
+            filter: '{$url->{req/profile/filter}}',
             report: '{$url->{req/report}}'
         },
         settings: {
