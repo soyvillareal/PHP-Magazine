@@ -262,9 +262,9 @@ class Load {
 						$last_ltr_tsource = "{$TEMP['#word']['and']} ";
 					}
 					$TEMP['#thumb_sources'] = implode(',', $TEMP['#thumb_sources']);
-					$TEMP['#thumb_sources'] = "<span class='color-white font-georgia font-low font-bold'>{$TEMP['#word']['images_taken_from']}:</span> {$TEMP['#thumb_sources']} <span class='display-inline-block'>{$last_ltr_tsource}<a class='btn-noway color-blue hover-button' href='{$last_source['source']}' target='_blank'>{$last_source['name']}</a>{$last_rtl_tsource}</span>";
+					$TEMP['#thumb_sources'] = "<span class='color-wwhite font-georgia font-low font-bold'>{$TEMP['#word']['images_taken_from']}:</span> {$TEMP['#thumb_sources']} <span class='display-inline-block'>{$last_ltr_tsource}<a class='btn-noway color-blue hover-button' href='{$last_source['source']}' target='_blank'>{$last_source['name']}</a>{$last_rtl_tsource}</span>";
 				} else {
-					$TEMP['#thumb_sources'] = "<span class='color-white font-georgia font-low font-bold'>{$TEMP['#word']['image_taken_from']}:</span> <span class='display-inline-block'><a class='btn-noway color-blue hover-button' href='{$thumb_sources[0]['source']}' target='_blank'>{$thumb_sources[0]['name']}</a></span>";
+					$TEMP['#thumb_sources'] = "<span class='color-wwhite font-georgia font-low font-bold'>{$TEMP['#word']['image_taken_from']}:</span> <span class='display-inline-block'><a class='btn-noway color-blue hover-button' href='{$thumb_sources[0]['source']}' target='_blank'>{$thumb_sources[0]['name']}</a></span>";
 				}
 			}
 

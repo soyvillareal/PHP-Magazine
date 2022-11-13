@@ -243,6 +243,7 @@ ul {
     bottom: 0;
     right: 0;
     z-index: 9998;
+    box-shadow: -2px 0px 13px rgb(0, 0, 0, .2);
 }
 
 .btn-apalette {

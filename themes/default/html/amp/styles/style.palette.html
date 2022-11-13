@@ -1,0 +1,177 @@
+    /* Light mode */
+    html .content-article a:not(.no-style) { 
+        -webkit-text-decoration-color: {$light_palette->color->blue};
+        text-decoration-color: {$light_palette->color->blue};
+    }
+
+    html .item-share:last-child button:focus .share-icon g,
+    html .item-share:last-child a:focus .share-icon g {
+       stroke: {$light_palette->color->black};
+    }
+    
+    html .content-aoverlay {
+        background-color: {$light_palette->background->blackly};
+    }
+    
+    /* Background color */
+    html .background-blue {
+        background-color: {$light_palette->background->blue};
+    }
+    html .background-black {
+        background-color: {$light_palette->background->black};
+    }
+    html .background-red {
+        background-color: {$light_palette->background->red};
+    }
+    html .item-share:not(:last-child) amp-social-share:focus,
+    html .background-wwhite,
+    html .background-white {
+        background-color: {$light_palette->background->white};
+    }
+    html .background-grely {
+        background-color: {$light_palette->background->grely};
+    }
+
+
+
+    /* Border color */
+    html .border-blue {
+        border-color: {$light_palette->border->blue};
+    }
+    html .item-share:not(:last-child) amp-social-share:focus,
+    html .amp-next-page-links:not(:empty),
+    html .amp-next-page-link:not(:last-child),
+    html .border-grely {
+        border-color: {$light_palette->border->grely};
+    }
+
+    /* Text color */
+    html .color-wwhite,
+    html .color-white {
+        color: {$light_palette->color->white};
+    }
+    html .color-blackly {
+        color: {$light_palette->color->blackly};
+    }
+    html form#content-fsave button.saved g[submit-success],
+    html .color-black {
+        color: {$light_palette->color->black};
+    }
+    html .content-article a:not(.no-style),
+    html .content-article a:not(.no-style):visited,
+    html .color-blue {
+        color: {$light_palette->color->blue};
+    }
+    html .color-grey {
+        color: {$light_palette->color->grey};
+    }
+
+
+    /* Hover and focus */
+    html .hover-background:not([disabled]).active,
+    html .hover-background:not([disabled]):active,
+    html .hover-background:not([disabled]):focus,
+    html .hover-background[aria-hidden=true] {
+        background-color: {$light_palette->hover->background};
+    }
+
+    @media(pointer: fine){
+        html .item-share:last-child button:hover .share-icon g,
+        html .item-share:last-child a:hover .share-icon g {
+           stroke: {$light_palette->background->black};
+           opacity: 0.4;
+        }
+
+        html .hover-background:not([disabled]):hover {
+            background-color: {$light_palette->hover->background};
+        } 
+    }
+
+
+
+
+
+
+
+
+
+
+
+    /* Dark mode */
+    html.is_dark .content-article a:not(.no-style) { 
+        -webkit-text-decoration-color: {$dark_palette->color->blue};
+        text-decoration-color: {$dark_palette->color->blue};
+    }
+      
+    html .item-share:last-child button:focus .share-icon g,
+    html .item-share:last-child a:focus .share-icon g {
+       stroke: {$dark_palette->color->black};
+    }
+
+    /* Background color */
+    html.is_dark .item-share:not(:last-child) amp-social-share:focus,
+    html.is_dark .background-white {
+        background-color: {$dark_palette->background->white};
+    }
+    html.is_dark .background-blue {
+        background-color: {$dark_palette->background->blue};
+    }
+    html.is_dark .background-grely {
+        background-color: {$dark_palette->background->grely};
+    }
+    html.is_dark .background-wwhite,
+    html.is_dark .background-black {
+        background-color: {$dark_palette->background->black};
+    }
+
+    /* Border color */
+    html.is_dark .border-blue {
+        border-color: {$dark_palette->border->blue} !important;
+    }
+    html.is_dark .item-share:not(:last-child) amp-social-share:focus,
+    html.is_dark .amp-next-page-links:not(:empty),
+    html.is_dark .amp-next-page-link:not(:last-child),
+    html.is_dark .border-grely {
+        border-color: {$dark_palette->border->grely} !important;
+    }
+
+    /* Text color */
+    html.is_dark .color-white {
+        color: {$dark_palette->color->white};
+    }
+    html.is_dark .color-blackly {
+        color: {$dark_palette->color->blackly};
+    }
+    html.is_dark form#content-fsave button.saved g[submit-success],
+    html.is_dark .color-wwhite,
+    html.is_dark .color-black {
+        color: {$dark_palette->color->black};
+    }
+    html.is_dark .content-article a:not(.no-style),
+    html.is_dark .content-article a:not(.no-style):visited,
+    html.is_dark .color-blue {
+        color: {$dark_palette->color->blue};
+    }
+    html.is_dark .color-grey {
+        color: {$dark_palette->color->grey};
+    }
+
+    /* Hover and focus */
+    html.is_dark .hover-background:not([disabled]).active,
+    html.is_dark .hover-background:not([disabled]):active,
+    html.is_dark .hover-background:not([disabled]):focus,
+    html.is_dark .hover-background[aria-hidden=true] {
+        background-color: {$dark_palette->hover->background};
+    }
+    
+    @media(pointer: fine){
+        html.is_dark .item-share:last-child button:hover .share-icon g,
+        html.is_dark .item-share:last-child a:hover .share-icon g {
+           stroke: {$dark_palette->background->black};
+           opacity: 0.4;
+        }
+
+        html.is_dark .hover-background:not([disabled]):hover {
+            background-color: {$dark_palette->hover->background};
+        }
+    }

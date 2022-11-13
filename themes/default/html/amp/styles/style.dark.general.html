@@ -1,15 +1,5 @@
     html.is_dark .site-logo {
 		background-image: url('../themes/default/images/logo-night.png');
-    }    
-    html.is_dark .item-share:not(:last-child) amp-social-share:focus {
-        background-color: #181818;
-        border: 1px solid #606060;
-    }
-
-    html.is_dark .item-share:last-child button:focus .share-icon g,
-    html.is_dark .item-share:last-child a:focus .share-icon g {
-        stroke: #e4e6eb;
-        opacity: 0.4;
     }
 
     html.is_dark .content-ad-google::after,
@@ -18,7 +8,7 @@
     }
     
     html.is_dark .content-cmessage {
-        background: rgba(0, 0, 0, 0.5);
+        background: rgb(24, 24, 24, .5);
     }
 
     html.is_dark .item_ctbackground {
@@ -27,78 +17,4 @@
     
     html.is_dark .content-ad-google::before {
         color: #67717e;
-    }
-
-
-
-
-
-
-    /* Background color */
-    html.is_dark .background-white {
-        background-color: #181818;
-    }
-    html.is_dark .background-blue {
-        background-color: #265070;
-    }
-    html.is_dark .background-grely {
-        background-color: #303030;
-    }
-    html.is_dark .background-wwhite,
-    html.is_dark .background-black {
-        background-color: #e4e6eb;
-    }
-
-
-
-    /* Border color */
-    html.is_dark .border-blue {
-        border-color: #265070 !important;
-    }
-    html.is_dark .border-grely {
-        border-color: #606060 !important;
-    }
-
-
-    /* Hover and focus */
-    html.is_dark .hover-background:not([disabled]).active,
-    html.is_dark .hover-background:not([disabled]):active,
-    html.is_dark .hover-background:not([disabled]):focus,
-    html.is_dark .hover-background[aria-hidden=true] {
-        background-color: #222222;
-    }
-
-
-    /* Text color */
-    html.is_dark .color-white {
-        color: #181818;
-    }
-    html.is_dark .color-blackly {
-        color: #b0b3b8;
-    }
-    html.is_dark .color-wwhite,
-    html.is_dark .color-black {
-        color: #e4e6eb;
-    }
-    html.is_dark .color-blue {
-        color: #265070;
-    }
-    html.is_dark .color-grey {
-        color: #aaa;
-    }
-
-
-    @media(pointer: fine){
-        html.is_dark .hover-background:not([disabled]):hover {
-            background-color: #222222;
-        }
-        html.is_dark .item-share:not(:last-child) amp-social-share:hover {
-            background-color: #181818;
-            border: 1px solid #606060;
-        }
-        html.is_dark .item-share:last-child button:hover .share-icon g,
-        html.is_dark .item-share:last-child a:hover .share-icon g {
-            stroke: #e4e6eb;
-            opacity: 0.4;
-        }
     }

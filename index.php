@@ -120,6 +120,7 @@ $maket = 'wrapper';
 if($one == 'amp'){
     $maket = 'amp-wrapper';
     $TEMP['style_fonts'] = Specific::Maket('amp/styles/style.fonts');
+    $TEMP['style_palette'] = Specific::Maket('amp/styles/style.palette');
     $TEMP['style_general'] = Specific::Maket('amp/styles/style.general');
     
     if($TEMP['#dir'] == 'rtl'){
