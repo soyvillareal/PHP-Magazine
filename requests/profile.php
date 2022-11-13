@@ -50,7 +50,7 @@ if($one == 'follow'){
 	$filter_by = Functions::Filter($_POST['filter_by']);
 	$user_id = Functions::Filter($_POST['user_id']);
 
-	if(!empty($user_id) && is_numeric($user_id) && in_array($filter_by, array('all', 'published', 'eraser', 'deleted'))){
+	if(!empty($user_id) && is_numeric($user_id) && in_array($filter_by, array('all', 'published', 'draft', 'deleted'))){
 		$profile_load = Loads::Profile($user_id, $filter_by);
 
 		if($profile_load['return']){

@@ -118,7 +118,7 @@ if ($TEMP['#publisher'] === true) {
 			}
 		}
 
-		if(in_array($action, array('post', 'eraser'))){
+		if(in_array($action, array('post', 'draft'))){
 			if(empty($empty)){
 				if(!empty($_FILES['thumbnail'])){
 					if($_FILES['thumbnail']['size'] > $TEMP['#settings']['file_size_limit']){
@@ -398,7 +398,7 @@ if ($TEMP['#publisher'] === true) {
 							$slug = "{$slug}-{$slugs}";
 						}
 						
-						if($action == 'eraser'){
+						if($action == 'draft'){
 							$status = 'pending';
 							$published_at = 0;
 						}

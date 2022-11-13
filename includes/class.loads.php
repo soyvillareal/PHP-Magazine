@@ -631,7 +631,7 @@ class Loads {
 		}
 
 		if($TEMP['#moderator'] == true || Functions::IsOwner($user_id)){
-			if($type == 'eraser'){
+			if($type == 'draft'){
 				$query .= ' AND published_at = 0';
 			} else if($type == 'published'){
 				$query .= ' AND status = "approved" AND published_at <> 0';

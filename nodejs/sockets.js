@@ -946,7 +946,7 @@ module.exports = async function(socket){
                         }
                     }
 
-                    if(['post', 'eraser'].indexOf(action) !== -1){
+                    if(['post', 'draft'].indexOf(action) !== -1){
                         if(empty.length == 0){
 
                             if(Object.keys(files).indexOf('thumbnail') !== -1){
@@ -1267,7 +1267,7 @@ module.exports = async function(socket){
                                         arr_trues.push(!1);
                                     })
 
-                                    if(action == 'eraser'){
+                                    if(action == 'draft'){
                                         status = 'pending';
                                         published_at = 0;
                                     }
