@@ -38,6 +38,27 @@ $lang = array(
     'es' => 'es_ES',
     'en' => 'en_US'
 );
+
+// To add for new browsers support, simply edit the next array
+$supported_browsers = array(
+    array(
+        'name' => 'Chrome', // Name
+        'min_version' => 107 // Mimimum supported version
+    ),
+    array(
+        'name' => 'Microsoft Edge',
+        'min_version' => 107
+    ),
+    array(
+        'name' => 'Firefox',
+        'min_version' => 107
+    ),
+    array(
+        'name' => 'Opera',
+        'min_version' => 107
+    )
+);
+
 $TEMP['#lang'] = $lang[$TEMP['#settings']['language']];
 $TEMP['#admin'] = Functions::Admin();
 $TEMP['#moderator'] = Functions::Moderator();

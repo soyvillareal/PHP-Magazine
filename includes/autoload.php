@@ -7,6 +7,8 @@ require_once('includes/specs.php');
 require_once('libraries/PHPMailer-master/src/PHPMailer.php');
 require_once('libraries/PHPMailer-master/src/SMTP.php');
 require_once('libraries/PHPMailer-master/src/Exception.php');
+require_once('libraries/spyc/spyc.php');
+require_once('libraries/device-detector/autoload.php');
 
 require_once('includes/class.functions.php');
 require_once('includes/class.loads.php');

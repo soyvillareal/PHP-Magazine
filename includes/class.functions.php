@@ -2,6 +2,10 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
+use DeviceDetector\ClientHints;
+use DeviceDetector\DeviceDetector;
+use DeviceDetector\Parser\Device\AbstractDeviceParser;
+AbstractDeviceParser::setVersionTruncation(AbstractDeviceParser::VERSION_TRUNCATION_MAJOR);
 
 class Functions {
 
@@ -1830,96 +1834,69 @@ class Functions {
 	    return false;
 	}
 
+	public static function BrowserSupport(){
+		global $supported_browsers;
+		$support = true;
+		$browser_details = self::BrowserDetails()['details'];
+		
+		foreach ($supported_browsers as $browser) {
+			if($browser['name'] == $browser_details['name'] && $browser['min_version'] > $browser_details['version']){
+				$support = false;
+				break;
+			}
+		}
+		return $support;
+	}
+
 	public static function BrowserDetails() {
-	    $u_agent = $_SERVER['HTTP_USER_AGENT'];
-	    $is_mobile = false;
+		$user_agent = $_SERVER['HTTP_USER_AGENT']; // change this to the useragent you want to parse
+		$client_hints = ClientHints::factory($_SERVER); // client hints are optional
+		$dd = new DeviceDetector($user_agent, $client_hints);
+		$dd->parse();
+
 	    $bname = 'Unknown';
 	    $platform = 'Unknown';
-	    $version = "";
+		$version = "?";
 
-	    // Is mobile platform?
-	    if (preg_match("/(android|Android|ipad|iphone|IPhone|ipod)/i", $u_agent)) {
+	    // First get the platform
+		$os = $dd->getOs();
+
+		if(!empty($os)){
+			$platform = "{$os['name']} {$os['version']}";
+		}
+
+	    // Get the browser details
+		$client = $dd->getClient();
+
+		if(!empty($client)){
+			$bname = $client['name'];
+			if(!empty($client['version'])){
+				$version = $client['version'];
+			}
+		}
+
+	    $is_mobile = false;
+
+	    // Is mobile platform
+	    if ($dd->isSmartphone() || $dd->isTablet()) {
 	        $is_mobile = true;
 	    }
 
-	    // First get the platform?
-	    // First get the platform?
-		if (preg_match('/linux/i', $u_agent)) {
-		    $platform = 'Linux';
-		} elseif (preg_match('/macintosh|mac os x/i', $u_agent)) {
-		    $platform = 'Mac';
-		} elseif (preg_match('/windows|win32/i', $u_agent)) {
-		    $platform = 'Windows';
-		} else if(preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|android|iemobile)/i', $u_agent)){
-			$platform = 'Mobile';
-		} else if(preg_match('/(tablet|ipad|playbook)|(android(?!.*(mobi|opera mini)))/i', $u_agent)){
-			$platform = 'Tablet';
-		}
-
-
-	    // Next get the name of the useragent yes seperately and for good reason
-	    if(preg_match('/MSIE/i',$u_agent) && !preg_match('/Opera/i',$u_agent)) {
-	        $bname = 'Internet Explorer';
-	        $ub = "MSIE";
-	    } elseif(preg_match('/Firefox/i',$u_agent)) {
-	        $bname = 'Mozilla Firefox';
-	        $ub = "Firefox";
-	    } elseif(preg_match('/Chrome/i',$u_agent)) {
-	        $bname = 'Google Chrome';
-	        $ub = "Chrome";
-	    } elseif(preg_match('/Safari/i',$u_agent)) {
-	        $bname = 'Apple Safari';
-	        $ub = "Safari";
-	    } elseif(preg_match('/Opera/i',$u_agent)) {
-	        $bname = 'Opera';
-	        $ub = "Opera";
-	    } elseif(preg_match('/Netscape/i',$u_agent)) {
-	        $bname = 'Netscape';
-	        $ub = "Netscape";
-	    }
-
-	    // finally get the correct version number
-	    $known = array('Version', $ub, 'other');
-	    $pattern = '#(?<browser>' . join('|', $known) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
-	    if (!preg_match_all($pattern, $u_agent, $matches)) {
-	        // we have no matching number just continue
-	    }
-	    // see how many we have
-	    $i = count($matches['browser']);
-	    if ($i != 1) {
-	        //we will have two since we are not using 'other' argument yet
-	        //see if version is before or after the name
-	        if (strripos($u_agent,"Version") < strripos($u_agent,$ub)){
-	            $version= $matches['version'][0];
-	        } else {
-	            $version= $matches['version'][1];
-	        }
-	    } else {
-	        $version= $matches['version'][0];
-	    }
-
-	    // check if we have a number
-	    if ($version == null || $version == "") {
-	        $version="?";
-	    }
 	    return array(
-	        'validate' => array(
-	            'is_mobile' => $is_mobile
-	        ),
+	        'userAgent' => $user_agent,
+	        'is_mobile' => $is_mobile,
 	        'details' => array(
 	            'ip' => self::GetClientIp(),
-	            'userAgent' => $u_agent,
 	            'name' => $bname,
 	            'version' => $version,
-	            'platform'  => $platform,
-	            'pattern' => $pattern
-	        )
+	            'platform'  => $platform
+			)
 	    );
 	}
 
 	public static function Fingerprint($user_id = 0){
 		$client_details = self::BrowserDetails();
-		$fingerprint = sha1(md5("{$client_details['validate']['is_mobile']}{$client_details['details']['ip']}{$client_details['details']['userAgent']}{$client_details['details']['name']}{$client_details['details']['version']}{$client_details['details']['platform']}{$client_details['details']['pattern']}{getallheaders()['Accept']}"));
+		$fingerprint = sha1(md5("{$client_details['is_mobile']}{$client_details['details']['ip']}{$client_details['userAgent']}{$client_details['details']['name']}{$client_details['details']['version']}{$client_details['details']['platform']}{$client_details['details']['pattern']}{getallheaders()['Accept']}"));
 
 		return $fingerprint;
 	}
@@ -2070,8 +2047,6 @@ class Functions {
 	    require($file);
 	    $html = ob_get_contents();
 	    ob_end_clean();
-
-
 
 		$html = self::ColorPalette($html);
 		$html = self::ColorPalette($html, 'dark');

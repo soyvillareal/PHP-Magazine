@@ -34,6 +34,7 @@ $RUTE['#r_habeas_data'] = 'habeas-data';
 $RUTE['#r_about_us'] = 'quienes-somos';
 $RUTE['#r_contact'] = 'contactar';
 $RUTE['#r_show_palette'] = 'mostrar-paleta';
+$RUTE['#r_compatibility'] = 'compatibilidad';
 $RUTE['#r_logout'] = 'salir';
 
 //Params

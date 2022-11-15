@@ -4,6 +4,7 @@ RewriteBase /PHP-Magazine
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^$ index.php?one=home [NC,QSA]
+RewriteRule ^compatibilidad$ compatibility.php [NC,QSA]
 
 RewriteRule ^ingresar$ index.php?one=login [NC,QSA]
 RewriteRule ^ingresar-social$ index.php?one=social-login [NC,QSA]

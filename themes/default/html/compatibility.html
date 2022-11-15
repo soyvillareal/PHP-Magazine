@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="{#language}">
+    <head>
+        <meta charset="UTF-8" />
+        <title>{#title}</title>
+        <meta name="title" content="{#title}">
+        <meta name="description" content="{#description}">
+        <meta name="keywords" content="{#keywords}">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.fonts.css}}" />
+        <link rel="shortcut icon" type="image/png" href="{$theme->{images/favicon.ico}}" />
+        <style type="text/css">
+            * {
+                box-sizing: border-box
+            }
+
+            a,
+            body,
+            div,
+            h1,
+            h2,
+            h3,
+            html,
+            img,
+            li,
+            p,
+            span,
+            ul {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                font-size: 100%;
+                background: transparent
+            }
+
+            html,
+            body,
+            #body-wrapper {
+                height: 100%
+            }
+
+            a {
+                text-decoration: none;
+                cursor: pointer
+            }
+
+            body {
+                background: {$light_palette->background->white};
+                color: {$light_palette->color->black};
+                font-family: Franklin, arial, sans-serif;
+                font-weight: 400;
+                white-space: inherit;
+                overflow: inherit;
+                text-overflow: inherit;
+                -webkit-font-smoothing: antialiased
+            }
+
+            #header {
+                height: 56px;
+                padding: 16px 24px;
+                position: relative;
+                text-align: center;
+            }
+
+            #body-wrapper {
+                height: auto;
+                min-height: 100%;
+                position: relative
+            }
+
+            #main-content {
+                position: relative;
+                margin: auto;
+                max-width: 640px;
+                text-align: center;
+            }
+
+            h1 {
+                font-family: Georgia, "Times New Roman", serifniSvtyTwoITCTT-Book, georgia, serif;
+                font-weight: 500;
+                margin-bottom: 16px;
+                font-size: 32px;
+                line-height: 48px
+            }
+
+            p {
+                margin-bottom: 24px;
+                line-height: 21px
+            }
+
+            #browsers-list {
+                list-style: none
+            }
+
+            .browser {
+                display: inline-block;
+                width: 136px;
+                height: 136px;
+                margin: 0 16px 16px 0;
+                background: {$light_palette->background->grely};
+                border-radius: 4px
+            }
+
+            body[dir=rtl] .browser {
+                margin: 0 0 16px 16px
+            }
+
+            .browser.last {
+                margin-right: 0
+            }
+
+            body[dir=rtl] .browser.last {
+                margin-right: inherit;
+                margin-left: 0
+            }
+
+            .browser>a {
+                display: block;
+                width: 100%;
+                height: 100%;
+                padding: 16px;
+                color: {$light_palette->color->black}
+            }
+
+            .browser>a:visited {
+                color: {$light_palette->background->blue}
+            }
+
+            .browser img {
+                margin: 0 16px 8px 16px
+            }
+
+            .browser h3 {
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 16px;
+                text-align: center
+            }
+
+            #return-to {
+                display: inline-block;
+                background: {$light_palette->background->blue};
+                color: {$light_palette->color->white};
+                font-weight: 500;
+                text-transform: uppercase;
+                text-align: center;
+                padding: 12px 24px;
+                border-radius: 4px;
+                margin: 16px 0
+            }
+
+            @media (max-width:1127px) {
+                #return-to {
+                    margin: 24px 0
+                }
+            }
+
+            @media (max-width:647px) {
+                #main-content {
+                    margin: 16px auto;
+                    max-width: 439px
+                }
+                .browser.second {
+                    margin-right: 0
+                }
+                body[dir=rtl] .browser.second {
+                    margin-right: inherit;
+                    margin-left: 0
+                }
+            }
+
+            @media (max-width:340px) {
+                #main-content {
+                    max-width: 270px
+                }
+                .browser {
+                    margin-right: 0
+                }
+                h1 {
+                    font-size: 32px;
+                    line-height: 40px
+                }
+            }
+        </style>
+    </head>
+    <body dir="{#dir}">
+        <div id="body-wrapper">
+            <div id="header">
+                <a id="logo" href="/" alt="{$settings->title}" title="{$settings->title}">
+                    <img height="20px" src="{$theme->{images/logo-light.png}}" alt="{$settings->title}">
+                </a>
+            </div>
+            <div id="main-content">
+                <div id="browsers">
+                    <h1>{$title}</h1>
+                    <p>{$description}</p>
+                    <ul id="browsers-list">
+                        {$browsers}
+                    </ul>
+                    <a id="return-to" href="{$url->{{#r_home}}}">{$word->browse_site}</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

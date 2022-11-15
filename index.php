@@ -1,6 +1,15 @@
 <?php
 require_once('./includes/autoload.php');
 
+if(!Functions::BrowserSupport()){
+    if(!isset($_COOKIE['not_supported'])){
+        header("Location: " . Functions::Url($RUTE['#r_compatibility']));
+        exit();
+    }
+} else {
+    setcookie('not_supported', null, -1, '/');
+}
+
 $page = 'home/content.php';
 $one = $_GET['one'];
 if (isset($one)) {
