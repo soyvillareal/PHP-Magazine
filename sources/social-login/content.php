@@ -1,5 +1,6 @@
 <?php
-require_once('./includes/libraries/hybridauth/autoload.php');
+require_once('./assets/import/autoload.php');
+
 $provider = Functions::Filter($_GET[$RUTE['#p_provider']]);
 if ($TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, array('facebook', 'twitter', 'google')) && !isset($_GET['denied'])) {
     try {

@@ -1,0 +1,34 @@
+{
+    "name": "soyvillareal/php-magazine",
+    "description": "The best digital magazine for newspapers or bloggers",
+    "keywords": [
+        "Web",
+        "Website",
+        "Magazine",
+        "Open-source-project",
+        "PHP-Script",
+        "Magazine-website"
+    ],
+    "homepage": "https://phpmagazine.soyvillareal.com",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Oscar Garces",
+            "email": "soyvillareal@gmail.com",
+            "homepage": "https://soyvillareal.com"
+        }
+    ],
+    "config": {
+        "vendor-dir": "assets/import"
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.4",
+        "matomo/device-detector": "^6.0",
+        "hybridauth/hybridauth": "^3.8",
+        "phpmailer/phpmailer": "^6.6",
+        "mustangostang/spyc": "^0.6.3",
+        "onesignal/onesignal-php-api": "*@dev"
+    }
+}

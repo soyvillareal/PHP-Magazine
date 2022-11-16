@@ -1,6 +1,6 @@
 <?php 
 
-require_once('./includes/autoload.php');
+require_once('./assets/init.php');
 
 header("Content-type:text/xml");
 

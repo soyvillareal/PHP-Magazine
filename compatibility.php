@@ -1,5 +1,5 @@
 <?php 
-require_once('./includes/autoload.php');
+require_once('./assets/init.php');
 
 $browsers = array(
     array(
