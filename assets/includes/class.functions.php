@@ -1841,7 +1841,7 @@ class Functions {
 		$browser_details = self::BrowserDetails()['details'];
 		
 		foreach ($supported_browsers as $browser) {
-			if($browser['name'] == $browser_details['name'] && $browser['min_version'] > $browser_details['version']){
+			if($browser['name'] == $browser_details['name'] && $browser['min_version'] < $browser_details['version']){
 				$support = false;
 				break;
 			}
