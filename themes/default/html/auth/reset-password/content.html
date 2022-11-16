@@ -3,59 +3,59 @@
       <h1 class="font-big font-bold text-center margin-t15 margin-b15 padding-t25">{$word->change_password}</h1>
       <div class="content-form">
          <form novalidate>
-               <div class="signup-fields margin-b15">
-                  <div class="w-100 position-relative padding-b10">
-                     <input id="password" class="item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="password" aria-label="{$word->password}" autocomplete="password" autocapitalize="off">
-                     <div class="color-red text-left text-error font-low margin-t5"></div>
-                     <label class="item-label position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->password}</label>
-                  </div>
-                  <div class="w-100 position-relative">
-                     <input id="re-password" class="item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="password" aria-label="{$word->confirm_password}" autocomplete="re-password" autocapitalize="off">
-                     <div class="color-red text-left text-error font-low margin-t5"></div>
-                     <label class="item-label position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->confirm_password}</label>
-                  </div>
-                  <div class="display-flex direction-colum align-center">
-                     <div id="valid-password" class="display-flex direction-row w-100 padding-t10 padding-b5">
-                        <div class="item-valid-password border-all margin-r15 w-25"></div>
-                        <div class="item-valid-password border-all margin-r15 w-25"></div>
-                        <div class="item-valid-password border-all margin-r15 w-25"></div>
-                        <div class="item-valid-password border-all w-25"></div>
-                     </div>
-                     <span class="display-inline-flex justify-center color-grey margin-t10 margin-b10">
-                        <b id="text-validate">{$word->write_a_password}</b>
-                     </span>
-                  </div>
-                  <div class="display-flex justify-center">
-                     <ul>
-                        <li class="display-flex direction-row align-center justify-center">
-                           <svg id="icon-five" class="color-grey margin-r5" width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <circle cx="4.5" cy="5" r="4.275" fill="currentColor" stroke="#D5D5D5" stroke-width="0.45"></circle>
-                              <path d="M2.36261 5.22692L4.09387 6.57489L6.61511 3.19989" stroke="white" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"></path>
-                           </svg>
-                           <div class="color-blackly font-mediumly">{$word->must_include_least_characters}</div>
-                        </li>
-                        <li class="display-flex direction-row align-center justify-center margin-t10">
-                           <svg id="icon-supported" class="color-grey margin-r5" width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg" data-qa="disabled-checkmark">
-                              <circle cx="4.5" cy="5" r="4.275" fill="currentColor" stroke="#D5D5D5" stroke-width="0.45"></circle>
-                              <path d="M2.36261 5.22692L4.09387 6.57489L6.61511 3.19989" stroke="white" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"></path>
-                           </svg>
-                           <div class="display-flex color-blackly font-mediumly">{$word->must_include_least_one}&nbsp;
-                              <div class="display-flex position-relative">
-                                 <button id="show-symbols" class="btn-noway text-underline" type="button" aria-haspopup="true" aria-label="Supported Symbols" aria-expanded="false">{$word->symbol}</button>
-                              </div>
-                           </div>
-                        </li>
-                        <li id="supported-symbols" class="h-0 overflow-hidden animation-ease3s margin-t10" aria-modal="true" role="dialog">
-                           <div class="text-symbols" role="toolbar">
-                              <div class="background-white border-rlow border-all border-grely padding-t10 padding-b10 padding-l10 padding-r10 text-center">
-                                 <span class="color-grey">{$word->supported_symbols}</span>
-                                 <p class="color-blue margin-t5">¡!"#$%&'()*+,-./:;<=>¿?@[]^_`{|}~</p>
-                              </div>
-                           </div>
-                        </li>
-                     </ul>
-                  </div>
+            <div class="signup-fields margin-b15">
+               <div class="w-100 position-relative padding-b10">
+                  <input id="password" class="item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="password" aria-label="{$word->password}" autocomplete="password" autocapitalize="off">
+                  <div class="color-red text-left text-error font-low margin-t5"></div>
+                  <label class="item-label position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->password}</label>
                </div>
+               <div class="w-100 position-relative">
+                  <input id="re-password" class="item_input background-white color-black w-100 h-45 padding-t20 padding-b5 padding-l10 padding-r10 border-all border-black border-rlow border-focus-blue sizing-box" type="password" aria-label="{$word->confirm_password}" autocomplete="re-password" autocapitalize="off">
+                  <div class="color-red text-left text-error font-low margin-t5"></div>
+                  <label class="item-label position-absolute pointer-events-none ellipsis-horizontal color-grey animation-ease3s">{$word->confirm_password}</label>
+               </div>
+               <div class="display-flex direction-colum align-center">
+                  <div id="valid-password" class="display-flex direction-row w-100 padding-t10 padding-b5">
+                     <div class="item-valid-password border-all margin-r15 w-25"></div>
+                     <div class="item-valid-password border-all margin-r15 w-25"></div>
+                     <div class="item-valid-password border-all margin-r15 w-25"></div>
+                     <div class="item-valid-password border-all w-25"></div>
+                  </div>
+                  <span class="display-inline-flex justify-center color-grey margin-t10 margin-b10">
+                     <b id="text-validate">{$word->write_a_password}</b>
+                  </span>
+               </div>
+               <div class="display-flex justify-center">
+                  <ul>
+                     <li class="display-flex direction-row align-center justify-center">
+                        <svg id="icon-five" class="color-grey margin-r5" width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                           <circle cx="4.5" cy="5" r="4.275" fill="currentColor" stroke="#D5D5D5" stroke-width="0.45"></circle>
+                           <path d="M2.36261 5.22692L4.09387 6.57489L6.61511 3.19989" stroke="white" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <div class="color-blackly font-mediumly">{$word->must_include_least_characters}</div>
+                     </li>
+                     <li class="display-flex direction-row align-center justify-center margin-t10">
+                        <svg id="icon-supported" class="color-grey margin-r5" width="9" height="10" viewBox="0 0 9 10" fill="none" xmlns="http://www.w3.org/2000/svg" data-qa="disabled-checkmark">
+                           <circle cx="4.5" cy="5" r="4.275" fill="currentColor" stroke="#D5D5D5" stroke-width="0.45"></circle>
+                           <path d="M2.36261 5.22692L4.09387 6.57489L6.61511 3.19989" stroke="white" stroke-width="0.9" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        <div class="display-flex color-blackly font-mediumly">{$word->must_include_least_one}&nbsp;
+                           <div class="display-flex position-relative">
+                              <button id="show-symbols" class="btn-noway text-underline" type="button" aria-haspopup="true" aria-label="Supported Symbols" aria-expanded="false">{$word->symbol}</button>
+                           </div>
+                        </div>
+                     </li>
+                     <li id="supported-symbols" class="h-0 overflow-hidden animation-ease3s margin-t10" aria-modal="true" role="dialog">
+                        <div class="text-symbols" role="toolbar">
+                           <div class="background-white border-rlow border-all border-grely padding-t10 padding-b10 padding-l10 padding-r10 text-center">
+                              <span class="color-grey">{$word->supported_symbols}</span>
+                              <p class="color-blue margin-t5">¡!"#$%&'()*+,-./:;<=>¿?@[]^_`{|}~</p>
+                           </div>
+                        </div>
+                     </li>
+                  </ul>
+               </div>
+            </div>
             <button id="btn-change" class="button-access btn-noway w-100 h-36 background-blue font-medium font-bold margin-b10 padding-l20 padding-r20 border-r25px inhover-button animation-ease3s" type="submit" disabled>
                <span class="color-wwhite">{$word->change}</span>
                <div class="content-spinner-circle position-absolute">

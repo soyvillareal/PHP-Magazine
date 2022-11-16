@@ -1,7 +1,7 @@
 <?php
 require_once('./includes/libraries/hybridauth/autoload.php');
 $provider = Functions::Filter($_GET[$RUTE['#p_provider']]);
-if ( $TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, array('facebook', 'twitter', 'google')) && !isset($_GET['denied'])) {
+if ($TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, array('facebook', 'twitter', 'google')) && !isset($_GET['denied'])) {
     try {
         $hybridauth = new Hybridauth\Hybridauth(array(
             "callback" => Functions::Url("{$RUTE['#r_social_login']}?{$RUTE['#p_provider']}=$provider"),
@@ -154,7 +154,7 @@ if ( $TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arr
     catch (Exception $e) {
         if(isset($_SESSION['HYBRIDAUTH::STORAGE'])){
             unset($_SESSION['HYBRIDAUTH::STORAGE']);
-            header("Location: " . Functions::Url("{$RUTE['#r_social_login']}?{$RUTE['#p_provider']}=$provider"));
+            header("Location: " . Functions::Url("{$RUTE['#r_social_login']}?{$RUTE['#p_provider']}={$provider}"));
             exit();
         }
         exit($e->getMessage());

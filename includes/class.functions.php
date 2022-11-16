@@ -1265,6 +1265,7 @@ class Functions {
 	    if($data['is_html'] == true){
 	    	$TEMP['title'] = $subject;
 		    $TEMP['body'] = $content;
+			$TEMP['year_now'] = date('Y');
 		    $content = self::Build('emails/content');
 	    }
 	    $mail->IsHTML($data['is_html']);
@@ -1821,7 +1822,7 @@ class Functions {
 	            }
 	        }
 	    }
-	    return '?';
+	    return 'Unknown';
 	}
 
 	public static function IsOwner($user_id) {
@@ -2131,14 +2132,10 @@ class Functions {
 		preg_match_all('/{%%(.+?)%%}/is', $page, $scripts);
 		$page = preg_replace(array(
 			'/{\*HERE\*}/',
-			'/{%%(.+?)%%}/is',
-			'/class=("|\')@(.+?)/',
-			'/{#(.*?)#}/'
+			'/{%%(.+?)%%}/is'
 		), array(
 			implode('', $scripts[1]),
-			'',
-			'class=$1$2',
-			'$1'
+			''
 		), $page);
 
 		return $page;
