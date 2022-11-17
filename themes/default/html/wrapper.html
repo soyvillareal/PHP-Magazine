@@ -960,7 +960,7 @@
    {%%<script src="{$theme->{assets/js/jquery.palette.min.js}}"></script>%%}
    {%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/plugins/spectrum.min.css}}" />%%}
    <?php } ?>
-   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.fonts.css}}" />
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.fonts.min.css}}" />
    
    <style id="light-palette" type="text/css">
       html .content-article a:not(.no-style) { 
@@ -1300,17 +1300,17 @@
    </style>
 
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.search.min.css}}" />
-   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.general.css}}" />
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.general.min.css}}" />
    <?php if($TEMP['#dir'] == 'rtl'){ ?>
-   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.rtl.general.css}}" />
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.rtl.general.min.css}}" />
    <?php } ?>
    <?php if($TEMP['#settings']['switch_mode'] == 'on' || $TEMP['#settings']['theme_mode'] == 'night'){ ?>
-   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.dark.general.css}}" />
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.dark.general.min.css}}" />
    <?php } ?>
-   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.modal.css}}" />
-   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.header.css}}" />
-   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.footer.css}}" />
-   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.aside.css}}" />
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/style.modal.min.css}}" />
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.header.min.css}}" />
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.footer.min.css}}" />
+   <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/wrapper/style.aside.min.css}}" />
    <?php if($TEMP['#settings']['nodejs'] == 'on'){ ?>
    <script src="{$theme->{assets/js/socket.io.min.js}}"></script>
    <?php } ?>
