@@ -11,7 +11,7 @@ if(!empty($TEMP['#random_posts'])){
 
 		$TEMP['!title'] = $post['title'];
 		$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-		$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+		$TEMP['!category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 		$TEMP['!url'] = Functions::Url($post['slug']);
 		$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 		$TEMP['!published_date'] = date('c', $post['published_at']);

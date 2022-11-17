@@ -5,49 +5,47 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^$ index.php?one=home [NC,QSA]
 
-RewriteRule ^compatibilidad$ compatibility.php [NC,QSA]
-
-RewriteRule ^ingresar$ index.php?one=login [NC,QSA]
-RewriteRule ^ingresar-social$ index.php?one=social-login [NC,QSA]
-RewriteRule ^registrarse$ index.php?one=register [NC,QSA]
-RewriteRule ^recuperar-contrasena$ index.php?one=forgot-password [NC,QSA]
-RewriteRule ^salir$ index.php?one=logout [NC,QSA]
-RewriteRule ^verificar-correo/([^/.]+)?$ index.php?one=verify-email&tokenu=$1 [NC,QSA]
-RewriteRule ^autenticacion/([^/.]+)?$ index.php?one=2check&tokenu=$1 [NC,QSA]
-RewriteRule ^cambiar-contrasena/([^\/]+)(\/|)$ index.php?one=reset-password&tokenu=$1 [NC,QSA]
-RewriteRule ^desvincular-correo/([^/.]+)?$ index.php?one=unlink-mail&tokenu=$1 [NC,QSA]
+RewriteRule ^amp/([^/.]+)?$ index.php?one=amp&slug=$1 [NC,QSA]
 
 
+# Edit the following rules only if you plan to modify the routes.php and routes.js files to modify the routes in the urls.
+
+# Start
+RewriteRule ^compatibility$ compatibility.php [NC,QSA]
+RewriteRule ^login$ index.php?one=login [NC,QSA]
+RewriteRule ^social-login$ index.php?one=social-login [NC,QSA]
+RewriteRule ^register$ index.php?one=register [NC,QSA]
+RewriteRule ^forgot-password$ index.php?one=forgot-password [NC,QSA]
+RewriteRule ^logout$ index.php?one=logout [NC,QSA]
+RewriteRule ^verify-email/([^/.]+)?$ index.php?one=verify-email&tokenu=$1 [NC,QSA]
+RewriteRule ^2check/([^/.]+)?$ index.php?one=2check&tokenu=$1 [NC,QSA]
+RewriteRule ^reset-password/([^\/]+)(\/|)$ index.php?one=reset-password&tokenu=$1 [NC,QSA]
+RewriteRule ^unlink-mail/([^/.]+)?$ index.php?one=unlink-mail&tokenu=$1 [NC,QSA]
 
 RewriteRule ^rss/([^/.]+)/([^/.]+)?$ rss.php?type=$1&get=$2 [NC,QSA]
+RewriteRule ^create-post$ index.php?one=create-post [NC,QSA]
+RewriteRule ^edit-post/([^/.]+)?$ index.php?one=edit-post&post_id=$1 [NC,QSA]
+RewriteRule ^messages$ index.php?one=messages [NC,QSA]
+RewriteRule ^messages/([^/.]+)?$ index.php?one=messages&username=$1 [NC,QSA]
+RewriteRule ^user/([^/.]+)?$ index.php?one=user&username=$1 [NC,QSA]
+RewriteRule ^category/([^/.]+)?$ index.php?one=category&category=$1 [NC,QSA]
+RewriteRule ^tag/([^/.]+)?$ index.php?one=tag&label=$1 [NC,QSA]
 
-RewriteRule ^amp/([^/.]+)?$ index.php?one=amp&slug=$1 [NC,QSA]
-RewriteRule ^crear-publicacion$ index.php?one=create-post [NC,QSA]
-RewriteRule ^editar-publicacion/([^/.]+)?$ index.php?one=edit-post&post_id=$1 [NC,QSA]
+RewriteRule ^settings$ index.php?one=settings&page=account [NC,QSA]
+RewriteRule ^settings/account$ index.php?one=settings&page=account [NC,QSA]
+RewriteRule ^settings/logins$ index.php?one=settings&page=logins [NC,QSA]
+RewriteRule ^settings/blocked-users$ index.php?one=settings&page=blocked-users [NC,QSA]
+RewriteRule ^settings/change-password$ index.php?one=settings&page=change-password [NC,QSA]
+RewriteRule ^change-email/([^/.]+)?$ index.php?one=change-email&tokenu=$1 [NC,QSA]
 
-RewriteRule ^mensajes$ index.php?one=messages [NC,QSA]
-RewriteRule ^mensajes/([^/.]+)?$ index.php?one=messages&username=$1 [NC,QSA]
-
-RewriteRule ^usuario/([^/.]+)?$ index.php?one=user&username=$1 [NC,QSA]
-RewriteRule ^seccion/([^/.]+)?$ index.php?one=category&category=$1 [NC,QSA]
-RewriteRule ^noticias/([^/.]+)?$ index.php?one=tags&label=$1 [NC,QSA]
-
-RewriteRule ^ajustes$ index.php?one=settings&page=account [NC,QSA]
-RewriteRule ^ajustes/cuenta$ index.php?one=settings&page=account [NC,QSA]
-RewriteRule ^ajustes/inicios-de-sesion$ index.php?one=settings&page=logins [NC,QSA]
-RewriteRule ^ajustes/usuarios-bloqueados$ index.php?one=settings&page=blocked-users [NC,QSA]
-RewriteRule ^ajustes/cambiar-contrasena$ index.php?one=settings&page=change-password [NC,QSA]
-RewriteRule ^cambiar-correo/([^/.]+)?$ index.php?one=change-email&tokenu=$1 [NC,QSA]
-RewriteRule ^buscar$ index.php?one=search [NC,QSA]
-RewriteRule ^guardado$ index.php?one=save [NC,QSA]
-
-
-RewriteRule ^boletin$ index.php?one=newsletter [NC,QSA]
-RewriteRule ^boletin/([^/.]+)?$ index.php?one=newsletter&slug=$1 [NC,QSA]
-
-RewriteRule ^pagina/([^\/]+)(\/|)?$ index.php?one=page&slug=$1 [NC,QSA]
-RewriteRule ^contactar$ index.php?one=contact [NC,QSA]
-RewriteRule ^mapa-del-sitio$ index.php?one=sitemap [NC,QSA]
+RewriteRule ^search$ index.php?one=search [NC,QSA]
+RewriteRule ^saved$ index.php?one=saved [NC,QSA]
+RewriteRule ^newsletter$ index.php?one=newsletter [NC,QSA]
+RewriteRule ^newsletter/([^/.]+)?$ index.php?one=newsletter&slug=$1 [NC,QSA]
+RewriteRule ^page/([^\/]+)(\/|)?$ index.php?one=page&slug=$1 [NC,QSA]
+RewriteRule ^contact$ index.php?one=contact [NC,QSA]
+RewriteRule ^sitemap$ index.php?one=sitemap [NC,QSA]
+# End
 
 
 RewriteCond %{REQUEST_FILENAME} !-f

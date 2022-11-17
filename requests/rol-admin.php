@@ -96,7 +96,6 @@ if ($TEMP['#loggedin'] === true && $TEMP['#admin'] === true) {
                 $palette = $dark_palette;
             }
 
-            $deliver['XD'] = $palette;
             if($dba->query("UPDATE ".T_SETTING." SET value = ? WHERE name = '{$type}_palette'", json_encode($palette))->returnStatus()){
                 $deliver['S'] = 200;
             }

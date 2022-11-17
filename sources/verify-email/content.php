@@ -1,6 +1,6 @@
 <?php
 $tokenu = Functions::Filter($_GET['tokenu']);
-$TEMP['#descode'] = Functions::Filter($_GET[$RUTE['#p_insert']]);
+$TEMP['#descode'] = Functions::Filter($_GET[$ROUTE['#p_insert']]);
 if ($TEMP['#loggedin'] === true || $TEMP['#settings']['verify_email'] == 'off' || empty($tokenu)) {
 	header("Location: " . Functions::Url());
 	exit();
@@ -15,8 +15,8 @@ $page = Functions::ValidateToken($verify_email['expires'], 'verify_email') || $v
 $TEMP['title'] = $TEMP['#word']['check_your_email'];
 $TEMP['type'] = 'verify_email';
 $TEMP['token'] = $tokenu;
-$TEMP['url'] = Functions::Url($RUTE['#r_verify_email']);
-if(!empty($_GET[$RUTE['#p_insert']])){
+$TEMP['url'] = Functions::Url($ROUTE['#r_verify_email']);
+if(!empty($_GET[$ROUTE['#p_insert']])){
 	$TEMP['desone'] = substr($TEMP['#descode'], 0, 1);
 	$TEMP['destwo'] = substr($TEMP['#descode'], 1, 1);
 	$TEMP['desthree'] = substr($TEMP['#descode'], 2, 1);

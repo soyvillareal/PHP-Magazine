@@ -1,7 +1,7 @@
 <?php
 class Loads {
 	public static function LastPosts($limit, $home_ids = array()){
-		global $dba, $TEMP, $RUTE;
+		global $dba, $TEMP, $ROUTE;
 
 		$data = array(
 			'last_posts_one' => false,
@@ -32,7 +32,7 @@ class Loads {
 
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-				$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+				$TEMP['!category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 				$TEMP['!url'] = Functions::Url($post['slug']);
 				$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
@@ -55,7 +55,7 @@ class Loads {
 				$TEMP['title_left'] = $last_posts_two_sql[0]['title'];
 				$TEMP['description_left'] = $last_posts_two_sql[0]['description'];
 				$TEMP['category_left'] = $TEMP['#word']["category_{$category_left['name']}"];
-				$TEMP['category_slug_left'] = Functions::Url("{$RUTE['#r_category']}/{$category_left['slug']}");
+				$TEMP['category_slug_left'] = Functions::Url("{$ROUTE['#r_category']}/{$category_left['slug']}");
 				$TEMP['url_left'] = Functions::Url($last_posts_two_sql[0]['slug']);
 				$TEMP['thumbnail_left'] = Functions::GetFile($last_posts_two_sql[0]['thumbnail'], 1, 's');
 				$TEMP['published_date_left'] = date('c', $last_posts_two_sql[0]['published_at']);
@@ -69,7 +69,7 @@ class Loads {
 				$TEMP['title_right'] = $last_posts_two_sql[1]['title'];
 				$TEMP['description_right'] = $last_posts_two_sql[1]['description'];
 				$TEMP['category_right'] = $TEMP['#word']["category_{$category_right['name']}"];
-				$TEMP['category_slug_right'] = Functions::Url("{$RUTE['#r_category']}/{$category_right['slug']}");
+				$TEMP['category_slug_right'] = Functions::Url("{$ROUTE['#r_category']}/{$category_right['slug']}");
 				$TEMP['url_right'] = Functions::Url($last_posts_two_sql[1]['slug']);
 				$TEMP['thumbnail_right'] = Functions::GetFile($last_posts_two_sql[1]['thumbnail'], 1, 's');
 				$TEMP['published_date_right'] = date('c', $last_posts_two_sql[1]['published_at']);
@@ -88,7 +88,7 @@ class Loads {
 					$TEMP['!title_middle'] = $post['title'];
 					$TEMP['!description_middle'] = $post['description'];
 					$TEMP['!category_middle'] = $TEMP['#word']["category_{$category_middle['name']}"];
-					$TEMP['!category_slug_middle'] = Functions::Url("{$RUTE['#r_category']}/{$category_middle['slug']}");
+					$TEMP['!category_slug_middle'] = Functions::Url("{$ROUTE['#r_category']}/{$category_middle['slug']}");
 					$TEMP['!url_middle'] = Functions::Url($post['slug']);
 					$TEMP['!thumbnail_middle'] = Functions::GetFile($post['thumbnail'], 1, 's');
 					$TEMP['!published_date_middle'] = date('c', $post['published_at']);
@@ -108,7 +108,7 @@ class Loads {
 
 
 	public static function RecommendedVideos($home_ids = array()){
-		global $dba, $TEMP, $RUTE;
+		global $dba, $TEMP, $ROUTE;
 
 		$data = array(
 			'main_recommended_videos' => false,
@@ -126,7 +126,7 @@ class Loads {
 
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!category'] = $TEMP['#word']["category_{$category_middle['name']}"];
-				$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category_middle['slug']}");
+				$TEMP['!category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category_middle['slug']}");
 				$TEMP['!url'] = Functions::Url($post['slug']);
 				$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
@@ -143,7 +143,7 @@ class Loads {
 	}
 
 	public static function Post($post = array(), $is_loaded = false, $is_amp = false){
-		global $dba, $TEMP, $RUTE;
+		global $dba, $TEMP, $ROUTE;
 
 		if(!empty($post)){
 			$post_ids = array();
@@ -193,7 +193,7 @@ class Loads {
 
 			$TEMP['title'] = $title;
 			$TEMP['category'] = $TEMP['#word']["category_{$category['name']}"];
-			$TEMP['category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+			$TEMP['category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 			$TEMP['views'] = Functions::NumberShorten($post_views);
 			$TEMP['likes'] = Functions::NumberShorten($post['likes']);
 			$TEMP['dislikes'] = Functions::NumberShorten($post['dislikes']);
@@ -284,7 +284,7 @@ class Loads {
 				$keywords[] = $tag['name'];
 
 				$TEMP['!name'] = $tag['name'];
-				$TEMP['!url'] = Functions::Url("{$RUTE['#r_tag']}/{$tag['slug']}");
+				$TEMP['!url'] = Functions::Url("{$ROUTE['#r_tag']}/{$tag['slug']}");
 				$TEMP['tags'] .= Functions::Build('includes/post-amp/tags');
 			}
 			Functions::DestroyBuild();
@@ -324,7 +324,7 @@ class Loads {
 
 		                		$TEMP['!re_title'] = $recommended_bo['title'];
 								$TEMP['!re_category'] = $TEMP['#word']["category_{$category['name']}"];
-								$TEMP['!re_category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+								$TEMP['!re_category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 		                		$TEMP['!re_url'] = Functions::Url($recommended_bo['slug']);
 								$TEMP['!re_thumbnail'] = Functions::GetFile($recommended_bo['thumbnail'], 1, 's');
 								$TEMP['!re_published_date'] = date('c', $recommended_bo['published_at']);
@@ -451,7 +451,7 @@ class Loads {
 
 					$TEMP['!title'] = $rl['title'];
 					$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-					$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+					$TEMP['!category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 					$TEMP['!url'] = Functions::Url($rl['slug']);
 					$TEMP['!thumbnail'] = Functions::GetFile($rl['thumbnail'], 1, 's');
 					$TEMP['!published_date'] = date('c', $rl['published_at']);
@@ -471,7 +471,7 @@ class Loads {
 			$comment_ids = array();
 
 			$TEMP['#has_cfeatured'] = false;
-			$TEMP['#featured_cid'] = Functions::Filter($_GET[$RUTE['#p_comment_id']]);
+			$TEMP['#featured_cid'] = Functions::Filter($_GET[$ROUTE['#p_comment_id']]);
 			$featured_comment = Functions::FeaturedComment($TEMP['#featured_cid']);
 			if($featured_comment['return']){
 				$TEMP['comments'] .= $featured_comment['html'];
@@ -480,7 +480,7 @@ class Loads {
 			}
 
 			$TEMP['#has_rfeatured'] = false;
-			$TEMP['#featured_rid'] = Functions::Filter($_GET[$RUTE['#p_reply_id']]);
+			$TEMP['#featured_rid'] = Functions::Filter($_GET[$ROUTE['#p_reply_id']]);
 			$featured_reply = Functions::FeaturedComment($TEMP['#featured_rid'], 'reply');
 			if($featured_reply['return']){
 				$TEMP['comments'] .= $featured_reply['html'];
@@ -513,7 +513,7 @@ class Loads {
 	}
 
 	public static function Search($data = array(), $search_ids = array()){
-		global $dba, $TEMP, $RUTE;
+		global $dba, $TEMP, $ROUTE;
 
 		$keyword = $data['keyword'];
 		$date = $data['date'];
@@ -538,36 +538,36 @@ class Loads {
 			$query .= ' AND (title LIKE "%'.$keyword.'%" OR description LIKE "%'.$keyword.'%")';
 		}
 
-		if(in_array($date, array($RUTE['#p_all'], $RUTE['#p_today'], $RUTE['#p_this_week'], $RUTE['#p_this_month'], $RUTE['#p_this_year']))){
-			if ($date == $RUTE['#p_today']) {
+		if(in_array($date, array($ROUTE['#p_all'], $ROUTE['#p_today'], $ROUTE['#p_this_week'], $ROUTE['#p_this_month'], $ROUTE['#p_this_year']))){
+			if ($date == $ROUTE['#p_today']) {
 				$time = strtotime("00:00:00 today");
 				$query .= " AND created_at >= ".$time;
-			} else if ($date == $RUTE['#p_this_week']) {
+			} else if ($date == $ROUTE['#p_this_week']) {
 				$time = strtotime("-7 days");
 				$query .= " AND created_at >= ".$time;
-			} else if ($date == $RUTE['#p_this_month']) {
+			} else if ($date == $ROUTE['#p_this_month']) {
 				$time = strtotime("00:00:00 first day of this month");
 				$query .= " AND created_at >= ".$time;
-			} else if ($date == $RUTE['#p_this_year']) {
+			} else if ($date == $ROUTE['#p_this_year']) {
 				$time = strtotime("00:00:00 first day of January");
 				$query .= " AND created_at >= ".$time;
 			}
 		}
 				
-		if(in_array($category, $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false)) && $category != $RUTE['#p_all']){
+		if(in_array($category, $dba->query('SELECT id FROM '.T_CATEGORY)->fetchAll(false)) && $category != $ROUTE['#p_all']){
 			$query .= " AND category_id = {$category}";
 		}
 
-		if(in_array($author, $dba->query('SELECT id FROM '.T_USER.' WHERE role = "publisher" OR role = "moderator" OR role = "admin"')->fetchAll(false)) && $author != $RUTE['#p_all']){
+		if(in_array($author, $dba->query('SELECT id FROM '.T_USER.' WHERE role = "publisher" OR role = "moderator" OR role = "admin"')->fetchAll(false)) && $author != $ROUTE['#p_all']){
 			$query .= " AND user_id = {$author}";
 		}
 					
-		if(in_array($sort, array($RUTE['#p_newest'], $RUTE['#p_oldest'], $RUTE['#p_views']))){
-			if($sort == $RUTE['#p_newest']){
+		if(in_array($sort, array($ROUTE['#p_newest'], $ROUTE['#p_oldest'], $ROUTE['#p_views']))){
+			if($sort == $ROUTE['#p_newest']){
 				$query .= " ORDER BY published_at DESC";
-			} else if($sort == $RUTE['#p_oldest']){
+			} else if($sort == $ROUTE['#p_oldest']){
 				$query .= " ORDER BY published_at ASC";
-			} else if($sort == $RUTE['#p_views']){
+			} else if($sort == $ROUTE['#p_views']){
 				$query .= " ORDER BY views DESC";
 			}
 		}
@@ -584,7 +584,7 @@ class Loads {
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
 				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-				$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+				$TEMP['!category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 				$TEMP['!url'] = Functions::Url($post['slug']);
 				$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
@@ -615,7 +615,7 @@ class Loads {
 	}
 
 	public static function Profile($user_id, $type = 'all', $profile_ids = array()){
-		global $dba, $TEMP, $RUTE;
+		global $dba, $TEMP, $ROUTE;
 
 		$html = '';
 		$query = '';
@@ -660,7 +660,7 @@ class Loads {
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
 				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-				$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+				$TEMP['!category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 				$TEMP['!url'] = Functions::Url($post['slug']);
 				$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
@@ -686,7 +686,7 @@ class Loads {
 	}
 
 	public static function Category($category_id, $category_ids = array()){
-		global $dba, $TEMP, $RUTE;
+		global $dba, $TEMP, $ROUTE;
 
 		$html = '';
 		$query = '';
@@ -713,7 +713,7 @@ class Loads {
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
 				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-				$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+				$TEMP['!category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 				$TEMP['!author_name'] = Functions::Data($post['user_id'], array('username'));
 				$TEMP['!author_url'] = Functions::ProfileUrl($TEMP['!author_name']);
 				$TEMP['!url'] = Functions::Url($post['slug']);
@@ -741,7 +741,7 @@ class Loads {
 	}
 
 	public static function Tag($label_id, $label_ids = array()){
-		global $dba, $TEMP, $RUTE;
+		global $dba, $TEMP, $ROUTE;
 
 		$html = '';
 		$query = '';
@@ -768,7 +768,7 @@ class Loads {
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
 				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-				$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+				$TEMP['!category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 				$TEMP['!url'] = Functions::Url($post['slug']);
 				$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
 				$TEMP['!published_date'] = date('c', $post['published_at']);
@@ -793,8 +793,8 @@ class Loads {
 		return $data;
 	}
 
-	public static function Save($save_ids = array()){
-		global $dba, $TEMP, $RUTE;
+	public static function Saved($saved_ids = array()){
+		global $dba, $TEMP, $ROUTE;
 
 		$html = '';
 		$query = '';
@@ -802,18 +802,18 @@ class Loads {
 		$data = array(
 			'return' => false,
 			'html' => $html,
-			'save_ids' => $save_ids
+			'saved_ids' => $saved_ids
 		);
 
 
-		if(!empty($save_ids)){
-			$query = ' AND id NOT IN ('.implode(',', $save_ids).')';
+		if(!empty($saved_ids)){
+			$query = ' AND id NOT IN ('.implode(',', $saved_ids).')';
 		}
 
-		$save_posts = $dba->query('SELECT * FROM '.T_POST.' p WHERE user_id NOT IN ('.$TEMP['#blocked_users'].') AND (SELECT post_id FROM '.T_SAVED.' WHERE user_id = ? AND post_id = p.id AND status = "approved") = id'.$query.' ORDER BY created_at DESC LIMIT 8', $TEMP['#user']['id'])->fetchAll();
+		$saved_posts = $dba->query('SELECT * FROM '.T_POST.' p WHERE user_id NOT IN ('.$TEMP['#blocked_users'].') AND (SELECT post_id FROM '.T_SAVED.' WHERE user_id = ? AND post_id = p.id AND status = "approved") = id'.$query.' ORDER BY created_at DESC LIMIT 8', $TEMP['#user']['id'])->fetchAll();
 
-		if(!empty($save_posts)){
-			foreach ($save_posts as $post) {
+		if(!empty($saved_posts)){
+			foreach ($saved_posts as $post) {
 				$category = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $post['category_id'])->fetchArray();
 				$TEMP['!id'] = $post['id'];
 				$TEMP['!type'] = $post['type'];
@@ -821,7 +821,7 @@ class Loads {
 				$TEMP['!title'] = $post['title'];
 				$TEMP['!description'] = $post['description'];
 				$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-				$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+				$TEMP['!category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 
 
 				$TEMP['!author_name'] = Functions::Data($post['user_id'], array('username'));
@@ -833,15 +833,15 @@ class Loads {
 				$TEMP['!published_date'] = date('c', $post['published_at']);
 				$TEMP['!published_at'] = Functions::DateString($post['published_at']);
 
-				$html .= Functions::Build("save/includes/save-posts");
-				$save_ids[] = $post['id'];
+				$html .= Functions::Build("saved/includes/saved-posts");
+				$saved_ids[] = $post['id'];
 			}
 			Functions::DestroyBuild();
 
 			$data = array(
 				'return' => true,
 				'html' => $html,
-				'save_ids' => $save_ids
+				'saved_ids' => $saved_ids
 			);
 		} else {
 			$data = array(
@@ -1108,7 +1108,7 @@ class Loads {
 
 
 	public static function Sitemap($params = array(), $sitemap_ids = array()){
-		global $dba, $TEMP, $RUTE;
+		global $dba, $TEMP, $ROUTE;
 
 
 		$html = '';
@@ -1124,7 +1124,7 @@ class Loads {
 			$query = ' AND id NOT IN ('.implode(',', $sitemap_ids).')';
 		}
 
-		if(in_array($params['date'], array($RUTE['#p_today'], $RUTE['#p_yesterday'], $RUTE['#p_this_week'], $RUTE['#p_last_week']))){
+		if(in_array($params['date'], array($ROUTE['#p_today'], $ROUTE['#p_yesterday'], $ROUTE['#p_this_week'], $ROUTE['#p_last_week']))){
 
 			$today = strtotime("00:00:00 today");
 
@@ -1136,11 +1136,11 @@ class Loads {
 			$last_week_start = strtotime("last sunday", strtotime("-1 week"));
 			$last_week_end = strtotime("this sunday", strtotime("-1 week"));
 
-			if($params['date'] == $RUTE['#p_yesterday']){
+			if($params['date'] == $ROUTE['#p_yesterday']){
 				$query .= " AND created_at >= {$yesterday_start} AND created_at <= {$yesterday_end}";
-			} else if($params['date'] == $RUTE['#p_this_week']){
+			} else if($params['date'] == $ROUTE['#p_this_week']){
 				$query .= ' AND created_at >= '.$this_week;
-			} else if($params['date'] == $RUTE['#p_last_week']){
+			} else if($params['date'] == $ROUTE['#p_last_week']){
 				$last_week_start = $last_week_start;
 				$last_week_end = $last_week_end;
 

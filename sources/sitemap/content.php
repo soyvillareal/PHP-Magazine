@@ -7,11 +7,11 @@ if($page['status'] == 'disabled'){
 	exit();
 }
 
-$date = Functions::Filter($_GET[$RUTE['#p_date']]);
+$date = Functions::Filter($_GET[$ROUTE['#p_date']]);
 
-$day = Functions::Filter($_GET[$RUTE['#p_day']]);
-$month = Functions::Filter($_GET[$RUTE['#p_month']]);
-$year = Functions::Filter($_GET[$RUTE['#p_year']]);
+$day = Functions::Filter($_GET[$ROUTE['#p_day']]);
+$month = Functions::Filter($_GET[$ROUTE['#p_month']]);
+$year = Functions::Filter($_GET[$ROUTE['#p_year']]);
 
 $TEMP['#has_link'] = true;
 $TEMP['#has_dates'] = false;
@@ -19,7 +19,7 @@ $TEMP['#has_content'] = false;
 $TEMP['#has_posts'] = false;
 
 $TEMP['#date'] = 'other';
-if(in_array($date, array($RUTE['#p_today'], $RUTE['#p_yesterday'], $RUTE['#p_this_week'], $RUTE['#p_last_week']))){
+if(in_array($date, array($ROUTE['#p_today'], $ROUTE['#p_yesterday'], $ROUTE['#p_this_week'], $ROUTE['#p_last_week']))){
 	$TEMP['#date'] = $date;
 }
 
@@ -61,7 +61,7 @@ if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE status = "approved"')->fet
 		if($dba->query('SELECT COUNT(*) FROM '.T_POST.' WHERE status = "approved"'.$query)->fetchArray(true) > 0){
 			$TEMP['#has_dates'] = true;
 			$TEMP['!title'] = $TEMP['#word'][$key];
-			$TEMP['!url'] = Functions::Url("{$RUTE['#r_sitemap']}?{$RUTE['#p_date']}={$RUTE["#p_{$key}"]}");
+			$TEMP['!url'] = Functions::Url("{$ROUTE['#r_sitemap']}?{$ROUTE['#p_date']}={$ROUTE["#p_{$key}"]}");
 
 			$TEMP['dates'] .= Functions::Build('sitemap/includes/date');
 		}

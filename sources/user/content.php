@@ -49,7 +49,7 @@ if(!empty($TEMP['#related_cat'])){
 		$TEMP['!key'] += 1;
 		$TEMP['!title'] = $rlc['title'];
 		$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-		$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+		$TEMP['!category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 		$TEMP['!url'] = Functions::Url($rlc['slug']);
 		$TEMP['!thumbnail'] = Functions::GetFile($rlc['thumbnail'], 1, 's');
 		$TEMP['!published_date'] = date('c', $rlc['published_at']);

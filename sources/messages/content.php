@@ -16,7 +16,7 @@ if(!empty($TEMP['#username'])){
 	$user = $dba->query('SELECT * FROM '.T_USER.' WHERE username = ?', $TEMP['#username'])->fetchArray();
 	
 	if(Functions::IsOwner($user['id']) || in_array($user['id'], Functions::BlockedUsers(false))){
-		header("Location: " . Functions::Url($RUTE['#r_messages']));
+		header("Location: " . Functions::Url($ROUTE['#r_messages']));
 		exit();
 	}
 	if(empty($user)){

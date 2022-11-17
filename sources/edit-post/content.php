@@ -1,7 +1,7 @@
 <?php
 
 if ($TEMP['#loggedin'] == false) {
-    header("Location: ".Functions::Url($RUTE['#r_login']));
+    header("Location: ".Functions::Url($ROUTE['#r_login']));
     exit();
 }
 
@@ -125,7 +125,7 @@ if(!empty($TEMP['#recobo'])){
 
         $TEMP['!title'] = $re['title'];
         $TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-        $TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+        $TEMP['!category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
         $TEMP['!url'] = Functions::Url($re['slug']);
         $TEMP['!thumbnail'] = Functions::GetFile($re['thumbnail'], 1, 's');
         $TEMP['!published_date'] = date('c', $re['published_at']);

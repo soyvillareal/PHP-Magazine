@@ -58,7 +58,7 @@ if($one == 'validate'){
 				        } else if ($user['status'] == 'deactivated') {
 				           	$deliver = array(
 				           		'S' => 401,
-				           		'E' => "*{$TEMP['#word']['account_was_deactivated_if_need_help']} <a class='color-blue' href='".Functions::Url($RUTE['#r_contact'])."' target='_blank'>{$TEMP['#word']['contact_us']}</a>",
+				           		'E' => "*{$TEMP['#word']['account_was_deactivated_if_need_help']} <a class='color-blue' href='".Functions::Url($ROUTE['#r_contact'])."' target='_blank'>{$TEMP['#word']['contact_us']}</a>",
 				           		'EE' => 'deactivated'
 				            );
 				        } else {
@@ -74,9 +74,9 @@ if($one == 'validate'){
 
 									$TEMP['code'] = $code;
 									$TEMP['username'] = $user['username'];
-									$TEMP['url'] = Functions::Url("{$RUTE['#r_2check']}/$token?{$RUTE['#p_insert']}=$code");
+									$TEMP['url'] = Functions::Url("{$ROUTE['#r_2check']}/$token?{$ROUTE['#p_insert']}=$code");
 									$TEMP['text'] = $TEMP['#word']['confirm_are_who_trying_enter'];
-									$TEMP['footer'] = "{$TEMP['#word']['arent_trying_access']}, {$TEMP['#word']['we_recommend_you']} <a target='_blank' href='".Functions::Url("{$RUTE['#r_reset_password']}/$reset_password")."' style='display:inline-block;'>{$TEMP['#word']['change_your_password']}</a>.";
+									$TEMP['footer'] = "{$TEMP['#word']['arent_trying_access']}, {$TEMP['#word']['we_recommend_you']} <a target='_blank' href='".Functions::Url("{$ROUTE['#r_reset_password']}/{$reset_password}")."' style='display:inline-block;'>{$TEMP['#word']['change_your_password']}</a>.";
 									$TEMP['button'] = $TEMP['#word']['enter_code'];
 
 									$send = Functions::SendEmail(array(
@@ -95,7 +95,7 @@ if($one == 'validate'){
 								        }
 										$deliver = array(
 										    'S' => 200,
-										    'UR' => Functions::Url("{$RUTE['#r_2check']}/{$token}{$return_param}")
+										    'UR' => Functions::Url("{$ROUTE['#r_2check']}/{$token}{$return_param}")
 										);
 									} else {
 										$deliver = array(
@@ -188,9 +188,9 @@ if($one == 'validate'){
 										$TEMP['code'] = $code;
 										$TEMP['username'] = $user['username'];
 
-										$TEMP['url'] = Functions::Url("{$RUTE['#r_verify_email']}/$token?{$RUTE['#p_insert']}=$code");
+										$TEMP['url'] = Functions::Url("{$ROUTE['#r_verify_email']}/$token?{$ROUTE['#p_insert']}=$code");
 										$TEMP['text'] = "{$TEMP['#word']['verify_your_account']} {$TEMP['#word']['of']} {$TEMP['#settings']['title']}";
-										$TEMP['footer'] = "{$TEMP['#word']['one_who_has_registered_this_account']}, <a target='_blank' href='".Functions::Url("{$RUTE['#r_unlink_email']}/$unlink_email")."' style='display:inline-block;'>{$TEMP['#word']['let_us_know']}</a>.";
+										$TEMP['footer'] = "{$TEMP['#word']['one_who_has_registered_this_account']}, <a target='_blank' href='".Functions::Url("{$ROUTE['#r_unlink_email']}/$unlink_email")."' style='display:inline-block;'>{$TEMP['#word']['let_us_know']}</a>.";
 										$TEMP['button'] = $TEMP['#word']['verify_your_account'];
 
 						                $send = Functions::SendEmail(array(
@@ -206,7 +206,7 @@ if($one == 'validate'){
 						                if($send){
 							                $deliver = array(
 							                	'S' => 200,
-							                	'UR' => Functions::Url("{$RUTE['#r_verify_email']}/{$token}{$return_param}")
+							                	'UR' => Functions::Url("{$ROUTE['#r_verify_email']}/{$token}{$return_param}")
 							                );
 						               	} else {
 											$deliver = array(
@@ -262,7 +262,7 @@ if($one == 'validate'){
 				        } else if ($user['status'] == 'deactivated'){
 					        $deliver = array(
 					         	'S' => 401,
-				           		'E' => "*{$TEMP['#word']['account_was_deactivated_if_need_help']} <a class='color-blue' href='".Functions::Url($RUTE['#r_contact'])."' target='_blank'>{$TEMP['#word']['contact_us']}</a>",
+				           		'E' => "*{$TEMP['#word']['account_was_deactivated_if_need_help']} <a class='color-blue' href='".Functions::Url($ROUTE['#r_contact'])."' target='_blank'>{$TEMP['#word']['contact_us']}</a>",
 				           		'EE' => 'deactivated'
 					        );
 					    } else { 	
@@ -352,9 +352,9 @@ if($one == 'validate'){
 				            $unlink_email = $dba->query('SELECT unlink_email FROM '.T_TOKEN.' WHERE user_id = ?', $user['id'])->fetchArray(true);
 
 							$TEMP['code'] = $code;
-							$TEMP['url'] = Functions::Url("{$RUTE['#r_verify_email']}/$token?{$RUTE['#p_insert']}=$code");
+							$TEMP['url'] = Functions::Url("{$ROUTE['#r_verify_email']}/$token?{$ROUTE['#p_insert']}=$code");
 							$TEMP['text'] = "{$TEMP['#word']['verify_your_account']} {$TEMP['#word']['of']} {$TEMP['#settings']['title']}";
-							$TEMP['footer'] = "{$TEMP['#word']['one_who_has_registered_this_account']}, <a target='_blank' href='".Functions::Url("{$RUTE['#r_unlink_email']}/$unlink_email")."'>{$TEMP['#word']['let_us_know']}</a>.";
+							$TEMP['footer'] = "{$TEMP['#word']['one_who_has_registered_this_account']}, <a target='_blank' href='".Functions::Url("{$ROUTE['#r_unlink_email']}/$unlink_email")."'>{$TEMP['#word']['let_us_know']}</a>.";
 							$TEMP['button'] = $TEMP['#word']['verify_your_account'];
 							$subject = $TEMP['#word']['verify_your_account'];
 						} else {
@@ -366,9 +366,9 @@ if($one == 'validate'){
 				           	$reset_password = $dba->query('SELECT reset_password FROM '.T_TOKEN.' WHERE user_id = ?', $user['id'])->fetchArray(true);
 
 							$TEMP['code'] = $code;
-							$TEMP['url'] = Functions::Url("{$RUTE['#r_2check']}/$token?{$RUTE['#p_insert']}=$code");
+							$TEMP['url'] = Functions::Url("{$ROUTE['#r_2check']}/$token?{$ROUTE['#p_insert']}=$code");
 							$TEMP['text'] = $TEMP['#word']['confirm_are_who_trying_enter'];
-							$TEMP['footer'] = "{$TEMP['#word']['arent_trying_access']}, {$TEMP['#word']['we_recommend_you']} <a target='_blank' href='".Functions::Url("{$RUTE['#r_reset_password']}/$reset_password")."' style='display:inline-block;'>{$TEMP['#word']['change_your_password']}</a>.";
+							$TEMP['footer'] = "{$TEMP['#word']['arent_trying_access']}, {$TEMP['#word']['we_recommend_you']} <a target='_blank' href='".Functions::Url("{$ROUTE['#r_reset_password']}/{$reset_password}")."' style='display:inline-block;'>{$TEMP['#word']['change_your_password']}</a>.";
 							$TEMP['button'] = $TEMP['#word']['enter_code'];
 							$subject = $TEMP['#word']['2check'];
 						}

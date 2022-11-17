@@ -58,9 +58,9 @@ if($TEMP['#loggedin'] == true){
 					    	$post_id = $reaction['reacted_id'];
 					    	if(in_array($notify['type'], array('n_creact', 'n_rreact'))){
 					    		$t_query = 'SELECT post_id FROM '.T_COMMENTS.' WHERE id = ?';
-								$params = "?{$RUTE['#p_comment_id']}={$reaction['reacted_id']}";
+								$params = "?{$ROUTE['#p_comment_id']}={$reaction['reacted_id']}";
 					    		if($notify['type'] == 'n_rreact'){
-									$params = "?{$RUTE['#p_reply_id']}={$reaction['reacted_id']}";
+									$params = "?{$ROUTE['#p_reply_id']}={$reaction['reacted_id']}";
 					    			$t_query = 'SELECT post_id FROM '.T_COMMENTS.' c WHERE (SELECT comment_id FROM '.T_REPLY.' WHERE id = ? AND comment_id = c.id) = id';
 					    		}
 					    		$post_id = $dba->query($t_query, $reaction['reacted_id'])->fetchArray(true);
@@ -88,7 +88,7 @@ if($TEMP['#loggedin'] == true){
 				    
 				    if(!empty($comment)){
 			        	$has_notification = true;
-				    	$params = "?{$RUTE['#p_comment_id']}={$notify['notified_id']}";
+				    	$params = "?{$ROUTE['#p_comment_id']}={$notify['notified_id']}";
 					    $user = Functions::Data($comment['user_id']);
 					    $post = $dba->query('SELECT slug FROM '.T_POST.' WHERE id = ? AND status = "approved"', $comment['post_id'])->fetchArray();
 
@@ -103,7 +103,7 @@ if($TEMP['#loggedin'] == true){
 			    	$user_id = $dba->query('SELECT user_id FROM '.T_REPLY.' WHERE id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].')', $notify['notified_id'])->fetchArray(true);
 			    	if(!empty($user_id)){
 			        	$has_notification = true;
-			    		$params = "?{$RUTE['#p_reply_id']}={$notify['notified_id']}";
+			    		$params = "?{$ROUTE['#p_reply_id']}={$notify['notified_id']}";
 				    	$post_id = $dba->query('SELECT post_id FROM '.T_COMMENTS.' WHERE (SELECT comment_id FROM '.T_REPLY.' WHERE id = ?) = id', $notify['notified_id'])->fetchArray();
 
 					    $user = Functions::Data($user_id);
@@ -127,7 +127,7 @@ if($TEMP['#loggedin'] == true){
 				       	$TEMP['!username'] = $user['username'];
 				       	$TEMP['!image'] = $user['avatar_s'];
 
-					    $slug = "{$RUTE['#r_user']}/{$user['username']}";
+					    $slug = "{$ROUTE['#r_user']}/{$user['username']}";
 					}
 			    }
 			    if($has_notification && (!empty($post) || $notify['type'] == 'n_followers')){

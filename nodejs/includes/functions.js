@@ -1,7 +1,7 @@
 const info = require('../info'),
       connection = require('../mysql/DB'),
       unixTime = require('unix-time'),
-      R = require('./rutes'),
+      R = require('./routes'),
       T = require('./tables'),
       entities = require('../utils/entities'),
       url_regex = require('../utils/url_regex'),

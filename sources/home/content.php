@@ -37,7 +37,7 @@ if(count($TEMP['#main']) >= $TEMP['#limit_main']){
 
 		$TEMP['!title'] = $post['title'];
 		$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-		$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+		$TEMP['!category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 		$TEMP['!published_date'] = date('c', $post['published_at']);
 		$TEMP['!url'] = Functions::Url($post['slug']);
 		if($key < 6){
@@ -54,7 +54,7 @@ if(count($TEMP['#main']) >= $TEMP['#limit_main']){
 			$TEMP['main_right_id'] = $post['id'];
 			$TEMP['main_right_title'] = $post['title'];
 			$TEMP['main_right_category'] = $TEMP['#word']["category_{$category['name']}"];
-			$TEMP['main_right_category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+			$TEMP['main_right_category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 			$TEMP['main_right_description'] = $post['description'];
 			$TEMP['main_right_url'] = Functions::Url($post['slug']);
 			$TEMP['main_right_thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 'b');
@@ -79,7 +79,7 @@ if(count($TEMP['#main']) >= $TEMP['#limit_main']){
 
 			$TEMP['!title'] = $post['title'];
 			$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-			$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+			$TEMP['!category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 			$TEMP['!title'] = $post['title'];
 			$TEMP['!url'] = Functions::Url($post['slug']);
 			$TEMP['!thumbnail'] = Functions::GetFile($post['thumbnail'], 1, 's');
@@ -98,7 +98,7 @@ if(count($TEMP['#main']) >= $TEMP['#limit_main']){
 
 		$category = $dba->query('SELECT id, name, slug FROM '.T_CATEGORY.' WHERE id = ?', $TEMP['#video']['category_id'])->fetchArray();
 		$TEMP['category'] = $TEMP['#word']["category_{$category['name']}"];
-		$TEMP['category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+		$TEMP['category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 
 
 		$TEMP['title'] = $TEMP['#video']['title'];
@@ -138,10 +138,10 @@ if(count($TEMP['#main']) >= $TEMP['#limit_main']){
 	}
 }
 
-$show_alert = Functions::Filter($_GET[$RUTE['#p_show_alert']]);
+$show_alert = Functions::Filter($_GET[$ROUTE['#p_show_alert']]);
 $TEMP['#show_alert'] = false;
 if($TEMP['#loggedin'] == true){
-	if($show_alert == $RUTE['#p_deleted_post']){
+	if($show_alert == $ROUTE['#p_deleted_post']){
 		$TEMP['#show_alert'] = true;
 	}
 }

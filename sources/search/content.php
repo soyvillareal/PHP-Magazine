@@ -1,32 +1,32 @@
 <?php
 
-$keyword = Functions::Filter($_GET[$RUTE['#p_keyword']]);
-$date = Functions::Filter($_GET[$RUTE['#p_date']]);
-$category = Functions::Filter($_GET[$RUTE['#p_category']]);
-$author = Functions::Filter($_GET[$RUTE['#p_author']]);
-$sort = Functions::Filter($_GET[$RUTE['#p_sort']]);
+$keyword = Functions::Filter($_GET[$ROUTE['#p_keyword']]);
+$date = Functions::Filter($_GET[$ROUTE['#p_date']]);
+$category = Functions::Filter($_GET[$ROUTE['#p_category']]);
+$author = Functions::Filter($_GET[$ROUTE['#p_author']]);
+$sort = Functions::Filter($_GET[$ROUTE['#p_sort']]);
 
-$TEMP['#type_date'] = $RUTE['#p_all'];
+$TEMP['#type_date'] = $ROUTE['#p_all'];
 $TEMP['type_ndate'] = $TEMP['#word']['all_'];
-if(in_array($date, array($RUTE['#p_today'], $RUTE['#p_this_week'], $RUTE['#p_this_month'], $RUTE['#p_this_year']))){
+if(in_array($date, array($ROUTE['#p_today'], $ROUTE['#p_this_week'], $ROUTE['#p_this_month'], $ROUTE['#p_this_year']))){
 	$TEMP['#type_date'] = $date;
-	if($date == $RUTE['#p_today']){
+	if($date == $ROUTE['#p_today']){
 		$TEMP['type_ndate'] = $TEMP['#word']['today'];
-	} else if($date == $RUTE['#p_this_week']){
+	} else if($date == $ROUTE['#p_this_week']){
 		$TEMP['type_ndate'] = $TEMP['#word']['this_week'];
-	} else if($date == $RUTE['#p_this_month']){
+	} else if($date == $ROUTE['#p_this_month']){
 		$TEMP['type_ndate'] = $TEMP['#word']['this_month'];
-	} else if($date == $RUTE['#p_this_year']){
+	} else if($date == $ROUTE['#p_this_year']){
 		$TEMP['type_ndate'] = $TEMP['#word']['this_year'];
 	}
 } else {
-	$date = $RUTE['#p_all'];
+	$date = $ROUTE['#p_all'];
 }
 
-$TEMP['#type_category'] = $RUTE['#p_all'];
+$TEMP['#type_category'] = $ROUTE['#p_all'];
 $TEMP['type_ncategory'] = $TEMP['#word']['all_'];
 if(!empty($category) && is_numeric($category)){
-	if($category != $RUTE['#p_all']){
+	if($category != $ROUTE['#p_all']){
 		$cat = $dba->query('SELECT name, id, COUNT(*) as count FROM '.T_CATEGORY.' WHERE id = ?', $category)->fetchArray();
 		if($cat['count'] > 0){
 			$TEMP['#type_category'] = $cat['id'];
@@ -34,13 +34,13 @@ if(!empty($category) && is_numeric($category)){
 		}
 	}
 } else {
-	$category = $RUTE['#p_all'];
+	$category = $ROUTE['#p_all'];
 }
 
-$TEMP['#type_author'] = $RUTE['#p_all'];
+$TEMP['#type_author'] = $ROUTE['#p_all'];
 $TEMP['type_nauthor'] = $TEMP['#word']['all_'];
 if(!empty($author) && is_numeric($author)){
-	if($author != $RUTE['#p_all']){
+	if($author != $ROUTE['#p_all']){
 		$user_exists = $dba->query('SELECT COUNT(*) FROM '.T_USER.' WHERE id = ? AND (role = "publisher" OR role = "moderator" OR role = "admin")', $author)->fetchArray(true);
 		if($user_exists > 0){
 			$user = Functions::Data($author, array('username', 'name', 'surname'));
@@ -49,20 +49,20 @@ if(!empty($author) && is_numeric($author)){
 		}
 	}
 } else {
-	$author = $RUTE['#p_all'];
+	$author = $ROUTE['#p_all'];
 }
 
-$TEMP['#type_sort'] = $RUTE['#p_newest'];
+$TEMP['#type_sort'] = $ROUTE['#p_newest'];
 $TEMP['type_nsort'] = $TEMP['#word']['newest'];
-if(in_array($sort, array($RUTE['#p_newest'], $RUTE['#p_oldest'], $RUTE['#p_views']))){
+if(in_array($sort, array($ROUTE['#p_newest'], $ROUTE['#p_oldest'], $ROUTE['#p_views']))){
 	$TEMP['#type_sort'] = $sort;
-	if($sort == $RUTE['#p_oldest']){
+	if($sort == $ROUTE['#p_oldest']){
 		$TEMP['type_nsort'] = $TEMP['#word']['oldest'];
-	} else if($sort == $RUTE['#p_views']){
+	} else if($sort == $ROUTE['#p_views']){
 		$TEMP['type_nsort'] = $TEMP['#word']['views'];
 	}
 } else {
-	$sort = $RUTE['#p_newest'];
+	$sort = $ROUTE['#p_newest'];
 }
 
 
@@ -102,7 +102,7 @@ if(!empty($TEMP['#related_cat'])){
 		$TEMP['!key'] += 1;
 		$TEMP['!title'] = $rlc['title'];
 		$TEMP['!category'] = $TEMP['#word']["category_{$category['name']}"];
-		$TEMP['!category_slug'] = Functions::Url("{$RUTE['#r_category']}/{$category['slug']}");
+		$TEMP['!category_slug'] = Functions::Url("{$ROUTE['#r_category']}/{$category['slug']}");
 		$TEMP['!url'] = Functions::Url($rlc['slug']);
 		$TEMP['!thumbnail'] = Functions::GetFile($rlc['thumbnail'], 1, 's');
 		$TEMP['!published_date'] = date('c', $rlc['published_at']);

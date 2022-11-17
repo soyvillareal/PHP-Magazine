@@ -1,13 +1,13 @@
 <?php
-if (!in_array($_GET['slug'], array($RUTE['#r_terms_of_use'], $RUTE['#r_habeas_data'], $RUTE['#r_about_us']))){
+if (!in_array($_GET['slug'], array($ROUTE['#r_terms_of_use'], $ROUTE['#r_habeas_data'], $ROUTE['#r_about_us']))){
 	header("Location: " . Functions::Url('404'));
 	exit();
 }
 
 $pages = array(
-	$RUTE['#r_terms_of_use'] => 'terms_of_use',
-	$RUTE['#r_habeas_data'] => 'habeas_data',
-	$RUTE['#r_about_us'] => 'about_us'
+	$ROUTE['#r_terms_of_use'] => 'terms_of_use',
+	$ROUTE['#r_habeas_data'] => 'habeas_data',
+	$ROUTE['#r_about_us'] => 'about_us'
 );
 
 $slug = Functions::Filter($_GET['slug']);

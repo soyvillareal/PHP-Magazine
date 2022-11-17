@@ -210,13 +210,13 @@ if($TEMP['#loggedin'] == true){
 							$deliver = array(
 								'S' => 200,
 								'M' => "{$TEMP['#word']['newsletter_settings']} ({$TEMP['#word'][$value]})",
-								'HT' => "{$TEMP['#word']['configuration_tells_send_news']} <a class='color-blue hover-button animation-ease3s' href='".Functions::Url("{$RUTE['#r_newsletter']}/{$slug}")."' target='_self'>{$TEMP['#word']['see_detailed_settings']}</a>"
+								'HT' => "{$TEMP['#word']['configuration_tells_send_news']} <a class='color-blue hover-button animation-ease3s' href='".Functions::Url("{$ROUTE['#r_newsletter']}/{$slug}")."' target='_self'>{$TEMP['#word']['see_detailed_settings']}</a>"
 							);
 						}
 					} else {
 						if($dba->query('UPDATE '.T_NEWSLETTER.' SET reason = NULL, status = ? WHERE email = ?', $value, $TEMP['#data']['email'])->returnStatus()){
 							$slug = $dba->query('SELECT slug FROM '.T_NEWSLETTER.' WHERE email = ?', $TEMP['#data']['email'])->fetchArray(true);
-							$deliver['HT'] = $value == 'enabled' ? "{$TEMP['#word']['configuration_tells_send_news']} <a class='color-blue hover-button animation-ease3s' href='".Functions::Url("{$RUTE['#r_newsletter']}/{$slug}")."' target='_self'>{$TEMP['#word']['see_detailed_settings']}</a>" : $TEMP['#word']['configuration_tells_send_news'];
+							$deliver['HT'] = $value == 'enabled' ? "{$TEMP['#word']['configuration_tells_send_news']} <a class='color-blue hover-button animation-ease3s' href='".Functions::Url("{$ROUTE['#r_newsletter']}/{$slug}")."' target='_self'>{$TEMP['#word']['see_detailed_settings']}</a>" : $TEMP['#word']['configuration_tells_send_news'];
 							$deliver['S'] = 200;
 							$deliver['M'] = "{$TEMP['#word']['newsletter_settings']} ({$TEMP['#word'][$value]})";
 						}
@@ -319,10 +319,10 @@ if($TEMP['#loggedin'] == true){
 				if ($dba->query('UPDATE '.T_USER.' SET password = ? WHERE id = ?', $password, $TEMP['#data']['id'])->returnStatus()) {
 					$deliver['S'] = 200;
 
-					$return = Functions::Url("{$RUTE['#r_settings']}/{$RUTE['#r_reset_password']}");
+					$return = Functions::Url("{$ROUTE['#r_settings']}/{$ROUTE['#r_change_password']}");
 					$return = urlencode($return);
 
-					$deliver['UR'] = Functions::Url("{$RUTE['#r_login']}?{$RUTE['#p_return']}={$return}");
+					$deliver['UR'] = Functions::Url("{$ROUTE['#r_login']}?{$ROUTE['#p_return']}={$return}");
 					if($TEMP['#user']['id'] == $TEMP['#data']['id']){
 						setcookie('_LOGIN_TOKEN', null, -1, '/');
 						if (isset($_COOKIE['_SAVE_SESSION'])){
@@ -331,7 +331,7 @@ if($TEMP['#loggedin'] == true){
 		                session_destroy();
 					} else {
 						if($TEMP['#moderator'] == true){
-							$deliver['UR'] = Functions::Url("{$RUTE['#r_settings']}/{$RUTE['#r_reset_password']}?{$RUTE['#p_user_id']}={$TEMP['#data']['id']}");
+							$deliver['UR'] = Functions::Url("{$ROUTE['#r_settings']}/{$ROUTE['#r_change_password']}?{$ROUTE['#p_user_id']}={$TEMP['#data']['id']}");
 						}
 					}
 				}
@@ -357,7 +357,7 @@ if($TEMP['#loggedin'] == true){
 							    setcookie('_SAVE_SESSION', null, -1, '/');
 							}
 		                    session_destroy();
-		                    $deliver['UR'] = Functions::Url($RUTE['#r_login']);
+		                    $deliver['UR'] = Functions::Url($ROUTE['#r_login']);
 		                }
 		            }
 		        }
@@ -433,10 +433,10 @@ if($TEMP['#loggedin'] == true){
 							setcookie('_SAVE_SESSION', null, -1, '/');
 						}
 			            session_destroy();
-			            $deliver['UR'] = Functions::Url($RUTE['#r_login']);
+			            $deliver['UR'] = Functions::Url($ROUTE['#r_login']);
 			        } else {
 			        	if($TEMP['#moderator'] == true){
-							$deliver['UR'] = Functions::Url($RUTE['#r_settings']);
+							$deliver['UR'] = Functions::Url($ROUTE['#r_settings']);
 						}
 			        }
 	    		}

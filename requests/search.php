@@ -14,29 +14,29 @@ if($one == 'normal-search'){
 		'sort' => $sort
 	));
 
-	$url = Functions::Url("{$RUTE['#r_search']}");
+	$url = Functions::Url("{$ROUTE['#r_search']}");
 	if(!empty($keyword)){
-		$url .= "?{$RUTE['#p_keyword']}={$keyword}";
+		$url .= "?{$ROUTE['#p_keyword']}={$keyword}";
 	}
 
 	if(!empty($date)){
 		$param = !empty($keyword)? '&' : '?';
-		$url .= "{$param}{$RUTE['#p_date']}={$date}";
+		$url .= "{$param}{$ROUTE['#p_date']}={$date}";
 	}
 
 	if(!empty($category)){
 		$param = !empty($keyword) || !empty($date)  ? '&' : '?';
-		$url .= "{$param}{$RUTE['#p_category']}={$category}";
+		$url .= "{$param}{$ROUTE['#p_category']}={$category}";
 	}
 
 	if(!empty($author)){
 		$param = !empty($keyword) || !empty($date) || !empty($category)  ? '&' : '?';
-		$url .= "{$param}{$RUTE['#p_author']}={$author}";
+		$url .= "{$param}{$ROUTE['#p_author']}={$author}";
 	}
 
 	if(!empty($sort)){
 		$param = !empty($keyword) || !empty($date) || !empty($category) || !empty($author)  ? '&' : '?';
-		$url .= "{$param}{$RUTE['#p_sort']}={$sort}";
+		$url .= "{$param}{$ROUTE['#p_sort']}={$sort}";
 	}
 
 	$deliver['KW'] = $keyword;

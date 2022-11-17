@@ -1,7 +1,7 @@
 <?php
 
 if($TEMP['#loggedin'] == false) {
-    header("Location: ".Functions::Url($RUTE['#r_login']));
+    header("Location: ".Functions::Url($ROUTE['#r_login']));
     exit();
 }
 

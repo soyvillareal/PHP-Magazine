@@ -662,7 +662,7 @@ class Functions {
 	}
 
 	public static function BuildComment($comment = array(), $order = 'recent', $type = 'normal'){
-		global $dba, $TEMP, $RUTE;
+		global $dba, $TEMP, $ROUTE;
 
 		if(!empty($comment)){
 
@@ -674,7 +674,7 @@ class Functions {
 			}
 			
 			$post = $dba->query('SELECT user_id, slug FROM '.T_POST.' WHERE id = ?', $comment['post_id'])->fetchArray();
-			$TEMP['!url_comment'] = self::Url("{$post['slug']}?{$RUTE['#p_comment_id']}={$comment['id']}");
+			$TEMP['!url_comment'] = self::Url("{$post['slug']}?{$ROUTE['#p_comment_id']}={$comment['id']}");
 			$TEMP['!comment_id'] = $comment['id'];
 			$TEMP['!comment_owner'] = self::IsOwner($comment['user_id']);
 			$TEMP['!comment_powner'] = self::IsOwner($post['user_id']);
@@ -736,7 +736,7 @@ class Functions {
 	}
 
 	public static function BuildReply($reply = array(), $type = 'normal'){
-		global $dba, $TEMP, $RUTE;
+		global $dba, $TEMP, $ROUTE;
 
 		if(!empty($reply)){
 			$TEMP['!reply_type'] = $type;
@@ -745,7 +745,7 @@ class Functions {
 			$post = $dba->query('SELECT user_id, slug FROM '.T_POST.' WHERE (SELECT post_id FROM '.T_COMMENTS.' WHERE id = ?) = id', $reply['comment_id'])->fetchArray();
 
 			$TEMP['!comment_id'] = $reply['comment_id'];
-			$TEMP['!url_reply'] = self::Url("{$post['slug']}?{$RUTE['#p_reply_id']}={$reply['id']}");
+			$TEMP['!url_reply'] = self::Url("{$post['slug']}?{$ROUTE['#p_reply_id']}={$reply['id']}");
 			$TEMP['!reply_id'] = $reply['id'];
 			$TEMP['!reply_owner'] = self::IsOwner($reply['user_id']);
 
@@ -1289,19 +1289,19 @@ class Functions {
 	}
 
 	public static function ReturnUrl() {
-		global $TEMP, $RUTE, $site_url;
+		global $TEMP, $ROUTE, $site_url;
 		$params = "";
 		if(!empty($_SERVER["REQUEST_URI"])){
 			$url = (!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on' ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'] . $_SERVER["REQUEST_URI"];
 			if(self::Url() != $url){
-				$params = "{$RUTE['#r_login']}?{$RUTE['#p_return']}=".urlencode($url);
+				$params = "{$ROUTE['#r_login']}?{$ROUTE['#p_return']}=".urlencode($url);
 			}
 		}
 		return self::Url($params);
 	}
 
 	public static function SendChangeEmailToken($user = array(), $new_email = ''){
-		global $TEMP, $RUTE;
+		global $TEMP, $ROUTE;
 
 		$data = array(
 			'return' => false,
@@ -1319,7 +1319,7 @@ class Functions {
 
 			$TEMP['code'] = $code;
 			$TEMP['username'] = $user['username'];
-			$TEMP['url'] = self::Url("{$RUTE['#r_change_email']}/{$change_email['token']}?{$RUTE['#p_insert']}=$code");
+			$TEMP['url'] = self::Url("{$ROUTE['#r_change_email']}/{$change_email['token']}?{$ROUTE['#p_insert']}=$code");
 			$TEMP['text'] = "{$TEMP['#word']['check_your_email']} {$user['new_email']}";
 			$TEMP['footer'] = $TEMP['#word']['have_been_one_who_has_carried_out'];
 			$TEMP['button'] = $TEMP['#word']['check_your_email'];
@@ -1520,8 +1520,8 @@ class Functions {
 	}
 
 	public static function ProfileUrl($username){
-		global $TEMP, $RUTE;
-		return self::Url("{$RUTE['#r_user']}/{$username}");
+		global $TEMP, $ROUTE;
+		return self::Url("{$ROUTE['#r_user']}/{$username}");
 	}
 
 	public static function IdentifyFrame($frame, $autoplay = false, $is_amp = false){
@@ -1782,9 +1782,9 @@ class Functions {
 	}
 
 	public static function Language(){
-		global $dba, $TEMP, $RUTE;
+		global $dba, $TEMP, $ROUTE;
 
-		$lang = self::Filter($_GET[$RUTE['#p_language']]);
+		$lang = self::Filter($_GET[$ROUTE['#p_language']]);
 
 		$language = $TEMP['#settings']['language'];
 
@@ -2038,7 +2038,7 @@ class Functions {
 	}
 	
 	public static function Build($page, $ext = 'html'){
-	    global $TEMP, $RUTE, $site_url;
+	    global $TEMP, $ROUTE, $site_url;
 
 	    $file = "./themes/{$TEMP['#settings']['theme']}/html/{$page}.{$ext}";
 	    if(!file_exists($file)){
@@ -2067,18 +2067,18 @@ class Functions {
 	    $page = preg_replace_callback('/{\$data->(.+?)}/i', function($matches) use ($TEMP) {
 	        return (isset($TEMP['data'][$matches[1]])?$TEMP['data'][$matches[1]]:"");
 	    }, $page);
-	    $page = preg_replace_callback('/{(\#[a-zA-Z0-9_]+)}/i', function($matches) use ($TEMP, $RUTE) {
+	    $page = preg_replace_callback('/{(\#[a-zA-Z0-9_]+)}/i', function($matches) use ($TEMP, $ROUTE) {
 	        $tmp_match = $TEMP[$matches[1]];
-	        $rte_match = $RUTE[$matches[1]];
-	        $return = self::Filter($_GET[$RUTE['#p_return']]);
+	        $rte_match = $ROUTE[$matches[1]];
+	        $return = self::Filter($_GET[$ROUTE['#p_return']]);
 	    	if(in_array($matches[1], array('#r_login', '#r_register', '#r_logout', '#r_2check'))){
 		    	preg_match("/(?:[\w]+)\/([\w\-]+)(?:\/([\w\-]+)|)/", $_SERVER['REQUEST_URI'], $current_url);
 		    	if(isset($TEMP['#current_url'])){
 		    		$current_url[1] = $TEMP['#current_url'];
 		    	}
-				$no_returns = array($RUTE['#r_home'], $RUTE['#r_login'], $RUTE['#r_register'], $RUTE['#r_forgot_password'], $RUTE['#r_reset_password'], $RUTE['#r_2check'], $RUTE['#r_verify_email'], $RUTE['#r_settings'], $RUTE['#r_saved'], $RUTE['#r_create_post'], $RUTE['#r_edit_post']);
+				$no_returns = array($ROUTE['#r_home'], $ROUTE['#r_login'], $ROUTE['#r_register'], $ROUTE['#r_forgot_password'], $ROUTE['#r_reset_password'], $ROUTE['#r_2check'], $ROUTE['#r_verify_email'], $ROUTE['#r_settings'], $ROUTE['#r_saved'], $ROUTE['#r_create_post'], $ROUTE['#r_edit_post']);
 				if($TEMP['#loggedin'] == true){
-					$no_returns[] = $RUTE['#r_newsletter'];
+					$no_returns[] = $ROUTE['#r_newsletter'];
 				}
 				if(!in_array($current_url[1], $no_returns) || (!empty($return) && !in_array($return, $no_returns))){
 					if($current_url[1] == $current_url[2] || !isset($current_url[2])){
@@ -2089,7 +2089,7 @@ class Functions {
 				    if(!empty($return)){
 				        $current_url = urlencode($return);
 				    }
-				    return (!empty($current_url)?"{$rte_match}?{$RUTE['#p_return']}={$current_url}":$rte_match);
+				    return (!empty($current_url)?"{$rte_match}?{$ROUTE['#p_return']}={$current_url}":$rte_match);
 				}
 			}
 	        if(is_bool($tmp_match)){

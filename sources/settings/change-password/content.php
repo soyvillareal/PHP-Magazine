@@ -5,10 +5,10 @@ if ($TEMP['#loggedin'] === false) {
 }
 $TEMP['#user_id'] = $TEMP['#user']['id'];
 if($TEMP['#moderator'] == true){
-    $user_id = Functions::Filter($_GET[$RUTE['#p_user_id']]);
+    $user_id = Functions::Filter($_GET[$ROUTE['#p_user_id']]);
     if(!empty($user_id)){
         $TEMP['#user_id'] = $user_id;
-        $TEMP['#param'] = "?{$RUTE['#p_user_id']}={$user_id}";
+        $TEMP['#param'] = "?{$ROUTE['#p_user_id']}={$user_id}";
     }
 }
 

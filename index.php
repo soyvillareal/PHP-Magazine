@@ -3,7 +3,7 @@ require_once('./assets/init.php');
 
 if(!Functions::BrowserSupport()){
     if(!isset($_COOKIE['not_supported'])){
-        header("Location: " . Functions::Url($RUTE['#r_compatibility']));
+        header("Location: " . Functions::Url($ROUTE['#r_compatibility']));
         exit();
     }
 } else {
@@ -26,11 +26,11 @@ foreach($TEMP['#languages'] as $lang){
     $TEMP['!lang'] = $lang;
     $TEMP['!lang_name'] = $language['name'];
 
-    $lang_url = "{$RUTE['#p_language']}={$lang}";
+    $lang_url = "{$ROUTE['#p_language']}={$lang}";
     if(strpos($_SERVER['REQUEST_URI'], '?') !== false){
-        $lang_regex = "/{$RUTE['#p_language']}=(.+?)[^*]/";
+        $lang_regex = "/{$ROUTE['#p_language']}=(.+?)[^*]/";
         if(preg_match($lang_regex, $_SERVER['REQUEST_URI']) > 0){
-            $lang_url = preg_replace($lang_regex, "{$RUTE['#p_language']}={$lang}", $_SERVER['REQUEST_URI']);
+            $lang_url = preg_replace($lang_regex, "{$ROUTE['#p_language']}={$lang}", $_SERVER['REQUEST_URI']);
         }
     } else {
         $http = 'https://';
@@ -46,10 +46,10 @@ foreach($TEMP['#languages'] as $lang){
 }
 
 $TEMP['#return_url'] = $TEMP['#site_url'];
-$return = Functions::Filter($_GET[$RUTE['#p_return']]);
+$return = Functions::Filter($_GET[$ROUTE['#p_return']]);
 if(!empty($return)){
     $TEMP['#return_url'] = $return;
-    $TEMP['#return_param'] = "?{$RUTE['#p_return']}=$return";
+    $TEMP['#return_param'] = "?{$ROUTE['#p_return']}=$return";
 }
 
 if (isset($_COOKIE['_SAVE_SESSION'])) {
@@ -110,7 +110,7 @@ if (file_exists("./sources/{$page}")) {
 $TEMP['#show_index_palette'] = false;
 if($TEMP['#admin'] == true && $TEMP['#settings']['show_palette'] == 'on'){
     $TEMP['#show_index_palette'] = true;
-    $show_palette = Functions::Filter($_GET[$RUTE['#r_show_palette']]);
+    $show_palette = Functions::Filter($_GET[$ROUTE['#r_show_palette']]);
     $TEMP['#show_palette'] = json_decode($show_palette);
 
     Functions::BuildIndexPalette();
@@ -159,5 +159,5 @@ $content = Functions::Build($build);
 echo Functions::HTMLFormatter($content);
 $dba->close();
 unset($TEMP);
-unset($RUTE);
+unset($ROUTE);
 ?>

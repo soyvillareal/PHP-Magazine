@@ -25,18 +25,18 @@ if($one == 'catag'){
 			);
 		}
 	}
-} else if($one == 'save'){
-	$save_ids = Functions::Filter($_POST['save_ids']);
-	$save_ids = html_entity_decode($save_ids);
-	$save_ids = json_decode($save_ids);
+} else if($one == 'saved'){
+	$saved_ids = Functions::Filter($_POST['saved_ids']);
+	$saved_ids = html_entity_decode($saved_ids);
+	$saved_ids = json_decode($saved_ids);
 
 	if($TEMP['#loggedin'] == true){
-		$save_load = Loads::Save($save_ids);
-		if($save_load['return']){
+		$saved_load = Loads::Saved($saved_ids);
+		if($saved_load['return']){
 			$deliver = array(
 				'S' => 200,
-				'HT' => $save_load['html'],
-				'IDS' => $save_load['save_ids']
+				'HT' => $saved_load['html'],
+				'IDS' => $saved_load['saved_ids']
 			);
 		}
 	}

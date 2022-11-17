@@ -4,7 +4,7 @@
             <h1 class="font-postoni-bodo font-supraly">{$word->saved_posts}</h1>
         </div>
         <div class="font-franklin font-mediumly color-blackly">
-            <span class="display-inline-flex">{$save_time}</span>
+            <span class="display-inline-flex">{$saved_time}</span>
             <span class="margin-l5 margin-r5">•</span>
             <span>{$word->good_morning}, {$me->username}</span>
         </div>
@@ -15,7 +15,7 @@
             <span class="font-franklin font-medium font-italic color-blackly">{$word->stories_save_added_reading_list}</span>
         </header>
         <section id="content-saposts" class="display-flex vertical-slots margin-t15">
-            {$save_posts}
+            {$saved_posts}
         </section>
         <div id="content-lsaload" class="container-lsaload display-flex vertical-slots hidden">
             <div class="content-lsaload item_sapost display-block position-relative margin-b15 border-grely">
@@ -69,15 +69,15 @@
         </div>
     </div>
 </main>
-{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/save/style.save.min.css}}" />%%}
+{%%<link rel="stylesheet" type="text/css" href="{$theme->{assets/css/saved/style.saved.min.css}}" />%%}
 {%%<script type="text/javascript">
    paper_us = {
       token: '{#token_session}',
       url: {
-         load_posts: '{$url->{req/load/save}}',
+         load_posts: '{$url->{req/load/saved}}',
          delete_saved: '{$url->{req/delete-saved}}'
       },
-      save_ids: [{$save_ids}]
+      saved_ids: [{$saved_ids}]
    }
 </script>%%}
-{%%<script src="{$theme->{assets/js/save/jquery.save.min.js}}"></script>%%}
+{%%<script src="{$theme->{assets/js/saved/jquery.saved.min.js}}"></script>%%}

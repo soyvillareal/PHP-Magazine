@@ -35,7 +35,7 @@ if($one == 'load'){
 			if($dba->query('UPDATE '.T_POST.' SET status = "deleted", deleted_at = ? WHERE id = ?', time(), $post_id)->returnStatus()){
 				$deliver = array(
 					'S' => 200,
-					'LK' => Functions::Url("?{$RUTE['#p_show_alert']}={$RUTE['#p_deleted_post']}")
+					'LK' => Functions::Url("?{$ROUTE['#p_show_alert']}={$ROUTE['#p_deleted_post']}")
 				);
 			}
 		}
