@@ -267,7 +267,7 @@ if($one == 'validate'){
 					        );
 					    } else { 	
 							$user = Functions::Data($user, 3);
-						    $reset_password = Functions::UserToken('reset_password', $user['id']);
+						    $reset_password = Functions::UserToken('reset_password', $user['id'], true);
 						    $token = $reset_password['token'];
 
 				           	if($reset_password['return']){
