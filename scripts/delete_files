@@ -1,0 +1,13 @@
+#!/bin/bash
+shopt -s extglob
+cd ../../deployment-archive/assets/includes
+rm info.php
+
+cd /home/admin/web/phpmagazine.soyvillareal.com/public_html
+rm *
+rm -rf "sources" "nodejs" "requests" "sources" "themes"
+cd assets/includes
+GLOBIGNORE=info.php
+rm *
+unset GLOBIGNORE
+shopt -u extglob
