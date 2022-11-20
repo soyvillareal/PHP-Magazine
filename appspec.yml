@@ -5,6 +5,11 @@ files:
     destination: /home/admin/web/phpmagazine.soyvillareal.com/public_html
     overwrite: true
     file_exists_behavior: OVERWRITE
+permissions:
+  - object: /home/admin/web/phpmagazine.soyvillareal.com/public_html
+    owner: root
+    group: root
+    mode: 777
 hooks:
   ApplicationStart:
     - location: scripts/start_server
