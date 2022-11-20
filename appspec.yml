@@ -9,10 +9,6 @@ hooks:
     - location: scripts/start_server
       timeout: 300
       runas: root
-  DownloadBundle:
-    - location: scripts/delete_info
-      timeout: 300
-      runas: root
   BeforeInstall:
     - location: scripts/delete_files
       timeout: 300

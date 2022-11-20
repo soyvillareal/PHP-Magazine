@@ -1,10 +1,13 @@
 #!/bin/bash
 shopt -s extglob
-cd /home/admin/web/phpmagazine.soyvillareal.com/public_html
+
+cd /home/admin/web/phpmagazine.soyvillareal.com/public_html/assets/includes
+export INFOSERVER=$(cat info.php)
+rm *
+cd /assets
+rm -d "includes"
+rm "init.php"
+cd /public_html
 rm *
 rm -rf "sources" "nodejs" "requests" "sources" "themes"
-cd assets/includes
-GLOBIGNORE=info.php
-rm *
-unset GLOBIGNORE
 shopt -u extglob
