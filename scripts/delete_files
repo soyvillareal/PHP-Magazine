@@ -7,7 +7,7 @@ rm *
 cd ..
 rm -d "includes"
 rm "init.php"
-cd /public_html
+cd ..
 rm * .htaccess
 rm -rf "sources" "nodejs" "requests" "sources" "themes"
 shopt -u extglob
