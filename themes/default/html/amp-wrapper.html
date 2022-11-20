@@ -116,10 +116,10 @@
 
                 <nav id="content-nav" class="padding-t15">
                    <section>
-                      <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->national}</span>
+                      <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->f_one}</span>
                       <ul class="display-flex vertical-slots padding-b15">
                          <?php foreach($TEMP['#categories'] as $cat){ ?>
-                         <?php if($cat['footer'] == 'national'){ ?>
+                         <?php if($cat['footer'] == 'f_one'){ ?>
                          <li class="display-flex direction-row align-center w-50 h-36">
                             <a class="display-block color-black font-mediumly" href="<?php echo Functions::Url("{$ROUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
                          </li>
@@ -128,10 +128,10 @@
                       </ul>
                    </section>
                    <section>
-                      <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->social}</span>
+                      <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->f_two}</span>
                       <ul class="display-flex vertical-slots padding-b15">
                          <?php foreach($TEMP['#categories'] as $cat){ ?>
-                         <?php if($cat['footer'] == 'social'){ ?>
+                         <?php if($cat['footer'] == 'f_two'){ ?>
                          <li class="display-flex direction-row align-center w-50 h-36">
                             <a class="display-block color-black font-mediumly" href="<?php echo Functions::Url("{$ROUTE['#r_category']}/{$cat['slug']}");?>" target="_self" title="<?php echo $TEMP['#word']["category_{$cat['name']}"];?>"><?php echo $TEMP['#word']["category_{$cat['name']}"];?></a>
                          </li>
