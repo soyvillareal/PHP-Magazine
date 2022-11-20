@@ -3,6 +3,7 @@ os: linux
 files:
   - source: /
     destination: /home/admin/web/phpmagazine.soyvillareal.com/public_html
+    overwrite: true
 hooks:
   BeforeInstall:
     - location: scripts/install_dependencies
