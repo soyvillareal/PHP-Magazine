@@ -10,16 +10,25 @@ if ($TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arra
                 // openid providers
                 "Facebook" => array(
                     "enabled" => true,
-                    "keys" => array("id" => $TEMP['#settings']['fb_app_id'], "secret" => $TEMP['#settings']['fb_secret_id']),
+                    "keys" => array(
+                        "id" => $TEMP['#settings']['fb_app_id'],
+                        "secret" => $TEMP['#settings']['fb_secret_id']
+                    ),
                     "scope" => "email",
                     "trustForwarded" => false
                 ), "Twitter" => array(
                     "enabled" => true,
-                    "keys" => array("key" => $TEMP['#settings']['tw_app_id'], "secret" => $TEMP['#settings']['tw_secret_id']),
+                    "keys" => array(
+                        "key" => $TEMP['#settings']['tw_api_key'],
+                        "secret" => $TEMP['#settings']['tw_api_key_secret']
+                    ),
                     "includeEmail" => true
                 ), "Google" => array(
                     "enabled" => true,
-                    "keys" => array("id" => $TEMP['#settings']['go_app_id'], "secret" => $TEMP['#settings']['go_secret_id']),
+                    "keys" => array(
+                        "id" => $TEMP['#settings']['go_app_id'],
+                        "secret" => $TEMP['#settings']['go_secret_id']
+                    ),
                 ),
             )
         ));
