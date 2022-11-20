@@ -10,6 +10,15 @@
    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
    <meta name="format-detection" content="telephone=no">
    <link rel="shortcut icon" type="image/png" href="{$theme->{images/favicon.ico}}" />
+   
+   <!-- Google tag (gtag.js) -->
+   <script async src="https://www.googletagmanager.com/gtag/js?id={$settings->google_analytics}"></script>
+   <script type="text/javascript">
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{$settings->google_analytics}');
+   </script>
 </head>
 <body class="position-relative w-100 mw-1170 h-100 background-white color-black margin-auto" dir="{#dir}" style="overflow:hidden;">
    <style type="text/css">
