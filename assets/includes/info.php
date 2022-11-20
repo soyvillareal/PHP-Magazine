@@ -6,5 +6,5 @@ $mysql_database = "php-magazine"; // Database name
 
 
 $domain = 'localhost'; // Web domain, eg. (localhost, IP or example.tld)
-$site_url = "http://{$domain}/PHP-Magazine"; // URL and subfolders of the website, eg. (http://${domain}/ or http//${domain}/subfolder). You can also use HTTP or HTTPS.
+$site_url = "https://{$domain}/PHP-Magazine"; // URL and subfolders of the website, eg. (http://${domain} or http//${domain}/subfolder). You can also use HTTP or HTTPS.
 ?>

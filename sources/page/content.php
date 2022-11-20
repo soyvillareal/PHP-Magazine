@@ -1,10 +1,11 @@
 <?php
-if (!in_array($_GET['slug'], array($ROUTE['#r_terms_of_use'], $ROUTE['#r_habeas_data'], $ROUTE['#r_about_us']))){
+if (!in_array($_GET['slug'], array($ROUTE['#r_delete_account'], $ROUTE['#r_terms_of_use'], $ROUTE['#r_habeas_data'], $ROUTE['#r_about_us']))){
 	header("Location: " . Functions::Url('404'));
 	exit();
 }
 
 $pages = array(
+	$ROUTE['#r_delete_account'] => 'delete_account',
 	$ROUTE['#r_terms_of_use'] => 'terms_of_use',
 	$ROUTE['#r_habeas_data'] => 'habeas_data',
 	$ROUTE['#r_about_us'] => 'about_us'

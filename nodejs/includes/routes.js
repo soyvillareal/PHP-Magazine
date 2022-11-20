@@ -32,6 +32,7 @@ module.exports = {
     r_sitemap: 'sitemap',
     r_rss: 'rss',
     r_page: 'page',
+    r_delete_account: 'delete-account',
     r_terms_of_use: 'terms-of-use',
     r_habeas_data: 'habeas-data',
     r_about_us: 'about-us',

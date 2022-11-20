@@ -34,6 +34,7 @@ $ROUTE['#r_blocked_users'] = 'blocked-users';
 $ROUTE['#r_sitemap'] = 'sitemap';
 $ROUTE['#r_rss'] = 'rss';
 $ROUTE['#r_page'] = 'page';
+$ROUTE['#r_delete_account'] = 'delete-account';
 $ROUTE['#r_terms_of_use'] = 'terms-of-use';
 $ROUTE['#r_habeas_data'] = 'habeas-data';
 $ROUTE['#r_about_us'] = 'about-us';

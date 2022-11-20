@@ -707,7 +707,7 @@
                   <span class="display-block w-100 color-black font-medium font-bold padding-t25 padding-b10 border-top border-grely">{$word->about_us}</span>
                   <ul class="display-flex vertical-slots">
                      <?php foreach($TEMP['#pages'] as $page){ ?>
-                     <?php if($page['status'] == 'enabled'){ ?>
+                     <?php if($page['status'] == 'enabled' && $page['footer'] == 'on'){ ?>
                      <li class="display-flex direction-row align-center w-50 h-36">
                         <?php if(!empty($page['text'])){ ?>
                         <a class="display-block color-black font-mediumly" href="<?php echo Functions::Url("{$ROUTE['#r_page']}/{$ROUTE["#r_{$page['slug']}"]}");?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
@@ -749,7 +749,7 @@
             </div>
             <ul>
                <?php foreach($TEMP['#pages'] as $page){ ?>
-               <?php if($page['status'] == 'enabled'){ ?>
+               <?php if($page['status'] == 'enabled' && $page['footer'] == 'on'){ ?>
                <li class="margin-b5">
                   <?php if(!empty($page['text'])){ ?>
                   <a class="color-black font-low inhover-button" href="<?php echo Functions::Url("{$ROUTE['#r_page']}/{$ROUTE["#r_{$page['slug']}"]}");?>" target="_self" title="<?php echo $TEMP['#word']["page_{$page['slug']}"];?>"><?php echo $TEMP['#word']["page_{$page['slug']}"];?></a>
