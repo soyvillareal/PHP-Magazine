@@ -1,6 +1,6 @@
 <?php
-if (!version_compare(PHP_VERSION, '7.4.0', '>=')) {
-    exit("Required PHP_VERSION >= 7.4.0 , Your PHP_VERSION is : " . PHP_VERSION . "\n");
+if (!version_compare(PHP_VERSION, '7.2', '>=')) {
+    exit("Required PHP_VERSION >= 7.2 , Your PHP_VERSION is : " . PHP_VERSION . "\n");
 }
 
 $conn = @new mysqli($mysql_hostname, $mysql_username, $mysql_password, $mysql_database);
@@ -13,15 +13,19 @@ if (!function_exists('curl_version')) {
     $ServerFails[] = "cURL: Not installed (NOT OK)";
 }
 if (!extension_loaded('gd') && !function_exists('gd_info')) {
+    // Required GD Library for image cropping
 	$ServerFails[] = "GD Library: Not installed (NOT OK)";
 }
 if(!extension_loaded('mbstring')) {
+    // Required mbstring for PHPMailer
     $ServerFails[] = "mbstring: Not installed (NOT OK)";
 }
 if(!function_exists('mail')) {
+    // Required Mail for PHPMailer
     $ServerFails[] = "Mail: Not installed (NOT OK)";
 }
 if(!extension_loaded('openssl')){
+    // Required OpenSSL for PHPMailer
 	$ServerFails[] = "OpenSSL: Not Installed (NOT OK)";
 }
 
