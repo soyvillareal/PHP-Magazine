@@ -1,6 +1,2 @@
 #!/bin/bash
-cd /home/admin/web/phpmagazine.soyvillareal.com/public_html/assets/includes
-echo "${INFOSERVER}" > info.php
-unset INFOSERVER
-
 service apache2 start
