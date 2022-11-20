@@ -1,11 +1,10 @@
 <?php
-require_once('./assets/import/autoload.php');
 
 $provider = Functions::Filter($_GET[$ROUTE['#p_provider']]);
 if ($TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, array('facebook', 'twitter', 'google')) && !isset($_GET['denied'])) {
     try {
         $hybridauth = new Hybridauth\Hybridauth(array(
-            "callback" => Functions::Url("{$ROUTE['#r_social_login']}?{$ROUTE['#p_provider']}=$provider"),
+            "callback" => Functions::Url("{$ROUTE['#r_social_login']}?{$ROUTE['#p_provider']}={$provider}"),
             "providers" => array(
                 // openid providers
                 "Facebook" => array(
@@ -30,7 +29,9 @@ if ($TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arra
                         "secret" => $TEMP['#settings']['go_secret_id']
                     ),
                 ),
-            )
+            ),
+            'debug_mode' => false,
+            'debug_file' => __FILE__ . '.log'
         ));
         $authProvider = $hybridauth->authenticate($provider);
         $profile = $authProvider->getUserProfile();
@@ -51,8 +52,8 @@ if ($TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arra
             if (!empty($profile->email)) {
                 $user_email = $profile->email;
             }
-            $user = $dba->query('SELECT id, COUNT(*) as count FROM '.T_USER.' WHERE email = ?', $user_email)->fetchArray();
-            if ($user['count'] > 0) {
+            $user = $dba->query('SELECT id FROM '.T_USER.' WHERE email = ?', $user_email)->fetchArray();
+            if (!empty($user)) {
                 $login_token = sha1(Functions::RandomKey().md5(time()));
                 if($dba->query('INSERT INTO '.T_SESSION.' (user_id, token, details, created_at) VALUES (?, ?, ?, ?)', $user['id'], $login_token, json_encode(Functions::BrowserDetails()['details']), time())->returnStatus()){
                     if($save_session == 'on'){
@@ -133,8 +134,13 @@ if ($TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arra
                         'is_html' => true
                     ));
                 }
+                $ip = Functions::GetClientIp();
+                $darkmode = 0;
+                if($TEMP['#settings']['switch_mode'] == 'on' && $TEMP['#settings']['theme_mode'] == 'night'){
+                    $darkmode = 1;
+                }
+                $user_id = $dba->query('INSERT INTO '.T_USER.' (username, email, password, name, surname, gender, about, facebook, twitter, avatar, ip, darkmode, status, type, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "active", ?, ?)', $username, $email, $password, $name, $surname, $gender, $about, $facebook_url, $twitter_url, $avatar, $ip, $darkmode, $type, time())->insertId();
 
-                $user_id = $dba->query('INSERT INTO '.T_USER.' (username, email, password, name, surname, gender, about, facebook, twitter, avatar, status, type, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "active", ?, ?)', $username, $email, $password, $name, $surname, $gender, $about, $facebook_url, $twitter_url, $avatar, $type, time())->insertId();
                 if ($user_id) {
                     if($dba->query('INSERT INTO '.T_TOKEN.' (user_id, verify_email, change_email, reset_password, unlink_email, 2check, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)', $user_id, $verify_email, $change_email, $reset_password, $unlink_email, $_2check, time())->returnStatus()){
                         $login_token = sha1(Functions::RandomKey().md5(time()));
@@ -168,7 +174,7 @@ if ($TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arra
             exit();
         }
         exit($e->getMessage());
-        /*switch ($e->getCode()) {
+        switch ($e->getCode()) {
             case 0:
                 print("Unspecified error.");
                 break;
@@ -198,7 +204,7 @@ if ($TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arra
                 break;
         }
         print("an error found while processing your request! <b><a href='" . Functions::Url() . "'>Try again<a></b>");
-        */
+        
     }
 } else {
     header("Location: " . Functions::Url());
