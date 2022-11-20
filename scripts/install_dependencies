@@ -2,6 +2,12 @@
 
 cd /home/admin/web/phpmagazine.soyvillareal.com/public_html
 
+echo "$(cat info.php)" > /assets/includes/info.php
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
 export COMPOSER_ALLOW_SUPERUSER=1;
 composer install
 npm install
