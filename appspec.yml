@@ -4,6 +4,7 @@ files:
   - source: /
     destination: /home/admin/web/phpmagazine.soyvillareal.com/public_html
     overwrite: true
+    file_exists_behavior: OVERWRITE
 hooks:
   ApplicationStart:
     - location: scripts/start_server
