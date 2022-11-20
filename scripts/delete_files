@@ -1,8 +1,8 @@
 #!/bin/bash
-shopt -s extglob
 cd ../../deployment-archive/assets/includes
 rm info.php
 
+shopt -s extglob
 cd /home/admin/web/phpmagazine.soyvillareal.com/public_html
 rm *
 rm -rf "sources" "nodejs" "requests" "sources" "themes"
