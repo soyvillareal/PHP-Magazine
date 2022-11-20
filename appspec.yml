@@ -5,11 +5,12 @@ files:
     destination: /home/admin/web/phpmagazine.soyvillareal.com/public_html
     overwrite: true
 hooks:
-  BeforeInstall:
-    - location: scripts/install_dependencies
+  ApplicationStart:
+    - location: scripts/start_server
       timeout: 300
       runas: root
-    - location: scripts/start_server
+  AfterInstall:
+    - location: scripts/install_dependencies
       timeout: 300
       runas: root
   ApplicationStop:
