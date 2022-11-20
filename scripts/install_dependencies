@@ -1,3 +1,4 @@
 #!/bin/bash
+cd /home/admin/web/phpmagazine.soyvillareal.com/public_html
 composer install
 npm install
