@@ -2,8 +2,6 @@
 
 cd /home/admin/web/phpmagazine.soyvillareal.com/public_html
 
-npm install
 export COMPOSER_ALLOW_SUPERUSER=1;
 composer install
-
-echo "$(cat info.php)" > /assets/includes/info.php
+npm install
