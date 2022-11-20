@@ -6,9 +6,15 @@ files:
     file_exists_behavior: OVERWRITE
 permissions:
   - object: /home/admin/web/phpmagazine.soyvillareal.com/public_html
-    owner: root
-    group: root
+    owner: admin
+    group: admin
+    acls:
+      - "d:u::rwx"
+      - "d:g::rwx"
+      - "d:o::rwx"
     mode: 644
+    type:
+      - directory
 hooks:
   ApplicationStart:
     - location: scripts/start_server
