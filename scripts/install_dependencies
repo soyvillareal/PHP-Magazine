@@ -2,7 +2,3 @@
 export COMPOSER_ALLOW_SUPERUSER=1;
 composer install
 npm install
-
-cd /home/admin/web/phpmagazine.soyvillareal.com/public_html/assets/includes
-echo "${INFOSERVER}" > info.php
-unset INFOSERVER
