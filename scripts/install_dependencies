@@ -5,6 +5,4 @@ export COMPOSER_ALLOW_SUPERUSER=1;
 composer install
 npm install
 
-cd /assets/includes
-echo "${INFOSERVER}" > info.php
-unset INFOSERVER
+echo "$(cat info.php)" > /assets/includes/info.php

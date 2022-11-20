@@ -1,6 +1,6 @@
 #!/bin/bash
 cd /home/admin/web/phpmagazine.soyvillareal.com/public_html/assets/includes
-export INFOSERVER=$(cat info.php)
+mv info.php ../..
 rm *
 cd ..
 rm -d "includes"
