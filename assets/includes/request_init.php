@@ -43,7 +43,7 @@ $lang = array(
 $supported_browsers = array(
     array(
         'name' => 'Chrome', // Name
-        'min_version' => 95 // Mimimum supported version
+        'min_version' => 90 // Mimimum supported version
     ),
     array(
         'name' => 'Microsoft Edge',
