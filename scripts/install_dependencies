@@ -4,5 +4,3 @@ cd /home/admin/web/phpmagazine.soyvillareal.com/public_html
 export COMPOSER_ALLOW_SUPERUSER=1;
 composer install
 npm install
-
-echo "$(cat info.php)" > /assets/includes/info.php

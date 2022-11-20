@@ -1,2 +1,4 @@
 #!/bin/bash
+echo "$(cat info.php)" > /assets/includes/info.php
+
 service apache2 start
