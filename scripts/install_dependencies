@@ -2,7 +2,7 @@
 
 cd /home/admin/web/phpmagazine.soyvillareal.com/public_html
 
-echo "$(cat info.php)" > /assets/includes/info.php
+echo "$(cat /assets/import/info.php)" > /assets/includes/info.php
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
