@@ -1,7 +1,4 @@
 #!/bin/bash
-cd ../../deployment-archive/assets/includes
-rm info.php
-
 shopt -s extglob
 cd /home/admin/web/phpmagazine.soyvillareal.com/public_html
 rm *
