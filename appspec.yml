@@ -3,7 +3,8 @@ os: linux
 files:
   - source: /
     destination: /home/admin/web/phpmagazine.soyvillareal.com/public_html
-eInstall:
+hooks:
+  BeforeInstall:
     - location: scripts/install_dependencies
       timeout: 300
       runas: root
@@ -14,4 +15,3 @@ eInstall:
     - location: scripts/stop_server
       timeout: 300
       runas: root
-
