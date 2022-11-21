@@ -561,8 +561,8 @@ if ($TEMP['#publisher'] === true) {
 							}
 
 							foreach ($tags as $tag) {
-								$label = $dba->query('SELECT id, COUNT(*) as count FROM '.T_LABEL.' WHERE name = ?', $tag)->fetchArray();
-								if($label['count'] > 0){
+								$label = $dba->query('SELECT id FROM '.T_LABEL.' WHERE name = ?', $tag)->fetchArray();
+								if(!empty($label)){
 									$label_id = $label['id'];
 								} else {
 									$label_id = $dba->query('INSERT INTO '.T_LABEL.' (name, slug, created_at) VALUES (?, ?, ?)', $tag, Functions::CreateSlug($tag), time())->insertId();
@@ -592,8 +592,8 @@ if ($TEMP['#publisher'] === true) {
 							if(!empty($collaborators)){
 								$cocount = 0;
 								foreach ($collaborators as $co) {
-									$user = $dba->query('SELECT about, facebook, twitter, instagram, main_sonet, COUNT(*) as count FROM '.T_USER.' WHERE id = ? AND id NOT IN ('.$TEMP['#blocked_users'].') AND status = "active"', $co)->fetchArray();
-									if($user['count'] > 0 && !empty($user['about']) && !empty($user[$user['main_sonet']]) && $co != $TEMP['#user']['id']){
+									$user = $dba->query('SELECT about, facebook, twitter, instagram, main_sonet FROM '.T_USER.' WHERE id = ? AND id NOT IN ('.$TEMP['#blocked_users'].') AND status = "active"', $co)->fetchArray();
+									if(!empty($user) && !empty($user['about']) && !empty($user[$user['main_sonet']]) && $co != $TEMP['#user']['id']){
 										$insert_id = $dba->query('INSERT INTO '.T_COLLABORATOR.' (user_id, post_id, aorder, created_at) VALUES (?, ?, ?, ?)', $co, $post_id, $cocount, time())->insertId();
 										if($insert_id){
 											Functions::SetNotify(array(
@@ -776,9 +776,9 @@ if ($TEMP['#publisher'] === true) {
 		}
 
 		if(!empty($post_id)){
-			$post = $dba->query('SELECT user_id, slug, thumbnail, status, published_at, COUNT(*) as count FROM '.T_POST.' WHERE id = ?', $post_id)->fetchArray();
+			$post = $dba->query('SELECT user_id, slug, thumbnail, status, published_at FROM '.T_POST.' WHERE id = ?', $post_id)->fetchArray();
 
-			if($post['count'] > 0 && (Functions::IsOwner($post['user_id']) || $TEMP['#moderator'] == true)){
+			if(!empty($post) && (Functions::IsOwner($post['user_id']) || $TEMP['#moderator'] == true)){
 				if(in_array($action, array('post', 'save'))){
 					if(empty($empty)){
 						if(!empty($_FILES['thumbnail'])){
@@ -1328,8 +1328,8 @@ if ($TEMP['#publisher'] === true) {
 
 									if(!empty($add_tags)){
 										foreach ($add_tags as $key => $tag) {
-											$label = $dba->query('SELECT id, COUNT(*) as count FROM '.T_LABEL.' WHERE name = ?', $tag)->fetchArray();
-											if($label['count'] > 0){
+											$label = $dba->query('SELECT id FROM '.T_LABEL.' WHERE name = ?', $tag)->fetchArray();
+											if(!empty($label)){
 												$label_id = $label['id'];
 											} else {
 												$label_id = $dba->query('INSERT INTO '.T_LABEL.' (name, slug, created_at) VALUES (?, ?, ?)', $tag, Functions::CreateSlug($tag), time())->insertId();
@@ -1383,8 +1383,8 @@ if ($TEMP['#publisher'] === true) {
 
 									if(!empty($add_collaborators)){
 										foreach ($add_collaborators as $addco) {
-											$user = $dba->query('SELECT about, facebook, twitter, instagram, main_sonet, COUNT(*) as count FROM '.T_USER.' WHERE id = ? AND id NOT IN ('.$TEMP['#blocked_users'].') AND status = "active"', $addco)->fetchArray();
-											if($user['count'] > 0 && !empty($user['about']) && !empty($user[$user['main_sonet']])){
+											$user = $dba->query('SELECT about, facebook, twitter, instagram, main_sonet FROM '.T_USER.' WHERE id = ? AND id NOT IN ('.$TEMP['#blocked_users'].') AND status = "active"', $addco)->fetchArray();
+											if(!empty($user) && !empty($user['about']) && !empty($user[$user['main_sonet']])){
 												$insert_id = $dba->query('INSERT INTO '.T_COLLABORATOR.' (user_id, post_id, created_at) VALUES (?, ?, ?)', $addco, $post_id, time())->insertId();
 
 												if($insert_id){
@@ -1705,7 +1705,7 @@ if ($TEMP['#publisher'] === true) {
 				$post_id = 0;
 			}
 
-			$post = $dba->query('SELECT *, COUNT(*) as count FROM '.T_POST.' WHERE id != ? AND id = ? AND status = "approved"', $post_id, $push_id)->fetchArray();
+			$post = $dba->query('SELECT * FROM '.T_POST.' WHERE id != ? AND id = ? AND status = "approved"', $post_id, $push_id)->fetchArray();
 
 			$error = false;
 			$pos = 0;
@@ -1720,7 +1720,7 @@ if ($TEMP['#publisher'] === true) {
 
 			if(count($entry_text) > count($post_ids)){
 				if($error == false){
-					if($post['count'] > 0){
+					if(!empty($post)){
 						$category = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $post['category_id'])->fetchArray();
 						$TEMP['!id'] = $post['id'];
 
@@ -1800,10 +1800,10 @@ if ($TEMP['#publisher'] === true) {
 		$user_ids = json_decode($user_ids);
 
 		if(!empty($push_id) && is_numeric($push_id)){
-			$user = $dba->query('SELECT id, about, facebook, twitter, instagram, main_sonet, COUNT(*) as count FROM '.T_USER.' WHERE id = ? AND id NOT IN ('.$TEMP['#blocked_users'].') AND status = "active"', $push_id)->fetchArray();
+			$user = $dba->query('SELECT id, about, facebook, twitter, instagram, main_sonet FROM '.T_USER.' WHERE id = ? AND id NOT IN ('.$TEMP['#blocked_users'].') AND status = "active"', $push_id)->fetchArray();
 
 			$user_id = $user['id'];
-			if($user['count'] > 0){
+			if(!empty($user)){
 				if(!empty($user['about'])){
 					if(!empty($user[$user['main_sonet']])){
 						$TEMP['!id'] = $user_id;

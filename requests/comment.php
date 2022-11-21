@@ -6,8 +6,8 @@ if($TEMP['#loggedin'] == true){
 
 		if(!empty($post_id) && is_numeric($post_id) && !empty(trim($text)) && mb_strlen(strip_tags(html_entity_decode($text)), "UTF8") <= $TEMP['#settings']['max_words_comments']){
 
-			$post = $dba->query('SELECT user_id, COUNT(*) as count FROM '.T_POST.' WHERE id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"', $post_id)->fetchArray();
-			if($post['count'] > 0){
+			$post = $dba->query('SELECT user_id FROM '.T_POST.' WHERE id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"', $post_id)->fetchArray();
+			if(!empty($post)){
 				$created_at = time();
 				$insert_id = $dba->query('INSERT INTO '.T_COMMENTS.' (user_id, post_id, text, created_at) VALUES (?, ?, ? ,?)', $TEMP['#user']['id'], $post_id, $text, $created_at)->insertId();
 
@@ -89,8 +89,8 @@ if($TEMP['#loggedin'] == true){
 		if(!empty($comment_id) && is_numeric($comment_id)){
 			$comment = $dba->query('SELECT *, 1 as pinned FROM '.T_COMMENTS.' WHERE id = ?', $comment_id)->fetchArray();
 			if(!empty($comment)){
-				$post = $dba->query('SELECT *, COUNT(*) as count FROM '.T_POST.' WHERE id = ? AND status = "approved"', $comment['post_id'])->fetchArray();
-				if($post['count'] > 0){
+				$post = $dba->query('SELECT * FROM '.T_POST.' WHERE id = ? AND status = "approved"', $comment['post_id'])->fetchArray();
+				if(!empty($post)){
 					if(Functions::IsOwner($post['user_id'])){
 						$comment_old = $dba->query('SELECT *, 0 as pinned, COUNT(*) as count FROM '.T_COMMENTS.' WHERE pinned = 1')->fetchArray();
 						if($comment_old['count'] > 0 && $comment_old['id'] != $comment_id){
@@ -131,8 +131,8 @@ if($TEMP['#loggedin'] == true){
 
 		if(!empty($comment_id) && is_numeric($comment_id) && in_array($type, array('comment', 'reply'))){
 			if($type == 'comment'){
-				$comment = $dba->query('SELECT *, COUNT(*) as count FROM '.T_COMMENTS.' WHERE id = ?', $comment_id)->fetchArray();
-				if($comment['count'] > 0){
+				$comment = $dba->query('SELECT * FROM '.T_COMMENTS.' WHERE id = ?', $comment_id)->fetchArray();
+				if(!empty($comment)){
 					$user_id = $dba->query('SELECT user_id FROM '.T_POST.' WHERE id = ? AND status = "approved"', $comment['post_id'])->fetchArray(true);
 
 					if(Functions::IsOwner($comment['user_id']) || Functions::IsOwner($user_id)){
@@ -147,8 +147,8 @@ if($TEMP['#loggedin'] == true){
 					}
 				}
 			} else {
-				$reply = $dba->query('SELECT *, COUNT(*) as count FROM '.T_REPLY.' WHERE id = ?', $comment_id)->fetchArray();
-				if($reply['count'] > 0){
+				$reply = $dba->query('SELECT * FROM '.T_REPLY.' WHERE id = ?', $comment_id)->fetchArray();
+				if(!empty($reply)){
 
 					$user_id = $dba->query('SELECT user_id FROM '.T_POST.' WHERE (SELECT post_id FROM '.T_COMMENTS.' WHERE id = ? AND status = "approved") = id', $reply['comment_id'])->fetchArray(true);
 

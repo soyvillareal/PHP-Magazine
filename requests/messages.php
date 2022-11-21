@@ -140,8 +140,8 @@ if($one == 'fetch'){
 
 	if(!empty($profile_id) && is_numeric($profile_id) && (!empty(trim($text)) || $count_files > 0) && is_numeric($count_files) && in_array($type, array('text', 'file', 'image')) && !in_array($profile_id, Functions::BlockedUsers(false))){
 
-		$user = $dba->query('SELECT shows, COUNT(*) as count FROM '.T_USER.' WHERE id = ?', $profile_id)->fetchArray();
-		if($user['count'] > 0){
+		$user = $dba->query('SELECT shows FROM '.T_USER.' WHERE id = ?', $profile_id)->fetchArray();
+		if(!empty($user)){
 			$user = Functions::Data($user, 3);
 			if($user['shows']['messages'] == 'on' && $TEMP['#user']['shows']['messages'] == 'on'){
 				$created_at = $updated_at = time();
@@ -155,10 +155,10 @@ if($one == 'fetch'){
 					}
 				}
 				
-				$chat = $dba->query('SELECT *, COUNT(*) as count FROM '.T_CHAT.' WHERE (user_id = ? AND profile_id = ?) OR (profile_id = ? AND user_id = ?)', $TEMP['#user']['id'], $profile_id, $TEMP['#user']['id'], $profile_id)->fetchArray();
+				$chat = $dba->query('SELECT * FROM '.T_CHAT.' WHERE (user_id = ? AND profile_id = ?) OR (profile_id = ? AND user_id = ?)', $TEMP['#user']['id'], $profile_id, $TEMP['#user']['id'], $profile_id)->fetchArray();
 
 				$chat_id = $chat['id'];
-				if($chat['count'] > 0){
+				if(!empty($chat)){
 					$dba->query('UPDATE '.T_CHAT.' SET updated_at = ? WHERE id = ?', $updated_at, $chat_id);
 				} else {
 					$chat_id = $dba->query('INSERT INTO '.T_CHAT.' (user_id, profile_id, updated_at, created_at) VALUES (?, ?, ?, ?)', $TEMP['#user']['id'], $profile_id, $updated_at, $created_at)->insertId();
@@ -340,9 +340,9 @@ if($one == 'fetch'){
 	if(!empty($id) && is_numeric($id) && in_array($type, array('text', 'file', 'image')) && in_array($for, array('all', 'me'))){
 		$deleted_at = time();
 		if($type == 'text'){
-			$message = $dba->query('SELECT user_id, COUNT(*) as count FROM '.T_MESSAGE.' WHERE id = ? AND profile_id NOT IN ('.$TEMP['#blocked_users'].')', $id)->fetchArray();
+			$message = $dba->query('SELECT user_id FROM '.T_MESSAGE.' WHERE id = ? AND profile_id NOT IN ('.$TEMP['#blocked_users'].')', $id)->fetchArray();
 
-			if($message['count'] > 0){
+			if(!empty($message)){
 				$query = 'deleted_fprofile = ?';
 				if(Functions::IsOwner($message['user_id'])){
 					$query = 'seen = 1, deleted_at = ?';
@@ -395,9 +395,9 @@ if($one == 'fetch'){
 	if(!empty($id) && is_numeric($id) && in_array($type, array('text', 'file', 'image'))){
 		$deleted_at = time();
 		if($type == 'text'){
-			$message = $dba->query('SELECT user_id, COUNT(*) as count FROM '.T_MESSAGE.' WHERE id = ? AND profile_id NOT IN ('.$TEMP['#blocked_users'].')', $id)->fetchArray();
+			$message = $dba->query('SELECT user_id FROM '.T_MESSAGE.' WHERE id = ? AND profile_id NOT IN ('.$TEMP['#blocked_users'].')', $id)->fetchArray();
 
-			if($message['count'] > 0){
+			if(!empty($message)){
 				$query = 'deleted_fprofile = ?';
 				if(Functions::IsOwner($message['user_id'])){
 					$query = 'deleted_fuser = ?';
@@ -434,8 +434,8 @@ if($one == 'fetch'){
 	$chat_id = Functions::Filter($_POST['chat_id']);
 
 	if(!empty($chat_id) && is_numeric($chat_id)){
-		$message = $dba->query('SELECT user_id, profile_id, COUNT(*) as count FROM '.T_MESSAGE.' WHERE (user_id = ? OR profile_id = ?) AND chat_id = ? AND profile_id NOT IN ('.$TEMP['#blocked_users'].')', $TEMP['#user']['id'], $TEMP['#user']['id'], $chat_id)->fetchArray();
-		if($message['count'] > 0){
+		$message = $dba->query('SELECT user_id, profile_id FROM '.T_MESSAGE.' WHERE (user_id = ? OR profile_id = ?) AND chat_id = ? AND profile_id NOT IN ('.$TEMP['#blocked_users'].')', $TEMP['#user']['id'], $TEMP['#user']['id'], $chat_id)->fetchArray();
+		if(!empty($message)){
 			$deleted_at = time();
 			if($dba->query('UPDATE '.T_MESSAGE.' SET deleted_fuser = ? WHERE user_id = ? AND chat_id = ?', $deleted_at, $TEMP['#user']['id'], $chat_id)->returnStatus()){
 				if($dba->query('UPDATE '.T_MESSAGE.' SET deleted_fprofile = ? WHERE profile_id = ? AND chat_id = ?', $deleted_at, $TEMP['#user']['id'], $chat_id)->returnStatus()){

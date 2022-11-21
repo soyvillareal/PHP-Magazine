@@ -7,9 +7,9 @@ if ($TEMP['#loggedin'] === true || $TEMP['#settings']['verify_email'] == 'off' |
 }
 
 
-$verify_email = $dba->query('SELECT user_id, expires, COUNT(*) as count FROM '.T_TOKEN.' WHERE verify_email = ?', $tokenu)->fetchArray();
+$verify_email = $dba->query('SELECT user_id, expires FROM '.T_TOKEN.' WHERE verify_email = ?', $tokenu)->fetchArray();
 
-$page = Functions::ValidateToken($verify_email['expires'], 'verify_email') || $verify_email['count'] == 0 || $dba->query('SELECT status FROM '.T_USER.' WHERE id = ?', $verify_email['user_id'])->fetchArray(true) == 'active' || (strlen($TEMP['#descode']) != 6 && !empty($TEMP['#descode'])) ? 'invalid-auth' : 'check-code';
+$page = Functions::ValidateToken($verify_email['expires'], 'verify_email') || empty($verify_email) || $dba->query('SELECT status FROM '.T_USER.' WHERE id = ?', $verify_email['user_id'])->fetchArray(true) == 'active' || (strlen($TEMP['#descode']) != 6 && !empty($TEMP['#descode'])) ? 'invalid-auth' : 'check-code';
 
 
 $TEMP['title'] = $TEMP['#word']['check_your_email'];

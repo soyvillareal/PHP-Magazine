@@ -6,9 +6,9 @@ if ($TEMP['#loggedin'] === true || empty($tokenu)) {
 }
 
 
-$reset_password = $dba->query('SELECT expires, COUNT(*) as count FROM '.T_TOKEN.' WHERE reset_password = ?', $tokenu)->fetchArray();
+$reset_password = $dba->query('SELECT expires FROM '.T_TOKEN.' WHERE reset_password = ?', $tokenu)->fetchArray();
 
-$page = Functions::ValidateToken($reset_password['expires'], 'reset_password') || $reset_password['count'] == 0 ? 'invalid-auth' : 'reset-password';
+$page = Functions::ValidateToken($reset_password['expires'], 'reset_password') || empty($reset_password) ? 'invalid-auth' : 'reset-password';
 
 $TEMP['tokenu'] = $tokenu;
 

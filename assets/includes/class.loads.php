@@ -999,9 +999,9 @@ class Loads {
 					$TEMP['!text'] = Functions::TextFilter($message['text']);
 					$TEMP['!type'] = 'normal';
 
-					$messaan = $dba->query('SELECT answered_id, type, COUNT(*) as count FROM '.T_MESSAAN.' a WHERE message_id = ?', $message['id'])->fetchArray();
+					$messaan = $dba->query('SELECT answered_id, type FROM '.T_MESSAAN.' a WHERE message_id = ?', $message['id'])->fetchArray();
 
-					if($messaan['count'] > 0){
+					if(!empty($messaan)){
 						$has_answer = false;
 						$TEMP['!ans_deleted'] = false;
 						if($messaan['type'] == 'text'){

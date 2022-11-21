@@ -5,8 +5,8 @@ if($TEMP['#loggedin'] == true){
 		$type = Functions::Filter($_POST['type']);
 
 		if(!empty($post_id) && in_array($type, array('like', 'dislike'))){
-			$post = $dba->query('SELECT *, COUNT(*) as count FROM '.T_POST.' WHERE id = ? AND status = "approved"', $post_id)->fetchArray();
-			if($post['count'] > 0){
+			$post = $dba->query('SELECT * FROM '.T_POST.' WHERE id = ? AND status = "approved"', $post_id)->fetchArray();
+			if(!empty($post)){
 				if($type == 'like'){
 					if($dba->query('SELECT COUNT(*) FROM '.T_REACTION.' WHERE user_id = ? AND reacted_id = ? AND type = "like" AND place = "post"', $TEMP['#user']['id'], $post_id)->fetchArray(true) > 0){
 						$likes = ($post['likes']-1);

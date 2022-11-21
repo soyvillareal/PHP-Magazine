@@ -27,8 +27,8 @@ $TEMP['#type_category'] = $ROUTE['#p_all'];
 $TEMP['type_ncategory'] = $TEMP['#word']['all_'];
 if(!empty($category) && is_numeric($category)){
 	if($category != $ROUTE['#p_all']){
-		$cat = $dba->query('SELECT name, id, COUNT(*) as count FROM '.T_CATEGORY.' WHERE id = ?', $category)->fetchArray();
-		if($cat['count'] > 0){
+		$cat = $dba->query('SELECT name, id FROM '.T_CATEGORY.' WHERE id = ?', $category)->fetchArray();
+		if(!empty($cat)){
 			$TEMP['#type_category'] = $cat['id'];
 			$TEMP['type_ncategory'] = $TEMP['#word']["category_{$cat['name']}"];
 		}

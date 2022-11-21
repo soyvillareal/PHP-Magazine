@@ -29,14 +29,14 @@ if($one == 'subscribe'){
 				}
 			}
 			if(filter_var($email, FILTER_VALIDATE_EMAIL)){
-				$newsletter = $dba->query('SELECT status, COUNT(*) as count FROM '.T_NEWSLETTER.' WHERE email = ?', $email)->fetchArray(true);
-				if($newsletter['count'] == 0 || ($newsletter['count'] > 0 && $newsletter['status'] == 'disabled')){
+				$newsletter = $dba->query('SELECT status FROM '.T_NEWSLETTER.' WHERE email = ?', $email)->fetchArray(true);
+				if(empty($newsletter) || (!empty($newsletter) && $newsletter['status'] == 'disabled')){
 					if(in_array($type, array('all', 'personalized')) && in_array($frequency, array('now', 'daily', 'weekly')) && !in_array(false, $catrues)){
 						$slug = Functions::RandomKey(12, 16);
 						if($dba->query('SELECT COUNT(*) FROM '.T_NEWSLETTER.' WHERE slug = ?', $slug)->fetchArray(true) > 0){
 							$slug = Functions::RandomKey(12, 16);
 						}
-						if($newsletter['count'] == 0 || ($newsletter['count'] > 0 && $dba->query('DELETE FROM '.T_NEWSLETTER.' WHERE email = ?', $email)->returnStatus())){
+						if(empty($newsletter) || (!empty($newsletter) && $dba->query('DELETE FROM '.T_NEWSLETTER.' WHERE email = ?', $email)->returnStatus())){
 							if($type == 'all'){
 								if($dba->query('INSERT INTO '.T_NEWSLETTER.' (slug, email, frequency, created_at) VALUES (?, ?, ?, ?)', $slug, $email, $type, time())->returnStatus()){
 									$deliver = array(
@@ -103,9 +103,9 @@ if($one == 'subscribe'){
 				}
 			}
 		}
-		$newsletter = $dba->query('SELECT id, COUNT(*) as count FROM '.T_NEWSLETTER.' WHERE slug = ?', $slug)->fetchArray();
+		$newsletter = $dba->query('SELECT id FROM '.T_NEWSLETTER.' WHERE slug = ?', $slug)->fetchArray();
 
-		if($newsletter['count'] > 0){
+		if(!empty($newsletter)){
 			if(in_array($type, array('all', 'personalized')) && in_array($frequency, array('now', 'daily', 'weekly')) && !in_array(false, $catrues)){
 				
 				$popular = $populars[$popular];

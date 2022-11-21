@@ -9,9 +9,9 @@ if ($TEMP['#loggedin'] == false){
     exit();
 }
 
-$change_email = $dba->query('SELECT expires, COUNT(*) as count FROM '.T_TOKEN.' WHERE change_email = ?', $tokenu)->fetchArray();
+$change_email = $dba->query('SELECT expires FROM '.T_TOKEN.' WHERE change_email = ?', $tokenu)->fetchArray();
 
-$page = Functions::ValidateToken($change_email['expires'], 'change_email') || $change_email['count'] == 0 || empty($TEMP['#user']['new_email']) || (strlen($TEMP['#descode']) != 6 && !empty($TEMP['#descode'])) ? 'invalid-auth' : 'check-code';
+$page = Functions::ValidateToken($change_email['expires'], 'change_email') || empty($change_email) || empty($TEMP['#user']['new_email']) || (strlen($TEMP['#descode']) != 6 && !empty($TEMP['#descode'])) ? 'invalid-auth' : 'check-code';
 
 $TEMP['title'] = $TEMP['#word']['check_your_email'];
 $TEMP['type'] = 'change_email';

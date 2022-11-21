@@ -27,8 +27,8 @@ if(!empty($reported_id) && is_numeric($reported_id) && in_array($place, array('u
 		if(!in_array($type, array('r_spam', 'r_none', 'rp_writing', 'rp_thumbnail', 'rp_copyright'))){
 			$error = true;
 		}
-		$post = $dba->query('SELECT user_id, COUNT(*) as count FROM '.T_POST.' WHERE id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"', $reported_id)->fetchArray();
-		if($post['count'] == 0){
+		$post = $dba->query('SELECT user_id FROM '.T_POST.' WHERE id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"', $reported_id)->fetchArray();
+		if(empty($post)){
 			$error = true;
 		}
 
@@ -47,8 +47,8 @@ if(!empty($reported_id) && is_numeric($reported_id) && in_array($place, array('u
 		if($place == 'reply'){
 			$t_query = T_REPLY;
 		}
-		$comment = $dba->query('SELECT *, COUNT(*) as count FROM '.$t_query.' WHERE id = ?', $reported_id)->fetchArray();
-		if($comment['count'] == 0){
+		$comment = $dba->query('SELECT * FROM '.$t_query.' WHERE id = ?', $reported_id)->fetchArray();
+		if(empty($comment)){
 			$error = true;
 		}
 

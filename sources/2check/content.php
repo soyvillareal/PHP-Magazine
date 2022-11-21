@@ -6,9 +6,9 @@ if ($TEMP['#loggedin'] === true || $TEMP['#settings']['2check'] == 'off' || empt
 	exit();
 }
 
-$_2check = $dba->query('SELECT expires, COUNT(*) as count FROM '.T_TOKEN.' WHERE 2check = ?', $tokenu)->fetchArray();
+$_2check = $dba->query('SELECT expires FROM '.T_TOKEN.' WHERE 2check = ?', $tokenu)->fetchArray();
 
-$page = Functions::ValidateToken($_2check['expires'], '2check') || $_2check['count'] == 0 || (strlen($TEMP['#descode']) != 6 && !empty($TEMP['#descode'])) ? 'invalid-auth' : 'check-code';
+$page = Functions::ValidateToken($_2check['expires'], '2check') || empty($_2check) || (strlen($TEMP['#descode']) != 6 && !empty($TEMP['#descode'])) ? 'invalid-auth' : 'check-code';
 
 $TEMP['title'] = $TEMP['#word']['2check'];
 $TEMP['type'] = '2check';

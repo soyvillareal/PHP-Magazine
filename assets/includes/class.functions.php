@@ -576,8 +576,8 @@ class Functions {
 		
 		if($username_exists > 0){
 			for ($i=0; $i < $username_exists; $i++) {
-				$user = $dba->query('SELECT id, username, COUNT(*) as count FROM '.T_USER.' WHERE username = ? AND status = "active"', $username[1][$i])->fetchArray();
-				if($user['count'] > 0){
+				$user = $dba->query('SELECT id, username FROM '.T_USER.' WHERE username = ? AND status = "active"', $username[1][$i])->fetchArray();
+				if(!empty($user)){
 					if($user['id'] != $mention_uid){
 						$text = preg_replace("/@({$username[1][$i]}+)/i", '<a class="color-blue hover-button" href="'.self::ProfileUrl($user['username']).'" target="_blank">@'.$user['username'].'</a>', $text);
 					}
@@ -826,8 +826,8 @@ class Functions {
 		$username_exists = preg_match_all('/@([a-zA-Z0-9]+)/i', $data['text'], $username);
 		if($username_exists > 0){
 			for ($i=0; $i < $username_exists; $i++) {
-				$user = $dba->query('SELECT id, COUNT(*) as count FROM '.T_USER.' WHERE username = ? AND status = "active"', $username[1][$i])->fetchArray();
-				if($user['count'] > 0){
+				$user = $dba->query('SELECT id FROM '.T_USER.' WHERE username = ? AND status = "active"', $username[1][$i])->fetchArray();
+				if(!empty($user)){
 					if($user['id'] != $data['user_id']){
 						return self::SetNotify(array(
 							'user_id' => $user['id'],
@@ -2078,7 +2078,7 @@ class Functions {
 	        $tmp_match = $TEMP[$matches[1]];
 	        $rte_match = $ROUTE[$matches[1]];
 	        $return = self::Filter($_GET[$ROUTE['#p_return']]);
-	    	if(in_array($matches[1], array('#r_login', '#r_register', '#r_logout', '#r_2check'))){
+	    	if(in_array($matches[1], array('#r_login', '#r_register', '#r_forgot_password', '#r_logout', '#r_2check'))){
 				
 				$no_returns = array(
 					$ROUTE['#r_home'],
