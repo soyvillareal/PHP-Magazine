@@ -1,6 +1,6 @@
 <?php
-if (!version_compare(PHP_VERSION, '7.2', '>=')) {
-    exit("Required PHP_VERSION >= 7.2 , Your PHP_VERSION is : " . PHP_VERSION . "\n");
+if (!version_compare(PHP_VERSION, '7.4', '>=')) {
+    exit("Required PHP_VERSION >= 7.4 , Your PHP_VERSION is : " . PHP_VERSION . "\n");
 }
 
 $conn = @new mysqli($mysql_hostname, $mysql_username, $mysql_password, $mysql_database);
