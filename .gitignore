@@ -1,6 +1,6 @@
-*.xml
 .vscode/
 sitemaps/
 uploads/
 node_modules/
 assets/import/
+sitemap-index.xml

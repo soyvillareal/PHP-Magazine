@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/" version="2.0">
+    <channel>
+        <title>{$title}</title>
+        <description>{$description}</description>
+        <image>
+            <url>{$rss_image}</url>
+            <title>{$title}</title>
+            <link>{$link}</link>
+        </image>
+        <pubDate>{$pub_date}</pubDate>
+        <lastBuildDate>{$last_build_date}</lastBuildDate>
+        <link>{#site_url}</link>
+        <atom:link rel="self" type="application/rss+xml" href="{$url->{{#r_rss}/{#type}/{#get}}}"/> 
+        <ttl>1</ttl> 
+        <sy:updatePeriod>hourly</sy:updatePeriod>
+        <sy:updateFrequency>1</sy:updateFrequency>
+        {$items}
+    </channel>
+</rss>

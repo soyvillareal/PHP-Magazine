@@ -1,0 +1,14 @@
+    <item>
+        <title>{!title}</title>
+        <?php if($TEMP['#get'] == $RUTE['#r_user']){ ?>
+        <dc:creator>{!author}</dc:creator>
+        <?php } ?>
+        <pubDate>{!pub_date}</pubDate>
+        <link>{!url}</link>
+        <guid>{!url}</guid>
+        <category>{!category}</category>
+        <description>{!description}</description>
+        <?php if($TEMP['#get'] == $RUTE['#r_category'] && $TEMP['#settings']['system_comments'] == 'on'){ ?>
+        <slash:comments>{!count_comments}</slash:comments>
+        <?php } ?>
+    </item>
