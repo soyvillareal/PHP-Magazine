@@ -1,7 +1,8 @@
 <?php
 $TEMP = array();
-$TEMP['#site_domain'] = $domain;
 $TEMP['#site_url'] = $site_url;
+$TEMP['#site_domain'] = $domain;
+$TEMP['#site_subfolder'] = $subfolder;
 $TEMP['#settings'] = Functions::Settings();
 $TEMP['#loggedin'] = Functions::Logged();
 

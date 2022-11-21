@@ -2038,7 +2038,7 @@ class Functions {
 	}
 	
 	public static function Build($page, $ext = 'html'){
-	    global $TEMP, $ROUTE, $site_url;
+	    global $TEMP, $ROUTE;
 
 	    $file = "./themes/{$TEMP['#settings']['theme']}/html/{$page}.{$ext}";
 	    if(!file_exists($file)){
@@ -2072,23 +2072,40 @@ class Functions {
 	        $rte_match = $ROUTE[$matches[1]];
 	        $return = self::Filter($_GET[$ROUTE['#p_return']]);
 	    	if(in_array($matches[1], array('#r_login', '#r_register', '#r_logout', '#r_2check'))){
-		    	preg_match("/(?:[\w]+)\/([\w\-]+)(?:\/([\w\-]+)|)/", $_SERVER['REQUEST_URI'], $current_url);
-		    	if(isset($TEMP['#current_url'])){
-		    		$current_url[1] = $TEMP['#current_url'];
-		    	}
-				$no_returns = array($ROUTE['#r_home'], $ROUTE['#r_login'], $ROUTE['#r_register'], $ROUTE['#r_forgot_password'], $ROUTE['#r_reset_password'], $ROUTE['#r_2check'], $ROUTE['#r_verify_email'], $ROUTE['#r_settings'], $ROUTE['#r_saved'], $ROUTE['#r_create_post'], $ROUTE['#r_edit_post']);
+				
+				$no_returns = array(
+					$ROUTE['#r_home'],
+					$ROUTE['#r_login'],
+					$ROUTE['#r_register'],
+					$ROUTE['#r_forgot_password'],
+					$ROUTE['#r_reset_password'],
+					$ROUTE['#r_2check'],
+					$ROUTE['#r_verify_email'],
+					$ROUTE['#r_settings'],
+					$ROUTE['#r_messages'],
+					$ROUTE['#r_saved'],
+					$ROUTE['#r_create_post'],
+					$ROUTE['#r_edit_post']
+				);
+
 				if($TEMP['#loggedin'] == true){
 					$no_returns[] = $ROUTE['#r_newsletter'];
 				}
-				if(!in_array($current_url[1], $no_returns) || (!empty($return) && !in_array($return, $no_returns))){
-					if($current_url[1] == $current_url[2] || !isset($current_url[2])){
-						$current_url = urlencode($current_url[1]);
-					} else {
-				    	$current_url = urlencode("{$current_url[1]}/{$current_url[2]}");
-					}
-				    if(!empty($return)){
-				        $current_url = urlencode($return);
-				    }
+
+				
+				if(!empty($return)){
+					$current_url = urldecode($return);
+					$current_url = str_replace("{$TEMP['#site_url']}/", '', $current_url);
+				} else {
+					$current_url = $_SERVER['REQUEST_URI'];
+					$current_url = str_replace("/{$TEMP['#site_subfolder']}/", '', $current_url);
+				}
+				$nr = explode('/', $current_url);
+				$nr = $nr[0];
+				
+				if(!in_array($nr, $no_returns)){
+					$current_url = self::Url($current_url);
+				    $current_url = urlencode($current_url);
 				    return (!empty($current_url)?"{$rte_match}?{$ROUTE['#p_return']}={$current_url}":$rte_match);
 				}
 			}

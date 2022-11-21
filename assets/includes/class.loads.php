@@ -268,7 +268,6 @@ class Loads {
 				}
 			}
 
-			$TEMP['#current_url'] = $post['slug'];
 			$TEMP['#entry_types'] = array();
 			$TEMP['#saved'] = $dba->query('SELECT COUNT(*) FROM '.T_SAVED.' WHERE user_id = ? AND post_id = ?', $TEMP['#user']['id'], $post['id'])->fetchArray(true);
 			$TEMP['#count_comments'] = $dba->query('SELECT COUNT(*) FROM '.T_COMMENTS.' WHERE post_id = ?', $post['id'])->fetchArray(true);
@@ -702,7 +701,7 @@ class Loads {
 			$query = ' AND id NOT IN ('.implode(',', $category_ids).')';
 		}
 
-		$posts = $dba->query('SELECT * FROM '.T_POST.' WHERE category_id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"'.$query.' ORDER BY created_at DESC LIMIT 10', $category_id)->fetchAll();
+		$posts = $dba->query('SELECT * FROM '.T_POST.' WHERE category_id = ? AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved" AND published_at <> 0'.$query.' ORDER BY created_at DESC LIMIT 10', $category_id)->fetchAll();
 
 		if(!empty($posts)){
 			foreach ($posts as $post) {

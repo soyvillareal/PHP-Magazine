@@ -21,10 +21,10 @@ $TEMP['birthday'] = $TEMP['#profile']['birthday'] > 0 ? "{$TEMP['#word']['date_o
 
 $TEMP['gender'] = ucfirst($TEMP['#word']['gender'])." ({$TEMP['#profile']['gender_txt']})";
 
-$newsletter = $dba->query('SELECT slug, status, COUNT(*) as count FROM '.T_NEWSLETTER.' WHERE email = ?', $TEMP['#profile']['email'])->fetchArray();
+$newsletter = $dba->query('SELECT slug, status FROM '.T_NEWSLETTER.' WHERE email = ?', $TEMP['#profile']['email'])->fetchArray();
 $TEMP['#newsletter_exists'] = false;
 $TEMP['#newsletter_status'] = 'disabled';
-if($newsletter['count'] > 0){
+if(!empty($newsletter)){
     $TEMP['#newsletter_exists'] = $newsletter['status'] == 'enabled';
     $TEMP['#newsletter_status'] = $newsletter['status'];
 }
