@@ -2036,6 +2036,13 @@ class Functions {
 	        return (isset($p) ? $p : "");
 	    }, $html);
 	}
+
+	function StrFReplace($search, $replace, $string){
+		if(($pos=strpos($string, $search)) !== false){
+			return substr_replace($string, $replace, $pos, strlen($search));
+		}
+		return $string;
+	}
 	
 	public static function Build($page, $ext = 'html'){
 	    global $TEMP, $ROUTE;
@@ -2098,7 +2105,7 @@ class Functions {
 					$current_url = str_replace("{$TEMP['#site_url']}/", '', $current_url);
 				} else {
 					$current_url = $_SERVER['REQUEST_URI'];
-					$current_url = str_replace("/{$TEMP['#site_subfolder']}/", '', $current_url);
+					$current_url = self::StrFReplace("{$TEMP['#site_subfolder']}/", '', $current_url);
 				}
 				$nr = explode('/', $current_url);
 				$nr = $nr[0];
