@@ -87,7 +87,7 @@ name | expected values | description
 :---: | :---: | :---:
 title | `string` | Website title
 description | `string` | Website Description
-keyword | `string separate by comma (,)` | Website keywords.
+keywords | `string separate by comma (,)` | Website keywords.
 contact_email | `email` | Contact email for the contact form on the website.
 facebook_page | `URL` | Website Facebook profile url
 twitter_page | `URL` | URL of the Twitter profile of the website.
