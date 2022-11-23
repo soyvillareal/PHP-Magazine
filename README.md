@@ -93,6 +93,7 @@ facebook_page | `URL` | Website Facebook profile url
 twitter_page | `URL` | URL of the Twitter profile of the website.
 instagram_page | `URL` | Url of the Instagram profile of the website.
 language | `two letter string` | Default language of the website (look at the `language` table in the database and note what is available. eg: `en`)
+timezone | `timezone` | Time zone of the place where your business or enterprise is located, for example: `America/Bogota`. See [list of supported time zones](https://www.php.net/manual/en/timezones.php)
 switch_mode | `on or off` | Allow to change the mode of the site (Dark or light), if it is left in `off` the value that `theme_mode` has will be used by default
 dir_pages | `ltr or rtl` | Address of the terms and conditions and habeas data pages (You must modify it according to the language of the letter)
 dismiss_cookie | `on or off` | Show cookies alert or not
