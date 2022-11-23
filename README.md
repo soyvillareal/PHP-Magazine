@@ -1,5 +1,5 @@
 # PHP Magazine
-PHP Magazine! is a website for sharing blog posts, it is an open source solution that is available for free to everyone. With PHP Magazine you can create your own site to upload news or information that you think is relevant, PHP Magazine gives you the ability to have a presence on the internet, whether you are a newspaper or blogger. This platform was released in November 2022 after hard coding work and I guarantee that it will continue to be maintained.
+PHP Magazine! is a website for sharing blog posts, it is an open source solution that is available for free to everyone. With PHP Magazine you can create your own site to upload news or information that you think is relevant, PHP Magazine gives you the ability to have a presence on the internet, whether you are a newspaper or blogger. This platform was released in December 2022 after hard coding work and I guarantee that it will continue to be maintained.
 
 ![PHP Magazine Banner](https://soyvillareal.com/docs/php-magazine/images/banner-dark.png)
 
@@ -112,7 +112,7 @@ fb_comments | `on or off` | Activate or deactivate the Facebook comments plugin.
 fb_app_id | `int` | Facebook Application ID (You will need to put this here to allow registration or login to an account with this social network if you want to use the Facebook comments plugin: `fb_comments = on`)
 fb_secret_id | `string` | Secret id of your facebook application (It is necessary to register or enter an account with this social network)
 tw_api_key | `string` | Public key of the Twitter application (You must place this here to allow registering or entering an account with this social network)
-tw_api_key_secret | string` | Twitter application private key (You must place this here to allow registration or login to an account with this social network)
+tw_api_key_secret | `string` | Twitter application private key (You must place this here to allow registration or login to an account with this social network)
 google_analytics | `string` | Google Analytics Tracking ID.
 go_app_id | `string` | Google App ID (You will need to put this here to allow signing up or signing into an account with this method).
 go_secret_id | `string` | Secret key of the Google application (You must place this here to allow registering or entering an account with this means.
