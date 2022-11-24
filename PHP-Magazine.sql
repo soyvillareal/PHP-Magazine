@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-11-2022 a las 03:35:45
+-- Tiempo de generación: 24-11-2022 a las 22:06:58
 -- Versión del servidor: 10.4.22-MariaDB
 -- Versión de PHP: 7.4.27
 
@@ -465,6 +465,7 @@ INSERT INTO `setting` (`name`, `value`) VALUES
 ('fb_comments', 'on'),
 ('fb_secret_id', ''),
 ('file_size_limit', '26214400'),
+('from_email', 'no-reply@phpmagazine.soyvillareal.com'),
 ('google_analytics', 'G-T102KHMVHQ'),
 ('go_app_id', ''),
 ('go_secret_id', ''),
@@ -478,11 +479,13 @@ INSERT INTO `setting` (`name`, `value`) VALUES
 ('max_words_comments', '1000'),
 ('max_words_report', '500'),
 ('max_words_unsub_newsletter', '600'),
+('newsletter', 'off'),
 ('nodejs', 'off'),
 ('node_hostname', 'phpmagazine.soyvillareal.com'),
 ('node_server_port', '3000'),
 ('number_labels', '8'),
 ('number_of_fonts', '8'),
+('post_article', 'all'),
 ('recaptcha', 'off'),
 ('recaptcha_private_key', ''),
 ('recaptcha_public_key', ''),
