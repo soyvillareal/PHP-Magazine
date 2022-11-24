@@ -54,7 +54,7 @@ Functions::DestroyBuild();
 $TEMP['title'] = $TEMP['#word']['browser_up_date'];
 $TEMP['description'] = str_replace('{$settings->title}', $TEMP['#settings']['title'], $TEMP['#word']['can_use_latest_features']);
 
-if(!Functions::BrowserSupport()){
+if(true){
     if(!isset($_COOKIE['not_supported'])){
         setcookie("not_supported", true, time() + 315360000, "/");
     }

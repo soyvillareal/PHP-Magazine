@@ -61,7 +61,7 @@ if(in_array($_POST['subject'], array('content', 'technical', 'pattern', 'ask', '
 
 			if($recaptcha_success){
 		    	$send_email_data = array(
-				    'from_email' => $TEMP['#settings']['smtp_username'],
+				    'from_email' => $TEMP['#settings']['from_email'],
 				    'from_name' => $name,
 		        	'reply_to' => $email,
 				    'to_email' => $TEMP['#settings']['contact_email'],

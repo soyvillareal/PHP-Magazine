@@ -134,7 +134,7 @@ if ($TEMP['#loggedin'] == false && !empty($provider) && in_array($provider, arra
                     $TEMP['user'] = $username;
                     $TEMP['code'] = $code;
                     $send = Functions::SendEmail(array(
-                        'from_email' => $TEMP['#settings']['smtp_username'],
+                        'from_email' => $TEMP['#settings']['from_email'],
                         'from_name' => $TEMP['#settings']['title'],
                         'to_email' => $profile->email,
                         'to_name' => $to_name,

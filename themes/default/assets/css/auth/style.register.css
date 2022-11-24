@@ -1,0 +1,72 @@
+/*!
+    +------------------------------------------------------------------------+
+    | @author Oscar Garcés (SoyVillareal)
+    | @author_url 1: https://soyvillareal.com
+    | @author_url 2: https://github.com/soyvillareal
+    | @author_email: hi@soyvillareal.com   
+    +------------------------------------------------------------------------+
+    | PHP Magazine - The best digital magazine for newspapers or bloggers
+    | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+    +------------------------------------------------------------------------+
+*/
+
+.have-account {
+    padding: 0 40px 30px;
+}
+.item_input ~ .item-label {
+    top: 0;
+    left: 12px;
+    max-width: 90%;
+    padding-top: 12px;
+    transform-origin: 0 0;
+}
+.item_input.active ~ .item-label,
+.item_input:focus ~ .item-label {
+    transform: translateY(-.1rem) translateY(-.2rem) scale(.8);
+}
+.item-valid-password {
+    border-color: #cdcdcd !important;
+}
+.border-green {
+    border-color: #61a125 !important;
+}
+.border-orange {
+    border-color: #f29f18 !important;
+}
+.signup-fields .content-spinner-circle {
+    left: unset;
+    right: 5px;
+    top: 23px;
+}
+.content-spinner-circle .spinner-circle {
+    height: 17px;
+    width: 17px;
+    border-width: 1px;
+    border-top-color: rgb(0, 0, 0, .3);
+    border-bottom-color: rgb(0, 0, 0, .3);
+    border-right-color: rgb(0, 0, 0, .3);
+    border-left-color: #fff;
+}
+.input-username {
+    padding-right: 35px;
+}
+.helper-text {
+    line-height: .08em;
+}
+#container-signup:not(.has-back-button) .content-back {
+    display: none;
+}
+#container-signup.has-back-button h1 {
+    margin-top: 0;
+    padding-top: 0;
+}
+.accept-icon {
+    display: none;
+}
+.accept-checkbox:checked ~ .accept-icon {
+    display: block;
+}
+.accept-icon {
+    top: 50%;
+    transform: translateY(-50%);
+}

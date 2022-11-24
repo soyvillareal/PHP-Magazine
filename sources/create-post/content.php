@@ -15,7 +15,7 @@ if($TEMP['#loggedin'] == false) {
     exit();
 }
 
-if ($TEMP['#publisher'] == false) {
+if ($TEMP['#publisher'] == false && $TEMP['#settings']['post_article'] == 'publisher') {
     header("Location: ".Functions::Url('404'));
     exit();
 }

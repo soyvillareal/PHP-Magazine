@@ -11,6 +11,10 @@
 // +------------------------------------------------------------------------+
 
 $slug = Functions::Filter($_GET['slug']);
+if($TEMP['#settings']['newsletter'] == 'off'){
+    header("Location: " . Functions::Url('404'));
+    exit();
+}
 if(!empty($slug)){
     $newsletter = $dba->query('SELECT * FROM '.T_NEWSLETTER.' WHERE slug = ?', $slug)->fetchArray();
     if (empty($newsletter) || $newsletter['status'] == 'disabled') {

@@ -1,0 +1,136 @@
+/*!
+    +------------------------------------------------------------------------+
+    | @author Oscar Garcés (SoyVillareal)
+    | @author_url 1: https://soyvillareal.com
+    | @author_url 2: https://github.com/soyvillareal
+    | @author_email: hi@soyvillareal.com   
+    +------------------------------------------------------------------------+
+    | PHP Magazine - The best digital magazine for newspapers or bloggers
+    | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+    +------------------------------------------------------------------------+
+*/
+
+.close-newsletter {
+    background: -webkit-linear-gradient(left,#1b4abe,#3c78f0);
+    background: linear-gradient(200deg,#1b4abe,#3c78f0);
+    width: 25px;
+    height: 25px;
+    right: 8px;
+    top: -12px;
+    padding: 0;
+}
+.close-newsletter:after {
+    content: "";
+    background-image: url(data:image/svg+xml;charset=utf8,%3Csvg%20viewBox%3D%220%200%2090%2074%22%20xmlns%3D%22http%3A%2F%2Fwww%2Ew3%2Eorg%2F2000%2Fsvg%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20stroke%3D%22transparent%22%20stroke%2Dwidth%3D%220%22%20d%3D%22M8%2E2%2064L72%200l9%2E8%2010L18%2073%2E7%20M18%20%2E2L82%2064l%2D10%209%2E8L8%2E3%2010%22%2F%3E%3C%2Fsvg%3E);
+    height: 17px;
+    width: 20px;
+    background-repeat: no-repeat;
+    margin: auto;
+}
+.newsletter-fixed {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 996;
+}
+.newsletter-fixed .content_newsletter {
+    height: calc(100% - 40px);
+    overflow-y: auto;
+    border-radius: 0;
+}
+body.newsletter-personalized-active .close-newsletter {
+    top: 12px;
+    right: 12px;
+}
+body.newsletter-personalized-active .newsletter-fixed,
+body.newsletter-personalized-active .item-newsletter-fixed {
+    height: 100%;
+}
+.content_newsletter {
+    background: -webkit-linear-gradient(left,#1b4abe,#3c78f0);
+    background: linear-gradient(90deg,#1b4abe,#3c78f0);
+}
+.newsletter_category {
+  min-height: 36px;
+}
+.newsletter_category::-webkit-scrollbar {
+    width: 8px;
+}
+.newsletter_category::-webkit-scrollbar-thumb {
+  background-color: #909090;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+.newsletter_popular:checked + .slider-popular,
+.btn_newsletter {
+    background-color: #092f8d;
+}
+.newsletter-checkbox {
+  width: 35px;
+  height: 18px;
+}
+.slider-popular {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 34px;
+}
+.slider-popular:before {
+  content: "";
+  position: absolute;
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  bottom: 2px;
+  border-radius: 50%;
+  background-color: white;
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+.newsletter_popular:checked + .slider-popular:before {
+  -webkit-transform: translateX(17px);
+  -ms-transform: translateX(17px);
+  transform: translateX(17px);
+}
+.post-right .content_newsletter {
+    display: none;
+}
+@media (max-width: 480px) {
+    .content_newsletter .item-newsletter {
+        margin-right: 0;
+    }
+    .content_newsletter .item-newsletter,
+    .content_newsletter .item-newsletter {
+        width: 100%;
+    }
+    .content_newsletter .items-newsletter,
+    .content_newsletter .all-newsletter {
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+    }
+}
+@media (min-width: 992px) {
+  .post-right .content_newsletter {
+    display: block;
+  }
+  .content_newsletter .item-newsletter,
+  .content_newsletter .item-newsletter {
+    width: 100%;
+  }
+  .content_newsletter .items-newsletter,
+  .content_newsletter .all-newsletter {
+      -ms-flex-direction: column;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+  }
+}
+@media (max-width: 991px) {
+    .content_newsletter .title-newsletter {
+        font-size: 18px;
+    }
+    .content_newsletter .subtitle-newsletter {
+        font-size: 16px;
+    }
+}

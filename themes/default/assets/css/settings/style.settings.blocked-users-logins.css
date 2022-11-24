@@ -1,0 +1,86 @@
+/*!
+    +------------------------------------------------------------------------+
+    | @author Oscar Garcés (SoyVillareal)
+    | @author_url 1: https://soyvillareal.com
+    | @author_url 2: https://github.com/soyvillareal
+    | @author_email: hi@soyvillareal.com   
+    +------------------------------------------------------------------------+
+    | PHP Magazine - The best digital magazine for newspapers or bloggers
+    | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+    +------------------------------------------------------------------------+
+*/
+
+@-webkit-keyframes palp {
+  0%, 100%{
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50%{
+    transform: translate(-50%, -50%) scale(1.0);
+    opacity: 0;
+  }
+}
+@keyframes palp {
+  0%, 100%{
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50%{
+    transform: translate(-50%, -50%) scale(1.0);
+    opacity: 0;
+  }
+}
+.container-table .content-scroll-table {
+    overflow-x: auto
+}
+.content-table-header,
+.content-pages {
+    min-width: 700px;
+}
+.content-row-table:last-child {
+    border-bottom: 0;
+}
+.container-table .content-scroll-table::-webkit-scrollbar {
+    height: 5px;
+    border-radius: 12px
+}
+.container-table .content-scroll-table::-webkit-scrollbar-thumb {
+    background: #aaa;
+    border-radius: 12px
+}
+.container-table .content-scroll-table::-webkit-scrollbar-thumb:hover {
+    background: #909090
+}
+.item-table-header:last-child,
+.item-row-table:last-child {
+    min-width: 140px;
+}
+.content-wspinner {
+    top: 0;
+    z-index: 98;
+    background-color: rgb(209, 209, 209, .6);
+    -webkit-user-select: none;
+}
+.item-wspinner {
+    width: 6rem;
+    height: 6rem;
+}
+.item-wspinner::before,
+.item-wspinner::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+}
+.item-wspinner::before {
+    -webkit-animation: palp 2s ease-in-out infinite;
+    animation: palp 2s ease-in-out infinite;
+}
+.item-wspinner::after {
+    -webkit-animation: palp 2s 1s ease-in-out infinite;
+    animation: palp 2s 1s ease-in-out infinite;
+}

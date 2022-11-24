@@ -100,7 +100,8 @@ dismiss_cookie | `on or off` | Show cookies alert or not
 server_type | `string` | Mail server type (eg. smtp)
 smtp_encryption | `ssl or tls` | Encryption of your mail server
 smtp_host | `domain or IP` | Host of your mail server
-smtp_username | `email` | Username of your mail server
+form_email | `email` | Email from where they are sent
+smtp_username | `anything` | Username of your mail server
 smtp_password | `anything` | Password of your mail server
 smtp_port | `int` | Port of your mail server
 token_expiration_attempts | `int` | Number of times it is allowed to request a new token, either; email verification, email change, password recovery or two-factor authentication
@@ -108,6 +109,8 @@ token_expiration_hours | `int` | Hours to wait to request a new token after exce
 verify_email | `on or off` | Send a 6-digit code to the email of the person who registers to verify the account.
 show_palette | `on or off` | Show or hide window to modify the color palette of the website (it can only be seen by administrators anyway).
 2check | `on or off` | Turn factor authentication for users on or off.
+newsletter | `on or off` | Activate or deactivate the sending of newsletters
+post_article | `all or publisher` | Allow everyone or only editors, moderators and admins to upload posts
 approve_posts | `on or off` | Allow the publication of articles only if they are approved (`on`) or without the need for this (`off`)
 fb_comments | `on or off` | Activate or deactivate the Facebook comments plugin.
 fb_app_id | `int` | Facebook Application ID (You will need to put this here to allow registration or login to an account with this social network if you want to use the Facebook comments plugin: `fb_comments = on`)

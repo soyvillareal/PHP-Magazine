@@ -1,3 +1,4 @@
+<?php if($TEMP['#settings']['newsletter'] == 'on'){ ?>
 {$form_newsletter}
 <?php if(empty($_COOKIE['dismiss_newsletter'])){ ?>
 {%%<div class="newsletter-fixed display-flex display-none-desk position-fixed">
@@ -15,3 +16,4 @@
       url: '{$url->{req/newsletter/subscribe}}'
    })
 </script>%%}
+<?php } ?>

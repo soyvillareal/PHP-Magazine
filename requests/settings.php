@@ -22,7 +22,13 @@ if($TEMP['#loggedin'] == true){
 		$input = Functions::Filter($_POST['input']);
 		$value = Functions::Filter($_POST['value']);
 
-		if(in_array($input, array('username', 'new_email', 'name', 'surname', 'about', 'birthday', 'gender', 'newsletter', '2check', 'facebook', 'twitter', 'instagram', 'main_sonet', 'contact_email', 'followers', 'messages'))){
+		$features = array('username', 'new_email', 'name', 'surname', 'about', 'birthday', 'gender', '2check', 'facebook', 'twitter', 'instagram', 'main_sonet', 'contact_email', 'followers', 'messages');
+
+		if($TEMP['#settings']['newsletter'] == 'on'){
+			$features[] = 'newsletter';
+		}
+
+		if(in_array($input, $features)){
 			if(in_array($input, array('followers', 'messages'))){
 				$shows = Functions::Shows($input, $value);
 				if($shows['return']){

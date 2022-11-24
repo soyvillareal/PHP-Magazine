@@ -10,7 +10,7 @@
 // | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
 // +------------------------------------------------------------------------+
 
-if ($TEMP['#publisher'] === true) {
+if ($TEMP['#settings']['post_article'] == 'all' || ($TEMP['#publisher'] === true && $TEMP['#settings']['post_article'] == 'publisher')) {
     if($one == 'create-post'){
     	$empty = array();
 		$error = array();

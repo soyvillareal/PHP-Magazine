@@ -58,22 +58,17 @@ class Functions {
 
 	public static function Admin() {
 	    global $TEMP;
-	    return $TEMP['#loggedin'] === false ? false : $TEMP['#user']['role'] == 'admin' ? true : false;
+	    return $TEMP['#loggedin'] === false ? false : ($TEMP['#user']['role'] == 'admin' ? true : false);
 	}
 
 	public static function Moderator() {
 	    global $TEMP;
-	    return $TEMP['#loggedin'] === false ? false : $TEMP['#user']['role'] == 'moderator' || $TEMP['#user']['role'] == 'admin' ? true : false;
+	    return $TEMP['#loggedin'] === false ? false : ($TEMP['#user']['role'] == 'moderator' || $TEMP['#user']['role'] == 'admin' ? true : false);
 	}
 
 	public static function Publisher() {
 	    global $TEMP;
-	    return $TEMP['#loggedin'] === false ? false : $TEMP['#user']['role'] == 'publisher' || $TEMP['#user']['role'] == 'moderator' || $TEMP['#user']['role'] == 'admin' ? true : false;
-	}
-
-	public static function Viewer() {
-	    global $TEMP;
-	    return $TEMP['#loggedin'] === false ? false : $TEMP['#user']['role'] == 'viewer' ? true : false;
+	    return $TEMP['#loggedin'] === false ? false : ($TEMP['#user']['role'] == 'publisher' || $TEMP['#user']['role'] == 'moderator' || $TEMP['#user']['role'] == 'admin' ? true : false);
 	}
 
 	function ResizeImage($max_width, $max_height, $source_file, $dst_dir, $quality = 80) {
@@ -606,14 +601,14 @@ class Functions {
 			$comment_id = $comment['id'];
 			
 			if(!empty($comment)){
-				$comment = self::BuildComment($comment, $order, 'featured-comment');	
+				$comment = self::BuildComment($comment, 'recent', 'featured-comment');	
 			}
 		} else {
 			$comment = $dba->query('SELECT * FROM '.T_COMMENTS.' WHERE (SELECT comment_id FROM '.T_REPLY.' WHERE id = ?) = id', $data_id)->fetchArray();
 			$comment_id = $comment['id'];
 
 			if(!empty($comment)){
-				$comment = self::BuildComment($comment, $order, 'featured-reply');	
+				$comment = self::BuildComment($comment, 'recent', 'featured-reply');	
 			}
 		}
 
@@ -1337,7 +1332,7 @@ class Functions {
 
 			if($change_email['return']){
 				$send = self::SendEmail(array(
-					'from_email' => $TEMP['#settings']['smtp_username'],
+					'from_email' => $TEMP['#settings']['from_email'],
 				    'from_name' => $TEMP['#settings']['title'],
 					'to_email' => $user['new_email'],
 					'to_name' => $user['username'],
@@ -1851,10 +1846,12 @@ class Functions {
 		$support = true;
 		$browser_details = self::BrowserDetails()['details'];
 		
-		foreach ($supported_browsers as $browser) {
-			if($browser['name'] == $browser_details['name'] && $browser['min_version'] < $browser_details['version']){
-				$support = false;
-				break;
+		if(!empty($supported_browsers)){
+			foreach ($supported_browsers as $browser) {
+				if($browser['name'] == $browser_details['name'] && $browser_details['version'] < $browser['min_version']){
+					$support = false;
+					break;
+				}
 			}
 		}
 		return $support;

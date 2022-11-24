@@ -1,4 +1,4 @@
-/*
+/*!
     +------------------------------------------------------------------------+
     | @author Oscar Garcés (SoyVillareal)
     | @author_url 1: https://soyvillareal.com
@@ -9,31 +9,4 @@
     | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
     +------------------------------------------------------------------------+
 */
-
-.have-account {
-    padding: 0 40px 30px;
-}
-.item_input ~ .item-label {
-    top: 0;
-    left: 12px;
-    max-width: 90%;
-    padding-top: 12px;
-    transform-origin: 0 0;
-}
-.item_input.active ~ .item-label,
-.item_input:focus ~ .item-label {
-    transform: translateY(-.1rem) translateY(-.2rem) scale(.8);
-}
-.helper-text {
-    line-height: .08em;
-}
-.accept-icon {
-    display: none;
-}
-.staylogged-checkbox:checked ~ .accept-icon {
-    display: block;
-}
-.accept-icon {
-    top: 50%;
-    transform: translateY(-50%);
-}
+.have-account{padding:0 40px 30px}.item_input~.item-label{top:0;left:12px;max-width:90%;padding-top:12px;transform-origin:0 0}.item_input.active~.item-label,.item_input:focus~.item-label{transform:translateY(-.1rem) translateY(-.2rem) scale(.8)}.helper-text{line-height:.08em}.accept-icon{display:none}.staylogged-checkbox:checked~.accept-icon{display:block}.accept-icon{top:50%;transform:translateY(-50%)}

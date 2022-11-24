@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.6deb5ubuntu0.5
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost:3306
--- Tiempo de generación: 20-11-2022 a las 17:10:48
--- Versión del servidor: 5.7.40-0ubuntu0.18.04.1
--- Versión de PHP: 7.2.24-0ubuntu0.18.04.15
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 24-11-2022 a las 03:35:45
+-- Versión del servidor: 10.4.22-MariaDB
+-- Versión de PHP: 7.4.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -17,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `admin_magazine`
+-- Base de datos: `testp`
 --
 
 -- --------------------------------------------------------
@@ -30,7 +31,7 @@ CREATE TABLE `block` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `profile_id` int(10) UNSIGNED NOT NULL,
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -42,8 +43,8 @@ CREATE TABLE `block` (
 CREATE TABLE `breaking` (
   `id` int(10) UNSIGNED NOT NULL,
   `post_id` int(10) UNSIGNED NOT NULL,
-  `expiration_at` int(11) NOT NULL DEFAULT '0',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `expiration_at` int(11) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -57,12 +58,12 @@ CREATE TABLE `category` (
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(550) COLLATE utf8_unicode_ci DEFAULT NULL,
   `slug` varchar(25) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `keywords` text COLLATE utf8_unicode_ci,
+  `keywords` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `footer` set('f_one','f_two','more') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'more',
   `order` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status` set('disabled','enabled') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'disabled',
-  `updated_at` int(11) NOT NULL DEFAULT '0',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `updated_at` int(11) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -90,8 +91,8 @@ CREATE TABLE `chat` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `profile_id` int(10) UNSIGNED NOT NULL,
-  `updated_at` int(11) NOT NULL DEFAULT '0',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `updated_at` int(11) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -104,8 +105,8 @@ CREATE TABLE `collaborator` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `post_id` int(10) UNSIGNED NOT NULL,
-  `aorder` int(11) NOT NULL DEFAULT '0',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `aorder` int(11) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -119,8 +120,8 @@ CREATE TABLE `comment` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `post_id` int(10) UNSIGNED NOT NULL,
   `text` text CHARACTER SET utf8mb4 NOT NULL,
-  `pinned` tinyint(1) NOT NULL,
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `pinned` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -130,16 +131,16 @@ CREATE TABLE `comment` (
 --
 
 CREATE TABLE `entry` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `post_id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `post_id` int(10) UNSIGNED NOT NULL,
   `type` set('text','image','carousel','video','embed','soundcloud','facebookpost','instagrampost','tweet','tiktok','spotify') COLLATE utf8_unicode_ci NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `body` text COLLATE utf8_unicode_ci,
-  `frame` text CHARACTER SET utf8mb4,
-  `esource` text COLLATE utf8_unicode_ci,
+  `body` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `frame` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `esource` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `eorder` int(11) NOT NULL,
-  `updated_at` int(11) NOT NULL DEFAULT '0',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `updated_at` int(11) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -152,7 +153,7 @@ CREATE TABLE `follower` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `profile_id` int(10) UNSIGNED NOT NULL,
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -162,10 +163,10 @@ CREATE TABLE `follower` (
 --
 
 CREATE TABLE `label` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(45) NOT NULL,
   `slug` varchar(255) NOT NULL,
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -178,19 +179,20 @@ CREATE TABLE `language` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(50) NOT NULL,
   `lang` varchar(2) NOT NULL DEFAULT 'en',
+  `code` varchar(16) NOT NULL DEFAULT 'en_US',
   `dir` set('rtl','ltr') NOT NULL,
   `status` set('enabled','disabled') NOT NULL DEFAULT 'enabled',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `language`
 --
 
-INSERT INTO `language` (`id`, `name`, `lang`, `dir`, `status`, `created_at`) VALUES
-(1, 'English', 'en', 'ltr', 'enabled', 1611596407),
-(2, 'Español', 'es', 'ltr', 'enabled', 1611596407),
-(3, 'عرب', 'ar', 'rtl', 'enabled', 1611596407);
+INSERT INTO `language` (`id`, `name`, `lang`, `code`, `dir`, `status`, `created_at`) VALUES
+(1, 'English', 'en', 'en_US', 'ltr', 'enabled', 1611596407),
+(2, 'Español', 'es', 'es_CO', 'ltr', 'enabled', 1611596407),
+(3, 'عرب', 'ar', 'ar_IL', 'rtl', 'enabled', 1611596407);
 
 -- --------------------------------------------------------
 
@@ -203,7 +205,7 @@ CREATE TABLE `messaan` (
   `message_id` int(10) UNSIGNED NOT NULL,
   `answered_id` int(10) UNSIGNED NOT NULL,
   `type` set('text','file','image') NOT NULL DEFAULT 'text',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -217,11 +219,11 @@ CREATE TABLE `messafi` (
   `name` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
   `message_id` int(10) UNSIGNED NOT NULL,
   `file` varchar(128) CHARACTER SET latin1 NOT NULL,
-  `size` int(11) NOT NULL DEFAULT '0',
-  `deleted_fuser` int(11) NOT NULL DEFAULT '0',
-  `deleted_fprofile` int(11) NOT NULL DEFAULT '0',
-  `deleted_at` int(11) NOT NULL DEFAULT '0',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `size` int(11) NOT NULL DEFAULT 0,
+  `deleted_fuser` int(11) NOT NULL DEFAULT 0,
+  `deleted_fprofile` int(11) NOT NULL DEFAULT 0,
+  `deleted_at` int(11) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -235,12 +237,12 @@ CREATE TABLE `message` (
   `chat_id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `profile_id` int(10) UNSIGNED NOT NULL,
-  `text` text CHARACTER SET utf8mb4,
-  `seen` tinyint(1) NOT NULL DEFAULT '0',
-  `deleted_fuser` int(11) NOT NULL DEFAULT '0',
-  `deleted_fprofile` int(11) NOT NULL DEFAULT '0',
-  `deleted_at` int(11) NOT NULL DEFAULT '0',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `text` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `seen` tinyint(1) NOT NULL DEFAULT 0,
+  `deleted_fuser` int(11) NOT NULL DEFAULT 0,
+  `deleted_fprofile` int(11) NOT NULL DEFAULT 0,
+  `deleted_at` int(11) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -253,7 +255,7 @@ CREATE TABLE `newscate` (
   `id` int(10) UNSIGNED NOT NULL,
   `newsletter_id` int(10) UNSIGNED NOT NULL,
   `category_id` int(10) UNSIGNED NOT NULL,
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -263,15 +265,15 @@ CREATE TABLE `newscate` (
 --
 
 CREATE TABLE `newsletter` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `slug` varchar(32) NOT NULL,
   `email` varchar(255) NOT NULL,
   `frequency` set('all','now','daily','weekly') NOT NULL DEFAULT 'all',
   `popular` set('off','on') NOT NULL DEFAULT 'off',
-  `reason` text,
+  `reason` text DEFAULT NULL,
   `status` set('enabled','disabled') NOT NULL DEFAULT 'enabled',
-  `updated_at` int(11) NOT NULL DEFAULT '0',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `updated_at` int(11) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -285,8 +287,8 @@ CREATE TABLE `notification` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `notified_id` text NOT NULL,
   `type` set('n_post','n_collab','n_followers','n_preact','n_creact','n_rreact','n_pcomment','n_preply','n_ucomment','n_ureply') NOT NULL,
-  `seen` tinyint(1) NOT NULL DEFAULT '0',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `seen` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -300,23 +302,24 @@ CREATE TABLE `page` (
   `slug` varchar(32) NOT NULL,
   `description` varchar(255) NOT NULL,
   `keywords` text NOT NULL,
-  `text` text,
+  `text` text DEFAULT NULL,
   `status` set('disabled','enabled') NOT NULL DEFAULT 'disabled',
-  `updated_at` int(11) NOT NULL DEFAULT '0',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `footer` set('on','off') NOT NULL DEFAULT 'on',
+  `updated_at` int(11) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `page`
 --
 
-INSERT INTO `page` (`id`, `slug`, `description`, `keywords`, `text`, `status`, `updated_at`, `created_at`) VALUES
-(1, 'terms_of_use', 'Conozca los Términos de uso de Las2rodillas. Conozca los lineamientos para el tratamiento de la información y el manejo de sus datos personales.', 'terminos y condiciones, aviso de privacidad, terminos de uso, las2rodillas, las dos rodillas', '<p>Estos t&eacute;rminos y condiciones de uso del portal&nbsp;<a href=\"https://las2rodillas.co/\">las2rodillas.com</a> (en adelante, el &quot;Portal&quot;) regulan el uso que Usted puede dar como Visitante al contenido publicado en el Portal, as&iacute; como la conducta que Usted puede desarrollar durante su visita y uso del Portal. Por el solo hecho de visitar el Portal, Usted acepta estos t&eacute;rminos y condiciones y consiente en someterse a los mismos. Usted asume la responsabilidad por el uso que haga del Portal. Es su responsabilidad revisar y cumplir estos T&eacute;rminos y Condiciones de Uso peri&oacute;dicamente.</p>\n\n<ol>\n    <li>\n    <h3><strong>Condiciones de acceso</strong></h3>\n\n    <p>El acceso al Portal por parte de los visitantes es libre y gratuito para personas mayores de edad. En caso de ser Usted menor de edad, debe obtener con anterioridad el consentimiento de sus padres, tutores o representantes legales, quienes ser&aacute;n responsables de los actos que Usted lleve a cabo en contravenci&oacute;n a estos t&eacute;rminos y condiciones de uso del Portal. Se da por entendido que los menores de edad que accedan y usen el Portal cuentan con este consentimiento. El acceso al Portal permite acceder a toda la informaci&oacute;n publicada por las2rodillas.com (en adelante, &quot;LAS2RODILLAS&quot;), por los Ciberperiodistas y a algunos blogs destacados (en adelante, el &quot;Contenido&quot;). El acceso a las funcionalidades de Comunidades requiere un registro previo, en las condiciones que se describen en las Condiciones de Acceso y Uso de las Comunidades.</p>\n    </li>\n    <li>\n    <h3><strong>Condiciones de Uso del Contenido P&uacute;blico</strong></h3>\n\n    <p>El Contenido (que incluye o puede incluir textos, informaci&oacute;n, im&aacute;genes, fotograf&iacute;as, dibujos, logos, dise&ntilde;os, video, multimedia, software, aplicaciones, m&uacute;sica, sonidos, entre otros, as&iacute; como su selecci&oacute;n y disposici&oacute;n), es propiedad exclusiva de LAS2RODILLAS, sus anunciantes, o de terceros que hayan otorgado una licencia a LAS2RODILLAS, con todos los derechos reservados. Como tal, dicho Contenido se encuentra protegido por las leyes y tratados internacionales vigentes en materia de Propiedad Intelectual. LAS2RODILLAS confiere a Usted una licencia para visualizar el Contenido en el Portal, y para realizar una copia cach&eacute; en su computador con dicho fin &uacute;nicamente. Este documento puede ser impreso y almacenado por Usted.&nbsp;<br />\n    <br />\n    Aparte de lo anterior, LAS2RODILLAS no confiere a los Visitantes ninguna licencia para descargar, reproducir, copiar, enmarcar, compilar, cargar o republicar en ning&uacute;n sitio de Internet, Intranet o Extranet, adaptar, modificar, transmitir, vender ni comunicar al p&uacute;blico, total o parcialmente, el Contenido. Cualquiera de estas actividades requiere de la autorizaci&oacute;n previa, expresa y por escrito de LAS2RODILLAS, so pena de incurrir en violaci&oacute;n a los derechos de propiedad industrial e intelectual, y someterse a las consecuencias civiles y penales de tal hecho, as&iacute; como al derecho de LAS2RODILLAS de revocar la licencia aqu&iacute; conferida.&nbsp;<br />\n    <br />\n    Salvo que se indique expresamente lo contrario en el presente Contrato, nada de lo dispuesto en los presentes T&eacute;rminos y Condiciones de Uso del Portal deber&aacute; interpretarse en el sentido de otorgar una licencia sobre derechos de propiedad intelectual, ya sea por impedimento legal, impl&iacute;citamente o de cualquier otra forma. Esta licencia podr&aacute; ser revocada en cualquier momento y sin preaviso, con o sin causa.&nbsp;<br />\n    <br />\n    Usted se compromete a hacer un uso adecuado del Contenido. De manera enunciativa pero no limitativa, Usted se compromete a no:</p>\n\n    <ul>\n        <li>\n        <p>Utilizar el Contenido para incurrir y/o incitar a terceros a incurrir en actividades il&iacute;citas, ilegales o contrarias a la buena fe y al orden p&uacute;blico, o para difundir contenidos o propaganda de car&aacute;cter racista, xen&oacute;fobo, pornogr&aacute;fico-ilegal, de apolog&iacute;a del terrorismo o atentatorio contra los derechos humanos;</p>\n        </li>\n        <li>\n        <p>Usar secuencias de comandos automatizadas para recopilar informaci&oacute;n publicada en el Portal o a trav&eacute;s del Portal o para interactuar de cualquier otro modo con los mismos;</p>\n        </li>\n        <li>\n        <p>provocar da&ntilde;os en los sistemas f&iacute;sicos y l&oacute;gicos de LAS2RODILLAS, de sus proveedores o de terceras personas, introducir o difundir en la red virus inform&aacute;ticos, troyanos, c&oacute;digo malicioso o cualesquiera otros sistemas f&iacute;sicos o l&oacute;gicos que sean susceptibles de provocar da&ntilde;os en y/o est&eacute;n dise&ntilde;ados para interrumpir, destruir o limitar la funcionalidad de cualquier software, hardware o equipo de telecomunicaciones o para da&ntilde;ar, deshabilitar, sobrecargar o perjudicar el Portal de cualquier modo; y</p>\n        </li>\n        <li>\n        <p>intentar acceder, recolectar o almacenar los datos personales de otros Visitantes y/o Usuarios del Portal y, en su caso, utilizar las cuentas de correo electr&oacute;nico de otros Visitantes y/o Usuarios y modificar o manipular sus mensajes.</p>\n        </li>\n    </ul>\n    </li>\n    <li>\n    <h3><strong>Cookies</strong></h3>\n\n    <p>Este portal hace uso de cookies propias y de terceros. Tenga en cuenta que el uso de la cookies va a permitir optimizar su experiencia en este portal.</p>\n\n    <p><strong>&iquest;Qu&eacute; son las cookies?</strong></p>\n\n    <p>Una cookie es un fichero que se descarga en el ordenador/smartphone/tablet del usuario al acceder a determinadas p&aacute;ginas web.</p>\n\n    <p><strong>Finalidades de las cookies</strong></p>\n\n    <p>LAS2RODILLAS har&aacute;&nbsp;uso de las cookies para:</p>\n\n    <p>- Determinar sus preferencias de navegaci&oacute;n&nbsp;<br />\n    - Para efectos promocionales, comerciales y publicitarios&nbsp;<br />\n    - Para efectos estad&iacute;sticos, entre otros fines.</p>\n\n    <p><strong>Aceptaci&oacute;n de uso de Cookies</strong></p>\n\n    <p>Al aceptar estos &ldquo;T&eacute;rminos y condiciones&rdquo;, Usted acepta que LAS2RODILLAS utilice&nbsp;cookies para los fines aqu&iacute; se&ntilde;alados.</p>\n\n    <p>El uso continuo de esta p&aacute;gina web se entender&aacute; como aceptaci&oacute;n de los &ldquo;T&eacute;rminos y Condiciones&rdquo; y como consecuencia, del uso de las cookies.</p>\n\n    <p><strong>Configuraci&oacute;n de Cookies</strong></p>\n\n    <p>Usted podr&aacute; configurar su navegador para que notifique y rechace la instalaci&oacute;n de las cookies enviadas por el Portal, sin que ello impida su acceso a los Contenidos. Sin embargo, tenga en cuenta que al desactivar el uso de cookies usted podr&aacute; experimentar una disminuci&oacute;n en la calidad de funcionamiento de la p&aacute;gina web.</p>\n    </li>\n    <li>\n    <h3><strong>Procedimiento de notificaci&oacute;n de Contenido Violatorio</strong></h3>\n\n    <p>LAS2RODILLAS respeta y promueve la protecci&oacute;n de los derechos de propiedad intelectual de terceros. No obstante, en ocasiones LAS2RODILLAS publicar&aacute; de manera inadvertida y sin mala fe de su parte, contenido cuyos derechos pertenezcan a terceros. Para ello, LAS2RODILLAS ha establecido el siguiente procedimiento de notificaci&oacute;n de contenido violatorio de derechos de terceros.<br />\n    <br />\n    En caso que Usted encuentre en el Portal contenido que considere violatorio de sus derechos, le solicitamos enviar una comunicaci&oacute;n escrita a nuestro Agente Designado, utilizando el&nbsp;<a href=\"https://las2rodillas.com/contactar\">formato</a>&nbsp;establecido para ello , o por fax, email o correo escrito a nuestro Agente Designado, as&iacute;:</p>\n\n    <ul>\n        <li>Dependencia: Servicio al cliente</li>\n        <li>\n        <p>Email: las2rodillas.co@gmail.com</p>\n        </li>\n    </ul>\n\n    <p>Por favor, incluya en la comunicaci&oacute;n la siguiente informaci&oacute;n:</p>\n\n    <ul>\n        <li>\n        <p>La p&aacute;gina o URL en la que aparece el contenido considerado violatorio.</p>\n        </li>\n        <li>\n        <p>Una descripci&oacute;n clara y detallada del contenido considerado violatorio. En caso que en la p&aacute;gina o URL existan varias obras, esta descripci&oacute;n debe ser suficiente para identificar cu&aacute;l de todas es la obra que est&aacute; violando sus derechos.</p>\n        </li>\n        <li>\n        <p>Una explicaci&oacute;n de en qu&eacute; manera el contenido en menci&oacute;n atenta contra sus derechos. En caso de contar con documentos que demuestren la titularidad de sus derechos, le rogamos anexar una copia.</p>\n        </li>\n        <li>\n        <p>Una declaraci&oacute;n bajo la gravedad del juramento, de que la informaci&oacute;n enviada en su comunicaci&oacute;n es correcta.</p>\n        </li>\n        <li>\n        <p>Sus datos de contacto, tales como nombre, identificaci&oacute;n, direcci&oacute;n de correspondencia escrita y electr&oacute;nica, tel&eacute;fono, celular, etc.</p>\n        </li>\n    </ul>\n\n    <p>Por favor tenga en cuenta que en caso que la informaci&oacute;n enviada en su comunicaci&oacute;n sea incorrecta, LAS2RODILLAS no asume responsabilidad por las consecuencias de su retiro. En consecuencia, Usted debe ser consciente de que al enviar su comunicaci&oacute;n asume los da&ntilde;os y perjuicios que pueda ocasionar a terceros de buena fe.&nbsp;<br />\n    <br />\n    LAS2RODILLAS revisar&aacute; el caso, y si encuentra m&eacute;rito en su queja, proceder&aacute; a retirar el material. En caso que la informaci&oacute;n haya sido publicada por un ciberperiodista o est&eacute; contenida en un blog destacado, o en cualquier otro mecanismo que permita a los Usuarios o Visitantes publicar informaci&oacute;n en el Portal como Contenido de acceso al p&uacute;blico, LAS2RODILLAS transmitir&aacute; la queja al Ciberperiodista, Visitante o Usuario que haya publicado el contenido considerado violatorio, quien tendr&aacute; un plazo de quince (15) d&iacute;as corrientes para responder a la queja. Para ello, el Ciberperiodista, Visitante o Usuario deber&aacute; enviar una comunicaci&oacute;n a LAS2RODILLAS con la siguiente informaci&oacute;n:</p>\n\n    <ul>\n        <li>\n        <p>Una explicaci&oacute;n de por qu&eacute; raz&oacute;n el contenido no era violatorio de los derechos alegados. En caso de contar con documentos que lo demuestren, deber&aacute; anexar una copia.</p>\n        </li>\n        <li>\n        <p>Una declaraci&oacute;n bajo la gravedad del juramento, de que la informaci&oacute;n enviada en su comunicaci&oacute;n es correcta.</p>\n        </li>\n        <li>\n        <p>Sus datos de contacto, tales como nombre, identificaci&oacute;n, direcci&oacute;n de correspondencia escrita y electr&oacute;nica, tel&eacute;fono, celular, etc.</p>\n        </li>\n    </ul>\n\n    <p>Tras la respuesta del Ciberperiodista, Visitante o Usuario, LAS2RODILLAS analizar&aacute; el caso y decidir&aacute; si mantiene el bloqueo del contenido, o si lo publica de nuevo.&nbsp;</p>\n    </li>\n    <li>\n    <h3><strong>Limitaci&oacute;n de Responsabilidad</strong></h3>\n\n    <p>LAS2RODILLAS no es responsable por:</p>\n\n    <ul>\n        <li>\n        <p>Las ca&iacute;das del Portal y la falla en el suministro del servicio, quedando exonerada por cualquier tipo de da&ntilde;os y perjuicios causados debido a la no disponibilidad y/o interrupci&oacute;n del servicio ocasionados por fallas o no disponibilidad de las redes y servicios de telecomunicaciones utilizados para soportar el Portal, y que sean ajenos a su voluntad.</p>\n        </li>\n        <li>\n        <p>Los da&ntilde;os y perjuicios causados por virus inform&aacute;ticos, troyanos, c&oacute;digo malicioso o cualesquiera otros sistemas f&iacute;sicos o l&oacute;gicos a los sistemas de los Usuarios.</p>\n        </li>\n        <li>\n        <p>Errores mecanogr&aacute;ficos y/o tipogr&aacute;ficos que aparezcan en el Contenido.</p>\n        </li>\n        <li>\n        <p>El contenido publicitario que aparezca en el Portal, el cual es responsabilidad del anunciante respectivo. Cualquier reclamaci&oacute;n por infracci&oacute;n a la propiedad industrial y de derechos de autor deber&aacute; ser dirigida directamente al Anunciante. Cualquier promoci&oacute;n, incluida la entrega y el pago por bienes y servicios, y cualquier otro t&eacute;rmino, condici&oacute;n, garant&iacute;a o representaci&oacute;n asociados con dichos tratos o promociones, corresponden a una relaci&oacute;n exclusiva entre el anunciante y el Usuario, sin participaci&oacute;n de LAS2RODILLAS.</p>\n        </li>\n        <li>\n        <p>Las opiniones publicadas por los Usuarios a trav&eacute;s de los blogs y otros servicios que ofrezca LAS2RODILLAS al p&uacute;blico.</p>\n        </li>\n        <li>\n        <p>El contenido de los sitios vinculados mediante hiperv&iacute;nculos que aparezcan en el Portal (los &quot;Sitios Vinculados&quot;), incluyendo sin limitaci&oacute;n, cualquier v&iacute;nculo contenido en los Sitios Vinculados, cualquier cambio o actualizaci&oacute;n a los Sitios Vinculados, cualquier tipo de transmisi&oacute;n recibida o enviada desde o hacia Sitios Vinculados, o el funcionamiento incorrecto de los Sitios Vinculados. LAS2RODILLAS proporciona estos Sitios Vinculados s&oacute;lo por comodidad, y la inclusi&oacute;n de cualquiera de ellos no implica aprobaci&oacute;n por parte de LAS2RODILLAS a ninguno de estos sitios ni ninguna asociaci&oacute;n con sus operadores.</p>\n        </li>\n    </ul>\n    </li>\n    <li>\n    <h3><strong>Miscel&aacute;nea</strong></h3>\n\n    <ul>\n        <li>\n        <p>Modificaci&oacute;n de los T&eacute;rminos Legales&nbsp;<br />\n        LAS2RODILLAS podr&aacute; modificar estos T&eacute;rminos y Condiciones de Uso del Portal en cualquier momento y sin previo aviso, tan pronto se publique una nueva versi&oacute;n en el Portal. LAS2RODILLAS publicar&aacute; en todo caso la fecha en que la versi&oacute;n vigente de los T&eacute;rminos y Condiciones fue publicada, para fines informativos de los Usuarios.</p>\n        </li>\n        <li>\n        <p>Legislaci&oacute;n aplicable.&nbsp;<br />\n        Los presentes T&eacute;rminos Legales se regir&aacute;n e interpretar&aacute;n de acuerdo con las leyes de la Rep&uacute;blica de Colombia.</p>\n        </li>\n    </ul>\n    </li>\n</ol>\n', 'enabled', 1665139297, 1664116167);
-INSERT INTO `page` (`id`, `slug`, `description`, `keywords`, `text`, `status`, `updated_at`, `created_at`) VALUES
-(2, 'habeas_data', 'Conozca las políticas de privacidad de Las2rodillas. Conozca los lineamientos para el tratamiento de la información y el manejo de sus datos personales.', 'habias data, politica de privacidad, aviso de privacidad', '<h2>Manual de&nbsp;pol&iacute;ticas y procedimientos&nbsp;para la proteci&oacute;n&nbsp;de datos&nbsp;personales de las2rodillas.com (en adelante, Las2rodillas)</h2>\n\n<p>El presente manual tiene por objeto el cumplimiento de las disposiciones legales, constitucionales y jurisprudenciales concernientes al desarrollo del derecho constitucional que tienen todas las personas a conocer, actualizar y rectificar la informaci&oacute;n que se haya recogido sobre ellas en bases de datos o archivos relativos al art&iacute;culo 15 de la Constituci&oacute;n Pol&iacute;tica, as&iacute; como el derecho a la informaci&oacute;n consagrado en el art&iacute;culo 20 de la misma.</p>\n\n<p>En resumen, el presente manual establece las pol&iacute;ticas y los procedimientos a trav&eacute;s de los cuales el titular de los datos personales puede hacer efectivos sus derechos relacionados con el tratamiento de sus datos y a su vez, el tratamiento que el responsable debe darle a los datos de terceros, as&iacute; como los mecanismos para instar el cumplimiento de los deberes en cabeza del responsable del tratamiento. As&iacute; mismo, se dan algunas definiciones relativas a t&eacute;rminos necesarios para la correcta aplicaci&oacute;n de las mencionadas pol&iacute;ticas, junto con los principios sobre los que se fundamenta la recolecci&oacute;n y tratamiento de los datos personales</p>\n\n<p>Es de aclarar este manual no aplicar&aacute; ni servir&aacute; de referencia para solicitudes de eliminaci&oacute;n de bases de datos de archivos de informaci&oacute;n period&iacute;stica y otros contenidos editoriales, lo anterior, en virtud del art&iacute;culo segundo (2&deg;) de la Ley 1581 de 2012 que dispuso lo siguiente:</p>\n\n<p><em>&ldquo;El r&eacute;gimen de protecci&oacute;n de datos personales que se establece en la presente ley no ser&aacute; de aplicaci&oacute;n (&hellip;) d) A las bases de datos y archivos de informaci&oacute;n period&iacute;stica y otros contenidos editoriales (&hellip;)&rdquo;.</em></p>\n\n<p>Como puede apreciarse, &eacute;sta exclusi&oacute;n da un tratamiento especial a la informaci&oacute;n period&iacute;stica y de contenidos editoriales de los medios de comunicaci&oacute;n en relaci&oacute;n con sus datos noticiosos. As&iacute; mismo la jurisprudencia interpret&oacute; los alcances de los contenidos sujetos al Habeas Data, la Corte Constitucional en sentencia C-748 de 2011 de control de constitucionalidad del proyecto de ley estatutaria 1581 de 2012 se pronunci&oacute; al punto de la excepci&oacute;n mencionada en los siguientes t&eacute;rminos:</p>\n\n<p>(&hellip;)</p>\n\n<p><strong><em>&ldquo;Constitucionalidad del literal d): la excepci&oacute;n de &ldquo;datos y archivos de informaci&oacute;n period&iacute;stica y otros contenidos editoriales&rdquo;</em></strong></p>\n\n<p><em>&ldquo;Esta restricci&oacute;n es necesaria en la medida en que a trav&eacute;s de ella se est&aacute; asegurando el respeto a la libertad de prensa. La jurisprudencia ha sido enf&aacute;tica en se&ntilde;alar que el &ldquo;&aacute;mbito de protecci&oacute;n de la libertad de expresi&oacute;n en sentido gen&eacute;rico consagrada en el art&iacute;culo 20 Superior, es la libertad de prensa, que se refiere no solo a los medios impresos sino a todos los medios masivos de comunicaci&oacute;n.&rdquo;.</em></p>\n\n<hr />\n<h3><strong>OBJETO</strong></h3>\n\n<p>Reglamentar las pol&iacute;ticas y procedimientos que ser&aacute;n aplicables en el manejo de informaci&oacute;n de datos personales por parte de Las2rodillas, seg&uacute;n las disposiciones contenidas en la Ley 1581 de 2012 y el decreto 1377 de 2013.</p>\n\n<h3><strong>RESPONSABLES DEL TRATAMIENTO</strong></h3>\n\n<p>Tel&eacute;fonos: 6435324<br />\nP&aacute;gina web principal:&nbsp;<a href=\"https://las2rodillas.com/\" target=\"_blank\">las2rodillas.com</a><br />\nEmail:&nbsp;<a href=\"mailto:las2rodillas.co@gmail.com\">las2rodillas.co@gmail.com</a></p>\n\n<h3><strong>ALCANCE</strong></h3>\n\n<p>El presente manual le es aplicable a los datos personales de personas naturales registrados en las bases de datos relativas a Empleados, Potenciales Empleados, Trabajadores Retirados, Accionistas, Proveedores, Potenciales Proveedores, Clientes y Usuarios (en lo pertinente) de Las2rodillas, los cuales sean susceptibles de tratamiento. Aplicar&aacute; a los datos personales que sean objeto de recolecci&oacute;n y manejo por parte de Las2rodillas. Si a futuro, otras personas jur&iacute;dicas entran a formar parte de Las2rodillas, el manual aplicar&aacute; a aquellas.</p>\n\n<p>El presente manual no aplicar&aacute; a:</p>\n\n<ol>\n    <li>A los datos de uso exclusivamente personal o dom&eacute;stico.</li>\n    <li>A los datos que tengan por finalidad la seguridad y defensa nacional, as&iacute; como la prevenci&oacute;n, detecci&oacute;n, monitoreo y control del lavado de activos y el financiamiento del terrorismo.</li>\n    <li>A los datos que contengan informaci&oacute;n de inteligencia y contrainteligencia del Estado.</li>\n    <li>A los datos de informaci&oacute;n period&iacute;stica y otros contenidos editoriales.</li>\n    <li>A las bases de datos y archivos regulados por la Ley Estatutaria 1266 de 2008.</li>\n    <li>A las bases de datos y archivos regulados por la Ley 79 de 1993.</li>\n</ol>\n\n<h3><strong>DEFINICIONES</strong></h3>\n\n<p>Para la aplicaci&oacute;n de las reglas y procedimientos establecidos en el presente manual, y de acuerdo a lo establecido en el art&iacute;culo 3 de la Ley Estatutaria 1581 de 2012, se entender&aacute; por:</p>\n\n<ol>\n    <li><strong>Autorizaci&oacute;n:</strong>&nbsp;Consentimiento previo, expreso e informado del Titular para llevar a cabo el Tratamiento de datos personales.</li>\n    <li><strong>Base de Datos:</strong>&nbsp;Conjunto organizado de datos personales que sea objeto de Tratamiento.</li>\n    <li><strong>Aviso de privacidad:</strong>&nbsp;Documento f&iacute;sico, electr&oacute;nico o en cualquier otro formato, generado por el responsable del Tratamiento que se pone a disposici&oacute;n del Titular para el Tratamiento de sus datos personales. A trav&eacute;s de este, se comunica al Titular de la informaci&oacute;n la existencia de las pol&iacute;ticas aplicables para el tratamiento de sus datos personales, junto con la forma como acceder a las mismas y las caracter&iacute;sticas del tratamiento de los datos personales.</li>\n    <li><strong>Dato personal:</strong>&nbsp;Cualquier informaci&oacute;n vinculada o que pueda asociarse a una o varias personas naturales determinadas o determinables, tales como nombre y apellidos, documento de identidad, edad, domicilio, regi&oacute;n, pa&iacute;s, ciudad, c&oacute;digo postal, n&uacute;mero de tel&eacute;fono fijo, n&uacute;mero de tel&eacute;fono m&oacute;vil, direcci&oacute;n, direcci&oacute;n de correo electr&oacute;nico, preferencias publicitarias, preferencia de consumo, preferencias de canales, quejas y reclamos, novedades de servicio, datos b&aacute;sicos y personales, datos de contacto, datos demogr&aacute;ficos, datos de gustos, preferencias y h&aacute;bitos.</li>\n    <li><strong>Datos sensibles:</strong>&nbsp;Se entiende por datos sensibles aquellos que afectan la intimidad de Titular o cuyo uso indebido puede generar su discriminaci&oacute;n, tales como aquellos revelen el origen racial o &eacute;tnico, la orientaci&oacute;n pol&iacute;tica, las convicciones religiosas o filos&oacute;ficas, la pertenencia a sindicatos, organizaciones sociales, de derechos humanos o que promuevan intereses de cualquier partido pol&iacute;tico o que garanticen los derechos y garant&iacute;as de partidos pol&iacute;ticos de oposici&oacute;n, as&iacute; como los datos relativos a la salud, a la vida sexual y los datos biom&eacute;tricos.</li>\n    <li><strong>Encargado del Tratamiento:</strong>&nbsp;Persona natural o jur&iacute;dica, p&uacute;blica o privada, que por s&iacute; misma o en asocio con otros, realice el Tratamiento de datos personales por cuenta del Responsable del Tratamiento.</li>\n    <li><strong>Responsable del Tratamiento:</strong>&nbsp;Persona natural o jur&iacute;dica, p&uacute;blica o privada, que por s&iacute; misma o en asocio con otros, decida sobre la base de datos y/o el Tratamiento de los datos.</li>\n    <li><strong>Titular:</strong>&nbsp;Persona natural cuyos datos personales sean objeto de Tratamiento.</li>\n    <li><strong>Tratamiento:</strong>&nbsp;Cualquier operaci&oacute;n o conjunto de operaciones sobre datos personales, tales como la recolecci&oacute;n, almacenamiento, uso, circulaci&oacute;n o supresi&oacute;n de datos, en cualquier tecnolog&iacute;a conocida o por conocer.</li>\n</ol>\n\n<h3><strong>PRINCIPIOS</strong></h3>\n\n<p>Los principios que a continuaci&oacute;n se enuncian, constituyen los par&aacute;metros generales mediante los cuales se dar&aacute; aplicaci&oacute;n a lo establecido en el presente manual referente a los datos personales de las personas a las que le es aplicable el tratamiento de sus datos:</p>\n\n<ol>\n    <li><strong>Principio de finalidad:</strong>&nbsp;El Tratamiento de datos personales por parte de Las2rodillas debe obedecer a una finalidad leg&iacute;tima, la cual debe ser informada al Titular.</li>\n    <li><strong>Principio de libertad:</strong>&nbsp;El Tratamiento de datos personales s&oacute;lo podr&aacute; ejercerse mediando con el consentimiento, previo, expreso e informado del Titular de la informaci&oacute;n. Los datos personales no podr&aacute;n ser obtenidos o divulgados sin previa autorizaci&oacute;n, o en ausencia de mandato legal o judicial que releve el consentimiento.</li>\n    <li><strong>Principio de veracidad o calidad:</strong>&nbsp;La informaci&oacute;n sujeta a Tratamiento debe ser veraz, completa, exacta, actualizada, comprobable y comprensible. Se proh&iacute;be el Tratamiento de datos parciales, incompletos, fraccionados o que induzcan a error.</li>\n    <li><strong>Principio de transparencia:</strong>&nbsp;En el Tratamiento debe garantizarse el derecho del Titular a obtener de Las2rodillas, en cualquier momento y sin restricciones, informaci&oacute;n acerca de la existencia de datos que le conciernan.</li>\n    <li><strong>Principio de acceso y circulaci&oacute;n restringida:</strong>&nbsp;Los datos personales, salvo la informaci&oacute;n p&uacute;blica, no podr&aacute;n estar disponibles en Internet u otros medios de divulgaci&oacute;n o comunicaci&oacute;n masiva, salvo que el acceso sea t&eacute;cnicamente controlable para brindar un conocimiento restringido s&oacute;lo a los Titulares o terceros autorizados.</li>\n    <li><strong>Principio de seguridad:</strong>&nbsp;La informaci&oacute;n sujeta a Tratamiento por Las2rodillas, se deber&aacute; manejar con las medidas t&eacute;cnicas, humanas y administrativas que sean necesarias para otorgar seguridad a los registros evitando su adulteraci&oacute;n, p&eacute;rdida, consulta, uso o acceso no autorizado o fraudulento.</li>\n    <li><strong>Principio de confidencialidad:</strong>&nbsp;Todas las personas que intervengan en el Tratamiento de datos personales que no tengan la naturaleza de p&uacute;blicos est&aacute;n obligadas a garantizar la reserva de la informaci&oacute;n, inclusive despu&eacute;s de finalizada su relaci&oacute;n con alguna de las labores que comprende el Tratamiento.</li>\n</ol>\n\n<h3><strong>CONTENIDO</strong></h3>\n\n<p><strong>Tratamiento a que ser&aacute;n sometidos los datos y finalidad del tratamiento.</strong></p>\n\n<p>El tratamiento es cualquier operaci&oacute;n o conjunto de operaciones sobre datos personales, tales como la recolecci&oacute;n, almacenamiento, uso, circulaci&oacute;n o supresi&oacute;n. La informaci&oacute;n que recolecta Las2rodillas en la prestaci&oacute;n de sus servicios y en general en el desarrollo de su objeto social, es utilizada principalmente para identificar, mantener un registro y control de los Empleados, Potenciales Empleados, Trabajadores Retirados, Accionistas, Proveedores, Potenciales Proveedores, Clientes y Usuarios de Las2rodillas.</p>\n\n<p><strong>Tratamientos Generales de la informaci&oacute;n:</strong></p>\n\n<ul>\n    <li>Procesar.</li>\n    <li>Confirmar.</li>\n    <li>Cumplir.</li>\n    <li>Proveer los servicios y/o productos adquiridos directamente o con la participaci&oacute;n de terceros.</li>\n    <li>Promocionar y publicitar nuestras actividades, productos y servicios.</li>\n    <li>Realizar transacciones.</li>\n    <li>Efectuar reportes con las distintas autoridades administrativas de control y vigilancia nacional, policiva o autoridades judiciales, entidades financieras y/o compa&ntilde;&iacute;as de seguros.</li>\n    <li>Fines administrativos internos y/o comerciales tales como: investigaci&oacute;n de mercados, auditorias, reportes contables, an&aacute;lisis estad&iacute;sticos o facturaci&oacute;n.</li>\n    <li>Recolecci&oacute;n.</li>\n    <li>Almacenamiento.</li>\n    <li>Grabaci&oacute;n.</li>\n    <li>Uso.</li>\n    <li>Circulaci&oacute;n.</li>\n    <li>Procesamiento.</li>\n    <li>Supresi&oacute;n.</li>\n    <li>Transmisi&oacute;n y/o transferencia a terceros pa&iacute;ses de los datos suministrados, para la ejecuci&oacute;n de las actividades relacionadas con los servicios y productos adquiridos.</li>\n    <li>Registros contables.</li>\n    <li>Correspondencia.</li>\n    <li>Identificaci&oacute;n de fraudes y prevenci&oacute;n de lavado de activos y de otras actividades delictivas.</li>\n</ul>\n\n<p><strong>Tratamiento General de Informaci&oacute;n de los accionistas:</strong></p>\n\n<ul>\n    <li>Efectuar el pago de dividendos.</li>\n    <li>Cumplimiento de decisiones judiciales y disposiciones administrativas y legales.</li>\n    <li>Contactos.</li>\n    <li>Cumplimiento de decisiones judiciales y disposiciones administrativas y legales, fiscales y regulatorias.</li>\n</ul>\n\n<p><strong>Tratamiento General de Informaci&oacute;n de los proveedores:</strong></p>\n\n<ul>\n    <li>Para fines comerciales.</li>\n    <li>Contabilizaci&oacute;n.</li>\n    <li>Cumplimiento de decisiones judiciales y disposiciones administrativas y legales, fiscales y regulatorias.</li>\n    <li>Cumplimiento de obligaciones contractuales, por lo cual la informaci&oacute;n podr&aacute; ser transferida a terceros, tales como entidades financieras, notar&iacute;as, listas OFAC y de terrorismo, abogados, etc.</li>\n    <li>Para realizar los procesos en que se encuentran vinculados los proveedores.</li>\n    <li>Cualquier otro uso que el proveedor autorice por escrito para el uso de su informaci&oacute;n.</li>\n    <li>Transmisi&oacute;n de informaci&oacute;n y datos personales en procesos de auditor&iacute;as.</li>\n</ul>\n\n<p><strong>Tratamiento General de Informaci&oacute;n de los clientes:</strong></p>\n\n<ul>\n    <li>Para fines comerciales.</li>\n    <li>Ofrecimiento de bienes y servicios.</li>\n    <li>Publicidad y mercadeo.</li>\n    <li>Alianzas comerciales.</li>\n    <li>Contabilizaci&oacute;n.</li>\n    <li>Cumplimiento de obligaciones contractuales, por lo cual la informaci&oacute;n podr&aacute; ser transferida a terceros, tales como entidades financieras, notar&iacute;as, listas OFAC y de terrorismo, abogados, etc.</li>\n    <li>Cumplimiento de decisiones judiciales y disposiciones administrativas y legales, fiscales y regulatorias.</li>\n    <li>Transmisi&oacute;n de informaci&oacute;n y datos personales en procesos de auditor&iacute;as.</li>\n    <li>Facturaci&oacute;n.</li>\n</ul>\n\n<p><strong>Tratamiento General de Informaci&oacute;n de los empleados, trabajadores retirados, pensionados y candidatos a ocupar vacantes:</strong></p>\n\n<ul>\n    <li>Para fines pertinentes a la relaci&oacute;n laboral (EPS, ARL, fondos de pensiones y cesant&iacute;as, cajas de compensaci&oacute;n familiar, etc.)</li>\n    <li>En el caso de los empleados con la suscripci&oacute;n del contrato laboral se entiende autorizaci&oacute;n expresa para darle Tratamiento a la informaci&oacute;n.</li>\n    <li>En el caso de requerimientos judiciales y legales.</li>\n    <li>Contabilizaci&oacute;n y pago de n&oacute;mina.</li>\n    <li>Reclutar y seleccionar personal que ocupar&aacute;n las vacantes.</li>\n    <li>Procesar, confirmar y cumplir con las obligaciones laborales legales y extralegales derivadas del contrato laboral.</li>\n    <li>Realizar transacciones.</li>\n    <li>Pago de beneficios extralegales.</li>\n    <li>Auditorias.</li>\n    <li>An&aacute;lisis estad&iacute;sticos.</li>\n    <li>Mantener base de datos de candidatos.</li>\n    <li>Capacitaci&oacute;n y formaci&oacute;n.</li>\n    <li>Compartir los datos personales con entidades bancarias, empresas que ofrezcan beneficios a nuestros trabajadores activos, entre otros.</li>\n</ul>\n\n<p><strong>Autorizaci&oacute;n.</strong></p>\n\n<p>La compilaci&oacute;n, almacenamiento, consulta, uso, intercambio, transmisi&oacute;n, transferencia y tratamiento de datos personales requiere el consentimiento libre, expreso e informado del Titular de la informaci&oacute;n. Basado en lo anterior y a trav&eacute;s de este manual, se implementa los mecanismos que permitan la consulta posterior por parte del titular de la informaci&oacute;n.</p>\n\n<p><strong>Mecanismos para otorgar Autorizaci&oacute;n</strong></p>\n\n<p>La autorizaci&oacute;n por parte del titular podr&aacute; constar en un documento f&iacute;sico, electr&oacute;nico o cualquier otro formato que permita concluir de forma razonable que el Titular otorg&oacute; la autorizaci&oacute;n.</p>\n\n<p>Teniendo en cuenta lo anterior, Las2rodillas deja de presente que la autorizaci&oacute;n en todo caso ser&aacute; mediante documento f&iacute;sico y/o digital, el cual deber&aacute; contar con la firma del Titular de la informaci&oacute;n, lo cual no obsta que m&aacute;s adelante se establezcan mecanismos diferentes para otorgar la autorizaci&oacute;n.</p>\n\n<p>A trav&eacute;s de la autorizaci&oacute;n se pondr&aacute; en conocimiento del Titular de la informaci&oacute;n o de su representante en el caso de infantes (ni&ntilde;os y ni&ntilde;as) y adolescentes, el hecho que la informaci&oacute;n ser&aacute; recolectada, incluyendo la finalidad, las modificaciones, almacenamiento y el uso especifico que se dar&aacute; a los mismos, y adem&aacute;s:</p>\n\n<ol>\n    <li>La persona quien recopila la informaci&oacute;n (especificando si es el Responsable o el Encargado del tratamiento).</li>\n    <li>Los datos que ser&aacute;n recopilados, incluyendo si se recopilan Datos Sensibles.</li>\n    <li>La finalidad del tratamiento de los datos.</li>\n    <li>Los mecanismos a trav&eacute;s de los cuales pueden ejercer sus derechos como Titulares de la informaci&oacute;n (acceso, correcci&oacute;n, actualizaci&oacute;n o supresi&oacute;n de los datos).</li>\n</ol>\n\n<p>&nbsp;</p>\n\n<p><strong>Prueba de la Autorizaci&oacute;n.</strong></p>\n\n<p>Las2rodillas en su calidad de Responsable y de Encargado del Tratamiento dispondr&aacute; de los medios necesarios para mantener los registros t&eacute;cnicos y tecnol&oacute;gicos de cu&aacute;ndo y c&oacute;mo se obtuvo la autorizaci&oacute;n por parte del Titular de la informaci&oacute;n para el tratamiento de los mismos.</p>\n\n<p><strong>Aviso de privacidad.</strong></p>\n\n<p>El aviso de privacidad es un documento f&iacute;sico, electr&oacute;nico o cualquier otro formato, mediante el cual se informa al titular de la informaci&oacute;n sobre la existencia de pol&iacute;ticas que le ser&aacute;n aplicables, as&iacute; como la forma en la que pueden acceder a las mismas y las caracter&iacute;sticas del tratamiento que se le dar&aacute; a los datos personales.</p>\n\n<p><strong>Contenido del aviso de privacidad.</strong></p>\n\n<ol>\n    <li>La identidad, domicilio y datos de contacto del Responsable o del Encargado del Tratamiento.</li>\n    <li>El Tratamiento al que ser&aacute;n sometidos los datos y la finalidad del mismo.</li>\n    <li>Los mecanismos dispuestos Las2rodillas para que el Titular conozca la pol&iacute;tica de tratamiento de la informaci&oacute;n y los cambios sustanciales que se produzcan en ella o en el aviso de privacidad correspondiente. En todos los casos, debe informar al Titular c&oacute;mo acceder o consultar la pol&iacute;tica de tratamiento de informaci&oacute;n.</li>\n</ol>\n\n<p>Se conservar&aacute; el modelo del aviso de privacidad que se transmiti&oacute; a los Titulares de la informaci&oacute;n mientras se lleve a cabo el tratamiento de los datos personales y perduren las obligaciones que de &eacute;ste se deriven. Para el almacenamiento del modelo, se podr&aacute;n emplear medios inform&aacute;ticos, electr&oacute;nicos o cualquier otra tecnolog&iacute;a a elecci&oacute;n de Las2rodillas.</p>\n\n<p>Seg&uacute;n el grupo de personas cuyos datos personales se recaban, habr&aacute; un &uacute;nico modelo de aviso de privacidad, en el cual se especificar&aacute; detalladamente los puntos anteriormente descritos para cada uno de los mismos.</p>\n\n<p><strong>Derechos de los Titulares de la informaci&oacute;n.</strong></p>\n\n<p>De conformidad con el art&iacute;culo 8 de la Ley Estatutaria 1581 de 2012, el Titular de los datos personales tiene los siguientes derechos:</p>\n\n<ol>\n    <li>Conocer, actualizar y rectificar sus datos personales Las2rodillas en su calidad de Responsable y Encargado del tratamiento.</li>\n    <li>Solicitar prueba de la autorizaci&oacute;n otorgada a Las2rodillas.</li>\n    <li>Ser informado por Las2rodillas&nbsp;respecto del uso que le ha dado a sus datos personales.</li>\n    <li>Presentar ante la Superintendencia de Industria y Comercio quejas por infracciones a lo dispuesto en la Ley Estatutaria 1581 de 2012, habi&eacute;ndose agotado el tr&aacute;mite de consulta o reclamo seg&uacute;n lo indicado en la mencionada Ley.</li>\n    <li>Revocar la autorizaci&oacute;n y/o solicitar la supresi&oacute;n del dato cuando en el Tratamiento no se respeten los principios, derechos y garant&iacute;as constitucionales y legales.</li>\n    <li>Acceder en forma gratuita a sus datos personales que hayan sido objeto de Tratamiento.</li>\n</ol>\n\n<p><strong>Deberes de Las2rodillas con relaci&oacute;n al tratamiento de datos personales en su calidad de Responsables y Encargado del Tratamiento.</strong></p>\n\n<p>Se deja de presente que los datos personales objeto del tratamiento son de propiedad de las personas a las que se refieren y ellas son las facultadas para disponer los mismos. Basado en lo anterior, solo har&aacute; uso de los datos personales conforme a las finalidades establecidas en la Ley y respetando lo establecido en la Ley Estatutaria 1581 de 2012.</p>\n\n<p>De conformidad con el art&iacute;culo 17 de la Ley Estatutaria 1581 de 2012, se comprometen a cumplir los siguientes deberes:</p>\n\n<ol>\n    <li>Garantizar al Titular, en todo tiempo, el pleno y efectivo ejercicio del derecho de h&aacute;beas data.</li>\n    <li>Solicitar y conservar copia de la respectiva autorizaci&oacute;n otorgada por el Titular.</li>\n    <li>Realizar en los t&eacute;rminos previstos en los art&iacute;culos 14 y 15 de la Ley Estatutaria 1581 de 2012, la actualizaci&oacute;n, rectificaci&oacute;n o supresi&oacute;n de los datos.</li>\n    <li>Tramitar las consultas y reclamos formulados por los titulares en los t&eacute;rminos se&ntilde;alados en el art&iacute;culo 14 de la Ley Estatutaria 1581 de 2012.</li>\n    <li>Conservar la informaci&oacute;n bajo las condiciones de seguridad necesarias para impedir su adulteraci&oacute;n, p&eacute;rdida, consulta, uso o acceso no autorizado o fraudulento.</li>\n    <li>Insertar en las bases de datos la leyenda &ldquo;informaci&oacute;n en discusi&oacute;n judicial&rdquo; una vez notificada por parte de la autoridad competente sobre procesos judiciales relacionados con la calidad o detalles del dato personal.</li>\n    <li>Informar a la Superintendencia de Industria y Comercio cuando se presenten violaciones a los c&oacute;digos de seguridad y existan riesgos en la administraci&oacute;n de la informaci&oacute;n de los titulares.</li>\n    <li>Tramitar las consultas y reclamos formulados por los titulares de la informaci&oacute;n.</li>\n    <li>Cumplir las instrucciones y requerimientos que imparta la Superintendencia de Industria y Comercio.</li>\n    <li>Aplicar las normas que reglamenten la Ley Estatutaria 1581 de 2012.</li>\n</ol>\n\n<p><strong>Deberes respecto del Tratamiento de datos de Infantes y Adolescentes.</strong></p>\n\n<p>Las2rodillas&nbsp;en su calidad de Responsable y Encargado de Tratamiento de los datos personales de los mencionados grupos deber&aacute;n tener especial cuidado en asegurar el cumplimiento de la Ley respecto a estos grupos y el respeto de los derechos de los mismos, en especial respecto a datos personales que no encuadren en la categor&iacute;a de datos de naturaleza p&uacute;blica (nombre, sexo, fecha de nacimiento, etc.).</p>\n\n<p><strong>Procedimientos para acceso, consulta y reclamaci&oacute;n.</strong></p>\n\n<p>Puntos aplicables para todos los Procedimientos:</p>\n\n<p><strong>(i)</strong>&nbsp;Para el ejercicio de los derechos indicados en este punto por parte de los causahabientes, y tambi&eacute;n para evitar acceso a la informaci&oacute;n por personas no autorizadas legalmente, se deber&aacute; verificar previamente y de acuerdo con la Ley, la documentaci&oacute;n que permita concluir que la persona que solicita la informaci&oacute;n s&iacute; es un causahabiente del Titular.</p>\n\n<p><strong>(ii)</strong>&nbsp;En caso de existir alguna duda en cuanto a la aplicaci&oacute;n de los procedimientos ac&aacute; indicados, la misma ser&aacute; informada por el &aacute;rea responsable de la base de datos que es objeto de la aplicaci&oacute;n del procedimiento y resuelta por la Direcci&oacute;n Jur&iacute;dica, quien resolver&aacute; el tema teniendo en cuenta la Ley, los Decretos y dem&aacute;s normas reglamentarias o instructivas, y las jurisprudencias que en la materia se emitan.</p>\n\n<p><strong>Acceso.</strong></p>\n\n<p>Teniendo en cuenta que la facultad de disponer o de decidir sobre los datos personales est&aacute; en cabeza del Titular de la informaci&oacute;n, esta facultad implica necesariamente el derecho del titular a acceder y conocer la informaci&oacute;n personal que est&aacute; siendo objeto de tratamiento, incluyendo en este aspecto el alcance, condiciones y generalidades del tratamiento.</p>\n\n<p>Teniendo en cuenta lo anterior, se garantiza este derecho en cabeza del Titular, el cual incluye.</p>\n\n<ol>\n    <li>El conocimiento de la existencia del tratamiento de sus datos personales.</li>\n    <li>El acceso a sus datos personales.</li>\n    <li>Las circunstancias del tratamiento de los datos personales.</li>\n</ol>\n\n<p><strong>Consulta.</strong></p>\n\n<p>De conformidad con el art&iacute;culo 14 de la Ley Estatutaria 1581 de 2012, los Titulares o sus causahabientes podr&aacute;n consultar la informaci&oacute;n personal del Titular que repose en cualquier base de datos. Basado en esto, se garantiza este derecho suministrando a estos toda la informaci&oacute;n contenida en el registro individual o que est&eacute; vinculada con la identificaci&oacute;n del Titular.</p>\n\n<p>Seg&uacute;n la naturaleza de la base de datos personales, la consulta ser&aacute; gestionada por el &aacute;rea responsable de la atenci&oacute;n a la misma al interior de Las2rodillas.</p>\n\n<p>Las consultas ser&aacute;n atendidas en un t&eacute;rmino m&aacute;ximo de diez (10) d&iacute;as h&aacute;biles contados a partir de la fecha de recibo de la misma. Cuando no fuere posible atender la consulta dentro de dicho t&eacute;rmino, se informar&aacute; al interesado dentro del primer t&eacute;rmino conferido, en donde se expresar&aacute; los motivos de la demora y se&ntilde;alando la fecha en que se atender&aacute; su consulta, la cual en ning&uacute;n caso podr&aacute; superar los cinco (5) d&iacute;as h&aacute;biles siguientes al vencimiento del primer t&eacute;rmino.</p>\n\n<p><strong>Reclamo.</strong></p>\n\n<p>De conformidad con el art&iacute;culo 15 de la Ley Estatutaria 1581 de 2012, el Titular o sus causahabientes que consideren que la informaci&oacute;n contenida en una base de datos debe ser objeto de correcci&oacute;n, actualizaci&oacute;n o supresi&oacute;n, o cuando adviertan el presunto incumplimiento de cualquiera de los deberes contenidos en la Ley Estatutaria 1581 de 2012, podr&aacute;n presentar un reclamo el cual ser&aacute; tramitado bajo las siguientes reglas:</p>\n\n<ol>\n    <li>El reclamo se formular&aacute; mediante comunicaci&oacute;n realizada por el titular o sus causahabientes dirigida a Las2rodillas responsable o el encargado del Tratamiento, la cual debe incluir la informaci&oacute;n se&ntilde;alada en el art&iacute;culo 15 de la Ley Estatutaria 1581 de 201Si el reclamo resulta incompleto, se requerir&aacute; al interesado dentro de los cinco (5) d&iacute;as siguientes a la recepci&oacute;n del reclamo para que subsane las fallas. Transcurridos dos (2) meses desde la fecha del requerimiento, sin que el solicitante presente la informaci&oacute;n requerida, se entender&aacute; que ha desistido del reclamo. En todo caso si la comunicaci&oacute;n es dirigida a Las2rodillas y no tiene la calidad para responder la comunicaci&oacute;n, Las2rodillas, sin necesidad de comunicarlo a la persona que realiza la reclamaci&oacute;n, dar&aacute; conocimiento de la misma a la sociedad que deba dar respuesta.</li>\n    <li>En caso de que Las2rodillas reciba un reclamo que no sea competente para resolver, dar&aacute; traslado a quien corresponda en un t&eacute;rmino m&aacute;ximo de dos (2) d&iacute;as h&aacute;biles e informar&aacute; de la situaci&oacute;n al interesado.</li>\n    <li>Una vez recibido el reclamo completo, se incluir&aacute; en la base de datos una leyenda que diga &quot;reclamo en tr&aacute;mite&quot; y el motivo del mismo, en un t&eacute;rmino no mayor a dos (2) d&iacute;as h&aacute;biles. Dicha leyenda deber&aacute; mantenerse hasta que el reclamo sea decidido.</li>\n    <li>El t&eacute;rmino m&aacute;ximo para atender el reclamo ser&aacute; de quince (15) d&iacute;as h&aacute;biles contados a partir del d&iacute;a siguiente a la fecha de su recibo. Cuando no fuere posible atender el reclamo dentro de dicho t&eacute;rmino, se informar&aacute; al interesado los motivos de la demora y la fecha en que se atender&aacute; su reclamo, la cual en ning&uacute;n caso podr&aacute; superar los ocho (8) d&iacute;as h&aacute;biles siguientes al vencimiento del primer t&eacute;rmino.</li>\n    <li>En cualquier tiempo y gratuitamente, la persona natural Titular de los datos personales o su representante podr&aacute; solicitar la rectificaci&oacute;n, actualizaci&oacute;n o supresi&oacute;n de sus datos personales previa acreditaci&oacute;n de su identidad.</li>\n</ol>\n\n<p>La solicitud de rectificaci&oacute;n, actualizaci&oacute;n o supresi&oacute;n de sus datos personales debe ser presentada a trav&eacute;s de los medios proporcionados se&ntilde;alados en el aviso de privacidad y deber&aacute; contener como m&iacute;nimo la siguiente informaci&oacute;n:</p>\n\n<ol>\n    <li>El nombre y domicilio del Titular o representante o cualquier otro medio para recibir la respuesta a su solicitud.</li>\n    <li>Los documentos que acrediten la identidad o la representaci&oacute;n del Titular de los datos personales.</li>\n    <li>La descripci&oacute;n clara y precisa de los datos personales y de los hechos que dan lugar al reclamo.</li>\n    <li>Los documentos que se desean hacer valer en la reclamaci&oacute;n.</li>\n</ol>\n\n<p>La supresi&oacute;n implica la eliminaci&oacute;n total o parcial de la informaci&oacute;n personal de acuerdo por lo solicitado por el Titular, de los registros, archives y bases de datos o tratamientos realizados por Las2rodillas.</p>\n\n<p>Seg&uacute;n la naturaleza de la Base de datos personales, la reclamaci&oacute;n ser&aacute; gestionada por el &aacute;rea responsable de la atenci&oacute;n a la misma al interior de Las2rodillas.</p>\n\n<p><strong>Requisito de procedibilidad.</strong></p>\n\n<p>El Titular o causahabiente s&oacute;lo podr&aacute; elevar queja ante la Superintendencia de Industria y Comercio una vez haya agotado el tr&aacute;mite de consulta o reclamo ante Las2rodillas.</p>\n\n<p><strong>Revocatoria de la autorizaci&oacute;n.</strong></p>\n\n<p>De acuerdo con lo establecido con la Ley, en el supuesto en que en el Tratamiento no se respeten los principios, derechos y garant&iacute;as constitucionales y legales, los Titulares o sus representantes (como es el caso de padres que ejerzan la patria potestad de un infante o adolescente) podr&aacute;n solicitar la revocatoria de la autorizaci&oacute;n otorgada para el Tratamiento de los mismos, salvo que por disposici&oacute;n legal o contractual se impida dicha revocatoria, indicando en dicho caso, las razones concretas con base en las cuales considera que se est&aacute; dando la situaci&oacute;n de no respecto a los mencionados alcances.</p>\n\n<p>Las2rodillas al ser responsable o el encargado del Tratamiento, seg&uacute;n el caso, deber&aacute; confirmar haber recibido la solicitud de revocatoria de autorizaci&oacute;n, incluyendo su fecha de recepci&oacute;n. Se podr&aacute; objetar la misma si a juicio de Las2rodillas no se presentan el supuesto indicado por el Titular o si tal revocatoria implica una afectaci&oacute;n para el seguimiento o cumplimiento de derechos o de obligaciones por parte de la entidad y respecto del Titular, caso en el cual deber&aacute; informarlo al mismo por escrito para que &eacute;ste tome las medidas ante las autoridades que considere pertinentes.</p>\n\n<p>La solicitud de revocatoria de la autorizaci&oacute;n puede ser total o parcial. Ser&aacute; total cuando se solicite la revocatoria de la totalidad de las finalidades consentidas a trav&eacute;s de la autorizaci&oacute;n; ser&aacute; parcial cuando se solicite la revocatoria de algunas finalidades dependiendo de la solicitud de revocatoria. Este calificativo deber&aacute; ser expresado de manera clara en la solicitud de revocatoria de la autorizaci&oacute;n.</p>\n\n<h3><strong>Seguridad de la informaci&oacute;n</strong></h3>\n\n<p><strong>Medidas de seguridad de la informaci&oacute;n.</strong></p>\n\n<p>En desarrollo del principio de seguridad establecido en la Ley Estatutaria 1581 de 2012, Las2rodillas implementara las medidas t&eacute;cnicas, humanas y administrativas adicionales en caso de requerirse, que sean necesarias para otorgar seguridad a los registros, mediante los cuales se evitar&aacute; su adulteraci&oacute;n, p&eacute;rdida, consulta, uso o acceso no autorizado o fraudulento.</p>\n\n<p><strong>Registro de las Bases.</strong></p>\n\n<p>Las2rodillas en su calidad de Responsable y Encargado de Tratamiento deber&aacute;n proceder al registro de las bases en los t&eacute;rminos indicados por las normas colombianas.</p>\n\n<p><strong>Aceptaci&oacute;n.</strong></p>\n\n<p>Los Titulares de la informaci&oacute;n aceptan el tratamiento de sus datos personales conforme los t&eacute;rminos de este Manual, al momento de proporcionar sus datos.</p>\n\n<p><strong>Vigencia:</strong></p>\n\n<p>Esta Pol&iacute;tica General de Privacidad es efectiva desde la fecha de su publicaci&oacute;n</p>', 'enabled', 0, 1664116167),
-(4, 'about_us', 'Debido a las preguntas constantes en nuestras redes sociales, vamos a responder en esta sección nuestros ideales y todo aquello que queremos llegar a representar.', 'about-us', '<p><em>Nuestros ideales no concuerdan con el comunismo, socialismo o cualquier otra denominaci&oacute;n que le asignen a esto&nbsp;que crearon&nbsp;para destruir pueblos y robar a manos llenas. Eso s&iacute;, debemos aclarar que en el capitalismo, la corrupci&oacute;n y el robo de los recursos p&uacute;blicos, siempre existir&aacute;; no es cuesti&oacute;n de ideales, es cuestion de etica.</em></p>\n\n<p>Desde que Colombia dej&oacute; atr&aacute;s el yugo espa&ntilde;ol, los medios de comunicaci&oacute;n han hecho gala de su amistad con el poder en el pa&iacute;s para confluir en ideas e intereses. Es por eso que grandes representantes de la pol&iacute;tica nacional, han salido del periodismo y su influencia en las decisiones que nos afectan a los ciudadanos, ha llegado al punto de colocar presidentes o guiar el legislativo.</p>\n\n<p>Hasta hace unos a&ntilde;os el periodismo y los medios cumpl&iacute;an una funci&oacute;n que los colombianos no consideraban como informativa, ya que se sent&iacute;an enga&ntilde;ados y la informaci&oacute;n que recib&iacute;an ten&iacute;a detr&aacute;s alg&uacute;n fin pol&iacute;tico, seg&uacute;n manifestaban diariamente. La llegada de Internet cambi&oacute; todo lo que hoy conocemos como comunicaci&oacute;n; nuevas herramientas, nuevos medios, nuevas maneras de enviarle mensajes a la gente y sobre todo, una nueva forma de confrontar todo lo que nos dicen los gobernantes con diferentes fuentes en tiempo real.</p>\n\n<p>El internet nos ha brindado la facilidad de &ldquo;no comer entero&rdquo; lo que los medios tradicionales nos obligaban a consumir, por esa raz&oacute;n muchos emprendimientos digitales buscando abrirle los ojos al pueblo y entregar datos veraces con mirada cr&iacute;tica, surgieron desde sus primeros a&ntilde;os de incursi&oacute;n.</p>\n\n<p>En ese sentido, naci&oacute; la Revista <em>Las2rodillas</em> en junio del 2017, a&ntilde;o en que comenzaban las campa&ntilde;as pol&iacute;ticas para que alguno de los posibles candidatos llegaran a la Presidencia de la Rep&uacute;blica. Nosotros vimos la necesidad de mostrarle a los colombianos el otro&nbsp;lado de la noticia, algo que contrastara con lo que los grandes conglomerados informativos enviaban diariamente; busc&aacute;bamos traer a colaci&oacute;n y poner sobre la mesa,&nbsp;los temas que nadie tocaba porque los politicos o&nbsp;padrinos del poder, no les pemitian publicar.</p>\n\n<p><em>Las2rodillas</em>&nbsp;desde sus inicios entr&oacute; rompiendo los esquemas y por eso hoy en d&iacute;a somos uno de los medios independientes m&aacute;s le&iacute;dos en Colombia, como lo corroboran los millones de visitantes que mensualmente leen nuestros cr&iacute;ticas, argumentos e informaci&oacute;n precisa sobre el acontecer de nuestro pa&iacute;s.</p>\n\n<p>Somos personas&nbsp;como t&uacute;, personas que decidieron crear algo diferente, algo que no se pudiese corromper, algo puro, y aunque&nbsp;legalmente no somos periodistas; algunos nos graduamos como ingenieros, otros como contadores y&nbsp;abogados, pero tratamos de entregar todo como si perteneci&eacute;ramos al honorable grupo de comunicadores colombianos que ofrecen su vida por llevarle la verdad al pueblo. Cada d&iacute;a aprendemos sobre este oficio.</p>\n\n<p>No nos hemos aliado con ning&uacute;n poder pol&iacute;tico y&nbsp;jam&aacute;s lo haremos. Nuestra independencia es nuestra arma, por eso podemos hablar sobre todos los temas sin pensar en el &ldquo;jal&oacute;n de orejas&rdquo; com&uacute;n en los medios tradicionales.</p>\n\n<p>Tratamos de expresar diariamente lo que en la calle se murmura; nuestras dudas e inconformismos con el poder y la pol&iacute;tica. El objetivo es mirar todos los puntos y contrastar cada una de la informaci&oacute;n que nos encontramos en el espectro nacional y gubernamental.</p>', 'enabled', 0, 1664116167),
-(5, 'contact', 'Si tienes alguna pregunta, inquietud o necesitas hacer alguna propuesta, puedes contactarnos y responderemos lo mas pronto posible.', 'contactar, las2rodillas, las dos rodillas, como contactar', '', 'enabled', 0, 1664116167),
-(6, 'sitemap', 'Un índice de todas las historias publicadas por Las2rodillas.', 'sitemap, mapa de las2rodillas, las2rodillas, las dos rodillas', '', 'enabled', 0, 1664116167);
+INSERT INTO `page` (`id`, `slug`, `description`, `keywords`, `text`, `status`, `footer`, `updated_at`, `created_at`) VALUES
+(1, 'terms_of_use', 'Learn about the PHP Magazine Terms of Use. Know the guidelines for the treatment of information and the management of your personal data.', 'terms and conditions, privacy notice, terms of use, php magazine', '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla id augue vitae consectetur. Praesent augue justo, efficitur nec ipsum sit amet, lacinia porttitor felis. Quisque consequat mattis rutrum. Aliquam tristique sapien ut enim iaculis, nec pretium odio aliquet. Aenean eu massa nec nunc auctor viverra. Cras dapibus sem nec magna gravida convallis et eu diam. Maecenas sagittis turpis vitae nibh pellentesque, eget semper erat rutrum. Vestibulum sed urna nunc. Donec felis odio, condimentum vitae maximus vel, consectetur eu urna. Integer metus velit, accumsan at aliquam sit amet, porta quis ipsum. Donec tristique leo ac massa efficitur porttitor in eget risus. Duis porta ante turpis.</p>\n\n<p>Nullam ultricies sodales augue, ut laoreet purus eleifend vel. Duis elit elit, interdum vel erat ut, suscipit pulvinar leo. In porttitor nisi ac blandit iaculis. In ultricies mi sed sem viverra condimentum. Aenean in massa ac elit feugiat egestas a eu elit. Morbi ut lectus tincidunt, fermentum mauris vel, fringilla velit. Ut massa lectus, rutrum non eros id, luctus elementum est. Aliquam lorem arcu, scelerisque elementum odio quis, mollis ultricies erat. Ut pharetra diam a arcu facilisis, at porttitor libero dapibus. Nam enim odio, efficitur ac congue et, interdum vel lectus. Vestibulum eget egestas eros. Vivamus vitae sem vel neque rhoncus mattis. In sit amet commodo arcu. Aenean nec consequat urna, id varius nunc.</p>\n\n<p>Praesent eget justo lobortis, aliquam nisi et, mattis ex. Etiam pretium urna risus, eu facilisis tortor interdum a. Nullam lacinia arcu vitae dignissim semper. Sed malesuada, justo id porttitor feugiat, lectus leo volutpat mi, porta tempor odio nunc tincidunt neque. Fusce gravida sem a erat hendrerit bibendum. Donec non finibus velit, quis rutrum libero. Nulla ante tortor, suscipit fermentum arcu et, efficitur ultrices massa. Vestibulum nunc mi, lobortis nec rhoncus quis, mattis id ipsum. In in fringilla tortor, a luctus tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc sem diam, consectetur id neque sed, iaculis efficitur enim. Phasellus bibendum scelerisque imperdiet. Nulla id tempus metus. Pellentesque sagittis, lorem sit amet semper porttitor, dolor leo sollicitudin leo, at auctor dui nulla ac dolor. Nam volutpat in magna ac pretium. Proin tristique aliquam justo sit amet lacinia.</p>\n\n<p>Ut varius sapien sed finibus lacinia. Curabitur luctus metus quis eros fringilla, sed finibus mi condimentum. Duis et rutrum nunc. Praesent quis dui sed orci placerat accumsan nec a tortor. Duis ut purus faucibus, lobortis magna non, venenatis eros. Nulla sed nisi vel risus egestas ullamcorper sed quis urna. Vivamus enim risus, dignissim in sollicitudin ac, elementum eget ipsum. Vestibulum ac malesuada dui, pulvinar lacinia dolor. Aliquam viverra diam massa, et fermentum est ultrices quis. Aliquam finibus libero a ex eleifend feugiat. Duis a condimentum justo.</p>\n\n<p>Praesent quis volutpat eros. Suspendisse finibus leo vitae pulvinar tempus. Phasellus sodales, sem eu consectetur blandit, nulla dolor sodales eros, vel pulvinar ligula nibh et felis. Nam porttitor dictum urna, ac pharetra enim. Donec orci lectus, consequat id dui vitae, efficitur pellentesque dolor. Nunc non pulvinar turpis. Aenean quis arcu nec leo suscipit consequat id sit amet tortor. Nullam posuere elementum mi id semper. Mauris non tempus nibh. Duis dapibus ipsum urna, vitae pellentesque magna fermentum eu.</p>\n\n<p>Proin quis ligula mauris. Integer eleifend ex vel fermentum finibus. Proin eu lorem id risus feugiat molestie. Ut sit amet venenatis quam. Quisque sollicitudin fermentum nibh a semper. Vestibulum blandit congue lectus, malesuada lacinia justo accumsan ac. Nullam a venenatis nulla. Morbi suscipit ligula a ligula pretium tincidunt. Aliquam erat volutpat. Praesent sed elementum massa. In vitae purus malesuada, consectetur velit quis, sagittis purus. Suspendisse potenti. Etiam augue ligula, euismod nec ultricies eu, placerat eu nisi.</p>\n\n<p>Cras at tortor varius, ultricies nulla vitae, sodales orci. Nulla tempor lobortis mauris, ut placerat neque dignissim eleifend. Maecenas vel eleifend velit. Aenean convallis sodales egestas. Nam sit amet rhoncus eros, et venenatis ligula. Fusce ante elit, semper sit amet nisl a, ultrices feugiat eros. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec in pellentesque odio, vitae commodo elit. Nulla sed leo at purus pharetra auctor. Morbi commodo vel risus eget mollis. Duis sit amet sollicitudin leo. Donec ultricies condimentum felis, in rhoncus nunc mattis eget.</p>\n\n<p>Mauris suscipit mauris sed purus posuere iaculis. Etiam scelerisque at mauris eget scelerisque. Nam vel quam magna. Mauris consectetur enim vel consectetur finibus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent a dolor nunc. Vestibulum in luctus erat. Duis quis iaculis enim, eu volutpat eros. Maecenas ut sollicitudin erat. In placerat nibh quis lobortis rutrum. Curabitur volutpat blandit urna, dapibus consequat eros vestibulum a. Sed fringilla lobortis dolor, at aliquam arcu convallis et. Duis dignissim luctus facilisis. Nulla bibendum porta dui. Suspendisse vel urna a risus tempus sagittis ut a velit. Praesent iaculis, nulla quis ultricies vehicula, tellus lectus fringilla nunc, in consectetur metus libero eget arcu.</p>\n\n<p>Aenean vel dolor vel nisl blandit ultrices rhoncus eget arcu. Nam ac nisl sem. Phasellus odio dolor, euismod quis sapien vel, euismod consectetur purus. Quisque non auctor odio. Vestibulum pellentesque metus egestas, consectetur sem eget, eleifend metus. In hac habitasse platea dictumst. Ut accumsan ante eget dolor tincidunt, quis posuere nulla tincidunt. Vivamus sagittis blandit metus nec pellentesque. Integer sit amet aliquet arcu. Donec sed iaculis magna. Vivamus vehicula pharetra lacus, at varius tortor sollicitudin sed. Proin turpis ligula, commodo eu auctor vel, varius at justo. Pellentesque porta hendrerit risus, eu placerat lacus. Nunc malesuada pharetra convallis. Aenean venenatis, dui a bibendum scelerisque, erat lectus interdum orci, ac tristique elit leo quis turpis.</p>\n\n<p>Etiam et tempor augue. Mauris tempor eget neque a semper. Nulla ante erat, dignissim ut tincidunt sit amet, consectetur eu orci. Nam vel sagittis erat. Nunc rhoncus consequat blandit. Aliquam iaculis enim eu viverra porttitor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>', 'enabled', 'on', 1665139297, 1664116167),
+(2, 'habeas_data', 'Get to know the privacy policies of PHP Magazine. Know the guidelines for the treatment of information and the management of your personal data.', 'habeas data, privacy policy, privacy notice, php magazine', '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla id augue vitae consectetur. Praesent augue justo, efficitur nec ipsum sit amet, lacinia porttitor felis. Quisque consequat mattis rutrum. Aliquam tristique sapien ut enim iaculis, nec pretium odio aliquet. Aenean eu massa nec nunc auctor viverra. Cras dapibus sem nec magna gravida convallis et eu diam. Maecenas sagittis turpis vitae nibh pellentesque, eget semper erat rutrum. Vestibulum sed urna nunc. Donec felis odio, condimentum vitae maximus vel, consectetur eu urna. Integer metus velit, accumsan at aliquam sit amet, porta quis ipsum. Donec tristique leo ac massa efficitur porttitor in eget risus. Duis porta ante turpis.</p>\n\n<p>Nullam ultricies sodales augue, ut laoreet purus eleifend vel. Duis elit elit, interdum vel erat ut, suscipit pulvinar leo. In porttitor nisi ac blandit iaculis. In ultricies mi sed sem viverra condimentum. Aenean in massa ac elit feugiat egestas a eu elit. Morbi ut lectus tincidunt, fermentum mauris vel, fringilla velit. Ut massa lectus, rutrum non eros id, luctus elementum est. Aliquam lorem arcu, scelerisque elementum odio quis, mollis ultricies erat. Ut pharetra diam a arcu facilisis, at porttitor libero dapibus. Nam enim odio, efficitur ac congue et, interdum vel lectus. Vestibulum eget egestas eros. Vivamus vitae sem vel neque rhoncus mattis. In sit amet commodo arcu. Aenean nec consequat urna, id varius nunc.</p>\n\n<p>Praesent eget justo lobortis, aliquam nisi et, mattis ex. Etiam pretium urna risus, eu facilisis tortor interdum a. Nullam lacinia arcu vitae dignissim semper. Sed malesuada, justo id porttitor feugiat, lectus leo volutpat mi, porta tempor odio nunc tincidunt neque. Fusce gravida sem a erat hendrerit bibendum. Donec non finibus velit, quis rutrum libero. Nulla ante tortor, suscipit fermentum arcu et, efficitur ultrices massa. Vestibulum nunc mi, lobortis nec rhoncus quis, mattis id ipsum. In in fringilla tortor, a luctus tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc sem diam, consectetur id neque sed, iaculis efficitur enim. Phasellus bibendum scelerisque imperdiet. Nulla id tempus metus. Pellentesque sagittis, lorem sit amet semper porttitor, dolor leo sollicitudin leo, at auctor dui nulla ac dolor. Nam volutpat in magna ac pretium. Proin tristique aliquam justo sit amet lacinia.</p>\n\n<p>Ut varius sapien sed finibus lacinia. Curabitur luctus metus quis eros fringilla, sed finibus mi condimentum. Duis et rutrum nunc. Praesent quis dui sed orci placerat accumsan nec a tortor. Duis ut purus faucibus, lobortis magna non, venenatis eros. Nulla sed nisi vel risus egestas ullamcorper sed quis urna. Vivamus enim risus, dignissim in sollicitudin ac, elementum eget ipsum. Vestibulum ac malesuada dui, pulvinar lacinia dolor. Aliquam viverra diam massa, et fermentum est ultrices quis. Aliquam finibus libero a ex eleifend feugiat. Duis a condimentum justo.</p>\n\n<p>Praesent quis volutpat eros. Suspendisse finibus leo vitae pulvinar tempus. Phasellus sodales, sem eu consectetur blandit, nulla dolor sodales eros, vel pulvinar ligula nibh et felis. Nam porttitor dictum urna, ac pharetra enim. Donec orci lectus, consequat id dui vitae, efficitur pellentesque dolor. Nunc non pulvinar turpis. Aenean quis arcu nec leo suscipit consequat id sit amet tortor. Nullam posuere elementum mi id semper. Mauris non tempus nibh. Duis dapibus ipsum urna, vitae pellentesque magna fermentum eu.</p>\n\n<p>Proin quis ligula mauris. Integer eleifend ex vel fermentum finibus. Proin eu lorem id risus feugiat molestie. Ut sit amet venenatis quam. Quisque sollicitudin fermentum nibh a semper. Vestibulum blandit congue lectus, malesuada lacinia justo accumsan ac. Nullam a venenatis nulla. Morbi suscipit ligula a ligula pretium tincidunt. Aliquam erat volutpat. Praesent sed elementum massa. In vitae purus malesuada, consectetur velit quis, sagittis purus. Suspendisse potenti. Etiam augue ligula, euismod nec ultricies eu, placerat eu nisi.</p>\n\n<p>Cras at tortor varius, ultricies nulla vitae, sodales orci. Nulla tempor lobortis mauris, ut placerat neque dignissim eleifend. Maecenas vel eleifend velit. Aenean convallis sodales egestas. Nam sit amet rhoncus eros, et venenatis ligula. Fusce ante elit, semper sit amet nisl a, ultrices feugiat eros. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec in pellentesque odio, vitae commodo elit. Nulla sed leo at purus pharetra auctor. Morbi commodo vel risus eget mollis. Duis sit amet sollicitudin leo. Donec ultricies condimentum felis, in rhoncus nunc mattis eget.</p>\n\n<p>Mauris suscipit mauris sed purus posuere iaculis. Etiam scelerisque at mauris eget scelerisque. Nam vel quam magna. Mauris consectetur enim vel consectetur finibus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent a dolor nunc. Vestibulum in luctus erat. Duis quis iaculis enim, eu volutpat eros. Maecenas ut sollicitudin erat. In placerat nibh quis lobortis rutrum. Curabitur volutpat blandit urna, dapibus consequat eros vestibulum a. Sed fringilla lobortis dolor, at aliquam arcu convallis et. Duis dignissim luctus facilisis. Nulla bibendum porta dui. Suspendisse vel urna a risus tempus sagittis ut a velit. Praesent iaculis, nulla quis ultricies vehicula, tellus lectus fringilla nunc, in consectetur metus libero eget arcu.</p>\n\n<p>Aenean vel dolor vel nisl blandit ultrices rhoncus eget arcu. Nam ac nisl sem. Phasellus odio dolor, euismod quis sapien vel, euismod consectetur purus. Quisque non auctor odio. Vestibulum pellentesque metus egestas, consectetur sem eget, eleifend metus. In hac habitasse platea dictumst. Ut accumsan ante eget dolor tincidunt, quis posuere nulla tincidunt. Vivamus sagittis blandit metus nec pellentesque. Integer sit amet aliquet arcu. Donec sed iaculis magna. Vivamus vehicula pharetra lacus, at varius tortor sollicitudin sed. Proin turpis ligula, commodo eu auctor vel, varius at justo. Pellentesque porta hendrerit risus, eu placerat lacus. Nunc malesuada pharetra convallis. Aenean venenatis, dui a bibendum scelerisque, erat lectus interdum orci, ac tristique elit leo quis turpis.</p>\n\n<p>Etiam et tempor augue. Mauris tempor eget neque a semper. Nulla ante erat, dignissim ut tincidunt sit amet, consectetur eu orci. Nam vel sagittis erat. Nunc rhoncus consequat blandit. Aliquam iaculis enim eu viverra porttitor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>', 'enabled', 'on', 0, 1664116167),
+(4, 'about_us', 'Learn more about PHP Magazine.', 'abous us, php magazine', '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla id augue vitae consectetur. Praesent augue justo, efficitur nec ipsum sit amet, lacinia porttitor felis. Quisque consequat mattis rutrum. Aliquam tristique sapien ut enim iaculis, nec pretium odio aliquet. Aenean eu massa nec nunc auctor viverra. Cras dapibus sem nec magna gravida convallis et eu diam. Maecenas sagittis turpis vitae nibh pellentesque, eget semper erat rutrum. Vestibulum sed urna nunc. Donec felis odio, condimentum vitae maximus vel, consectetur eu urna. Integer metus velit, accumsan at aliquam sit amet, porta quis ipsum. Donec tristique leo ac massa efficitur porttitor in eget risus. Duis porta ante turpis.</p>\n\n<p>Nullam ultricies sodales augue, ut laoreet purus eleifend vel. Duis elit elit, interdum vel erat ut, suscipit pulvinar leo. In porttitor nisi ac blandit iaculis. In ultricies mi sed sem viverra condimentum. Aenean in massa ac elit feugiat egestas a eu elit. Morbi ut lectus tincidunt, fermentum mauris vel, fringilla velit. Ut massa lectus, rutrum non eros id, luctus elementum est. Aliquam lorem arcu, scelerisque elementum odio quis, mollis ultricies erat. Ut pharetra diam a arcu facilisis, at porttitor libero dapibus. Nam enim odio, efficitur ac congue et, interdum vel lectus. Vestibulum eget egestas eros. Vivamus vitae sem vel neque rhoncus mattis. In sit amet commodo arcu. Aenean nec consequat urna, id varius nunc.</p>\n\n<p>Praesent eget justo lobortis, aliquam nisi et, mattis ex. Etiam pretium urna risus, eu facilisis tortor interdum a. Nullam lacinia arcu vitae dignissim semper. Sed malesuada, justo id porttitor feugiat, lectus leo volutpat mi, porta tempor odio nunc tincidunt neque. Fusce gravida sem a erat hendrerit bibendum. Donec non finibus velit, quis rutrum libero. Nulla ante tortor, suscipit fermentum arcu et, efficitur ultrices massa. Vestibulum nunc mi, lobortis nec rhoncus quis, mattis id ipsum. In in fringilla tortor, a luctus tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc sem diam, consectetur id neque sed, iaculis efficitur enim. Phasellus bibendum scelerisque imperdiet. Nulla id tempus metus. Pellentesque sagittis, lorem sit amet semper porttitor, dolor leo sollicitudin leo, at auctor dui nulla ac dolor. Nam volutpat in magna ac pretium. Proin tristique aliquam justo sit amet lacinia.</p>\n\n<p>Ut varius sapien sed finibus lacinia. Curabitur luctus metus quis eros fringilla, sed finibus mi condimentum. Duis et rutrum nunc. Praesent quis dui sed orci placerat accumsan nec a tortor. Duis ut purus faucibus, lobortis magna non, venenatis eros. Nulla sed nisi vel risus egestas ullamcorper sed quis urna. Vivamus enim risus, dignissim in sollicitudin ac, elementum eget ipsum. Vestibulum ac malesuada dui, pulvinar lacinia dolor. Aliquam viverra diam massa, et fermentum est ultrices quis. Aliquam finibus libero a ex eleifend feugiat. Duis a condimentum justo.</p>\n\n<p>Praesent quis volutpat eros. Suspendisse finibus leo vitae pulvinar tempus. Phasellus sodales, sem eu consectetur blandit, nulla dolor sodales eros, vel pulvinar ligula nibh et felis. Nam porttitor dictum urna, ac pharetra enim. Donec orci lectus, consequat id dui vitae, efficitur pellentesque dolor. Nunc non pulvinar turpis. Aenean quis arcu nec leo suscipit consequat id sit amet tortor. Nullam posuere elementum mi id semper. Mauris non tempus nibh. Duis dapibus ipsum urna, vitae pellentesque magna fermentum eu.</p>\n\n<p>Proin quis ligula mauris. Integer eleifend ex vel fermentum finibus. Proin eu lorem id risus feugiat molestie. Ut sit amet venenatis quam. Quisque sollicitudin fermentum nibh a semper. Vestibulum blandit congue lectus, malesuada lacinia justo accumsan ac. Nullam a venenatis nulla. Morbi suscipit ligula a ligula pretium tincidunt. Aliquam erat volutpat. Praesent sed elementum massa. In vitae purus malesuada, consectetur velit quis, sagittis purus. Suspendisse potenti. Etiam augue ligula, euismod nec ultricies eu, placerat eu nisi.</p>\n\n<p>Cras at tortor varius, ultricies nulla vitae, sodales orci. Nulla tempor lobortis mauris, ut placerat neque dignissim eleifend. Maecenas vel eleifend velit. Aenean convallis sodales egestas. Nam sit amet rhoncus eros, et venenatis ligula. Fusce ante elit, semper sit amet nisl a, ultrices feugiat eros. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec in pellentesque odio, vitae commodo elit. Nulla sed leo at purus pharetra auctor. Morbi commodo vel risus eget mollis. Duis sit amet sollicitudin leo. Donec ultricies condimentum felis, in rhoncus nunc mattis eget.</p>\n\n<p>Mauris suscipit mauris sed purus posuere iaculis. Etiam scelerisque at mauris eget scelerisque. Nam vel quam magna. Mauris consectetur enim vel consectetur finibus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Praesent a dolor nunc. Vestibulum in luctus erat. Duis quis iaculis enim, eu volutpat eros. Maecenas ut sollicitudin erat. In placerat nibh quis lobortis rutrum. Curabitur volutpat blandit urna, dapibus consequat eros vestibulum a. Sed fringilla lobortis dolor, at aliquam arcu convallis et. Duis dignissim luctus facilisis. Nulla bibendum porta dui. Suspendisse vel urna a risus tempus sagittis ut a velit. Praesent iaculis, nulla quis ultricies vehicula, tellus lectus fringilla nunc, in consectetur metus libero eget arcu.</p>\n\n<p>Aenean vel dolor vel nisl blandit ultrices rhoncus eget arcu. Nam ac nisl sem. Phasellus odio dolor, euismod quis sapien vel, euismod consectetur purus. Quisque non auctor odio. Vestibulum pellentesque metus egestas, consectetur sem eget, eleifend metus. In hac habitasse platea dictumst. Ut accumsan ante eget dolor tincidunt, quis posuere nulla tincidunt. Vivamus sagittis blandit metus nec pellentesque. Integer sit amet aliquet arcu. Donec sed iaculis magna. Vivamus vehicula pharetra lacus, at varius tortor sollicitudin sed. Proin turpis ligula, commodo eu auctor vel, varius at justo. Pellentesque porta hendrerit risus, eu placerat lacus. Nunc malesuada pharetra convallis. Aenean venenatis, dui a bibendum scelerisque, erat lectus interdum orci, ac tristique elit leo quis turpis.</p>\n\n<p>Etiam et tempor augue. Mauris tempor eget neque a semper. Nulla ante erat, dignissim ut tincidunt sit amet, consectetur eu orci. Nam vel sagittis erat. Nunc rhoncus consequat blandit. Aliquam iaculis enim eu viverra porttitor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>', 'enabled', 'on', 0, 1664116167),
+(5, 'contact', 'If you have any questions, concerns or need to make a proposal, you can contact us and we will respond as soon as possible.', 'contact, how to contact', '', 'enabled', 'on', 0, 1664116167),
+(6, 'sitemap', 'An index of all the stories published by PHP Magazine.', 'sitemap, php magazine sitemap', '', 'enabled', 'on', 0, 1664116167),
+(7, 'delete_account', 'Instructions for deleting your PHP Magazine account', 'Delete account, instructions, php magazine', '', 'enabled', 'off', 0, 1664116167);
 
 -- --------------------------------------------------------
 
@@ -325,24 +328,24 @@ INSERT INTO `page` (`id`, `slug`, `description`, `keywords`, `text`, `status`, `
 --
 
 CREATE TABLE `post` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `user_id` int(11) UNSIGNED NOT NULL,
-  `category_id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `category_id` int(10) UNSIGNED NOT NULL,
   `title` varchar(225) COLLATE utf8_unicode_ci DEFAULT NULL,
   `description` varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL,
   `slug` varchar(225) COLLATE utf8_unicode_ci NOT NULL,
   `thumbnail` varchar(128) CHARACTER SET latin1 DEFAULT 'default-holder',
-  `views` int(11) NOT NULL DEFAULT '0',
-  `likes` int(11) NOT NULL DEFAULT '0',
-  `dislikes` int(11) NOT NULL DEFAULT '0',
-  `post_sources` text COLLATE utf8_unicode_ci,
-  `thumb_sources` text COLLATE utf8_unicode_ci,
+  `views` int(11) NOT NULL DEFAULT 0,
+  `likes` int(11) NOT NULL DEFAULT 0,
+  `dislikes` int(11) NOT NULL DEFAULT 0,
+  `post_sources` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `thumb_sources` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `type` set('normal','video') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'normal',
   `status` set('approved','rejected','pending','deleted') CHARACTER SET utf8 NOT NULL DEFAULT 'pending',
-  `deleted_at` int(11) NOT NULL DEFAULT '0',
-  `updated_at` int(11) NOT NULL DEFAULT '0',
-  `published_at` int(11) NOT NULL DEFAULT '0',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `deleted_at` int(11) NOT NULL DEFAULT 0,
+  `updated_at` int(11) NOT NULL DEFAULT 0,
+  `published_at` int(11) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -357,7 +360,7 @@ CREATE TABLE `reaction` (
   `reacted_id` int(10) UNSIGNED NOT NULL,
   `type` set('like','dislike') NOT NULL,
   `place` set('post','comment','reply') NOT NULL,
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -370,8 +373,8 @@ CREATE TABLE `recobo` (
   `id` int(10) UNSIGNED NOT NULL,
   `recommended_id` int(10) UNSIGNED NOT NULL,
   `post_id` int(10) UNSIGNED NOT NULL,
-  `rorder` int(11) NOT NULL DEFAULT '0',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `rorder` int(11) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -385,7 +388,7 @@ CREATE TABLE `reply` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `comment_id` int(10) UNSIGNED NOT NULL,
   `text` text CHARACTER SET utf8mb4 NOT NULL,
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -397,12 +400,12 @@ CREATE TABLE `reply` (
 CREATE TABLE `report` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
-  `reported_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
+  `reported_id` int(10) UNSIGNED NOT NULL DEFAULT 0,
   `type` set('r_spam','r_none','rp_writing','rp_thumbnail','rp_copyright','rc_offensive','rc_abusive','rc_disagree','rc_marketing','ru_hate','ru_picture','ru_copyright') NOT NULL,
   `place` set('user','post','comment','reply') NOT NULL,
-  `description` text,
+  `description` text DEFAULT NULL,
   `status` set('unanswered','answered','archived','removed') NOT NULL DEFAULT 'unanswered',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -412,10 +415,10 @@ CREATE TABLE `report` (
 --
 
 CREATE TABLE `saved` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `user_id` int(11) UNSIGNED NOT NULL,
-  `post_id` int(11) UNSIGNED NOT NULL,
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `post_id` int(10) UNSIGNED NOT NULL,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -425,11 +428,11 @@ CREATE TABLE `saved` (
 --
 
 CREATE TABLE `session` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `user_id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
   `token` varchar(150) NOT NULL,
-  `details` text,
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `details` text DEFAULT NULL,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -451,25 +454,24 @@ INSERT INTO `setting` (`name`, `value`) VALUES
 ('2check', 'on'),
 ('approve_posts', 'off'),
 ('blocked_users', 'on'),
-('censored_words', 'prueba, oscar'),
+('censored_words', 'fuck, fuck you, puto, maldito, porno, puta'),
 ('contact_email', 'hi@soyvillareal.com'),
 ('dark_palette', '{\"background\":{\"white\":\"#181818\",\"blue\":\"#265070\",\"grely\":\"#303030\",\"black\":\"#e4e6eb\"},\"color\":{\"blackly\":\"#b0b3b8\",\"black\":\"#e4e6eb\",\"white\":\"#181818\",\"grey\":\"#aaa\",\"blue\":\"#265070\"},\"border\":{\"blue\":\"#265070\",\"focus-blue\":\"#265070\",\"grely\":\"#606060\",\"grey\":\"#aaa\",\"black\":\"#a5a6ab\"},\"hover\":{\"blue\":{\"type\":\"color\",\"value\":\"#265070\"},\"background\":{\"type\":\"background-color\",\"value\":\"#222222\"}}}'),
 ('description', 'The best digital magazine for newspapers or bloggers'),
 ('dir_pages', 'ltr'),
 ('dismiss_cookie', 'on'),
-('email', 'support@phpmagazine.soyvillareal.com'),
-('facebook_page', 'https://facebook.com/elegirco'),
-('fb_app_id', '981453882030339'),
+('facebook_page', 'https://facebook.com/soyvillareal'),
+('fb_app_id', ''),
 ('fb_comments', 'on'),
-('fb_secret_id', '9e5a2efec3d3f1aefef5c387bbf6e2dd'),
+('fb_secret_id', ''),
 ('file_size_limit', '26214400'),
-('google_analytics', 'UA-127104007-1'),
-('go_app_id', '344500601804-dch7u6ekcfasts7rjkak0b83jin34qce.apps.googleusercontent.com'),
-('go_secret_id', 'AIzaSyBXxQsoVpbKX7IbrYIfstZmlI0YFa-I7tE'),
-('hidden_domains', 'metatube.com, facebook.com'),
-('instagram_page', 'https://instagram.com/elegirco'),
-('keyword', 'PHP Magazine, Magazine, PHP Script, Nyt clone, Open Source'),
-('language', 'es'),
+('google_analytics', 'G-T102KHMVHQ'),
+('go_app_id', ''),
+('go_secret_id', ''),
+('hidden_domains', 'pornhub.com, xvideos.com'),
+('instagram_page', 'https://instagram.com/soyvillareal'),
+('keywords', 'PHP Magazine, Magazine, PHP Script, Nyt clone, Open Source project'),
+('language', 'en'),
 ('last_sitemap', '0'),
 ('light_palette', '{\"background\":{\"white\":\"#fff\",\"blue\":\"#326891\",\"grely\":\"#e9e9e9\",\"redly\":\"#dd6e68\",\"red\":\"#cb423b\",\"black\":\"#000\",\"blackly\":\"rgba(0,0,0,.5)\",\"green\":\"#61a125\"},\"color\":{\"blackly\":\"#333\",\"black\":\"#000\",\"white\":\"#fff\",\"grey\":\"#909090\",\"blue\":\"#326891\",\"red\":\"#cb0e0b\",\"green\":\"#61a125\",\"orange\":\"#f29f18\"},\"border\":{\"blue\":\"#326891\",\"focus-blue\":\"#326891\",\"grely\":\"#cdcdcd\",\"grey\":\"#909090\",\"black\":\"#000\",\"red\":\"#cb0e0b\"},\"hover\":{\"blue\":{\"type\":\"color\",\"value\":\"#326891\"},\"background\":{\"type\":\"background-color\",\"value\":\"#ebebeb\"}}}'),
 ('max_words_about', '800'),
@@ -477,31 +479,32 @@ INSERT INTO `setting` (`name`, `value`) VALUES
 ('max_words_report', '500'),
 ('max_words_unsub_newsletter', '600'),
 ('nodejs', 'off'),
-('node_hostname', '192.168.1.52'),
+('node_hostname', 'phpmagazine.soyvillareal.com'),
 ('node_server_port', '3000'),
 ('number_labels', '8'),
 ('number_of_fonts', '8'),
-('recaptcha', 'on'),
-('recaptcha_private_key', '6LcpOG4iAAAAAOvgi2ctony_gHbrVCJuwK02Qf_S'),
-('recaptcha_public_key', '6LcpOG4iAAAAAJ3d4AQnMbECkQbItEN7oyeV80ql'),
+('recaptcha', 'off'),
+('recaptcha_private_key', ''),
+('recaptcha_public_key', ''),
 ('server_type', 'smtp'),
 ('show_palette', 'on'),
-('smtp_encryption', 'ssl'),
+('smtp_encryption', 'tls'),
 ('smtp_host', 'smtp.soyvillareal.com'),
-('smtp_password', 'Oscar1980O$'),
-('smtp_port', '465'),
+('smtp_password', ''),
+('smtp_port', '587'),
 ('smtp_username', 'no-reply@phpmagazine.soyvillareal.com'),
 ('switch_mode', 'on'),
 ('system_comments', 'on'),
 ('theme', 'default'),
 ('theme_mode', 'light'),
+('timezone', 'America/Bogota'),
 ('title', 'PHP Magazine'),
 ('token_expiration_attempts', '7'),
 ('token_expiration_hours', '1'),
-('twitter_page', 'https://twitter.com/elergirco'),
-('tw_app_id', 'VDBJTEdjRU1Qc0Y4ekxOWlVQSDI6MTpjaQ'),
-('tw_secret_id', '3n98ATynegf1rtneYljpJIuIIwKCwMpaMgCJfELALXTI_ahpQN'),
-('verify_email', 'on');
+('twitter_page', 'https://twitter.com/zoyvillareal'),
+('tw_api_key', ''),
+('tw_api_key_secret', ''),
+('verify_email', 'off');
 
 -- --------------------------------------------------------
 
@@ -510,10 +513,10 @@ INSERT INTO `setting` (`name`, `value`) VALUES
 --
 
 CREATE TABLE `tag` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `post_id` int(11) UNSIGNED NOT NULL,
-  `label_id` int(11) UNSIGNED NOT NULL,
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `id` int(10) UNSIGNED NOT NULL,
+  `post_id` int(10) UNSIGNED NOT NULL,
+  `label_id` int(10) UNSIGNED NOT NULL,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -524,22 +527,15 @@ CREATE TABLE `tag` (
 
 CREATE TABLE `token` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
   `verify_email` varchar(50) NOT NULL,
   `change_email` varchar(50) NOT NULL,
   `reset_password` varchar(50) NOT NULL,
   `unlink_email` varchar(50) NOT NULL,
   `2check` varchar(50) NOT NULL,
-  `expires` text,
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `expires` text DEFAULT NULL,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `token`
---
-
-INSERT INTO `token` (`id`, `user_id`, `verify_email`, `change_email`, `reset_password`, `unlink_email`, `2check`, `expires`, `created_at`) VALUES
-(1, 1, 'a9f4c86c0ac253939e115d70d64219b7', 'd57224c48899e843dfdd2170ae54a92e', '7aab9a1437468c2dcf12ff87aac6787b', '5a54e63b9bf1ba39f8181d82dec87e533b374df5', 'a6741e6ae72646d5e512876e74aef2a1', '{\"2check\":{\"repeat\":2,\"updated_at\":1668544298},\"verify_email\":{\"updated_at\":1667867722,\"repeat\":1},\"reset_password\":{\"repeat\":2,\"updated_at\":1668882765},\"change_email\":{\"repeat\":4,\"updated_at\":1667859479}}', 1649983196);
 
 -- --------------------------------------------------------
 
@@ -551,7 +547,7 @@ CREATE TABLE `typing` (
   `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(10) UNSIGNED NOT NULL,
   `profile_id` int(10) UNSIGNED NOT NULL,
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -561,42 +557,35 @@ CREATE TABLE `typing` (
 --
 
 CREATE TABLE `user` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `username` varchar(40) CHARACTER SET utf8 NOT NULL,
-  `user_changed` int(11) NOT NULL DEFAULT '0',
+  `user_changed` int(11) NOT NULL DEFAULT 0,
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `new_email` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `ip` varchar(43) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(60) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `surname` varchar(60) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `birthday` int(11) NOT NULL DEFAULT '0',
-  `birthday_changed` int(11) NOT NULL DEFAULT '0',
+  `birthday` int(11) NOT NULL DEFAULT 0,
+  `birthday_changed` int(11) NOT NULL DEFAULT 0,
   `gender` set('male','female') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'male',
   `language` varchar(2) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'en',
-  `darkmode` tinyint(1) NOT NULL DEFAULT '0',
+  `darkmode` tinyint(1) NOT NULL DEFAULT 0,
   `avatar` varchar(128) CHARACTER SET latin1 NOT NULL DEFAULT 'default-holder',
-  `about` text COLLATE utf8_unicode_ci,
-  `facebook` varchar(50) CHARACTER SET latin1 NOT NULL,
-  `twitter` varchar(50) CHARACTER SET latin1 NOT NULL,
-  `instagram` varchar(100) CHARACTER SET latin1 NOT NULL,
+  `about` text CHARACTER SET utf8mb4 DEFAULT NULL,
+  `facebook` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `twitter` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `instagram` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
   `main_sonet` set('facebook','twitter','instagram') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'twitter',
-  `contact_email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `contact_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `status` set('pending','active','deactivated','deleted') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'pending',
   `role` set('admin','moderator','publisher','viewer') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'viewer',
   `2check` set('activated','deactivated') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'deactivated',
   `type` set('normal','facebook','twitter','google') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'normal',
-  `notifications` text COLLATE utf8_unicode_ci,
-  `shows` text COLLATE utf8_unicode_ci,
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `notifications` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `shows` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Volcado de datos para la tabla `user`
---
-
-INSERT INTO `user` (`id`, `username`, `user_changed`, `email`, `new_email`, `ip`, `password`, `name`, `surname`, `birthday`, `birthday_changed`, `gender`, `language`, `darkmode`, `avatar`, `about`, `facebook`, `twitter`, `instagram`, `main_sonet`, `contact_email`, `status`, `role`, `2check`, `type`, `notifications`, `shows`, `created_at`) VALUES
-(1, 'soyvillareal', 0, 'hi@soyvillareal.com', NULL, '::1', '$2y$12$ZMbS5cCobmw2IrcmMr0tLuCh.8sa.ZwBzw03612rKsDAeKo2L19u6', 'Oscar', 'Garcés', 930009600, 0, 'male', 'es', 0, 'PHPMagazine-12b4c375fc1d5cf8060b9042e3cc944d51b67cbd', 'Periodista, apasionado por la historia, la geopolítica y los documentales. Hago preguntas desde que tengo uso de razón. Egresado de la Universidad Eafit.', 'elegirco', 'elergirco', 'elegirco', 'twitter', 'i1409886@gmail.com', 'active', 'admin', 'deactivated', 'normal', '[\"followers\",\"post\",\"collab\",\"react\",\"pcomment\",\"preply\",\"ucomment\",\"ureply\",\"21\"]', '{\"birthday\":\"on\",\"gender\":\"on\",\"contact_email\":\"on\",\"messages\":\"on\",\"followers\":\"on\"}', 1611596407);
 
 -- --------------------------------------------------------
 
@@ -605,11 +594,11 @@ INSERT INTO `user` (`id`, `username`, `user_changed`, `email`, `new_email`, `ip`
 --
 
 CREATE TABLE `view` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `user_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
-  `post_id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `post_id` int(10) UNSIGNED NOT NULL,
   `fingerprint` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -619,13 +608,13 @@ CREATE TABLE `view` (
 --
 
 CREATE TABLE `widget` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `content` text COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `status` set('enabled','disabled') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'disabled',
-  `updated_at` int(11) NOT NULL DEFAULT '0',
-  `created_at` int(11) NOT NULL DEFAULT '0'
+  `updated_at` int(11) NOT NULL DEFAULT 0,
+  `created_at` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -633,12 +622,12 @@ CREATE TABLE `widget` (
 --
 
 INSERT INTO `widget` (`id`, `name`, `content`, `type`, `status`, `updated_at`, `created_at`) VALUES
-(7, 'post_body', '<ins class=\"adsbygoogle\" style=\"display:block\" data-ad-client=\"ca-pub-5730259165592897\" data-ad-slot=\"5293450553\" data-ad-format=\"auto\" data-full-width-responsive=\"true\"></ins>\n    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>', 'pbody', 'enabled', 1560990818, 1559974643),
-(8, 'aside', '<ins class=\"adsbygoogle\"\n     style=\"display:block; text-align:center;\"\n     data-ad-layout=\"in-article\"\n     data-ad-format=\"fluid\"\n     data-ad-client=\"ca-pub-5730259165592897\"\n     data-ad-slot=\"9414759438\"></ins>\n<script>\n     (adsbygoogle = window.adsbygoogle || []).push({});\n</script>', 'aside', 'enabled', 1561003881, 1561003881),
-(9, 'post_top', '<ins class=\"adsbygoogle\" style=\"display:block\" data-ad-client=\"ca-pub-5730259165592897\" data-ad-slot=\"5293450553\" data-ad-format=\"auto\" data-full-width-responsive=\"true\"></ins>\r\n    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>', 'ptop', 'enabled', 1560990818, 1559974643),
-(10, 'home_top', '<ins class=\"adsbygoogle\" style=\"display:block\" data-ad-client=\"ca-pub-5730259165592897\" data-ad-slot=\"5293450553\" data-ad-format=\"auto\" data-full-width-responsive=\"true\"></ins>\r\n    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>', 'htop', 'enabled', 1560990818, 1559974643),
-(11, 'home_load', '<ins class=\"adsbygoogle\" style=\"display:block\" data-ad-client=\"ca-pub-5730259165592897\" data-ad-slot=\"5293450553\" data-ad-format=\"auto\" data-full-width-responsive=\"true\"></ins>\r\n    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>', 'hload', 'enabled', 1560990818, 1559974643),
-(12, 'horiz_posts', '<ins class=\"adsbygoogle\"\n     style=\"display:block; text-align:center;\"\n     data-ad-layout=\"in-article\"\n     data-ad-format=\"fluid\"\n     data-ad-client=\"ca-pub-5730259165592897\"\n     data-ad-slot=\"9414759438\"></ins>\n<script>\n     (adsbygoogle = window.adsbygoogle || []).push({});\n</script>', 'horizposts', 'enabled', 1561003881, 1561003881);
+(7, 'post_body', '', 'pbody', 'enabled', 1560990818, 1559974643),
+(8, 'aside', '', 'aside', 'enabled', 1561003881, 1561003881),
+(9, 'post_top', '', 'ptop', 'enabled', 1560990818, 1559974643),
+(10, 'home_top', '', 'htop', 'enabled', 1560990818, 1559974643),
+(11, 'home_load', '', 'hload', 'enabled', 1560990818, 1559974643),
+(12, 'horiz_posts', '', 'horizposts', 'enabled', 1561003881, 1561003881);
 
 -- --------------------------------------------------------
 
@@ -648,9 +637,9 @@ INSERT INTO `widget` (`id`, `name`, `content`, `type`, `status`, `updated_at`, `
 
 CREATE TABLE `word` (
   `word` varchar(160) NOT NULL,
-  `en` text,
-  `ar` text,
-  `es` text
+  `en` text DEFAULT NULL,
+  `ar` text DEFAULT NULL,
+  `es` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -886,7 +875,7 @@ INSERT INTO `word` (`word`, `en`, `ar`, `es`) VALUES
 ('following', 'Following', 'التالية', 'Siguiendo'),
 ('follow_us_on', 'Follow us on', 'اتبعنا', 'Síguenos en'),
 ('footer_copyright_message', 'Copyright © {$year_now} {$settings->title}. All rights reserved.', 'حقوق النشر © {$year_now} {$settings->title}. كل الحقوق محفوظة.', 'Copyright © {$year_now} {$settings->title}. Todos los derechos reservados.'),
-('footer_message', 'We are a different medium, independent and very dedicated. We try to cover news of general interest that are not biased for one reason or another, we are different journalists, we are part of the future.', 'نحن وسيط مختلف ومستقل ومخلص للغاية. نحاول تغطية أخبار المصلحة العامة غير المنحازة لسبب أو لآخر ، فنحن صحفيون مختلفون ، نحن جزء من المستقبل.', 'Somos un medio diferente, independiente y muy dedicado. Intentamos cubrir noticias de interés general que no estén sesgadas por una u otra razón, somos periodistas diferentes, somos parte del futuro.'),
+('footer_message', 'The best digital magazine for newspapers or bloggers; Warning: this is the beta version, there are features to be developed, v1 will contain those features.', 'أفضل مجلة رقمية للصحف أو المدونين ؛ تحذير: هذا هو الإصدار التجريبي ، وهناك ميزات يجب تطويرها ، وسيحتوي الإصدار 1 على هذه الميزات.', 'La mejor revista digital para periodicos o blogueros; Advertencia: esta es la versión beta, faltan caracacteristicas por desarrollar, la v1 contendrá esas caracacteristicas.'),
 ('for', 'For', 'إلى عن على', 'Para'),
 ('forgot_your_password', 'Did you forget your password?', 'هل نسيت كلمة المرور الخاصة بك؟', '¿Olvidaste tu contraseña?'),
 ('form_no_longer_valid_please_again_later', 'This form is no longer valid, please try again later.', 'هذا النموذج لم يعد صالحًا ، يرجى المحاولة مرة أخرى لاحقًا.', 'Este formulario ya no es válido, por favor intenta de nuevo más tarde.'),
@@ -947,7 +936,6 @@ INSERT INTO `word` (`word`, `en`, `ar`, `es`) VALUES
 ('last_week', 'In the past week', 'في الاسبوع الماضي', 'La semana pasada'),
 ('latest_from', 'The latest of', 'أحدث من', 'Lo último de'),
 ('latest_in', 'Latest in', 'الأحدث في', 'Lo último en'),
-('latest_news_colombia_world', 'Latest News from Colombia and the World', 'آخر الأخبار من كولومبيا والعالم', 'Últimas Noticias de Colombia y el Mundo'),
 ('learn_more_about_cookies', 'Learn more about cookies', 'تعرف على المزيد حول ملفات تعريف الارتباط', 'Aprender más sobre las cookies'),
 ('leave_page_changes_will_saved', 'If you leave the page your changes will not be saved', 'إذا غادرت الصفحة ، فلن يتم حفظ تغييراتك', 'Si abandona la página sus cambios no se guardarán'),
 ('less_details', 'Less details', 'تفاصيل أقل', 'Menos detalles'),
@@ -1045,6 +1033,7 @@ INSERT INTO `word` (`word`, `en`, `ar`, `es`) VALUES
 ('other_settings', 'Other settings', 'اعدادات اخرى', 'Otras configuraciones'),
 ('page_about_us', 'About us?', 'معلومات عنا؟', '¿Quiénes somos?'),
 ('page_contact', 'Contact', 'اتصال', 'Contactar'),
+('page_delete_account', 'Delete account', 'حذف الحساب', 'Borrar cuenta'),
 ('page_habeas_data', 'Habeas Data', 'بيانات المثول أمام القضاء', 'Habeas Data'),
 ('page_not_found', 'Page not found', 'الصفحة غير موجودة', 'Página no encontrada'),
 ('page_sitemap', 'Site Map', 'خريطة الموقع', 'Mapa del sitio'),
@@ -1187,6 +1176,7 @@ INSERT INTO `word` (`word`, `en`, `ar`, `es`) VALUES
 ('technical_problems', 'Technical problems', 'مشاكل تقنية', 'Problemas técnicos'),
 ('text', 'Text', 'نص', 'Texto'),
 ('the_account_been_deactivated', 'The account has been deactivated', 'تم إلغاء تنشيط الحساب', 'La cuenta ha sido desactivada'),
+('the_best_digital_magazine', 'The best digital magazine', 'أفضل مجلة رقمية', 'La mejor revista digital'),
 ('the_items_cannot_fully_displayed', 'The items cannot be fully displayed, the screen is too small.', 'لا يمكن عرض العناصر بالكامل ، فالشاشة صغيرة جدًا.', 'Los elementos no se pueden visualizar completos, la pantalla es demasiado pequeña.'),
 ('this_email_is_already_subscribed', 'This email is already subscribed', 'هذا البريد الإلكتروني مشترك بالفعل', 'Este correo ya está suscrito'),
 ('this_field_is_empty', 'This field is empty', 'هذا الحقل فارغ', 'Este campo está vacío'),
@@ -1532,151 +1522,181 @@ ALTER TABLE `word`
 --
 ALTER TABLE `block`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `breaking`
 --
 ALTER TABLE `breaking`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `category`
 --
 ALTER TABLE `category`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
 --
 -- AUTO_INCREMENT de la tabla `chat`
 --
 ALTER TABLE `chat`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `collaborator`
 --
 ALTER TABLE `collaborator`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `comment`
 --
 ALTER TABLE `comment`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `entry`
 --
 ALTER TABLE `entry`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `follower`
 --
 ALTER TABLE `follower`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `label`
 --
 ALTER TABLE `label`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `language`
 --
 ALTER TABLE `language`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT de la tabla `messaan`
 --
 ALTER TABLE `messaan`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `messafi`
 --
 ALTER TABLE `messafi`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `message`
 --
 ALTER TABLE `message`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `newscate`
 --
 ALTER TABLE `newscate`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `newsletter`
 --
 ALTER TABLE `newsletter`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `notification`
 --
 ALTER TABLE `notification`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `page`
 --
 ALTER TABLE `page`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
 --
 -- AUTO_INCREMENT de la tabla `post`
 --
 ALTER TABLE `post`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `reaction`
 --
 ALTER TABLE `reaction`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `recobo`
 --
 ALTER TABLE `recobo`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `reply`
 --
 ALTER TABLE `reply`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `report`
 --
 ALTER TABLE `report`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `saved`
 --
 ALTER TABLE `saved`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `session`
 --
 ALTER TABLE `session`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `tag`
 --
 ALTER TABLE `tag`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `token`
 --
 ALTER TABLE `token`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `typing`
 --
 ALTER TABLE `typing`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `view`
 --
 ALTER TABLE `view`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT de la tabla `widget`
 --
 ALTER TABLE `widget`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
 --
 -- Restricciones para tablas volcadas
 --
@@ -1719,7 +1739,7 @@ ALTER TABLE `comment`
 -- Filtros para la tabla `entry`
 --
 ALTER TABLE `entry`
-  ADD CONSTRAINT `fk_pentry` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_pentry` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `follower`
@@ -1765,8 +1785,8 @@ ALTER TABLE `notification`
 -- Filtros para la tabla `post`
 --
 ALTER TABLE `post`
-  ADD CONSTRAINT `fk_cpost` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`) ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_upost` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_cpost` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `fk_upost` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 --
 -- Filtros para la tabla `reaction`
@@ -1798,27 +1818,27 @@ ALTER TABLE `report`
 -- Filtros para la tabla `saved`
 --
 ALTER TABLE `saved`
-  ADD CONSTRAINT `fk_psaved` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_usaved` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_psaved` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_usaved` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `session`
 --
 ALTER TABLE `session`
-  ADD CONSTRAINT `fk_usession` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_usession` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `tag`
 --
 ALTER TABLE `tag`
-  ADD CONSTRAINT `fk_plabel` FOREIGN KEY (`label_id`) REFERENCES `label` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_tpost` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_plabel` FOREIGN KEY (`label_id`) REFERENCES `label` (`id`),
+  ADD CONSTRAINT `fk_tpost` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `token`
 --
 ALTER TABLE `token`
-  ADD CONSTRAINT `fk_utoken` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_utoken` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `typing`
@@ -1831,7 +1851,8 @@ ALTER TABLE `typing`
 -- Filtros para la tabla `view`
 --
 ALTER TABLE `view`
-  ADD CONSTRAINT `fk_pview` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `fk_pview` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE CASCADE;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

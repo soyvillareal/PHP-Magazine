@@ -49,18 +49,18 @@ if(!empty($ServerFails)){
 
 $conn->set_charset('utf8mb4');
 $dba = new db($conn);
+session_start();
 
 ini_set('display_errors', 0);
 ini_set('display_startup_errors', 0);
 error_reporting(0);
 
-@ini_set('max_execution_time', 0);
-@ini_set("memory_limit", "-1");
-
 ini_set('session.cookie_samesite', 'None');
 session_set_cookie_params(['samesite' => 'None']);
 
-session_start();
+@ini_set('max_execution_time', 0);
+@ini_set("memory_limit", "-1");
+@set_time_limit(0);
 
 $country_codes = array(
     "AF" => "Afghanistan",

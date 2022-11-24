@@ -99,12 +99,6 @@ function Publisher(socket) {
     return TEMP.loggedin === !1 ? !1 : role == 'publisher' || role == 'moderator' || role == 'admin' ? !0 : !1;
 }
 
-function Viewer(socket) {
-    var TEMP = global.TEMP[socket.id],
-        role = TEMP.user.role;
-    return TEMP.loggedin === !1 ? !1 : role == 'viewer' ? !0 : !1;
-}
-
 function Settings() {
     var data = {};
     try {
@@ -1553,7 +1547,6 @@ module.exports = {
     Admin,
     Moderator,
     Publisher,
-    Viewer,
     Settings,
     setSocket,
     getSockets,

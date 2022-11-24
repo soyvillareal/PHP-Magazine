@@ -1,0 +1,122 @@
+/*!
+    +------------------------------------------------------------------------+
+    | @author Oscar Garcés (SoyVillareal)
+    | @author_url 1: https://soyvillareal.com
+    | @author_url 2: https://github.com/soyvillareal
+    | @author_email: hi@soyvillareal.com   
+    +------------------------------------------------------------------------+
+    | PHP Magazine - The best digital magazine for newspapers or bloggers
+    | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+    +------------------------------------------------------------------------+
+*/
+
+.item-pimage figure {
+    width: 180px;
+    height: 180px;
+}
+.btn-follow[type=follow] {
+    width: 140px;
+}
+.btn-follow[type=following] {
+    width: 165px;
+}
+.btn-follow[type=following] #text-follow,
+.btn-follow[type=following] #text-unfollow,
+.btn-follow[type=follow] #text-following,
+.btn-follow[type=follow] #text-unfollow {
+    display: none;
+}
+.btn-follow[type=following]:not([disabled]):active,
+.btn-follow[type=following]:not([disabled]):focus {
+    background-color: rgb(200, 60, 60, .1);
+    color: #cb423b;
+    border-color: #cb423b !important;
+}
+.btn-follow[type=following]:not([disabled]):active #text-following,
+.btn-follow[type=following]:not([disabled]):focus #text-following {
+    display: none;
+}
+.btn-follow[type=following]:not([disabled]):active #text-unfollow,
+.btn-follow[type=following]:not([disabled]):focus #text-unfollow {
+    display: block;
+}
+#btn-poptions[aria-expanded=true] ~ #content-poptions {
+    display: block !important;
+}
+.content-alert#alert-pblock ul {
+    list-style: disc;
+    margin-left: 18px;
+}
+@media (max-width: 590px){
+    .container-profile .content-pinfo,
+    .container-profile .content-plinks {
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        -webkit-align-items: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+    .content-plinks nav {
+        margin-left: auto;
+        margin-bottom: 15px;
+    }
+    .content-pinfo .item-pinfo {
+        text-align: center;
+        margin-top: 15px;
+        margin-right: 0;
+    }
+    .content-pinfo .item-pimage {
+        margin: 0;
+        padding: 0;
+    }
+    .item-pimage figure {
+        width: 120px;
+        height: 120px;
+    }
+    .item-pinfo .item-piname {
+        margin: 0px auto 10px auto;
+        padding-left: 31px;
+    }
+    .item-pinfo h1 {
+        font-size: 28px;
+    }
+    .item-pinfo p {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+    .content-sposts h2 {
+        font-size: 17px;
+    }
+}
+@media(max-width: 420px) {
+    .content-alert#alert-pblock {
+        top: calc(50% - 136px);
+    }
+}
+@media(min-width: 419px) {
+    .content-alert#alert-pblock {
+        width: 400px;
+        top: calc(50% - 117px);
+        left: calc(50% - 200px);
+    }
+}
+@media(max-width: 300px){
+    .content-alert#alert-pblock {
+        top: calc(50% - 191px);
+    }
+}
+@media(pointer: fine) {
+    .btn-follow[type=following]:not([disabled]):hover {
+        background-color: rgb(200, 60, 60, .1);
+        color: #cb423b;
+        border-color: #cb423b !important;
+    }
+    .btn-follow[type=following]:not([disabled]):hover #text-following {
+        display: none;
+    }
+    .btn-follow[type=following]:not([disabled]):hover #text-unfollow {
+        display: block;
+    }
+}

@@ -220,7 +220,7 @@
                                              <span class="color-blackly font-medium text-capitalize">{$me->username}</span>
                                           </a>
                                        </div>
-                                       <?php if($TEMP['#publisher'] == true) { ?>
+                                       <?php if($TEMP['#settings']['post_article'] == 'all' || ($TEMP['#publisher'] === true && $TEMP['#settings']['post_article'] == 'publisher')) { ?>
                                        <div class="dropdown-account-item display-flex border-bottom border-grely">
                                           <a class="w-100 color-grey font-medium padding-t10 padding-b10 padding-l10 padding-r10 hover-button" href="{$url->{{#r_create_post}}}" target="_self" title="{$word->create_post}">{$word->create_post}</a>
                                        </div>

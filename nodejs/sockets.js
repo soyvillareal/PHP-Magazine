@@ -841,7 +841,7 @@ module.exports = async function(socket){
                     WORD = TEMP.word,
                     SETTINGS = functions.Settings(),
                     blocked_inusers = TEMP.blocked_inusers;
-                if(functions.Publisher(socket) == !0){
+                if(SETTINGS.post_article == 'all' || (functions.Publisher(socket) == !0 && SETTINGS.post_article == 'publisher')){
                     var empty = [],
                         error = [],
                         title = functions.Filter(fields.title),
@@ -1687,7 +1687,7 @@ module.exports = async function(socket){
                     WORD = TEMP.word,
                     SETTINGS = functions.Settings(),
                     blocked_inusers = TEMP.blocked_inusers;
-                if(functions.Publisher(socket) == !0){
+                if(SETTINGS.post_article == 'all' || (functions.Publisher(socket) == !0 && SETTINGS.post_article == 'publisher')){
                     var ids = [],
                         empty = [],
                         error = [],

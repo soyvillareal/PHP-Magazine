@@ -1,4 +1,4 @@
-/*
+/*!
     +------------------------------------------------------------------------+
     | @author Oscar Garcés (SoyVillareal)
     | @author_url 1: https://soyvillareal.com
@@ -9,39 +9,4 @@
     | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
     +------------------------------------------------------------------------+
 */
-
-.radio-paper[type="radio"] + label:after,
-.radio-paper[type="radio"] + label:before {
-    content: "";
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    left: 0;
-    top: 0;
-    margin: 2px;
-    transition: 0.28s ease;
-}
-.radio-paper[type="radio"]:checked + label:before {
-    border: 2px solid #065fd4;
-    border-radius: 50%;
-}
-.radio-paper[type="radio"]:checked + label:after {
-    background-color: #065fd4;
-    border: 2px solid #065fd4;
-    z-index: 0;
-    -webkit-transform: scale(0.5);
-    transform: scale(0.5);
-    border-radius: 50%;
-}
-.radio-paper[type="radio"]:not(:checked) + label:after,
-.radio-paper[type="radio"]:not(:checked) + label:before {
-    border: 2px solid #5a5a5a;
-    border-radius: 50%;
-}
-.radio-paper[type="radio"] + label,
-.radio-paper[type="radio"] ~ p {
-    padding-left: 30px;
-}
-.radio-paper[type="radio"]:checked ~ .content_description {
-    display: block !important;
-}
+.radio-paper[type=radio]+label:after,.radio-paper[type=radio]+label:before{content:"";position:absolute;width:15px;height:15px;left:0;top:0;margin:2px;transition:.28s ease}.radio-paper[type=radio]:checked+label:before{border:2px solid #065fd4;border-radius:50%}.radio-paper[type=radio]:checked+label:after{background-color:#065fd4;border:2px solid #065fd4;z-index:0;-webkit-transform:scale(.5);transform:scale(.5);border-radius:50%}.radio-paper[type=radio]:not(:checked)+label:after,.radio-paper[type=radio]:not(:checked)+label:before{border:2px solid #5a5a5a;border-radius:50%}.radio-paper[type=radio]+label,.radio-paper[type=radio]~p{padding-left:30px}.radio-paper[type=radio]:checked~.content_description{display:block!important}

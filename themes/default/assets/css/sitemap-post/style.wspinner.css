@@ -1,0 +1,59 @@
+/*!
+    +------------------------------------------------------------------------+
+    | @author Oscar Garcés (SoyVillareal)
+    | @author_url 1: https://soyvillareal.com
+    | @author_url 2: https://github.com/soyvillareal
+    | @author_email: hi@soyvillareal.com   
+    +------------------------------------------------------------------------+
+    | PHP Magazine - The best digital magazine for newspapers or bloggers
+    | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+    +------------------------------------------------------------------------+
+*/
+
+@-webkit-keyframes palp {
+  0%, 100%{
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50%{
+    transform: translate(-50%, -50%) scale(1.0);
+    opacity: 0;
+  }
+}
+@keyframes palp {
+  0%, 100%{
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50%{
+    transform: translate(-50%, -50%) scale(1.0);
+    opacity: 0;
+  }
+}
+.content-wspinner {
+    z-index: 98;
+    -webkit-user-select: none;
+}
+.item-wspinner {
+    width: 4rem;
+    height: 4rem;
+}
+.item-wspinner::before,
+.item-wspinner::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+}
+.item-wspinner::before {
+    -webkit-animation: palp 2s ease-in-out infinite;
+    animation: palp 2s ease-in-out infinite;
+}
+.item-wspinner::after {
+    -webkit-animation: palp 2s 1s ease-in-out infinite;
+    animation: palp 2s 1s ease-in-out infinite;
+}

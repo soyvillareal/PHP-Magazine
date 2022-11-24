@@ -1,0 +1,62 @@
+/*!
+    +------------------------------------------------------------------------+
+    | @author Oscar Garcés (SoyVillareal)
+    | @author_url 1: https://soyvillareal.com
+    | @author_url 2: https://github.com/soyvillareal
+    | @author_email: hi@soyvillareal.com   
+    +------------------------------------------------------------------------+
+    | PHP Magazine - The best digital magazine for newspapers or bloggers
+    | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+    +------------------------------------------------------------------------+
+*/
+
+.content-recommended .recommended-posts {
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+.content-recommended .item-recommended {
+    width: 203px;
+    min-width: 203px;
+    height: 100%;
+}
+.content-recommended .item-recommended:not(:last-child) {
+    margin-right: 15px;
+    padding-right: 15px;
+    border-right: 1px solid;
+}
+
+.recommended-posts::-webkit-scrollbar {
+    height: 5px;
+}
+.recommended-posts::-webkit-scrollbar-thumb {
+    background: #909090;
+}
+
+@media (min-width: 768px) {
+    .content-more-posts .item-recommended {
+        width: calc(25% - 24px);
+        height: 100%;
+    }
+    .content-more-posts .item-recommended:not(:nth-child(4n)) {
+        margin-right: 15px;
+        padding-right: 15px;
+    }
+}
+@media (min-width: 421px) and (max-width: 767px) {
+    .content-more-posts .item-recommended {
+        width: calc(50% - 15px);
+        height: 100%;
+    }
+    .content-more-posts .item-recommended:not(:nth-child(2n)) {
+        margin-right: 15px;
+        padding-right: 15px;
+    }
+}
+@media (max-width: 419px) {
+    .content-more-posts .item-recommended:not(:last-child) {
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid;
+    }
+}

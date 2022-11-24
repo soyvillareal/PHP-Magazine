@@ -91,7 +91,7 @@ if($one == 'validate'){
 									$TEMP['button'] = $TEMP['#word']['enter_code'];
 
 									$send = Functions::SendEmail(array(
-										'from_email' => $TEMP['#settings']['smtp_username'],
+										'from_email' => $TEMP['#settings']['from_email'],
 							            'from_name' => $TEMP['#settings']['title'],
 										'to_email' => $user['email'],
 										'to_name' => $user['username'],
@@ -211,7 +211,7 @@ if($one == 'validate'){
 										$TEMP['button'] = $TEMP['#word']['verify_your_account'];
 
 						                $send = Functions::SendEmail(array(
-						                    'from_email' => $TEMP['#settings']['smtp_username'],
+						                    'from_email' => $TEMP['#settings']['from_email'],
 							                'from_name' => $TEMP['#settings']['title'],
 						                    'to_email' => $user['email'],
 						                    'to_name' => $user['username'],
@@ -291,7 +291,7 @@ if($one == 'validate'){
 					           	$TEMP['token'] = $token;
 								$TEMP['username'] = $user['username'];
 					            $send = Functions::SendEmail(array(
-					           		'from_email' => $TEMP['#settings']['smtp_username'],
+					           		'from_email' => $TEMP['#settings']['from_email'],
 						            'from_name' => $TEMP['#settings']['title'],
 					           		'to_email' => $email,
 					           		'to_name' => $user['username'],
@@ -392,7 +392,7 @@ if($one == 'validate'){
 
 						if($pass){
 							$send = Functions::SendEmail(array(
-								'from_email' => $TEMP['#settings']['smtp_username'],
+								'from_email' => $TEMP['#settings']['from_email'],
 					            'from_name' => $TEMP['#settings']['title'],
 								'to_email' => $user['email'],
 								'to_name' => $user['username'],

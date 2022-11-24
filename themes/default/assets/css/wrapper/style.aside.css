@@ -1,0 +1,77 @@
+/*!
+    +------------------------------------------------------------------------+
+    | @author Oscar Garcés (SoyVillareal)
+    | @author_url 1: https://soyvillareal.com
+    | @author_url 2: https://github.com/soyvillareal
+    | @author_email: hi@soyvillareal.com   
+    +------------------------------------------------------------------------+
+    | PHP Magazine - The best digital magazine for newspapers or bloggers
+    | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+    +------------------------------------------------------------------------+
+*/
+
+.content-drawer {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.content-drawer::-webkit-scrollbar {
+    width: 8px;
+}
+.content-drawer::-webkit-scrollbar-thumb {
+    background-color: #909090;
+    border-radius: 2px;
+}
+.container-drawer,
+.content-sitems {
+    z-index: 997;
+}
+.content-smessage {
+    top: 50%;
+    left: 0;
+    right: 0;
+    z-index: 0;
+}
+.container-slogo .btn_drawer {
+    top: 0;
+    z-index: 997;
+}
+@media (min-width: 992px){
+    body:not(.backdrop-active-as) .content-smessage {
+        display: none;
+    }
+    .backdrop-active-as .container-drawer {
+        width: 500px;
+    }
+    .backdrop-active-as .container-drawer:before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(18, 18, 18, 0.5);
+        z-index: -1;
+        backdrop-filter: blur(5px);
+    }
+    .container-drawer {
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+    }
+    .content-smessage {
+        display: flex;
+    }
+}
+@media (max-width: 991px){
+    body.backdrop-active-as .content-backdrop-as:before {
+        display: none !important;
+    }
+    .backdrop-active-as .container-drawer {
+        display: block !important;
+    }
+    .container-drawer {
+        top: 94px;
+        height: calc(100% - 94px);
+    }
+}

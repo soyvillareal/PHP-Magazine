@@ -60,19 +60,19 @@ if (isset($_SESSION['_LOGIN_TOKEN'])) {
 $supported_browsers = array(
     array(
         'name' => 'Chrome', // Name
-        'min_version' => 90 // Mimimum supported version
+        'min_version' => 1 // Mimimum supported version
     ),
     array(
         'name' => 'Microsoft Edge',
-        'min_version' => 107
+        'min_version' => 1
     ),
     array(
         'name' => 'Firefox',
-        'min_version' => 107
+        'min_version' => 1
     ),
     array(
         'name' => 'Opera',
-        'min_version' => 107
+        'min_version' => 1
     )
 );
 
