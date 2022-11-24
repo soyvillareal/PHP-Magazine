@@ -1,4 +1,15 @@
 <?php
+
+// +------------------------------------------------------------------------+
+// | @author Oscar Garcés (SoyVillareal)
+// | @author_url 1: https://soyvillareal.com
+// | @author_url 2: https://github.com/soyvillareal
+// | @author_email: hi@soyvillareal.com   
+// +------------------------------------------------------------------------+
+// | PHP Magazine - The best digital magazine for newspapers or bloggers
+// | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+// +------------------------------------------------------------------------+
+
 $slug = Functions::Filter($_GET['slug']);
 if(!empty($slug)){
     $newsletter = $dba->query('SELECT * FROM '.T_NEWSLETTER.' WHERE slug = ?', $slug)->fetchArray();
@@ -36,7 +47,7 @@ if(!empty($newsletter)){
 $TEMP['#page']        = 'newsletter';
 $TEMP['#title']       = $TEMP['#word']['newsletter_settings'] . ' - ' . $TEMP['#settings']['title'];
 $TEMP['#description'] = $TEMP['#settings']['description'];
-$TEMP['#keyword']     = $TEMP['#settings']['keyword'];
+$TEMP['#keywords']     = $TEMP['#settings']['keywords'];
 
 $TEMP['#content']     = Functions::Build("newsletter/content");
 ?>

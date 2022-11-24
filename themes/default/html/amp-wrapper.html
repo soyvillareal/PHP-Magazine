@@ -62,26 +62,22 @@
         }
     </script>
     
-
-
-
     <title>{$global_title}</title>
     <link rel="canonical" href="{$url}" />
     <meta property="fb:app_id" content="{$settings->fb_app_id}" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="{#og_type}" />
     <meta property="og:site_name" content="{$settings->title}" />
     <meta property="og:title" content="{$global_title}" />
-    <meta property="og:description" content="{$global_description}}" />
-    <meta property="og:url" content="{$amp_url}" />
-    <meta property="og:locale" content="{#lang}" />
-    <meta property="og:image" content="{$thumbnail}" />
+    <meta property="og:description" content="{$global_description}" />
+    <meta property="og:url" content="{#og_url}" />
+    <meta property="og:locale" content="{#lang_code}" />
+    <meta property="og:image" content="{#og_image}" />
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="{$global_title}" />
-    <meta name="twitter:url" content="{$amp_url}">
-    <meta name="twitter:description" content="{$global_description}}" />
-    <meta name="twitter:image" content="{$thumbnail}" />
+    <meta name="twitter:url" content="{#og_url}">
+    <meta name="twitter:description" content="{$global_description}" />
+    <meta name="twitter:image" content="{#og_image}" />
     <meta name="amp-experiments-opt-in" content="amp-next-page" />
-
     <script async custom-element="amp-next-page" src="https://cdn.ampproject.org/v0/amp-next-page-0.1.js"></script>
     <script async custom-element="amp-selector" src="https://cdn.ampproject.org/v0/amp-selector-0.1.js"></script>
     <script async custom-element="amp-iframe" src="https://cdn.ampproject.org/v0/amp-iframe-0.1.js"></script>
@@ -103,6 +99,20 @@
 
 </head>
 <body class="body background-white color-black" dir="{#dir}">
+    <!-- 
+       +------------------------------------------------------------------------+
+       | -----------------------------------------------------------------------
+       |        Don't worry, this message is not displayed in your browser
+       | -----------------------------------------------------------------------
+       | @author Oscar Garcés (SoyVillareal)
+       | @author_url 1: https://soyvillareal.com
+       | @author_url 2: https://github.com/soyvillareal
+       | @author_email: hi@soyvillareal.com   
+       +------------------------------------------------------------------------+
+       | PHP Magazine - The best digital magazine for newspapers or bloggers
+       | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+       +------------------------------------------------------------------------+
+    -->
     <amp-sidebar id="sidebar" class="container-drawer w-100" layout="nodisplay">
         <div class="content-drawer background-white h-100">
              <div class="container-sposts padding-t25 padding-b25 padding-l20 padding-r20">
@@ -292,7 +302,7 @@
                 <span class="color-black font-lowly font-bold">{$time}</span>
             </div>
             <div class="date-two font-lowly margin-left-auto">
-                <span class="color-black">Colombia</span>
+                <span class="color-black">{#tz_country}</span>
             </div>
         </div>
         <div id="global-content" class="padding-l15 padding-r15">

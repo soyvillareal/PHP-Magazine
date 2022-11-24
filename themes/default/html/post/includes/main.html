@@ -4,7 +4,7 @@
    <?php } ?>
    <?php if(in_array('instagrampost', $TEMP['#entry_types'])){ ?>
    <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.instagram-blockquote.min.css}}" />
-   <script src="//platform.instagram.com/{#lang}/embeds.js"></script>
+   <script src="//platform.instagram.com/{#lang_code}/embeds.js"></script>
    <?php } ?>
    <?php if(in_array('tiktok', $TEMP['#entry_types'])){ ?>
    <script async src="//www.tiktok.com/embed.js"></script>
@@ -520,7 +520,7 @@
    var c = $(<?php echo($TEMP['#settings']['system_comments'] == 'on' && $TEMP['#settings']['fb_comments'] == 'on') ? "'.btn_ctchange[data-type=facebook]'" : "'.container_comments'";?>),
        a = function(){
          $.ajax({
-            url: 'https://connect.facebook.net/{#lang}/sdk.js',
+            url: 'https://connect.facebook.net/{#lang_code}/sdk.js',
             dataType: 'script',
             success: function(data) {
                window.fb_isblocked = !1, c.removeClass('hidden')
@@ -554,11 +554,11 @@
       });
    }, (typeof FB != "undefined") && FB.XFBML.parse()
 </script>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/{#lang}/sdk.js"></script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/{#lang_code}/sdk.js"></script>
 <?php } ?>
 <?php if(in_array('carousel', $TEMP['#entry_types'])){ ?>
 <script type="text/javascript">
-   <?php if($TEMP['#is_loaded'] == true && in_array('carousel', $TEMP['#entry_types'])){ ?>, $('#post-{$post_id}').InitCarousel({
+   <?php if($TEMP['#is_loaded'] == true && in_array('carousel', $TEMP['#entry_types'])){ ?>$('#post-{$post_id}').InitCarousel({
       max_cimages: [{$max_cimages}],
       entry_cimages: [{$carousel_json}],
       word: {

@@ -1,4 +1,15 @@
 <?php
+
+// +------------------------------------------------------------------------+
+// | @author Oscar Garcés (SoyVillareal)
+// | @author_url 1: https://soyvillareal.com
+// | @author_url 2: https://github.com/soyvillareal
+// | @author_email: hi@soyvillareal.com   
+// +------------------------------------------------------------------------+
+// | PHP Magazine - The best digital magazine for newspapers or bloggers
+// | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+// +------------------------------------------------------------------------+
+
 require_once('./assets/init.php');
 
 if(!Functions::BrowserSupport()){
@@ -20,6 +31,12 @@ if (isset($one)) {
     }
 }
 
+$http = 'https://';
+if(!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on'){
+    $http = 'http://';
+}
+$url = "{$http}{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+
 foreach($TEMP['#languages'] as $lang){
     $language = $dba->query('SELECT * FROM '.T_LANGUAGE.' WHERE lang = ?', $lang)->fetchArray();
 
@@ -37,7 +54,7 @@ foreach($TEMP['#languages'] as $lang){
         if(!isset($_SERVER['HTTPS']) || $_SERVER['HTTPS'] != 'on'){
             $http = 'http://';
         }
-        $lang_url = "{$http}{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}?{$lang_url}";
+        $lang_url = "{$url}?{$lang_url}";
     }
 
     $TEMP['!lang_url'] = $lang_url;
@@ -87,6 +104,10 @@ if($TEMP['#settings']['switch_mode'] == 'off' || ($TEMP['#loggedin'] === false &
     }
 }
 
+$TEMP['#og_url'] = $url;
+$TEMP['#og_type'] = 'website';
+$TEMP['#og_image'] = Functions::GetFile('images/opengraph.jpeg', 2);
+
 $TEMP['#pages'] = $dba->query('SELECT * FROM '.T_PAGE)->fetchAll();
 $TEMP['#categories'] = $dba->query('SELECT * FROM '.T_CATEGORY)->fetchAll();
 if($one != 'amp'){
@@ -119,7 +140,7 @@ if($TEMP['#admin'] == true && $TEMP['#settings']['show_palette'] == 'on'){
 
 $TEMP['global_title'] = $TEMP['#title'];
 $TEMP['global_description'] = $TEMP['#description'];
-$TEMP['global_keywords'] = $TEMP['#keyword'];
+$TEMP['global_keywords'] = $TEMP['#keywords'];
 $TEMP['year_now'] = date('Y');
 $TEMP['time'] = Functions::DateFormat(time(), 'complete');
 $TEMP['content'] = $TEMP['#content'];

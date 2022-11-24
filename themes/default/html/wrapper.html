@@ -10,6 +10,20 @@
    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
    <meta name="format-detection" content="telephone=no">
    <link rel="shortcut icon" type="image/png" href="{$theme->{images/favicon.ico}}" />
+   <meta property="fb:app_id" content="{$settings->fb_app_id}">
+   <meta property="og:type" content="{#og_type}">
+   <meta property="og:site_name" content="{$settings->title}">
+   <meta property="og:title" content="{$global_title}">
+   <meta property="og:description" content="{$global_description}">
+   <meta property="og:url" content="{#og_url}">
+   <meta property="og:locale" content="{#lang_code}">
+   <meta property="og:image" content="{#og_image}">
+   <meta name="twitter:card" content="summary">
+   <meta name="twitter:site" content="{$settings->title}">
+   <meta name="twitter:title" content="{$global_title}">
+   <meta name="twitter:url" content="{#og_url}">
+   <meta name="twitter:description" content="{$global_description}">
+   <meta name="twitter:image" content="{#og_image}">
    
    <!-- Google tag (gtag.js) -->
    <script async src="https://www.googletagmanager.com/gtag/js?id={$settings->google_analytics}"></script>
@@ -21,6 +35,20 @@
    </script>
 </head>
 <body class="position-relative w-100 mw-1170 h-100 background-white color-black margin-auto" dir="{#dir}" style="overflow:hidden;">
+   <!-- 
+      +------------------------------------------------------------------------+
+      | -----------------------------------------------------------------------
+      |        Don't worry, this message is not displayed in your browser
+      | -----------------------------------------------------------------------
+      | @author Oscar Garcés (SoyVillareal)
+      | @author_url 1: https://soyvillareal.com
+      | @author_url 2: https://github.com/soyvillareal
+      | @author_email: hi@soyvillareal.com   
+      +------------------------------------------------------------------------+
+      | PHP Magazine - The best digital magazine for newspapers or bloggers
+      | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+      +------------------------------------------------------------------------+
+   -->
    <style type="text/css">
       html[dark=true] .page-loader {
          background-color: {$dark_palette->background->white};
@@ -428,11 +456,11 @@
             <span>{$time}</span>
          </div>
          <div class="date-two display-inline-block display-none-mob">
-            <span class="color-black">Colombia</span>
+            <span class="color-black">{#tz_country}</span>
          </div>
       </div>
       <div class="display-none-desk font-lowly margin-left-auto">
-         <span class="color-black">Colombia</span>
+         <span class="color-black">{#tz_country}</span>
       </div>
     </section>
     <div class="content-logo display-none-mob">

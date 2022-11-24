@@ -405,7 +405,7 @@
 {%%<script type="text/javascript">
   paper_cp = {
     token: '{#token_session}',
-    lang: '{#lang}',
+    lang: '{#lang_code}',
     url: {
       create_post: '<?php echo($TEMP['#settings']['nodejs'] == 'on') ? '//{$settings->node_hostname}:{$settings->node_server_port}' : '{$url->{req/rol-publisher}}';?>/create-post',
       get_tags: '{$url->{req/rol-publisher/get-tags}}',
@@ -454,4 +454,4 @@
     })
   })
 </script>%%}
-{%%<script async defer crossorigin="anonymous" src="https://connect.facebook.net/{#lang}/sdk.js"></script>%%}
+{%%<script async defer crossorigin="anonymous" src="https://connect.facebook.net/{#lang_code}/sdk.js"></script>%%}

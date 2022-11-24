@@ -1,4 +1,15 @@
 <?php
+
+// +------------------------------------------------------------------------+
+// | @author Oscar Garcés (SoyVillareal)
+// | @author_url 1: https://soyvillareal.com
+// | @author_url 2: https://github.com/soyvillareal
+// | @author_email: hi@soyvillareal.com   
+// +------------------------------------------------------------------------+
+// | PHP Magazine - The best digital magazine for newspapers or bloggers
+// | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+// +------------------------------------------------------------------------+
+
 $home_ids = array();
 
 $TEMP['#breaking_news'] = $dba->query('SELECT * FROM '.T_POST.' p WHERE (SELECT post_id FROM '.T_BREAKING.' WHERE post_id = p.id AND ? < expiration_at) = id AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved"', time())->fetchArray();
@@ -113,6 +124,7 @@ if(count($TEMP['#main']) >= $TEMP['#limit_main']){
 
 		$TEMP['#main_recommended_videos'] = $main_recommended_videos['main_recommended_videos'];
 		$TEMP['main_recommended_videos'] = $main_recommended_videos['main_recommended_videos_html'];
+		$home_ids = $main_recommended_videos['home_ids'];
 
 		$frame = Functions::IdentifyFrame($entry['frame'], true);
 		$TEMP['frame'] = $frame['html'];
@@ -147,8 +159,8 @@ if($TEMP['#loggedin'] == true){
 }
 
 $TEMP['#page']         = 'home';
-$TEMP['#title']        = $TEMP['#settings']['title'].' - '.$TEMP['#word']['latest_news_colombia_world'];
+$TEMP['#title']        = $TEMP['#settings']['title'].' - '.$TEMP['#word']['the_best_digital_magazine'];
 $TEMP['#description']  = $TEMP['#settings']['description'];
-$TEMP['#keyword']      = $TEMP['#settings']['keyword'];
+$TEMP['#keywords']      = $TEMP['#settings']['keywords'];
 $TEMP['#content']      = Functions::Build('home/content');
 ?>

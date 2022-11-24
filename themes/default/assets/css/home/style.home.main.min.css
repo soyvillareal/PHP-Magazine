@@ -1,3 +1,15 @@
+/*
+    +------------------------------------------------------------------------+
+    | @author Oscar Garcés (SoyVillareal)
+    | @author_url 1: https://soyvillareal.com
+    | @author_url 2: https://github.com/soyvillareal
+    | @author_email: hi@soyvillareal.com   
+    +------------------------------------------------------------------------+
+    | PHP Magazine - The best digital magazine for newspapers or bloggers
+    | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+    +------------------------------------------------------------------------+
+*/
+
 .content-mlload {
     margin-top: 25px;
 }
@@ -86,7 +98,7 @@
         overflow: hidden;
     }
     .left-posts-left {
-        width: calc(33% - 31px);
+        width: calc(33% - 32px);
         height: 100vh;
         overflow-y: auto;
         overflow-x: hidden;
@@ -147,7 +159,7 @@
         border-bottom: 1px solid;
     }
     .main-one {
-        width: calc(67% - 31px);
+        width: calc(67% - 32px);
     }
     .main-two {
         width: 33%;

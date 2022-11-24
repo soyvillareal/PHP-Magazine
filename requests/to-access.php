@@ -1,4 +1,15 @@
 <?php
+
+// +------------------------------------------------------------------------+
+// | @author Oscar Garcés (SoyVillareal)
+// | @author_url 1: https://soyvillareal.com
+// | @author_url 2: https://github.com/soyvillareal
+// | @author_email: hi@soyvillareal.com   
+// +------------------------------------------------------------------------+
+// | PHP Magazine - The best digital magazine for newspapers or bloggers
+// | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+// +------------------------------------------------------------------------+
+
 if($one == 'validate'){
 	$username = Functions::Filter($_POST['username']);
 	$email = Functions::Filter($_POST['email']);
@@ -170,7 +181,13 @@ if($one == 'validate'){
 							if($TEMP['#settings']['switch_mode'] == 'on' && $TEMP['#settings']['theme_mode'] == 'night'){
 								$darkmode = 1;
 							}
-				            $user_id = $dba->query('INSERT INTO '.T_USER.' (username, email, password, ip, darkmode, status, type, created_at) VALUES (?, ?, ?, ?, ?, ?, "normal", ?)', $username, $email, $password, $ip, $darkmode, $status, time())->insertId();
+
+							$role = 'viewer';
+							if($dba->query('SELECT COUNT(*) FROM '.T_USER)->fetchArray(true) == 0){
+								$role = 'admin';
+							}
+
+				            $user_id = $dba->query('INSERT INTO '.T_USER.' (username, email, password, ip, darkmode, status, role, type, created_at) VALUES (?, ?, ?, ?, ?, ?, "normal", ?)', $username, $email, $password, $ip, $darkmode, $status, $role, time())->insertId();
 
 				            if($user_id) {
 				            	$verify_email = Functions::UserToken('verify_email');

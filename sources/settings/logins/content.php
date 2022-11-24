@@ -1,4 +1,15 @@
 <?php
+
+// +------------------------------------------------------------------------+
+// | @author Oscar Garcés (SoyVillareal)
+// | @author_url 1: https://soyvillareal.com
+// | @author_url 2: https://github.com/soyvillareal
+// | @author_email: hi@soyvillareal.com   
+// +------------------------------------------------------------------------+
+// | PHP Magazine - The best digital magazine for newspapers or bloggers
+// | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+// +------------------------------------------------------------------------+
+
 if ($TEMP['#loggedin'] === false) {
     header("Location: ".Functions::ReturnUrl());
     exit();
@@ -34,7 +45,7 @@ if (!empty($user_sessions)) {
 $TEMP['#page']        = 'logins';
 $TEMP['#title']       = $TEMP['#word']['logins'] . ' - ' . $TEMP['#settings']['title'];
 $TEMP['#description'] = $TEMP['#settings']['description'];
-$TEMP['#keyword']     = $TEMP['#settings']['keyword'];
+$TEMP['#keywords']     = $TEMP['#settings']['keywords'];
 
 $TEMP['#content']     = Functions::Build("settings/logins/content");
 ?>

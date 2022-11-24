@@ -108,7 +108,7 @@
 <?php if(!empty($TEMP['#video'])){ ?>
 <div class="container-video-posts padding-b15 margin-b15 border-bottom border-grely">
    <div class="display-block background-blue position-relative padding-l20 padding-r20">
-      <section class="content-frame-posts display-flex direction-row align-center w-100 margin-b15 padding-t25 padding-b15 border-bottom border-grely" data-id="{$id}">
+      <section class="content-frame-posts display-flex direction-row align-center w-100 padding-t25<?php echo($TEMP['#main_recommended_videos'] == false) ? ' padding-b25' : '';?>" data-id="{$id}">
          <div id="content-video-posts" class="content-video-posts display-flex align-center position-relative background-blackly w-50 cursor-pointer margin-r15">
             <button class="btn-play-video display-flex position-absolute z-index-1 background-blackly btn-noway text-center border-rall hover-all">
                <span class="hidden">{$word->close}</span>
@@ -136,7 +136,7 @@
          </div>
       </section>
       <?php if($TEMP['#main_recommended_videos'] == true){ ?>
-      <div class="content-more-posts padding-b25">
+      <div class="content-more-posts margin-t15 padding-t15 padding-b25 border-top border-grely">
          <section class="items-recommended position-relative">
             <div class="recommended-title">
                <span class="color-wwhite font-postoni-bodo font-mediumly font-bold">Más videos</span>

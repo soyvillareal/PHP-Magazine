@@ -1,4 +1,15 @@
 <?php
+
+// +------------------------------------------------------------------------+
+// | @author Oscar Garcés (SoyVillareal)
+// | @author_url 1: https://soyvillareal.com
+// | @author_url 2: https://github.com/soyvillareal
+// | @author_email: hi@soyvillareal.com   
+// +------------------------------------------------------------------------+
+// | PHP Magazine - The best digital magazine for newspapers or bloggers
+// | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+// +------------------------------------------------------------------------+
+
 require_once('./assets/init.php');
 
 if(empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest'){
@@ -14,10 +25,11 @@ if (!empty($_GET['token'])) {
 }
 
 if (empty($token) || $token != $_SESSION['_LOGIN_TOKEN']) {
-	$deliver['E'] = "*{$TEMP['#word']['invalid_request']}";
-}
-
-if (!empty($_GET['request-name']) && !empty($token) && $token == $_SESSION['_LOGIN_TOKEN']) {
+	$deliver = array(
+		'S' => 400,
+		'E' => "*{$TEMP['#word']['invalid_request']}"
+	);
+} else if (!empty($_GET['request-name'])) {
 	$req = Functions::Filter($_GET['request-name']);
 	if (file_exists('./requests/'.$req.'.php')) {
 		require_once('./requests/'.$req.'.php');

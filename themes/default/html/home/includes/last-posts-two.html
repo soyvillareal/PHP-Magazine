@@ -1,5 +1,6 @@
 {$advertisement_hlad}
 <div class="container-ntwo"> 
+  <?php if(!empty($TEMP['#type_left']) && !empty($TEMP['#type_right'])){ ?>
   <div class="content-ntwo display-flex margin-b15 padding-b15 border-bottom border-grely">
     <div class="content-left-ntwo margin-r15 padding-r15 border-right border-grely" data-id="{$id_left}">
       <div class="item-left-ntwo position-relative padding-l20 padding-r20">
@@ -64,6 +65,7 @@
       </div>
     </div>
   </div>
+  <?php } ?>
   <div class="container-middle-ntwo display-flex">
     {$last_posts_three}
   </div>

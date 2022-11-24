@@ -1,5 +1,15 @@
 <?php
 
+// +------------------------------------------------------------------------+
+// | @author Oscar Garcés (SoyVillareal)
+// | @author_url 1: https://soyvillareal.com
+// | @author_url 2: https://github.com/soyvillareal
+// | @author_email: hi@soyvillareal.com   
+// +------------------------------------------------------------------------+
+// | PHP Magazine - The best digital magazine for newspapers or bloggers
+// | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+// +------------------------------------------------------------------------+
+
 $slug = Functions::Filter($_GET['one']);
 $post = $dba->query('SELECT * FROM '.T_POST.' WHERE slug = ?', $slug)->fetchArray();
 if(empty($post)){
@@ -16,6 +26,8 @@ if(!Functions::IsOwner($post['user_id'])){
 	header("Location: " . Functions::Url('404'));
 	exit();
 }
+
+$TEMP['#og_type'] = 'article';
 
 if(!in_array($post['user_id'], Functions::BlockedUsers(false)) || Functions::IsOwner($post['user_id'])){
 
@@ -56,7 +68,7 @@ if(!in_array($post['user_id'], Functions::BlockedUsers(false)) || Functions::IsO
 
 	$TEMP['form_newsletter'] = Functions::Build('includes/search-post-profile-category-tag/includes/form-newsletter');
 	$TEMP['newsletter'] = Functions::Build('includes/search-post-profile-category-tag/newsletter');
-	$TEMP['#keyword']      = implode(',', $post_load['keywords']);
+	$TEMP['#keywords']      = implode(',', $post_load['keywords']);
 	$TEMP['#content']      = Functions::Build('post/content');
 
 } else {
@@ -65,6 +77,6 @@ if(!in_array($post['user_id'], Functions::BlockedUsers(false)) || Functions::IsO
 
 
 $TEMP['#page']         = 'post';
-$TEMP['#title']        = $post['title'];
+$TEMP['#title']        = $post['title'].' - '.$TEMP['#settings']['title'];
 $TEMP['#description']  = $post['description'];
 ?>

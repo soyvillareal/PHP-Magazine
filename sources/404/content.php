@@ -1,4 +1,15 @@
 <?php 
+
+// +------------------------------------------------------------------------+
+// | @author Oscar Garcés (SoyVillareal)
+// | @author_url 1: https://soyvillareal.com
+// | @author_url 2: https://github.com/soyvillareal
+// | @author_email: hi@soyvillareal.com   
+// +------------------------------------------------------------------------+
+// | PHP Magazine - The best digital magazine for newspapers or bloggers
+// | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+// +------------------------------------------------------------------------+
+
 header("HTTP/1.0 404 Not Found");
 
 $TEMP['#random_posts'] = $dba->query('SELECT * FROM '.T_POST.' WHERE user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved" ORDER BY RAND() ASC LIMIT 4')->fetchAll();
@@ -26,7 +37,7 @@ if(!empty($TEMP['#random_posts'])){
 $TEMP['#page'] = '404';
 $TEMP['#title'] = '404 - ' . $TEMP['#settings']['title'];
 $TEMP['#description'] = $TEMP['#settings']['description'];
-$TEMP['#keyword'] = $TEMP['#settings']['keyword'];
+$TEMP['#keywords'] = $TEMP['#settings']['keywords'];
 
 $TEMP['#content'] = Functions::Build('404/content');
 ?>

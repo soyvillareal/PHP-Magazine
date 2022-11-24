@@ -1,4 +1,15 @@
 <?php
+
+// +------------------------------------------------------------------------+
+// | @author Oscar Garcés (SoyVillareal)
+// | @author_url 1: https://soyvillareal.com
+// | @author_url 2: https://github.com/soyvillareal
+// | @author_email: hi@soyvillareal.com   
+// +------------------------------------------------------------------------+
+// | PHP Magazine - The best digital magazine for newspapers or bloggers
+// | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+// +------------------------------------------------------------------------+
+
 class Loads {
 	public static function LastPosts($limit, $home_ids = array()){
 		global $dba, $TEMP, $ROUTE;
@@ -38,46 +49,49 @@ class Loads {
 				$TEMP['!published_date'] = date('c', $post['published_at']);
 				$TEMP['!published_at'] = Functions::DateString($post['published_at']);
 				$data['last_posts_one_html'] .= Functions::Build('home/includes/last-posts-one');
-				$home_ids[] = $post['id'];
+				$data['home_ids'][] = $post['id'];
 			}
 			Functions::DestroyBuild();
 		}
 
 		if(count($last_posts_one_sql) >= 8){
-			$last_posts_two_sql = $dba->query('SELECT * FROM '.T_POST.' WHERE user_id NOT IN ('.$TEMP['#blocked_users'].')'.$query.' AND status = "approved" ORDER BY RAND() ASC LIMIT 5')->fetchAll();
+			$last_posts_two_sql = $dba->query('SELECT * FROM '.T_POST.' WHERE user_id NOT IN ('.$TEMP['#blocked_users'].') AND id NOT IN ('.implode(',', $data['home_ids']).') AND status = "approved" ORDER BY RAND() ASC LIMIT 5')->fetchAll();
 
 			if(!empty($last_posts_two_sql)){
 				$data['last_posts_two'] = true;
-				$category_left = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $last_posts_two_sql[0]['category_id'])->fetchArray();
-				$TEMP['#type_left'] = $last_posts_two_sql[0]['type'];
+				if(count($last_posts_two_sql) > 2){
+					$category_left = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $last_posts_two_sql[0]['category_id'])->fetchArray();
+					$TEMP['#type_left'] = $last_posts_two_sql[0]['type'];
 
-				$TEMP['id_left'] = $last_posts_two_sql[0]['id'];
-				$TEMP['title_left'] = $last_posts_two_sql[0]['title'];
-				$TEMP['description_left'] = $last_posts_two_sql[0]['description'];
-				$TEMP['category_left'] = $TEMP['#word']["category_{$category_left['name']}"];
-				$TEMP['category_slug_left'] = Functions::Url("{$ROUTE['#r_category']}/{$category_left['slug']}");
-				$TEMP['url_left'] = Functions::Url($last_posts_two_sql[0]['slug']);
-				$TEMP['thumbnail_left'] = Functions::GetFile($last_posts_two_sql[0]['thumbnail'], 1, 's');
-				$TEMP['published_date_left'] = date('c', $last_posts_two_sql[0]['published_at']);
-				$TEMP['published_at_left'] = Functions::DateString($last_posts_two_sql[0]['published_at']);
-				$home_ids[] = $last_posts_two_sql[0]['id'];
+					$TEMP['id_left'] = $last_posts_two_sql[0]['id'];
+					$TEMP['title_left'] = $last_posts_two_sql[0]['title'];
+					$TEMP['description_left'] = $last_posts_two_sql[0]['description'];
+					$TEMP['category_left'] = $TEMP['#word']["category_{$category_left['name']}"];
+					$TEMP['category_slug_left'] = Functions::Url("{$ROUTE['#r_category']}/{$category_left['slug']}");
+					$TEMP['url_left'] = Functions::Url($last_posts_two_sql[0]['slug']);
+					$TEMP['thumbnail_left'] = Functions::GetFile($last_posts_two_sql[0]['thumbnail'], 1, 's');
+					$TEMP['published_date_left'] = date('c', $last_posts_two_sql[0]['published_at']);
+					$TEMP['published_at_left'] = Functions::DateString($last_posts_two_sql[0]['published_at']);
+					$data['home_ids'][] = $last_posts_two_sql[0]['id'];
+					
+					$category_right = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $last_posts_two_sql[1]['category_id'])->fetchArray();
+					$TEMP['#type_right'] = $last_posts_two_sql[1]['type'];
 
-				$category_right = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $last_posts_two_sql[1]['category_id'])->fetchArray();
-				$TEMP['#type_right'] = $last_posts_two_sql[1]['type'];
+					$TEMP['id_right'] = $last_posts_two_sql[1]['id'];
+					$TEMP['title_right'] = $last_posts_two_sql[1]['title'];
+					$TEMP['description_right'] = $last_posts_two_sql[1]['description'];
+					$TEMP['category_right'] = $TEMP['#word']["category_{$category_right['name']}"];
+					$TEMP['category_slug_right'] = Functions::Url("{$ROUTE['#r_category']}/{$category_right['slug']}");
+					$TEMP['url_right'] = Functions::Url($last_posts_two_sql[1]['slug']);
+					$TEMP['thumbnail_right'] = Functions::GetFile($last_posts_two_sql[1]['thumbnail'], 1, 's');
+					$TEMP['published_date_right'] = date('c', $last_posts_two_sql[1]['published_at']);
+					$TEMP['published_at_right'] = Functions::DateString($last_posts_two_sql[1]['published_at']);
+					$data['home_ids'][] = $last_posts_two_sql[1]['id'];
 
-				$TEMP['id_right'] = $last_posts_two_sql[1]['id'];
-				$TEMP['title_right'] = $last_posts_two_sql[1]['title'];
-				$TEMP['description_right'] = $last_posts_two_sql[1]['description'];
-				$TEMP['category_right'] = $TEMP['#word']["category_{$category_right['name']}"];
-				$TEMP['category_slug_right'] = Functions::Url("{$ROUTE['#r_category']}/{$category_right['slug']}");
-				$TEMP['url_right'] = Functions::Url($last_posts_two_sql[1]['slug']);
-				$TEMP['thumbnail_right'] = Functions::GetFile($last_posts_two_sql[1]['thumbnail'], 1, 's');
-				$TEMP['published_date_right'] = date('c', $last_posts_two_sql[1]['published_at']);
-				$TEMP['published_at_right'] = Functions::DateString($last_posts_two_sql[1]['published_at']);
-				$home_ids[] = $last_posts_two_sql[1]['id'];
+					unset($last_posts_two_sql[0]);
+					unset($last_posts_two_sql[1]);
+				}
 
-				unset($last_posts_two_sql[0]);
-				unset($last_posts_two_sql[1]);
 				$last_posts_two_sql = array_values($last_posts_two_sql);
 
 				foreach ($last_posts_two_sql as $post) {
@@ -95,12 +109,11 @@ class Loads {
 					$TEMP['!published_at_middle'] = Functions::DateString($post['published_at']);
 
 					$TEMP['last_posts_three'] .= Functions::Build('home/includes/last-posts-middle');
-					$home_ids[] = $post['id'];
+					$data['home_ids'][] = $post['id'];
 				}
 				Functions::DestroyBuild();
 				$data['last_posts_two_html'] .= Functions::Build('home/includes/last-posts-two');
 			}
-			$data['home_ids'] = $home_ids;
 		}
 
 		return $data;
@@ -118,7 +131,7 @@ class Loads {
 
 		$main_recommended_videos_sql = $dba->query('SELECT * FROM '.T_POST.' WHERE id NOT IN ('.implode(',', $home_ids).') AND type = "video" AND user_id NOT IN ('.$TEMP['#blocked_users'].') AND status = "approved" ORDER BY RAND() ASC LIMIT 18')->fetchAll();
 
-		if(!empty($main_recommended_videos_sql)){
+		if(count($main_recommended_videos_sql) > 5){
 			$data['main_recommended_videos'] = true;
 			foreach ($main_recommended_videos_sql as $post) {
 				$category_middle = $dba->query('SELECT name, slug FROM '.T_CATEGORY.' WHERE id = ?', $post['category_id'])->fetchArray();
@@ -164,7 +177,6 @@ class Loads {
 					$TEMP['#next_page'] = json_encode($next_page);
 				}
 				$root = 'amp';
-				$TEMP['amp_url'] = Functions::Url("amp/{$post['slug']}");
 			}
 
 			$title = $post['title'];
@@ -214,6 +226,7 @@ class Loads {
 			$TEMP['updated_date'] = date('c', $TEMP['#update_date']);
 			$TEMP['updated_at'] = Functions::DateString($post['updated_at']);
 
+			$TEMP['#og_image'] = $TEMP['thumbnail'];
 			$TEMP['#likes_active'] = $dba->query('SELECT COUNT(*) FROM '.T_REACTION.' WHERE user_id = ? AND reacted_id = ? AND type = "like" AND place = "post"', $TEMP['#user']['id'], $post['id'])->fetchArray(true);
 			$TEMP['#dislikes_active'] = $dba->query('SELECT COUNT(*) FROM '.T_REACTION.' WHERE user_id = ? AND reacted_id = ? AND type = "dislike" AND place = "post"', $TEMP['#user']['id'], $post['id'])->fetchArray(true);
 			$TEMP['#is_owner'] = Functions::IsOwner($post['user_id']);

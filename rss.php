@@ -1,5 +1,15 @@
 <?php 
 
+// +------------------------------------------------------------------------+
+// | @author Oscar Garcés (SoyVillareal)
+// | @author_url 1: https://soyvillareal.com
+// | @author_url 2: https://github.com/soyvillareal
+// | @author_email: hi@soyvillareal.com   
+// +------------------------------------------------------------------------+
+// | PHP Magazine - The best digital magazine for newspapers or bloggers
+// | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+// +------------------------------------------------------------------------+
+
 require_once('./assets/init.php');
 
 header("Content-type:text/xml");
@@ -33,10 +43,7 @@ if($TEMP['#type'] == $ROUTE['#r_user']){
     $TEMP['rss_image'] = Functions::GetFile('images/logo-light.png', 2);
     $TEMP['link'] = $TEMP['#site_url'];
 
-    $category_name = $dba->query('SELECT word FROM '.T_WORD." WHERE {$TEMP['#language']} = '{$TEMP['#get']}'")->fetchArray(true);
-    $category_name = str_replace('category_', '', $category_name);
-
-    $query = " AND (SELECT id FROM ".T_CATEGORY." WHERE name = '{$category_name}' AND id = p.category_id) = category_id";
+    $query = " AND (SELECT id FROM ".T_CATEGORY." WHERE slug = '{$TEMP['#get']}' AND id = p.category_id) = category_id";
 }
 
 

@@ -1,4 +1,15 @@
 <?php 
+
+// +------------------------------------------------------------------------+
+// | @author Oscar Garcés (SoyVillareal)
+// | @author_url 1: https://soyvillareal.com
+// | @author_url 2: https://github.com/soyvillareal
+// | @author_email: hi@soyvillareal.com   
+// +------------------------------------------------------------------------+
+// | PHP Magazine - The best digital magazine for newspapers or bloggers
+// | Licensed under the MIT License. Copyright (c) 2022 PHP Magazine.
+// +------------------------------------------------------------------------+
+
 require_once('./assets/init.php');
 
 $browsers = array(
@@ -55,7 +66,7 @@ if(!Functions::BrowserSupport()){
 
 $TEMP['#title'] = $TEMP['#word']['browser_not_supported']. ' - ' . $TEMP['#settings']['title'];
 $TEMP['#description'] = $TEMP['#settings']['description'];
-$TEMP['#keywords'] = $TEMP['#settings']['keyword'];
+$TEMP['#keywords'] = $TEMP['#settings']['keywords'];
 
 echo Functions::Build('compatibility');
 ?>

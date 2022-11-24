@@ -3,7 +3,7 @@
 <?php } ?>
 <?php if(in_array('instagrampost', $TEMP['#entry_types'])){ ?>
 <link rel="stylesheet" type="text/css" href="{$theme->{assets/css/post/style.instagram-blockquote.min.css}}" />
-<script src="//platform.instagram.com/{#lang}/embeds.js"></script>
+<script src="//platform.instagram.com/{#lang_code}/embeds.js"></script>
 <?php } ?>
 <?php if(in_array('tiktok', $TEMP['#entry_types'])){ ?>
 <script async src="//www.tiktok.com/embed.js"></script>
@@ -487,7 +487,7 @@
       nodejs: '{$settings->nodejs}'
     },
     token: '{#token_session}',
-    lang: '{#lang}',
+    lang: '{#lang_code}',
     word: {
       name: '{$word->name}',
       link: '{$word->link}',
@@ -524,4 +524,4 @@
     })
   })
 </script>%%}
-{%%<script async defer crossorigin="anonymous" src="https://connect.facebook.net/{#lang}/sdk.js"></script>%%}
+{%%<script async defer crossorigin="anonymous" src="https://connect.facebook.net/{#lang_code}/sdk.js"></script>%%}
