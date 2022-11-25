@@ -187,7 +187,7 @@ if($one == 'validate'){
 								$role = 'admin';
 							}
 
-				            $user_id = $dba->query('INSERT INTO '.T_USER.' (username, email, password, ip, darkmode, status, role, type, created_at) VALUES (?, ?, ?, ?, ?, ?, "normal", ?)', $username, $email, $password, $ip, $darkmode, $status, $role, time())->insertId();
+				            $user_id = $dba->query('INSERT INTO '.T_USER.' (username, email, password, ip, darkmode, status, role, type, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, "normal", ?)', $username, $email, $password, $ip, $darkmode, $status, $role, time())->insertId();
 
 				            if($user_id) {
 				            	$verify_email = Functions::UserToken('verify_email');
