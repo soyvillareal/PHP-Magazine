@@ -9,7 +9,7 @@ We will keep this demo updated with our newest releases as they come, so that yo
 To see all the features available to create a post visit the [example post](https://phpmagazine.soyvillareal.com/example-post-all-inputs-and-features) hosted on our demo.
 
 ## Donate
-<span class="badge-paypal"><a href="https://www.paypal.me/SoyVillareal" title="Donate to this project using Paypal" taget="_blank"><img src="https://img.shields.io/badge/paypal-donate-yellow.svg?style=for-the-badge&logo=paypal" alt="PayPal donate button" /></a></span>
+<span class="badge-paypal"><a href="https://www.paypal.me/SoyVillareal" title="Donate to this project using Paypal" target="_blank"><img src="https://img.shields.io/badge/paypal-donate-yellow.svg?style=for-the-badge&logo=paypal" alt="PayPal donate button" /></a></span>
 
 If you want to donate you can do it through Paypal. Any help greatly appreciated and would help me a lot with server costs. 😊
 
