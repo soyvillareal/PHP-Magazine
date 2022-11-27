@@ -53,7 +53,7 @@ Now that the prerequisites are ready to go it's a few simple commands to get you
 
 ```bash
 # Get the latest version of PHP Magazine
-git clone https://github.com/soyvillareal/PHP-Magazine
+git clone https://github.com/soyvillareal/PHP-Magazine.git
 
 # Install PHP libraries
 composer install
