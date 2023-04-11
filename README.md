@@ -171,7 +171,7 @@ The beta version of PHP Magazine is released, it contains most of the functional
 Please refer to the description of each [release](https://github.com/soyvillareal/PHP-Magazine/releases) or the git log.
 
 # Roadmap
-PHP Magazine is a project developed with a quality interface, designed to be functional and put into production for whoever requires it. This project will continue to be maintained by the author. New features and bug fixes will be added frequently.
+PHP Magazine is a project developed with a quality interface, designed to be functional and put into production for whoever requires it.
 
 For all our feature and bug tracking, we use the [Issues Section](https://github.com/soyvillareal/PHP-Magazine/issues). PHP Magazine 'roadmap' is currently to work through the feature requests and improvements that are in the issue tracker.  Take a look at the milestones for what we intend to add for upcoming releases.
 
