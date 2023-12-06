@@ -1,10 +1,7 @@
 # PHP Magazine
 PHP Magazine! is a website for sharing blog posts, it is an open source solution that is available for free to everyone. With PHP Magazine you can create your own site to upload news or information that you think is relevant, PHP Magazine gives you the ability to have a presence on the internet, whether you are a newspaper or blogger. This platform was released in December 2022 after hard coding work and I guarantee that it will continue to be maintained.
 
-![PHP Magazine Banner](https://soyvillareal.com/docs/php-magazine/images/banner-dark.png)
-
-## Live [Demo](https://phpmagazine.soyvillareal.com/)
-We will keep this demo updated with our newest releases as they come, so that you can check out new features there first before deciding to deploy them in your own environments. 
+![PHP Magazine Banner](https://soyvillareal.com/docs/php-magazine/images/banner-dark.png) 
 
 To see all the features available to create a post visit the [example post](https://phpmagazine.soyvillareal.com/example-post-all-inputs-and-features) hosted on our demo.
 
@@ -156,7 +153,7 @@ If you need to modify the color palette of the website, you can do it without mu
 ![Edit color palette](https://soyvillareal.com/docs/php-magazine/images/edit-color-palette.gif)
 
 ### For your curiosity
-The demo of this version is running on a server with the following characteristics:
+The demo of this version is running on a server with the following characteristics (retired):
 
 - Ubuntu 20.04.5
 - Node.js 19.0.0
